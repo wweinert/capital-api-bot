@@ -1,22 +1,30 @@
-# Trading Platform
+# Capital API Trading Bot
 
 ## Overview
-A Node.js-based trading system that executes strategies and logs trading data.
+Automated trading system built with Node.js that connects to a broker API to execute trading strategies, log market data and analyze performance.
 
 ## Features
-- Automated trading strategies
-- API integration (broker)
-- Logging and analytics
-- Risk management
+- Strategy-based trade execution
+- Market data processing
+- Trade logging and analytics
+- Risk management (SL/TP logic)
+- Backtesting support
 
 ## Tech Stack
 - Node.js
-- Express
+- JavaScript
+- REST APIs
+- Custom indicators and strategies
 
 ## Architecture
-- Modular strategy system
-- Service-based structure
+- `strategies/` – trading logic
+- `services/` – API communication
+- `indicators/` – technical indicators
+- `backtest/` – strategy testing
+- `logs/` – trading data
 
 ## Setup
+
+```bash
 npm install
 npm run start
