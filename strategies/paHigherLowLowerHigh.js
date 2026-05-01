@@ -39,6 +39,8 @@ export const PA_HLLH_CONFIG = {
     entryBreakMaxBars: 3,
     takeProfitR: 4,
     minStopDistancePips: 2,
+    avoidHoursUTC: [0, 10, 18, 21, 22, 23],
+    maxStopPips: 17.39,
     managementProfile: {
         mode: "atr_trail_after_r",
         activationR: 1.5,
@@ -617,6 +619,43 @@ function findLatestCloseEntryCandidate({ candidates, rows, symbol, config }) {
     return null;
 }
 
+function signalHourUTC(candidate) {
+    const ts = candidate?.signalTimestamp || candidate?.signalRow?.timestamp;
+    if (!ts) return null;
+    const hour = new Date(ts).getUTCHours();
+    return Number.isInteger(hour) ? hour : null;
+}
+
+function candidateStopDistancePips(candidate, symbol, config) {
+    const pipSize = candidate?.pipSize || pipSizeForSymbol(symbol);
+    const entry = Number(candidate?.entryLevel);
+    const stop = Number(candidate?.stopPrice);
+    if (![entry, stop, pipSize].every(Number.isFinite) || pipSize <= 0) return null;
+    return Math.abs(entry - stop) / pipSize;
+}
+
+function candidateQualityBlock(candidate, symbol, config) {
+    const avoidHours = Array.isArray(config.avoidHoursUTC) ? config.avoidHoursUTC.map((hour) => Number(hour)).filter(Number.isInteger) : [];
+    const hour = signalHourUTC(candidate);
+    if (hour !== null && avoidHours.includes(hour)) {
+        return {
+            reason: "hllh_avoid_hour_utc",
+            context: { signalHourUTC: hour, avoidHoursUTC: avoidHours },
+        };
+    }
+
+    const maxStopPips = Number(config.maxStopPips);
+    const stopDistancePips = candidateStopDistancePips(candidate, symbol, config);
+    if (Number.isFinite(maxStopPips) && maxStopPips > 0 && Number.isFinite(stopDistancePips) && stopDistancePips > maxStopPips) {
+        return {
+            reason: "hllh_stop_distance_above_max",
+            context: { stopDistancePips, maxStopPips },
+        };
+    }
+
+    return null;
+}
+
 function buildLiveSignalContext({ candidate, symbol, direction, config }) {
     const normalizedCandidateId = buildHllhStableCandidateIdentity({
         symbol,
@@ -693,6 +732,20 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
                     reason: config.entryMode === "entry_on_close" ? "hllh_no_close_entry" : "hllh_no_break_entry",
                     context: {
                         strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID,
+                        candidatesSeen: candidates.length,
+                        latestClosedH1: rows[rows.length - 1]?.timestamp ?? null,
+                    },
+                };
+            }
+
+            const qualityBlock = candidateQualityBlock(candidate, symbol, config);
+            if (qualityBlock) {
+                return {
+                    signal: null,
+                    reason: qualityBlock.reason,
+                    context: {
+                        strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID,
+                        ...qualityBlock.context,
                         candidatesSeen: candidates.length,
                         latestClosedH1: rows[rows.length - 1]?.timestamp ?? null,
                     },

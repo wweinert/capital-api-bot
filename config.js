@@ -13,10 +13,10 @@ export const API = {
 
 // Trading Sessions (UTC times)
 const SESSION_SYMBOLS = {
-    LONDON: ["EURUSD", "GBPUSD", "EURGBP", "USDCHF"],
-    NY: ["EURUSD", "GBPUSD", "USDJPY", "USDCAD", "EURGBP"],
-    SYDNEY: ["AUDUSD", "NZDUSD", "AUDJPY", "NZDJPY"],
-    TOKYO: ["USDJPY", "EURJPY", "AUDJPY", "AUDUSD", "NZDUSD"],
+    LONDON: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
+    NY: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
+    SYDNEY: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
+    TOKYO: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
 };
 
 // export const CRYPTO_SYMBOLS = ["BTCUSD", "BTCEUR", "SOLUSD", "XRPUSD", "DOGEUSD", "ADAUSD"];
@@ -72,7 +72,7 @@ const EMA = {
 // Technical Analysis Configuration
 export const ANALYSIS = {
     TIMEFRAMES,
-    SYMBOLS: ["USDCAD", "USDJPY", "USDCHF", "AUDUSD"],
+    SYMBOLS: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
     EMA,
 };
 
