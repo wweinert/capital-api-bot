@@ -17,6 +17,7 @@ import {
     maybeRejectSmallStop,
     scenarioId,
 } from "../backtest/lib/simulators/priceActionTradeCore.js";
+import { HLLH_SYMBOL_PROFILES } from "../config.js";
 import { buildHllhStableCandidateIdentity } from "../utils/hllhSignalIdentity.js";
 
 export const PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID = "PA_HIGHER_LOW_LOWER_HIGH";
@@ -619,6 +620,35 @@ function findLatestCloseEntryCandidate({ candidates, rows, symbol, config }) {
     return null;
 }
 
+function pickStrategyProfileFields(profile = {}) {
+    const allowed = [
+        "setupMode",
+        "pivotWindow",
+        "signalMode",
+        "entryMode",
+        "stopVariant",
+        "exitVariant",
+        "timeframe",
+        "maxSignalWaitBars",
+        "entryBreakMaxBars",
+        "takeProfitR",
+        "minStopDistancePips",
+        "avoidHoursUTC",
+        "maxStopPips",
+        "managementProfile",
+    ];
+    return Object.fromEntries(allowed.filter((key) => Object.hasOwn(profile, key)).map((key) => [key, profile[key]]));
+}
+
+function resolveSymbolConfig(baseConfig, symbol) {
+    const profile = HLLH_SYMBOL_PROFILES?.[String(symbol || "").toUpperCase()];
+    if (!profile?.enabled) return baseConfig;
+    return {
+        ...baseConfig,
+        ...pickStrategyProfileFields(profile),
+    };
+}
+
 function signalHourUTC(candidate) {
     const ts = candidate?.signalTimestamp || candidate?.signalRow?.timestamp;
     if (!ts) return null;
@@ -712,8 +742,9 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
         config,
 
         evaluate({ symbol, candles, bid, ask } = {}) {
+            const activeConfig = resolveSymbolConfig(config, symbol);
             const rows = liveCandleRows(candles);
-            if (rows.length < config.pivotWindow * 2 + 20) {
+            if (rows.length < activeConfig.pivotWindow * 2 + 20) {
                 return {
                     signal: null,
                     reason: "hllh_insufficient_h1_history",
@@ -721,15 +752,15 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
                 };
             }
 
-            const candidates = collectLiveCandidates(rows, config);
+            const candidates = collectLiveCandidates(rows, activeConfig);
             const candidate =
-                config.entryMode === "entry_on_close"
-                    ? findLatestCloseEntryCandidate({ candidates, rows, symbol, config })
-                    : findTriggeredLiveCandidate({ candidates, rows, symbol, bid, ask, config });
+                activeConfig.entryMode === "entry_on_close"
+                    ? findLatestCloseEntryCandidate({ candidates, rows, symbol, config: activeConfig })
+                    : findTriggeredLiveCandidate({ candidates, rows, symbol, bid, ask, config: activeConfig });
             if (!candidate) {
                 return {
                     signal: null,
-                    reason: config.entryMode === "entry_on_close" ? "hllh_no_close_entry" : "hllh_no_break_entry",
+                    reason: activeConfig.entryMode === "entry_on_close" ? "hllh_no_close_entry" : "hllh_no_break_entry",
                     context: {
                         strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID,
                         candidatesSeen: candidates.length,
@@ -738,7 +769,7 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
                 };
             }
 
-            const qualityBlock = candidateQualityBlock(candidate, symbol, config);
+            const qualityBlock = candidateQualityBlock(candidate, symbol, activeConfig);
             if (qualityBlock) {
                 return {
                     signal: null,
@@ -755,8 +786,8 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
             const direction = candidate.side === "LONG" ? "BUY" : "SELL";
             return {
                 signal: direction,
-                reason: config.entryMode === "entry_on_close" ? "pa_hllh_entry_on_close" : "pa_hllh_entry_on_break",
-                context: buildLiveSignalContext({ candidate, symbol, direction, config }),
+                reason: activeConfig.entryMode === "entry_on_close" ? "pa_hllh_entry_on_close" : "pa_hllh_entry_on_break",
+                context: buildLiveSignalContext({ candidate, symbol, direction, config: activeConfig }),
             };
         },
     };
