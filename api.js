@@ -5,6 +5,10 @@ import logger from "./utils/logger.js";
 let cst, xsecurity;
 let sessionStartTime = Date.now();
 
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export const getHeaders = (includeContentType = false) => {
     const baseHeaders = {
         "X-SECURITY-TOKEN": xsecurity,
@@ -135,16 +139,29 @@ export const getOpenPositions = async () =>
 
 export async function getHistorical(symbol, resolution, count) {
     // logger.info(`[API] Fetching historical: ${symbol} resolution=${resolution}`);
-    const response = await axios.get(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
-    return {
-        prices: response.data.prices.map((p) => ({
-            close: p.closePrice?.bid,
-            high: p.highPrice?.bid,
-            low: p.lowPrice?.bid,
-            open: p.openPrice?.bid,
-            timestamp: new Date(p.snapshotTime).toLocaleString(), // Human readable timestamp
-        })),
-    };
+    const maxAttempts = 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+        try {
+            const response = await axios.get(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
+            return {
+                prices: response.data.prices.map((p) => ({
+                    close: p.closePrice?.bid,
+                    high: p.highPrice?.bid,
+                    low: p.lowPrice?.bid,
+                    open: p.openPrice?.bid,
+                    timestamp: new Date(p.snapshotTime).toLocaleString(), // Human readable timestamp
+                })),
+            };
+        } catch (error) {
+            if (error.response?.status === 429 && attempt < maxAttempts) {
+                const waitMs = 1500 * attempt;
+                logger.warn(`[API] Rate limited fetching ${symbol} ${resolution}. Retry ${attempt}/${maxAttempts} in ${waitMs}ms`);
+                await delay(waitMs);
+                continue;
+            }
+            throw error;
+        }
+    }
 }
 
 export async function placeOrder(symbol, direction, size, level, orderType = "LIMIT") {
@@ -165,7 +182,7 @@ export async function placeOrder(symbol, direction, size, level, orderType = "LI
     });
 }
 
-export async function updateTrailingStop(positionId, currentPrice, entryPrice, takeProfit, direction, symbol) {
+export async function updateTrailingStop(positionId, currentPrice, entryPrice, takeProfit, direction, symbol, options = {}) {
     const entry = Number(entryPrice);
     const tp = Number(takeProfit);
     const price = Number(currentPrice);
@@ -175,7 +192,9 @@ export async function updateTrailingStop(positionId, currentPrice, entryPrice, t
     if (tpDistance <= 0) return;
 
     const dir = String(direction || "").toUpperCase();
-    const thresholdPrice = dir === "BUY" ? entry + 0.7 * tpDistance : entry - 0.7 * tpDistance;
+    const activationProgress = Number.isFinite(Number(options.activationProgress)) ? Number(options.activationProgress) : 0.7;
+    const trailDistanceTpFraction = Number.isFinite(Number(options.trailDistanceTpFraction)) ? Number(options.trailDistanceTpFraction) : 0.1;
+    const thresholdPrice = dir === "BUY" ? entry + activationProgress * tpDistance : entry - activationProgress * tpDistance;
 
     const thresholdMet = dir === "BUY" ? price >= thresholdPrice : price <= thresholdPrice;
 
@@ -184,7 +203,7 @@ export async function updateTrailingStop(positionId, currentPrice, entryPrice, t
     }
 
     // --- Calculate trailing distance ---
-    let trailingDistance = Math.abs(price - entry) * 0.1 || 0.001; // fallback if calculation fails
+    let trailingDistance = tpDistance * trailDistanceTpFraction || 0.001; // fallback if calculation fails
 
     // --- Get symbol-specific minimum stop distance ---
     let minStopDistance = 0.0003; // default fallback
