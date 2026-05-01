@@ -313,7 +313,7 @@ class TradingService {
         let marginRequired = marginForSize(size);
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
-        const maxMarginPerTrade = availableMargin * 0.9;
+        const maxMarginPerTrade = availableMargin * 0.7;
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
