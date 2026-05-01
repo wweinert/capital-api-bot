@@ -272,7 +272,19 @@ export function getTradeEntry(dealId, symbol) {
     return { entry: null, logPath: null };
 }
 
-export function logTradeOpen({ dealId, symbol, signal, openReason = "", entryPrice, stopLoss, takeProfit, indicatorsOnOpening, candlesOnOpening, timestamp }) {
+export function logTradeOpen({
+    dealId,
+    symbol,
+    signal,
+    openReason = "",
+    entryPrice,
+    stopLoss,
+    takeProfit,
+    indicatorsOnOpening,
+    candlesOnOpening,
+    strategyContext,
+    timestamp,
+}) {
     const logPath = getSymbolLogPath(symbol);
     const compactOpening = compactIndicators(indicatorsOnOpening);
     const compactCandlesOpening = compactCandles(candlesOnOpening);
@@ -287,6 +299,7 @@ export function logTradeOpen({ dealId, symbol, signal, openReason = "", entryPri
         takeProfit,
         indicatorsOnOpening: compactOpening,
         candlesOnOpening: compactCandlesOpening,
+        strategyContext: compactIndicators(strategyContext),
         openedAt: timestamp,
         status: "open",
 

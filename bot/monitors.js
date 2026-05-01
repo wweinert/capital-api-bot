@@ -42,12 +42,17 @@ export async function trailingStopCheck(bot) {
 
             let indicators;
             try {
-                const [m15Data, m5Data] = await Promise.all([getHistorical(symbol, "MINUTE_15", 50), getHistorical(symbol, "MINUTE_5", 50)]);
-                if (!m15Data?.prices || !m5Data?.prices) {
+                const h1Data = await getHistorical(symbol, "HOUR", 50);
+                await bot.delay(400);
+                const m15Data = await getHistorical(symbol, "MINUTE_15", 50);
+                await bot.delay(400);
+                const m5Data = await getHistorical(symbol, "MINUTE_5", 50);
+                if (!h1Data?.prices || !m15Data?.prices || !m5Data?.prices) {
                     logger.warn(`[Monitoring] Missing candles for ${symbol}, skipping trailing stop update.`);
                     continue;
                 }
                 indicators = {
+                    h1: await calcIndicators(h1Data.prices),
                     m15: await calcIndicators(m15Data.prices),
                     m5: await calcIndicators(m5Data.prices),
                 };

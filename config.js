@@ -44,9 +44,9 @@ export const SESSIONS = {
 };
 
 export const RISK = {
-    PER_TRADE: 0.01, // 2% risk per trade
-    MAX_POSITIONS: 5, // Maximum simultaneous positions
-    MAX_HOLD_TIME: 180, // Maximum hold time in minutes
+    PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
+    MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous position
+    MAX_HOLD_TIME: 2880, // HLLH aggressive TP4 needs room to reach 4R; 620m cut too many H1 trades
 };
 
 const TIMEFRAMES = {
@@ -72,20 +72,18 @@ const EMA = {
 // Technical Analysis Configuration
 export const ANALYSIS = {
     TIMEFRAMES,
-    SYMBOLS: ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD"],
+    SYMBOLS: ["USDCAD", "USDJPY", "USDCHF", "AUDUSD"],
     EMA,
 };
 
 // Development overrides for faster testing
 export const DEV = {
-    INTERVAL: 15 * 1000, // 15 seconds between analyses
-    MODE: true,
+    INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
+    MODE: false,
 };
 
-// 1 min
-// export const PROD = { INTERVAL: (60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds() + 5000 };
 
 // 5 min
 export const PROD = {
-    INTERVAL: ((5 - (new Date().getMinutes() % 5)) * 60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds() + 5000,
+    INTERVAL: ((60 - (new Date().getMinutes() % 5)) * 60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds() + 5000,
 };

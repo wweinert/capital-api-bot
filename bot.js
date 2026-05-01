@@ -1,6 +1,6 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
-import { DEV, PROD, ANALYSIS, SESSIONS } from "./config.js";
-import webSocketService from "./services/websocket.js";
+import { pathToFileURL } from "url";
+import { DEV, PROD, ANALYSIS } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
@@ -9,7 +9,7 @@ import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, logDeals, star
 
 const { TIMEFRAMES } = ANALYSIS;
 const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
-const MONITOR_INTERVAL_MS = 60 * 1000;
+
 class TradingBot {
     constructor() {
         this.isRunning = false;
@@ -26,21 +26,17 @@ class TradingBot {
         this.candleHistory = {}; // symbol -> array of candles
         this.monitorInterval = null; // Add monitor interval for open trades
         this.monitorInProgress = false; // Prevent overlapping monitor runs
-        this.priceMonitorInterval = null;
         this.priceMonitorInProgress = false;
-        this.dealIdMonitorInterval = null; // Interval handle for dealId monitor
         this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
         this.maxCandleHistory = 200; // Rolling window size for indicators
         this.openedPositions = {}; // Track opened positions
-
+        this.MONITOR_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
         this.openedBrockerDealIds = [];
         this.activeSymbols = [];
 
         this.allowedTradingWindows = [
-            // London: 08:15–16:45
-            { start: 8 * 60 + 15, end: 16 * 60 + 45 },
-            // NY: 13:15–20:45
-            { start: 13 * 60 + 15, end: 20 * 60 + 45 },
+            // HLLH approved candidate runs session-off on the configured symbol universe.
+            { start: 0, end: 24 * 60 - 1 },
         ];
         this.tokens = null;
     }
@@ -173,22 +169,7 @@ class TradingBot {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        const activeSessions = [];
-        const activeSessionNames = [];
-
-        for (const [name, session] of Object.entries(SESSIONS)) {
-            const startMinutes = this.parseMinutes(session?.START);
-            const endMinutes = this.parseMinutes(session?.END);
-            if (!this.inSession(currentMinutes, startMinutes, endMinutes)) continue;
-
-            activeSessions.push(session.SYMBOLS);
-            activeSessionNames.push(name);
-        }
-
-        // Combine symbols from all active sessions, remove duplicates
-        const combinedSet = new Set();
-        activeSessions.forEach((arr) => (arr || []).forEach((symbol) => combinedSet.add(symbol)));
-        const sessionSymbols = [...combinedSet];
+        const sessionSymbols = Array.isArray(ANALYSIS.SYMBOLS) ? ANALYSIS.SYMBOLS : [];
         const tradableSymbols = [];
 
         for (const symbol of sessionSymbols) {
@@ -198,7 +179,7 @@ class TradingBot {
         }
 
         logger.info(
-            `[Bot] Active sessions (UTC): ${activeSessions.length} (${activeSessionNames.length ? activeSessionNames.join(", ") : "none"}), Tradable symbols: ${
+            `[Bot] HLLH sessionMode=off | Configured symbols: ${sessionSymbols.join(", ")} | Tradable symbols: ${
                 tradableSymbols.length ? tradableSymbols.join(", ") : "none"
             }`,
         );
@@ -215,18 +196,15 @@ class TradingBot {
 
     async fetchAllCandles(symbol, timeframes, historyLength) {
         try {
-            const [d1Data, h4Data, h1Data, m15Data, m5Data, m1Data] = await Promise.all([
-                getHistorical(symbol, timeframes.D1, historyLength),
-                getHistorical(symbol, timeframes.H4, historyLength),
-                getHistorical(symbol, timeframes.H1, historyLength),
-                getHistorical(symbol, timeframes.M15, historyLength),
-                getHistorical(symbol, timeframes.M5, historyLength),
-                getHistorical(symbol, timeframes.M1, historyLength),
-            ]);
-            logger.debug(
-                `[CandleFetch] ${symbol}: fetched ${timeframes.D1}, ${timeframes.H4}, ${timeframes.H1}, ${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`,
-            );
-            return { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data };
+            const h1Data = await getHistorical(symbol, timeframes.H1, historyLength);
+            await this.delay(400);
+            const m15Data = await getHistorical(symbol, timeframes.M15, historyLength);
+            await this.delay(400);
+            const m5Data = await getHistorical(symbol, timeframes.M5, historyLength);
+            await this.delay(400);
+            const m1Data = await getHistorical(symbol, timeframes.M1, historyLength);
+            logger.debug(`[CandleFetch] ${symbol}: fetched ${timeframes.H1}, ${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
+            return { d1Data: { prices: [] }, h4Data: { prices: [] }, h1Data, m15Data, m5Data, m1Data };
         } catch (error) {
             logger.error(`[CandleFetch] Error fetching candles for ${symbol}: ${error.message}`);
             return {};
@@ -285,9 +263,6 @@ class TradingBot {
         clearInterval(this.sessionRefreshInterval);
         clearInterval(this.sessionPingInterval);
         clearInterval(this.monitorInterval);
-        clearInterval(this.dealIdMonitorInterval);
-        clearInterval(this.priceMonitorInterval);
-        webSocketService.disconnect();
     }
 
     startPriceMonitor() {
@@ -295,7 +270,7 @@ class TradingBot {
     }
 
     async startMonitorOpenTrades() {
-        return startMonitorOpenTrades(this, MONITOR_INTERVAL_MS);
+        return startMonitorOpenTrades(this, this.MONITOR_INTERVAL_MS);
     }
 
     async trailingStopCheck() {
@@ -374,8 +349,8 @@ class TradingBot {
 
     async buildIndicatorsSnapshot({ d1Candles, h4Candles, h1Candles, m15Candles, m5Candles, m1Candles }) {
         return {
-            d1: await calcIndicators(d1Candles),
-            h4: await calcIndicators(h4Candles),
+            d1: null,
+            h4: null,
             h1: await calcIndicators(h1Candles),
             m15: await calcIndicators(m15Candles),
             m5: await calcIndicators(m5Candles),
@@ -401,16 +376,21 @@ class TradingBot {
             return false;
         }
 
-        const news = await getNewsStatus(symbol, {
-            now,
-            includeImpacts: ["High", "Medium"],
-            windowsByImpact: {
-                High: { preMinutes: 30, postMinutes: 5 },
-                Medium: { preMinutes: 15, postMinutes: 2 },
-            },
-        });
+        let news = null;
+        try {
+            news = await getNewsStatus(symbol, {
+                now,
+                includeImpacts: ["High", "Medium"],
+                windowsByImpact: {
+                    High: { preMinutes: 30, postMinutes: 5 },
+                    Medium: { preMinutes: 15, postMinutes: 2 },
+                },
+            });
+        } catch (error) {
+            logger.warn(`[Bot][News] News status unavailable for ${symbol}: ${error?.message || error}. Continuing without news block.`);
+        }
 
-        if (news.blocked) {
+        if (news?.blocked) {
             const titles = news.blockingEvents.map((e) => `${e.impact}:${e.country}:${e.title}`);
             logger.info(`[Bot][News] Trading blocked for ${symbol} until ${news.blockUntilUtc?.toISOString()}. Events: ${titles.join(" | ")}`);
             return false;
@@ -426,13 +406,15 @@ class TradingBot {
 
 const bot = new TradingBot();
 
-const now = new Date();
-const day = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
-// if (day === 0 || day === 6) {
-//     logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
-// } else {
+if (import.meta.url === pathToFileURL(process.argv[1] || "").href) {
+    const now = new Date();
+    const day = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
+    // if (day === 0 || day === 6) {
+    //     logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
+    // } else {
     bot.initialize().catch((error) => {
         logger.error("[bot.js] Bot initialization failed:", error);
         process.exit(1);
     });
-// }
+    // }
+}
