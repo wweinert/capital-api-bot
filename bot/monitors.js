@@ -5,7 +5,7 @@ import tradingService from "../services/trading.js";
 import webSocketService from "../services/websocket.js";
 import { tradeWatchIndicators } from "../indicators/indicators.js";
 
-import { tradeTracker } from "../utils/tradeLogger.js";
+import { getTradeEntry, tradeTracker } from "../utils/tradeLogger.js";
 import logger from "../utils/logger.js";
 import { priceLogger } from "../utils/priceLogger.js";
 
@@ -23,6 +23,10 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
         bot.monitorInProgress = true;
         try {
             await trailingStopCheck(bot);
+            await bot.delay(3000);
+            await weekendFlatCheck(bot);
+            await bot.delay(3000);
+            await dailyFlatCheck(bot);
             await bot.delay(3000);
             await maxHoldCheck(bot);
             await bot.delay(3000);
@@ -71,7 +75,7 @@ export async function trailingStopCheck(bot) {
                 entryPrice: pos.position.level,
                 takeProfit: pos.position.profitLevel,
                 stopLoss: pos.position.stopLevel,
-                currentPrice: pos.market.bid,
+                currentPrice: tradingService.resolveMarketPrice(pos.position.direction, pos.market.bid, pos.market.offer ?? pos.market.ask),
                 trailingStop: pos.position.trailingStop,
             };
 
@@ -79,6 +83,63 @@ export async function trailingStopCheck(bot) {
         }
     } catch (error) {
         logger.error("[bot.js][Bot] Error in monitorOpenTrades:", error);
+    }
+}
+
+export async function dailyFlatCheck(bot) {
+    if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
+
+    const now = new Date();
+    const currentMinute = now.getUTCHours() * 60 + now.getUTCMinutes();
+    const closeMinute = Number.isFinite(Number(RISK.DAILY_CLOSE_MINUTE_UTC)) ? Number(RISK.DAILY_CLOSE_MINUTE_UTC) : 23 * 60 + 50;
+    if (currentMinute < closeMinute) return;
+
+    try {
+        const positions = await getOpenPositions();
+        if (!positions?.positions?.length) return;
+
+        for (const pos of positions.positions) {
+            const dealId = pos?.position?.dealId ?? pos?.dealId;
+            const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+            if (!dealId) {
+                logger.error(`[DailyFlat] Missing dealId for ${symbol}, cannot close.`);
+                continue;
+            }
+
+            await tradingService.closePosition(dealId, "daily_forced_close_utc");
+            logger.info(`[DailyFlat] Closed ${symbol} before UTC day rollover at/after minute ${closeMinute}`);
+            await bot.delay(500);
+        }
+    } catch (error) {
+        logger.error("[DailyFlat] Error closing positions before UTC day rollover:", error);
+    }
+}
+
+export async function weekendFlatCheck(bot) {
+    if (!RISK.WEEKEND_FLAT) return;
+
+    const now = new Date();
+    const closeHour = Number.isFinite(Number(RISK.FRIDAY_CLOSE_HOUR_UTC)) ? Number(RISK.FRIDAY_CLOSE_HOUR_UTC) : 20;
+    if (now.getUTCDay() !== 5 || now.getUTCHours() < closeHour) return;
+
+    try {
+        const positions = await getOpenPositions();
+        if (!positions?.positions?.length) return;
+
+        for (const pos of positions.positions) {
+            const dealId = pos?.position?.dealId ?? pos?.dealId;
+            const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+            if (!dealId) {
+                logger.error(`[WeekendFlat] Missing dealId for ${symbol}, cannot close.`);
+                continue;
+            }
+
+            await tradingService.closePosition(dealId, "weekend_flat");
+            logger.info(`[WeekendFlat] Closed ${symbol} before weekend at/after Friday ${closeHour}:00 UTC`);
+            await bot.delay(500);
+        }
+    } catch (error) {
+        logger.error("[WeekendFlat] Error closing positions before weekend:", error);
     }
 }
 
@@ -104,21 +165,59 @@ export async function maxHoldCheck(bot) {
             const heldMs = Math.max(0, nowMs - openMs);
             const minutesHeld = heldMs / 60000;
 
-            logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${RISK.MAX_HOLD_TIME}`);
+            const dealId = pos?.position?.dealId ?? pos?.dealId;
+            const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+            const maxHoldMinutes = resolveMaxHoldMinutes(pos, symbol);
 
-            if (minutesHeld >= RISK.MAX_HOLD_TIME) {
-                const dealId = pos?.position?.dealId ?? pos?.dealId;
+            logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${maxHoldMinutes}`);
+
+            if (minutesHeld >= maxHoldMinutes) {
                 if (!dealId) {
                     logger.error(`[Bot] Missing dealId for ${pos?.market?.epic}, cannot close.`);
                     continue;
                 }
                 await tradingService.closePosition(dealId, "timeout");
-                logger.info(`[Bot] Closed position ${pos?.market?.epic} after ${minutesHeld.toFixed(1)} minutes (max hold: ${RISK.MAX_HOLD_TIME})`);
+                logger.info(`[Bot] Closed position ${pos?.market?.epic} after ${minutesHeld.toFixed(1)} minutes (max hold: ${maxHoldMinutes})`);
             }
         }
     } catch (error) {
         logger.error("[Bot] Error in max hold monitor:", error);
     }
+}
+
+function timeframeMinutes(timeframe) {
+    const normalized = String(timeframe || "").toUpperCase();
+    if (normalized === "M1") return 1;
+    if (normalized === "M5") return 5;
+    if (normalized === "M15") return 15;
+    if (normalized === "H1") return 60;
+    if (normalized === "H4") return 240;
+    if (normalized === "D1") return 1440;
+    return null;
+}
+
+function resolveMaxHoldMinutes(pos, symbol) {
+    const fallback = Number.isFinite(Number(RISK.MAX_HOLD_TIME)) ? Number(RISK.MAX_HOLD_TIME) : 3600;
+    const dealId = pos?.position?.dealId ?? pos?.dealId;
+    if (!dealId) return fallback;
+
+    const { entry } = getTradeEntry(dealId, symbol);
+    const context = entry?.strategyContext || {};
+    const managementProfile = context.managementProfile || {};
+    const maxHoldBars = Number(managementProfile.maxHoldBars);
+    const managementTimeframe = managementProfile.timeframe || context.timeframe;
+    const managementMinutes = timeframeMinutes(managementTimeframe);
+    if (Number.isFinite(maxHoldBars) && maxHoldBars > 0 && Number.isFinite(managementMinutes) && managementMinutes > 0) {
+        return maxHoldBars * managementMinutes;
+    }
+
+    const match = String(context.exitVariant || "").match(/^time_exit_(\d+)$/);
+    if (!match) return fallback;
+
+    const bars = Number(match[1]);
+    const minutes = timeframeMinutes(context.timeframe);
+    if (!(Number.isFinite(bars) && bars > 0 && Number.isFinite(minutes) && minutes > 0)) return fallback;
+    return bars * minutes;
 }
 
 export function logDeals(bot) {

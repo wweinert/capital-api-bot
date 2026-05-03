@@ -1,4 +1,4 @@
-import { placePosition, updateTrailingStop, getDealConfirmation, closePosition as apiClosePosition, getOpenPositions, getHistorical } from "../api.js";
+import { placePosition, updateTrailingStop, getDealConfirmation, closePosition as apiClosePosition, getOpenPositions, getHistorical, getMarketDetails } from "../api.js";
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
@@ -17,6 +17,7 @@ class TradingService {
         this.dailyLoss = 0;
         this.dailyLossLimitPct = 0.05;
         this.executedHllhSignals = new Set();
+        this.quotePerEurCache = new Map();
     }
 
     setAccountBalance(balance) {
@@ -227,10 +228,12 @@ class TradingService {
             const takeProfitR = Number.isFinite(Number(context.takeProfitR)) ? Number(context.takeProfitR) : 1.5;
             const stopLossPrice = this.roundPrice(expectedStop, symbol);
             const takeProfitPrice = this.roundPrice(isBuy ? price + riskDistance * takeProfitR : price - riskDistance * takeProfitR, symbol);
-            const size = this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
+            const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
+            const size = positionSizing.size;
 
             return {
                 size,
+                positionSizing,
                 stopLossPrice,
                 takeProfitPrice,
                 stopLossPips: riskDistance,
@@ -251,7 +254,8 @@ class TradingService {
         const stopLossPrice = isBuy ? price - stopLossPips : price + stopLossPips;
         const takeProfitPips = 2 * stopLossPips; // 2:1 reward-risk ratio
         const takeProfitPrice = isBuy ? price + takeProfitPips : price - takeProfitPips;
-        const size = this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
+        const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
+        const size = positionSizing.size;
 
         // Trailing stop parameters
         const trailingStopParams = {
@@ -263,6 +267,7 @@ class TradingService {
 
         return {
             size,
+            positionSizing,
             stopLossPrice,
             takeProfitPrice,
             stopLossPips,
@@ -275,71 +280,173 @@ class TradingService {
         };
     }
 
-    positionSize(balance, entryPrice, stopLossPrice, symbol) {
+    leverageForSymbol(symbol) {
+        return String(symbol || "").includes("USD") ? 30 : 20;
+    }
+
+    parseSymbol(symbol) {
+        const normalized = String(symbol || "").toUpperCase();
+        return {
+            base: normalized.slice(0, 3),
+            quote: normalized.slice(3, 6),
+        };
+    }
+
+    marketMid(details) {
+        const bid = this.firstNumber(details?.snapshot?.bid, details?.bid);
+        const ask = this.firstNumber(details?.snapshot?.offer, details?.snapshot?.ask, details?.offer, details?.ask);
+        if (Number.isFinite(bid) && Number.isFinite(ask) && bid > 0 && ask > 0) return (bid + ask) / 2;
+        return this.firstNumber(details?.snapshot?.mid, details?.mid, bid, ask);
+    }
+
+    async getMarketMid(symbol) {
+        const details = await getMarketDetails(symbol);
+        const mid = this.marketMid(details);
+        return Number.isFinite(mid) && mid > 0 ? mid : null;
+    }
+
+    async getQuotePerEur(quoteCurrency) {
+        const quote = String(quoteCurrency || "").toUpperCase();
+        if (!quote) return null;
+        if (quote === "EUR") return 1;
+
+        const cached = this.quotePerEurCache.get(quote);
+        if (cached && Date.now() - cached.ts < 60_000) return cached.value;
+
+        const resolve = async () => {
+            const direct = await this.getMarketMid(`EUR${quote}`).catch(() => null);
+            if (Number.isFinite(direct) && direct > 0) return direct;
+
+            const inverse = await this.getMarketMid(`${quote}EUR`).catch(() => null);
+            if (Number.isFinite(inverse) && inverse > 0) return 1 / inverse;
+
+            const eurusd = await this.getMarketMid("EURUSD").catch(() => null);
+            if (!(Number.isFinite(eurusd) && eurusd > 0)) return null;
+
+            if (quote === "USD") return eurusd;
+
+            const usdQuote = await this.getMarketMid(`USD${quote}`).catch(() => null);
+            if (Number.isFinite(usdQuote) && usdQuote > 0) return eurusd * usdQuote;
+
+            const quoteUsd = await this.getMarketMid(`${quote}USD`).catch(() => null);
+            if (Number.isFinite(quoteUsd) && quoteUsd > 0) return eurusd / quoteUsd;
+
+            return null;
+        };
+
+        const value = await resolve();
+        if (Number.isFinite(value) && value > 0) {
+            this.quotePerEurCache.set(quote, { value, ts: Date.now() });
+            return value;
+        }
+        return null;
+    }
+
+    emptyPositionSizing(symbol, reason) {
+        return {
+            symbol,
+            size: 0,
+            reason,
+            requestedRiskPct: PER_TRADE,
+            requestedRiskAmount: 0,
+            effectiveRiskPct: 0,
+            effectiveRiskAmount: 0,
+            marginCapHit: false,
+        };
+    }
+
+    async positionSize(balance, entryPrice, stopLossPrice, symbol) {
         const accountBalance = this.toNumber(balance);
         if (!(Number.isFinite(accountBalance) && accountBalance > 0)) {
             logger.error(`[PositionSize] Invalid account balance for ${symbol}: ${balance}`);
-            return 0;
+            return this.emptyPositionSizing(symbol, "invalid_balance");
         }
 
-        const riskAmount = accountBalance * PER_TRADE;
-        const pipValue = this.getPipValue(symbol); // Dynamic pip value
-
-        if (!pipValue || pipValue <= 0) {
-            logger.error(`[PositionSize] Invalid pip value calculation for ${symbol}`);
-            return 0;
+        const entry = this.toNumber(entryPrice);
+        const stop = this.toNumber(stopLossPrice);
+        const riskDistance = Math.abs(entry - stop);
+        if (!(Number.isFinite(entry) && entry > 0 && Number.isFinite(stop) && stop > 0 && Number.isFinite(riskDistance) && riskDistance > 0)) {
+            logger.error(`[PositionSize] Invalid price inputs for ${symbol}: entry=${entryPrice}, stop=${stopLossPrice}`);
+            return this.emptyPositionSizing(symbol, "invalid_prices");
         }
 
-        const stopLossPips = Math.abs(entryPrice - stopLossPrice) / pipValue;
-        if (!(Number.isFinite(stopLossPips) && stopLossPips > 0)) return 0;
-
-        let size = riskAmount / (stopLossPips * pipValue);
-        // Convert to units (assuming size is in lots, so multiply by 1000)
-        size = size * 1000;
-        // Floor to nearest 100
-        size = Math.floor(size / 100) * 100;
-        if (size < 100) size = 100;
-
-        // Margin cap for the single-position risk model.
-        // Assume leverage is 30:1 for forex (can be adjusted)
-        const leverage = 30;
-        // JPY quotes are typically 100x larger; normalize to keep margin cap comparable.
-        const marginPrice = symbol.includes("JPY") ? entryPrice / 100 : entryPrice;
-        if (!(Number.isFinite(marginPrice) && marginPrice > 0)) {
-            logger.error(`[PositionSize] Invalid margin price for ${symbol}: ${entryPrice}`);
-            return 0;
+        const { base, quote } = this.parseSymbol(symbol);
+        if (!base || !quote) {
+            logger.error(`[PositionSize] Invalid symbol for sizing: ${symbol}`);
+            return this.emptyPositionSizing(symbol, "invalid_symbol");
         }
-        const marginForSize = (value) => (value * marginPrice) / leverage;
-        let marginRequired = marginForSize(size);
+
+        const quotePerEur = await this.getQuotePerEur(quote);
+        if (!(Number.isFinite(quotePerEur) && quotePerEur > 0)) {
+            logger.error(`[PositionSize] Could not resolve ${quote}/EUR conversion for ${symbol}`);
+            return this.emptyPositionSizing(symbol, "missing_quote_conversion");
+        }
+
+        const requestedRiskAmount = accountBalance * PER_TRADE;
+        const rawSize = (requestedRiskAmount * quotePerEur) / riskDistance;
+        const leverage = this.leverageForSymbol(symbol);
+        const notionalEurForSize = (value) => (value * entry) / quotePerEur;
+        const marginForSize = (value) => notionalEurForSize(value) / leverage;
+
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
         const maxMarginPerTrade = availableMargin * 0.7;
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
-            return 0;
+            return this.emptyPositionSizing(symbol, "invalid_margin_budget");
         }
 
-        if (marginRequired > maxMarginPerTrade) {
-            // Reduce size so marginRequired == maxMarginPerTrade
-            size = Math.floor((maxMarginPerTrade * leverage) / marginPrice / 100) * 100;
-            if (size < 100) {
-                logger.warn(
-                    `[PositionSize] ${symbol}: minimum size 100 exceeds margin cap. marginCap=${maxMarginPerTrade}, marginAtMin=${marginForSize(100)}`,
-                );
-                return 0;
-            }
-            marginRequired = marginForSize(size);
-            if (marginRequired > maxMarginPerTrade) {
-                logger.warn(`[PositionSize] ${symbol}: adjusted size still exceeds margin cap. size=${size}, margin=${marginRequired}, cap=${maxMarginPerTrade}`);
-                return 0;
-            }
-            logger.debug(`[PositionSize] Adjusted for margin on ${symbol}: new size=${size}`);
+        const rawMargin = marginForSize(rawSize);
+        const marginScale = rawMargin > maxMarginPerTrade ? maxMarginPerTrade / rawMargin : 1;
+        let size = Math.floor((rawSize * marginScale) / 100) * 100;
+        if (size < 100) {
+            logger.warn(`[PositionSize] ${symbol}: minimum size 100 exceeds sizing constraints. raw=${rawSize}, marginCap=${maxMarginPerTrade}`);
+            return this.emptyPositionSizing(symbol, "below_min_size");
         }
+
+        let marginRequired = marginForSize(size);
+        if (marginRequired > maxMarginPerTrade) {
+            size = Math.floor((maxMarginPerTrade * leverage * quotePerEur) / entry / 100) * 100;
+            marginRequired = marginForSize(size);
+        }
+
+        if (!(Number.isFinite(size) && size >= 100 && marginRequired <= maxMarginPerTrade)) {
+            logger.warn(`[PositionSize] ${symbol}: adjusted size still exceeds margin cap. size=${size}, margin=${marginRequired}, cap=${maxMarginPerTrade}`);
+            return this.emptyPositionSizing(symbol, "margin_cap_too_small");
+        }
+
+        const effectiveRiskAmount = (size * riskDistance) / quotePerEur;
+        const effectiveRiskPct = effectiveRiskAmount / accountBalance;
+        const stopLossPips = riskDistance / this.getPipValue(symbol);
+        const marginCapHit = rawMargin > maxMarginPerTrade || size < Math.floor(rawSize / 100) * 100;
+        const positionSizing = {
+            symbol,
+            baseCurrency: base,
+            quoteCurrency: quote,
+            quotePerEur,
+            size,
+            rawSize,
+            requestedRiskPct: PER_TRADE,
+            requestedRiskAmount,
+            effectiveRiskPct,
+            effectiveRiskAmount,
+            riskDistance,
+            stopLossPips,
+            leverage,
+            notionalEur: notionalEurForSize(size),
+            rawMargin,
+            marginRequired,
+            availableMargin,
+            maxMarginPerTrade,
+            marginCapPct: 0.7,
+            marginCapHit,
+        };
+
         logger.debug(
-            `[PositionSize] ${symbol}: raw=${riskAmount / (stopLossPips * pipValue)} final=${size} marginRequired=${marginRequired} maxPerTrade=${maxMarginPerTrade}`,
+            `[PositionSize] ${symbol}: targetRisk=${(PER_TRADE * 100).toFixed(2)}% effectiveRisk=${(effectiveRiskPct * 100).toFixed(3)}% raw=${rawSize.toFixed(2)} final=${size} margin=${marginRequired.toFixed(2)}/${maxMarginPerTrade.toFixed(2)}`,
         );
-        return size;
+        return positionSizing;
     }
 
     // ============================================================
@@ -347,7 +454,7 @@ class TradingService {
     // ============================================================
     async executeTrade(symbol, signal, bid, ask, indicators, reason, context, candlesSnapshot) {
         try {
-            const { size, price, stopLossPrice, takeProfitPrice } = await this.calculateTradeParameters(signal, symbol, bid, ask, context);
+            const { size, price, stopLossPrice, takeProfitPrice, positionSizing } = await this.calculateTradeParameters(signal, symbol, bid, ask, context);
             if (!(Number.isFinite(size) && size > 0)) {
                 logger.warn(`[Order] Skipping ${symbol}: calculated size is not tradable (${size}).`);
                 return;
@@ -366,7 +473,9 @@ class TradingService {
                 return;
             }
 
-            logger.info(`[Order] OPENED ${symbol} ${signal} size=${size} entry=${price} SL=${stopLossPrice} TP=${takeProfitPrice}`);
+            logger.info(
+                `[Order] OPENED ${symbol} ${signal} size=${size} entry=${price} SL=${stopLossPrice} TP=${takeProfitPrice} risk=${((positionSizing?.effectiveRiskPct || 0) * 100).toFixed(3)}% margin=${positionSizing?.marginRequired?.toFixed?.(2) ?? "n/a"}`,
+            );
 
             const affectedDealId = confirmation?.affectedDeals?.find((d) => d?.status === "OPENED")?.dealId;
             // or: const affectedDealId = confirmation?.affectedDeals?.[0]?.dealId;
@@ -380,6 +489,7 @@ class TradingService {
                     const stopLossRounded = this.roundPrice(stopLossPrice, symbol);
                     const takeProfitRounded = this.roundPrice(takeProfitPrice, symbol);
                     const logTimestamp = new Date().toISOString();
+                    const actualPositionSizing = await this.positionSize(this.accountBalance, entryPrice, stopLossRounded, symbol);
 
                     logTradeOpen({
                         dealId: affectedDealId,
@@ -392,6 +502,10 @@ class TradingService {
                         indicatorsOnOpening: indicators,
                         candlesOnOpening: candlesSnapshot,
                         strategyContext: context,
+                        positionSizing: {
+                            planned: positionSizing,
+                            actual: actualPositionSizing,
+                        },
                         timestamp: logTimestamp,
                     });
 
@@ -427,6 +541,11 @@ class TradingService {
 
         if (managementMode === "atr_trail_after_r") {
             await this.updateAtrTrailIfNeeded(position, indicators, loggedEntry, managementProfile);
+            return;
+        }
+
+        if (managementMode === "adaptive_trail_r") {
+            await this.updateAdaptiveRTrailIfNeeded(position, loggedEntry, managementProfile);
             return;
         }
 
@@ -524,6 +643,53 @@ class TradingService {
             logger.info(`[Trail] ATR profile updated SL distance for ${dealId}: atr=${atr}, multiplier=${atrMultiplier}, approxSL=${newSL}`);
         } catch (error) {
             logger.error(`[Trail] ATR profile error:`, error);
+        }
+    }
+
+    async updateAdaptiveRTrailIfNeeded(position, loggedEntry, managementProfile) {
+        const { dealId, direction, entryPrice, stopLoss, currentPrice, symbol } = position;
+        const entry = Number(entryPrice);
+        const price = Number(currentPrice);
+        const initialStop = this.toNumber(loggedEntry?.strategyContext?.expectedStopPrice) ?? this.toNumber(loggedEntry?.stopLoss) ?? this.toNumber(stopLoss);
+        if (![entry, price, initialStop].every(Number.isFinite)) return;
+
+        const dir = this.normalizeDirection(direction);
+        if (!["BUY", "SELL"].includes(dir)) return;
+
+        const initialRisk = Math.abs(entry - initialStop);
+        if (!(initialRisk > 0)) return;
+
+        const currentR = dir === "BUY" ? (price - entry) / initialRisk : (entry - price) / initialRisk;
+        const activationR = Number.isFinite(Number(managementProfile?.activationR)) ? Number(managementProfile.activationR) : 1;
+        const trailR = Number.isFinite(Number(managementProfile?.trailR)) ? Number(managementProfile.trailR) : 0.5;
+        const breakevenR = Number.isFinite(Number(managementProfile?.breakevenR)) ? Number(managementProfile.breakevenR) : activationR;
+        if (currentR < Math.min(activationR, breakevenR)) return;
+
+        let desiredStop = null;
+        if (currentR >= breakevenR) {
+            desiredStop = entry;
+        }
+        if (currentR >= activationR) {
+            const trailingStop = dir === "BUY" ? price - initialRisk * trailR : price + initialRisk * trailR;
+            desiredStop = desiredStop === null ? trailingStop : dir === "BUY" ? Math.max(desiredStop, trailingStop) : Math.min(desiredStop, trailingStop);
+        }
+        if (!Number.isFinite(desiredStop)) return;
+
+        const currentStop = Number(stopLoss);
+        if (Number.isFinite(currentStop)) {
+            if ((dir === "BUY" && desiredStop <= currentStop) || (dir === "SELL" && desiredStop >= currentStop)) return;
+        }
+
+        const stopDistance = Math.abs(price - desiredStop);
+        if (!(Number.isFinite(stopDistance) && stopDistance > 0)) return;
+
+        try {
+            await updateTrailingStop(dealId, price, entry, null, dir, symbol, { stopDistance });
+            logger.info(
+                `[Trail] Adaptive R profile updated ${symbol} ${dealId}: currentR=${currentR.toFixed(2)} stopDistance=${stopDistance.toFixed(6)} approxSL=${desiredStop}`,
+            );
+        } catch (error) {
+            logger.error(`[Trail] Adaptive R profile error:`, error);
         }
     }
 

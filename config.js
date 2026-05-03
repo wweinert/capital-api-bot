@@ -13,10 +13,10 @@ export const API = {
 
 // Trading Sessions (UTC times)
 const SESSION_SYMBOLS = {
-    LONDON: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
-    NY: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
-    SYDNEY: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
-    TOKYO: ["GBPJPY", "USDJPY", "AUDJPY", "EURJPY", "NZDJPY", "NZDUSD", "AUDCAD"],
+    LONDON: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
+    NY: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
+    SYDNEY: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
+    TOKYO: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
 };
 
 // export const CRYPTO_SYMBOLS = ["BTCUSD", "BTCEUR", "SOLUSD", "XRPUSD", "DOGEUSD", "ADAUSD"];
@@ -46,7 +46,13 @@ export const SESSIONS = {
 export const RISK = {
     PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
     MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous position
-    MAX_HOLD_TIME: 2880, // HLLH aggressive TP4 needs room to reach 4R; 620m cut too many H1 trades
+    MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
+    DAILY_FORCED_CLOSE_UTC: true,
+    DAILY_LAST_ENTRY_MINUTE_UTC: 23 * 60 + 30,
+    DAILY_CLOSE_MINUTE_UTC: 23 * 60 + 50,
+    WEEKEND_FLAT: true,
+    FRIDAY_LAST_ENTRY_HOUR_UTC: 18,
+    FRIDAY_CLOSE_HOUR_UTC: 20,
 };
 
 const TIMEFRAMES = {
@@ -69,149 +75,59 @@ const EMA = {
     },
 };
 
+const BEST_ADAPTIVE_HLLH_PROFILE = {
+    enabled: true,
+    setupMode: "aggressive",
+    pivotWindow: 2,
+    signalMode: "simple",
+    entryMode: "entry_on_close",
+    stopVariant: "signal_candle_extreme_with_buffer_2pip",
+    exitVariant: "adaptive_trail_1r_0_5",
+    timeframe: "M15",
+    takeProfitR: 20,
+    safetyTakeProfitR: 20,
+    maxSignalWaitBars: 8,
+    entryBreakMaxBars: 3,
+    avoidHoursUTC: [],
+    maxStopPips: 12,
+    dailyForcedCloseUTC: true,
+    managementProfile: {
+        mode: "adaptive_trail_r",
+        activationR: 1,
+        trailR: 0.5,
+        breakevenR: 1,
+        maxHoldBars: 96,
+        timeframe: "M15",
+    },
+    research: {
+        report: "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+        portfolioTrades: 1743,
+        winRate: 56.91,
+        profitFactor: 2.44,
+        expectancyR: 0.772,
+        maxDrawdownPct: 22.29,
+        startCapital: 500,
+        endCapital: 6241.53,
+        overnightTradeCount: 0,
+    },
+};
+
 export const HLLH_SYMBOL_PROFILES = {
-    AUDJPY: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 8,
-        avoidHoursUTC: [],
-        maxStopPips: 12,
-        research: { trades: 134, winRate: 43.28, profitFactor: 3.09, expectancyR: 1.172, totalR: 157 },
+    GBPAUD: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 352 },
     },
-    NZDJPY: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 11,
-        avoidHoursUTC: [],
-        maxStopPips: 12,
-        research: { trades: 158, winRate: 39.24, profitFactor: 2.56, expectancyR: 0.943, totalR: 149.02 },
+    EURAUD: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 529 },
     },
-    AUDCAD: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 11,
-        avoidHoursUTC: [],
-        maxStopPips: 12,
-        research: { trades: 166, winRate: 37.35, profitFactor: 2.43, expectancyR: 0.866, totalR: 143.79 },
+    EURJPY: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 473 },
     },
-    USDJPY: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 8,
-        avoidHoursUTC: [],
-        maxStopPips: 12,
-        research: { trades: 125, winRate: 40, profitFactor: 2.72, expectancyR: 1.012, totalR: 126.48 },
-    },
-    NZDUSD: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_3pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 8,
-        avoidHoursUTC: [0, 10, 21, 22, 23],
-        maxStopPips: 12,
-        research: { trades: 121, winRate: 33.06, profitFactor: 1.98, expectancyR: 0.656, totalR: 79.35 },
-    },
-    USDCAD: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_3",
-        takeProfitR: 3,
-        maxSignalWaitBars: 14,
-        avoidHoursUTC: [],
-        maxStopPips: 12,
-        research: { trades: 155, winRate: 38.06, profitFactor: 1.85, expectancyR: 0.517, totalR: 80.2 },
-    },
-    AUDUSD: {
-        enabled: true,
-        setupMode: "confirmed",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 11,
-        avoidHoursUTC: [],
-        maxStopPips: 25,
-        research: { trades: 93, winRate: 36.56, profitFactor: 2.16, expectancyR: 0.735, totalR: 68.4 },
-    },
-    USDCHF: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 3,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_range_buffer_40",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 11,
-        avoidHoursUTC: [0, 10, 18, 21, 22, 23],
-        maxStopPips: 17.39,
-        research: { trades: 88, winRate: 34.09, profitFactor: 1.93, expectancyR: 0.589, totalR: 51.8 },
-    },
-    GBPCHF: {
-        enabled: true,
-        setupMode: "confirmed",
-        pivotWindow: 3,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_3pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 8,
-        avoidHoursUTC: [0, 1, 2, 3, 4, 5, 6, 7, 10, 18, 19, 20, 21, 22, 23],
-        maxStopPips: 12,
-        research: { trades: 20, winRate: 65, profitFactor: 7.67, expectancyR: 2.107, totalR: 42.14 },
-    },
-    EURCHF: {
-        enabled: true,
-        setupMode: "aggressive",
-        pivotWindow: 3,
-        signalMode: "simple",
-        stopVariant: "signal_candle_extreme_with_buffer_2pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 11,
-        avoidHoursUTC: [0, 1, 2, 3, 4, 5, 6, 7, 10, 18, 19, 20, 21, 22, 23],
-        maxStopPips: 12,
-        research: { trades: 53, winRate: 32.08, profitFactor: 1.65, expectancyR: 0.443, totalR: 23.46 },
-    },
-    EURGBP: {
-        enabled: false,
-        setupMode: "confirmed",
-        pivotWindow: 2,
-        signalMode: "simple",
-        stopVariant: "structure_pivot_with_buffer_1pip",
-        exitVariant: "fixed_r_4",
-        takeProfitR: 4,
-        maxSignalWaitBars: 8,
-        avoidHoursUTC: [0, 1, 2, 3, 4, 5, 6, 7, 10, 18, 19, 20, 21, 22, 23],
-        maxStopPips: 12,
-        research: { trades: 23, winRate: 43.48, profitFactor: 1.83, expectancyR: 0.47, totalR: 10.8 },
+    GBPUSD: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 389 },
     },
 };
 
@@ -233,7 +149,7 @@ export const DEV = {
 };
 
 
-// 5 min
+// M15 close + 5 seconds
 export const PROD = {
-    INTERVAL: ((60 - (new Date().getMinutes() % 5)) * 60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds() + 5000,
+    INTERVAL: ((15 - (new Date().getMinutes() % 15)) * 60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds() + 5000,
 };

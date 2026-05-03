@@ -283,6 +283,7 @@ export function logTradeOpen({
     indicatorsOnOpening,
     candlesOnOpening,
     strategyContext,
+    positionSizing,
     timestamp,
 }) {
     const logPath = getSymbolLogPath(symbol);
@@ -300,6 +301,7 @@ export function logTradeOpen({
         indicatorsOnOpening: compactOpening,
         candlesOnOpening: compactCandlesOpening,
         strategyContext: compactIndicators(strategyContext),
+        positionSizing: compactIndicators(positionSizing),
         openedAt: timestamp,
         status: "open",
 
