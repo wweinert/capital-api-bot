@@ -4,7 +4,7 @@ import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
 import strategyRouter from "../strategies/Router.js";
 
-const { PER_TRADE, MAX_POSITIONS } = RISK;
+const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT = 0.7 } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
 const HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS = 0.5;
 const HLLH_TRAIL_DISTANCE_TP_FRACTION = 0.12;
@@ -390,7 +390,9 @@ class TradingService {
 
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
-        const maxMarginPerTrade = availableMargin * 0.7;
+        const marginReservePct = Number.isFinite(Number(MARGIN_RESERVE_PCT)) && Number(MARGIN_RESERVE_PCT) > 0 ? Number(MARGIN_RESERVE_PCT) : 0.7;
+        const maxPositionsForMargin = Number.isFinite(Number(MAX_POSITIONS)) && Number(MAX_POSITIONS) > 0 ? Number(MAX_POSITIONS) : 1;
+        const maxMarginPerTrade = (availableMargin * marginReservePct) / maxPositionsForMargin;
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
@@ -439,7 +441,8 @@ class TradingService {
             marginRequired,
             availableMargin,
             maxMarginPerTrade,
-            marginCapPct: 0.7,
+            marginCapPct: marginReservePct,
+            marginSlots: maxPositionsForMargin,
             marginCapHit,
         };
 
