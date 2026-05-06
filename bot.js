@@ -5,10 +5,10 @@ import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { getNewsStatus } from "./utils/newsChecker.js";
-import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, logDeals, startPriceMonitor, startWebSocket } from "./bot/monitors.js";
+import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startPriceMonitor, startWebSocket } from "./bot/monitors.js";
 
 const { TIMEFRAMES } = ANALYSIS;
-const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
+const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
 
 class TradingBot {
     constructor() {
@@ -109,13 +109,13 @@ class TradingBot {
             }
         };
 
-        // First run: align to next 5th minute + 5 seconds
+        // First run: align to next M15 close + 5 seconds
         const interval = this.getInitialIntervalMs();
         logger.info(`[${DEV.MODE ? "DEV" : "PROD"}] Setting up analysis interval: ${interval}ms`);
 
         this.analysisStartTimeout = setTimeout(() => {
             void runAnalysis();
-            // After first run, repeat every 5 minutes
+            // After first run, repeat every 15 minutes
             this.analysisInterval = setInterval(() => {
                 void runAnalysis();
             }, this.getRepeatIntervalMs());
@@ -281,6 +281,10 @@ class TradingBot {
         return maxHoldCheck(this);
     }
 
+    async dailyFlatCheck() {
+        return dailyFlatCheck(this);
+    }
+
     logDeals() {
         return logDeals(this);
     }
@@ -409,12 +413,12 @@ const bot = new TradingBot();
 if (import.meta.url === pathToFileURL(process.argv[1] || "").href) {
     const now = new Date();
     const day = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
-    // if (day === 0 || day === 6) {
-    //     logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
-    // } else {
-    bot.initialize().catch((error) => {
-        logger.error("[bot.js] Bot initialization failed:", error);
-        process.exit(1);
-    });
-    // }
+    if (day === 0 || day === 6) {
+        logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
+    } else {
+        bot.initialize().catch((error) => {
+            logger.error("[bot.js] Bot initialization failed:", error);
+            process.exit(1);
+        });
+    }
 }

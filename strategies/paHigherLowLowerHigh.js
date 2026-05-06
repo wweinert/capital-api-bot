@@ -16,8 +16,9 @@ import {
     maybeCloseTrade,
     maybeRejectSmallStop,
     scenarioId,
+    shouldDailyForceClose,
 } from "../backtest/lib/simulators/priceActionTradeCore.js";
-import { HLLH_SYMBOL_PROFILES } from "../config.js";
+import { HLLH_SYMBOL_PROFILES, RISK } from "../config.js";
 import { buildHllhStableCandidateIdentity } from "../utils/hllhSignalIdentity.js";
 
 export const PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID = "PA_HIGHER_LOW_LOWER_HIGH";
@@ -33,20 +34,24 @@ export const PA_HLLH_CONFIG = {
     pivotWindow: 2,
     signalMode: "simple",
     entryMode: "entry_on_close",
-    stopVariant: "signal_candle_extreme_with_range_buffer_25",
-    exitVariant: "fixed_r_4",
-    timeframe: "H1",
-    maxSignalWaitBars: 11,
+    stopVariant: "signal_candle_extreme_with_buffer_2pip",
+    exitVariant: "adaptive_trail_1r_0_5",
+    timeframe: "M15",
+    maxSignalWaitBars: 8,
     entryBreakMaxBars: 3,
-    takeProfitR: 4,
+    takeProfitR: 20,
+    safetyTakeProfitR: 20,
     minStopDistancePips: 2,
-    avoidHoursUTC: [0, 10, 18, 21, 22, 23],
-    maxStopPips: 17.39,
+    dailyForcedCloseUTC: true,
+    avoidHoursUTC: [],
+    maxStopPips: 12,
     managementProfile: {
-        mode: "atr_trail_after_r",
-        activationR: 1.5,
-        atrMultiplier: 2,
-        atrTimeframe: "H1",
+        mode: "adaptive_trail_r",
+        activationR: 1,
+        trailR: 0.5,
+        breakevenR: 1,
+        maxHoldBars: 96,
+        timeframe: "M15",
     },
 };
 
@@ -277,6 +282,22 @@ export function createPaHigherLowLowerHighStrategy({ config = {}, meta = {} } = 
         const emitted = [];
 
         if (openTrade) {
+            const previousRow = rows[index - 1] || null;
+            if (shouldDailyForceClose(openTrade, previousRow, row, resolvedConfig)) {
+                const forcedTrade = closeTrade(openTrade, index - 1, previousRow, previousRow.close, "daily_forced_close_utc", pipSize);
+                trades.push(forcedTrade);
+                openTrade = null;
+                const payload = tradeToLogPayload(forcedTrade, rows, pipSize, contextBase, {
+                    timestamp: forcedTrade.exitTimestamp,
+                    barIndex: forcedTrade.exitIndex,
+                    metadata: { tradeKey: forcedTrade.key },
+                });
+                log("trade_closed", payload);
+                emitted.push({ type: "trade_closed", trade: forcedTrade });
+            }
+        }
+
+        if (openTrade) {
             const closedTrade = maybeCloseTrade(openTrade, row, index, pipSize);
             if (closedTrade) {
                 trades.push(closedTrade);
@@ -414,6 +435,33 @@ export function createPaHigherLowLowerHighStrategy({ config = {}, meta = {} } = 
             });
             emitted.push(event);
 
+            const qualityBlock = candidateQualityBlock(
+                {
+                    ...candidate,
+                    entryLevel: previewEntryPrice,
+                    stopPrice: previewStopPrice,
+                    pipSize,
+                },
+                contextBase.symbol,
+                resolvedConfig,
+            );
+            if (qualityBlock) {
+                log("signal_rejected", {
+                    timestamp: candidate.signalTimestamp,
+                    barIndex: candidate.signalIndex,
+                    side: candidate.side,
+                    structureRefs: candidate.structureRefs || null,
+                    signalCandle: candleSnapshot(candidate.signalRow, candidate.signalIndex),
+                    confirmationType: candidate.confirmationType || null,
+                    invalidationReason: qualityBlock.reason,
+                    normalizedCandidateId: candidate.normalizedCandidateId || null,
+                    normalizedTradeId: candidate.normalizedTradeId || candidate.normalizedCandidateId || null,
+                    metadata: { candidateKey: candidate.key, ...(qualityBlock.context || {}) },
+                });
+                emitted.push({ type: "trade_rejected", reason: qualityBlock.reason });
+                continue;
+            }
+
             if (resolvedConfig.entryMode === "entry_on_close") {
                 const trade = buildTradeFromSignal({
                     candidate,
@@ -538,9 +586,18 @@ export function replayPaHigherLowLowerHighScenario(rows, config, meta = {}) {
     return engine.buildResult();
 }
 
-function liveCandleRows(candles = {}) {
-    const h1Rows = normalizeRows(candles?.h1Candles);
-    return h1Rows.length > 1 ? h1Rows.slice(0, -1) : h1Rows;
+function liveCandleRows(candles = {}, timeframe = "H1") {
+    const keyByTimeframe = {
+        D1: "d1Candles",
+        H4: "h4Candles",
+        H1: "h1Candles",
+        M15: "m15Candles",
+        M5: "m5Candles",
+        M1: "m1Candles",
+    };
+    const key = keyByTimeframe[String(timeframe || "H1").toUpperCase()] || "h1Candles";
+    const rows = normalizeRows(candles?.[key]);
+    return rows.length > 1 ? rows.slice(0, -1) : rows;
 }
 
 function collectLiveCandidates(rows, config) {
@@ -632,7 +689,9 @@ function pickStrategyProfileFields(profile = {}) {
         "maxSignalWaitBars",
         "entryBreakMaxBars",
         "takeProfitR",
+        "safetyTakeProfitR",
         "minStopDistancePips",
+        "dailyForcedCloseUTC",
         "avoidHoursUTC",
         "maxStopPips",
         "managementProfile",
@@ -656,6 +715,54 @@ function signalHourUTC(candidate) {
     return Number.isInteger(hour) ? hour : null;
 }
 
+function weekendEntryBlock(candidate) {
+    if (!RISK.WEEKEND_FLAT) return null;
+
+    const ts = candidate?.signalTimestamp || candidate?.signalRow?.timestamp;
+    if (!ts) return null;
+
+    const date = new Date(ts);
+    const day = date.getUTCDay();
+    const hour = date.getUTCHours();
+    if (!Number.isInteger(day) || !Number.isInteger(hour)) return null;
+
+    const lastEntryHour = Number.isFinite(Number(RISK.FRIDAY_LAST_ENTRY_HOUR_UTC)) ? Number(RISK.FRIDAY_LAST_ENTRY_HOUR_UTC) : 18;
+    if (day === 5 && hour >= lastEntryHour) {
+        return {
+            reason: "hllh_weekend_entry_block",
+            context: { signalDayUTC: day, signalHourUTC: hour, fridayLastEntryHourUTC: lastEntryHour },
+        };
+    }
+
+    if (day === 6 || (day === 0 && hour < 22)) {
+        return {
+            reason: "hllh_weekend_market_closed_block",
+            context: { signalDayUTC: day, signalHourUTC: hour },
+        };
+    }
+
+    return null;
+}
+
+function dailyEntryBlock(candidate) {
+    if (!RISK.DAILY_FORCED_CLOSE_UTC) return null;
+
+    const ts = candidate?.signalTimestamp || candidate?.signalRow?.timestamp;
+    if (!ts) return null;
+
+    const date = new Date(ts);
+    const minuteOfDay = date.getUTCHours() * 60 + date.getUTCMinutes();
+    const lastEntryMinute = Number.isFinite(Number(RISK.DAILY_LAST_ENTRY_MINUTE_UTC)) ? Number(RISK.DAILY_LAST_ENTRY_MINUTE_UTC) : 23 * 60 + 30;
+    if (minuteOfDay >= lastEntryMinute) {
+        return {
+            reason: "hllh_daily_flat_entry_block",
+            context: { signalMinuteUTC: minuteOfDay, dailyLastEntryMinuteUTC: lastEntryMinute },
+        };
+    }
+
+    return null;
+}
+
 function candidateStopDistancePips(candidate, symbol, config) {
     const pipSize = candidate?.pipSize || pipSizeForSymbol(symbol);
     const entry = Number(candidate?.entryLevel);
@@ -665,6 +772,12 @@ function candidateStopDistancePips(candidate, symbol, config) {
 }
 
 function candidateQualityBlock(candidate, symbol, config) {
+    const weekendBlock = weekendEntryBlock(candidate);
+    if (weekendBlock) return weekendBlock;
+
+    const dailyBlock = dailyEntryBlock(candidate);
+    if (dailyBlock) return dailyBlock;
+
     const avoidHours = Array.isArray(config.avoidHoursUTC) ? config.avoidHoursUTC.map((hour) => Number(hour)).filter(Number.isInteger) : [];
     const hour = signalHourUTC(candidate);
     if (hour !== null && avoidHours.includes(hour)) {
@@ -715,6 +828,8 @@ function buildLiveSignalContext({ candidate, symbol, direction, config }) {
         expectedEntryPrice: candidate.entryLevel,
         expectedStopPrice: candidate.stopPrice,
         takeProfitR: config.takeProfitR,
+        safetyTakeProfitR: config.safetyTakeProfitR,
+        dailyForcedCloseUTC: config.dailyForcedCloseUTC,
         managementProfile: config.managementProfile ? { ...config.managementProfile } : null,
         signalCandle: {
             timestamp: candidate.signalRow.timestamp,
@@ -743,11 +858,11 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
 
         evaluate({ symbol, candles, bid, ask } = {}) {
             const activeConfig = resolveSymbolConfig(config, symbol);
-            const rows = liveCandleRows(candles);
+            const rows = liveCandleRows(candles, activeConfig.timeframe);
             if (rows.length < activeConfig.pivotWindow * 2 + 20) {
                 return {
                     signal: null,
-                    reason: "hllh_insufficient_h1_history",
+                    reason: "hllh_insufficient_timeframe_history",
                     context: { strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID },
                 };
             }
@@ -764,7 +879,7 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
                     context: {
                         strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID,
                         candidatesSeen: candidates.length,
-                        latestClosedH1: rows[rows.length - 1]?.timestamp ?? null,
+                        latestClosedTimeframe: rows[rows.length - 1]?.timestamp ?? null,
                     },
                 };
             }
@@ -778,7 +893,7 @@ export function createPaHigherLowLowerHighLiveStrategy(overrides = {}) {
                         strategyType: PA_HIGHER_LOW_LOWER_HIGH_STRATEGY_ID,
                         ...qualityBlock.context,
                         candidatesSeen: candidates.length,
-                        latestClosedH1: rows[rows.length - 1]?.timestamp ?? null,
+                        latestClosedTimeframe: rows[rows.length - 1]?.timestamp ?? null,
                     },
                 };
             }

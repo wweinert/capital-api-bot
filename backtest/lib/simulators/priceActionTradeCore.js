@@ -46,6 +46,9 @@ export function buildTakeProfit(exitVariant, side, entryPrice, riskDistance, sig
     if (exitVariant === "fixed_r_2") return side === "LONG" ? entryPrice + riskDistance * 2 : entryPrice - riskDistance * 2;
     if (exitVariant === "fixed_r_3") return side === "LONG" ? entryPrice + riskDistance * 3 : entryPrice - riskDistance * 3;
     if (exitVariant === "fixed_r_4") return side === "LONG" ? entryPrice + riskDistance * 4 : entryPrice - riskDistance * 4;
+    if (exitVariant === "fixed_r_5") return side === "LONG" ? entryPrice + riskDistance * 5 : entryPrice - riskDistance * 5;
+    if (exitVariant === "fixed_r_6") return side === "LONG" ? entryPrice + riskDistance * 6 : entryPrice - riskDistance * 6;
+    if (String(exitVariant || "").startsWith("adaptive_")) return null;
     return null;
 }
 
@@ -53,6 +56,18 @@ export function timeExitBars(exitVariant) {
     if (exitVariant === "time_exit_2") return 2;
     if (exitVariant === "time_exit_3") return 3;
     if (exitVariant === "time_exit_4") return 4;
+    if (exitVariant === "time_exit_8") return 8;
+    if (exitVariant === "time_exit_16") return 16;
+    if (exitVariant === "time_exit_32") return 32;
+    return null;
+}
+
+function adaptiveManagementParams(exitVariant) {
+    if (exitVariant === "adaptive_trail_1r_0_5") return { activateR: 1, trailR: 0.5, breakevenR: 1, maxHoldBars: 96 };
+    if (exitVariant === "adaptive_trail_1r_1") return { activateR: 1, trailR: 1, breakevenR: 1, maxHoldBars: 96 };
+    if (exitVariant === "adaptive_trail_2r_1") return { activateR: 2, trailR: 1, breakevenR: 1, maxHoldBars: 96 };
+    if (exitVariant === "adaptive_breakeven_trail_1r_1") return { activateR: 1, trailR: 1, breakevenR: 0.8, maxHoldBars: 96 };
+    if (exitVariant === "adaptive_intraday_trail_1r_0_5") return { activateR: 1, trailR: 0.5, breakevenR: 1, maxHoldBars: 16 };
     return null;
 }
 
@@ -89,6 +104,7 @@ export function buildTradeFromSignal({ candidate, entryIndex, entryPrice, config
         stopPrice,
         takeProfit,
         timeExitBars: timeExitBars(config.exitVariant),
+        adaptiveManagement: adaptiveManagementParams(config.exitVariant),
         riskDistance,
         signalRange,
         manageFromIndex: entryIndex + 1,
@@ -108,6 +124,19 @@ export function closeTrade(trade, exitIndex, exitRow, exitPrice, exitReason, pip
         pnlR: trade.riskDistance > 0 ? directionalMove / trade.riskDistance : null,
         pnlPips: pipSize > 0 ? directionalMove / pipSize : null,
     };
+}
+
+function utcDayKey(timestamp) {
+    return typeof timestamp === "string" ? timestamp.slice(0, 10) : null;
+}
+
+export function shouldDailyForceClose(trade, previousRow, currentRow, config = {}) {
+    if (!config.dailyForcedCloseUTC) return false;
+    if (!trade || !previousRow || !currentRow) return false;
+    const previousDay = utcDayKey(previousRow.timestamp);
+    const currentDay = utcDayKey(currentRow.timestamp);
+    const entryDay = utcDayKey(trade.entryTimestamp);
+    return Boolean(previousDay && currentDay && entryDay && previousDay !== currentDay && entryDay <= previousDay);
 }
 
 export function maybeActivatePendingEntry(pending, row, index, pipSize, simulationStats) {
@@ -197,17 +226,46 @@ export function maybeCloseTrade(trade, row, index, pipSize) {
     if (!trade || index < trade.manageFromIndex) return null;
 
     if (trade.side === "LONG") {
-        const stopHit = row.low <= trade.stopPrice;
+        const stopLevel = Number.isFinite(trade.adaptiveStopPrice) ? Math.max(trade.stopPrice, trade.adaptiveStopPrice) : trade.stopPrice;
+        const stopHit = row.low <= stopLevel;
         const tpHit = Number.isFinite(trade.takeProfit) && row.high >= trade.takeProfit;
-        if (stopHit && tpHit) return closeTrade(trade, index, row, trade.stopPrice, "stop_loss_same_bar", pipSize);
-        if (stopHit) return closeTrade(trade, index, row, trade.stopPrice, "stop_loss", pipSize);
+        if (stopHit && tpHit) return closeTrade(trade, index, row, stopLevel, "stop_loss_same_bar", pipSize);
+        if (stopHit) return closeTrade(trade, index, row, stopLevel, stopLevel > trade.stopPrice ? "adaptive_trailing_stop" : "stop_loss", pipSize);
         if (tpHit) return closeTrade(trade, index, row, trade.takeProfit, "take_profit", pipSize);
     } else {
-        const stopHit = row.high >= trade.stopPrice;
+        const stopLevel = Number.isFinite(trade.adaptiveStopPrice) ? Math.min(trade.stopPrice, trade.adaptiveStopPrice) : trade.stopPrice;
+        const stopHit = row.high >= stopLevel;
         const tpHit = Number.isFinite(trade.takeProfit) && row.low <= trade.takeProfit;
-        if (stopHit && tpHit) return closeTrade(trade, index, row, trade.stopPrice, "stop_loss_same_bar", pipSize);
-        if (stopHit) return closeTrade(trade, index, row, trade.stopPrice, "stop_loss", pipSize);
+        if (stopHit && tpHit) return closeTrade(trade, index, row, stopLevel, "stop_loss_same_bar", pipSize);
+        if (stopHit) return closeTrade(trade, index, row, stopLevel, stopLevel < trade.stopPrice ? "adaptive_trailing_stop" : "stop_loss", pipSize);
         if (tpHit) return closeTrade(trade, index, row, trade.takeProfit, "take_profit", pipSize);
+    }
+
+    if (trade.adaptiveManagement) {
+        const params = trade.adaptiveManagement;
+        const favorableMove = trade.side === "LONG" ? row.high - trade.entryPrice : trade.entryPrice - row.low;
+        const favorableR = trade.riskDistance > 0 ? favorableMove / trade.riskDistance : 0;
+        if (favorableR >= Number(params.breakevenR || Number.POSITIVE_INFINITY)) {
+            trade.adaptiveStopPrice = trade.side === "LONG" ? Math.max(trade.adaptiveStopPrice ?? trade.stopPrice, trade.entryPrice) : Math.min(trade.adaptiveStopPrice ?? trade.stopPrice, trade.entryPrice);
+        }
+        if (favorableR >= Number(params.activateR || Number.POSITIVE_INFINITY)) {
+            const trailDistance = trade.riskDistance * Number(params.trailR || 1);
+            const nextStop = trade.side === "LONG" ? row.high - trailDistance : row.low + trailDistance;
+            trade.adaptiveStopPrice = trade.side === "LONG" ? Math.max(trade.adaptiveStopPrice ?? trade.stopPrice, nextStop) : Math.min(trade.adaptiveStopPrice ?? trade.stopPrice, nextStop);
+        }
+
+        if (Number.isFinite(trade.adaptiveStopPrice)) {
+            if (trade.side === "LONG" && row.low <= trade.adaptiveStopPrice) {
+                return closeTrade(trade, index, row, trade.adaptiveStopPrice, "adaptive_trailing_stop", pipSize);
+            }
+            if (trade.side === "SHORT" && row.high >= trade.adaptiveStopPrice) {
+                return closeTrade(trade, index, row, trade.adaptiveStopPrice, "adaptive_trailing_stop", pipSize);
+            }
+        }
+
+        if (Number.isFinite(params.maxHoldBars) && index - trade.entryIndex >= params.maxHoldBars) {
+            return closeTrade(trade, index, row, row.close, `adaptive_time_exit_${params.maxHoldBars}`, pipSize);
+        }
     }
 
     if (Number.isFinite(trade.timeExitBars) && index - trade.entryIndex >= trade.timeExitBars) {

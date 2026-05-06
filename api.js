@@ -186,24 +186,29 @@ export async function updateTrailingStop(positionId, currentPrice, entryPrice, t
     const entry = Number(entryPrice);
     const tp = Number(takeProfit);
     const price = Number(currentPrice);
-    if (!Number.isFinite(entry) || !Number.isFinite(tp) || !Number.isFinite(price)) return;
-
-    const tpDistance = Math.abs(tp - entry);
-    if (tpDistance <= 0) return;
+    const directStopDistance = Number(options.stopDistance);
+    const hasDirectStopDistance = Number.isFinite(directStopDistance) && directStopDistance > 0;
+    if (!Number.isFinite(entry) || !Number.isFinite(price) || (!hasDirectStopDistance && !Number.isFinite(tp))) return;
 
     const dir = String(direction || "").toUpperCase();
-    const activationProgress = Number.isFinite(Number(options.activationProgress)) ? Number(options.activationProgress) : 0.7;
-    const trailDistanceTpFraction = Number.isFinite(Number(options.trailDistanceTpFraction)) ? Number(options.trailDistanceTpFraction) : 0.1;
-    const thresholdPrice = dir === "BUY" ? entry + activationProgress * tpDistance : entry - activationProgress * tpDistance;
+    let trailingDistance = directStopDistance;
 
-    const thresholdMet = dir === "BUY" ? price >= thresholdPrice : price <= thresholdPrice;
+    if (!hasDirectStopDistance) {
+        const tpDistance = Math.abs(tp - entry);
+        if (tpDistance <= 0) return;
 
-    if (!thresholdMet) {
-        return; // keep the original SL until the threshold is hit
+        const activationProgress = Number.isFinite(Number(options.activationProgress)) ? Number(options.activationProgress) : 0.7;
+        const trailDistanceTpFraction = Number.isFinite(Number(options.trailDistanceTpFraction)) ? Number(options.trailDistanceTpFraction) : 0.1;
+        const thresholdPrice = dir === "BUY" ? entry + activationProgress * tpDistance : entry - activationProgress * tpDistance;
+
+        const thresholdMet = dir === "BUY" ? price >= thresholdPrice : price <= thresholdPrice;
+
+        if (!thresholdMet) {
+            return; // keep the original SL until the threshold is hit
+        }
+
+        trailingDistance = tpDistance * trailDistanceTpFraction || 0.001; // fallback if calculation fails
     }
-
-    // --- Calculate trailing distance ---
-    let trailingDistance = tpDistance * trailDistanceTpFraction || 0.001; // fallback if calculation fails
 
     // --- Get symbol-specific minimum stop distance ---
     let minStopDistance = 0.0003; // default fallback
