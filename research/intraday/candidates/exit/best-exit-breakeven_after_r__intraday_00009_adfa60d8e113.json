@@ -1,0 +1,234 @@
+{
+  "timestamp": "2026-05-06T04:23:08.424Z",
+  "experimentId": "intraday_00009_adfa60d8e113",
+  "configHash": "adfa60d8e113",
+  "candidate": {
+    "label": "intraday_00009",
+    "strategyFamily": {
+      "family": "donchian_breakout",
+      "lookbackBars": 8,
+      "atrFilter": false,
+      "minAtrPct": 0,
+      "trendFilter": "ema20_50"
+    },
+    "entryProfile": {
+      "timeframe": "M5",
+      "entryMode": "next_open"
+    },
+    "exitProfile": {
+      "kind": "breakeven_after_r",
+      "stopModel": "atr",
+      "stopAtrMultiplier": 1.5,
+      "stopPips": 12,
+      "minStopPips": 2,
+      "maxStopPips": 18,
+      "noOvernight": true,
+      "tpR": 5,
+      "breakevenR": 0.8
+    },
+    "managementProfile": {
+      "kind": "passive",
+      "maxHoldBars": 48
+    },
+    "riskProfile": {
+      "kind": "aggressive_3pct",
+      "riskPerTrade": 0.02,
+      "maxPositions": 3,
+      "maxTradesPerDay": 12,
+      "maxTradesPerSymbolPerDay": 3,
+      "dailyStopLossPct": 0.09,
+      "dailyTakeProfitLockPct": 0.16,
+      "stopAfterLosses": 5,
+      "reduceRiskAfterDrawdownPct": 25,
+      "reducedRiskMultiplier": 0.7
+    },
+    "notes": "Intraday lab candidate: strategy family + entry + exit + management + risk."
+  },
+  "strategyFamily": "donchian_breakout",
+  "entryProfile": {
+    "timeframe": "M5",
+    "entryMode": "next_open"
+  },
+  "exitProfile": {
+    "kind": "breakeven_after_r",
+    "stopModel": "atr",
+    "stopAtrMultiplier": 1.5,
+    "stopPips": 12,
+    "minStopPips": 2,
+    "maxStopPips": 18,
+    "noOvernight": true,
+    "tpR": 5,
+    "breakevenR": 0.8
+  },
+  "managementProfile": {
+    "kind": "passive",
+    "maxHoldBars": 48
+  },
+  "riskProfile": {
+    "kind": "aggressive_3pct",
+    "riskPerTrade": 0.02,
+    "maxPositions": 3,
+    "maxTradesPerDay": 12,
+    "maxTradesPerSymbolPerDay": 3,
+    "dailyStopLossPct": 0.09,
+    "dailyTakeProfitLockPct": 0.16,
+    "stopAfterLosses": 5,
+    "reduceRiskAfterDrawdownPct": 25,
+    "reducedRiskMultiplier": 0.7
+  },
+  "symbols": [
+    "AUDCAD",
+    "AUDJPY",
+    "AUDUSD",
+    "EURAUD",
+    "EURCHF",
+    "EURGBP",
+    "EURJPY",
+    "EURUSD",
+    "GBPAUD",
+    "GBPCHF",
+    "GBPJPY",
+    "GBPUSD",
+    "NZDJPY",
+    "NZDUSD",
+    "USDCAD",
+    "USDCHF",
+    "USDJPY"
+  ],
+  "timeframes": [
+    "M5"
+  ],
+  "dateRange": {
+    "from": "2026-01-04T22:00:00.000Z",
+    "to": "2026-05-01T18:55:00.000Z",
+    "days": 90
+  },
+  "metrics": {
+    "trades": 6,
+    "winRate": 0,
+    "profitFactor": 0,
+    "expectancyR": -1.3051,
+    "maxDrawdownPct": 14.99,
+    "startCapital": 500,
+    "endCapital": 425.05,
+    "rawPnl": -74.95,
+    "averageHoldBars": 5.33,
+    "days": 90
+  },
+  "score": -440.1036,
+  "scoreMode": "aggressiveIntraday",
+  "scores": {
+    "maxProfit": -338.1336,
+    "aggressiveIntraday": -440.1036,
+    "profitWithControl": -451.5121,
+    "stable": -500.2143
+  },
+  "riskFlags": [
+    "low_sample",
+    "negative_profit",
+    "profit_factor_below_1",
+    "live_parity_risk",
+    "same_candle_ambiguity_conservative"
+  ],
+  "rejectionReason": "too_few_trades",
+  "counts": {
+    "symbolCounts": {
+      "USDCHF": 1,
+      "AUDCAD": 1,
+      "AUDUSD": 1,
+      "NZDUSD": 1,
+      "EURCHF": 1,
+      "GBPCHF": 1
+    },
+    "familyCounts": {
+      "donchian_breakout": 6
+    },
+    "exitCounts": {
+      "breakeven_after_r": 6
+    },
+    "sessionCounts": {
+      "off_session": 6
+    }
+  },
+  "sampleTrades": [
+    {
+      "symbol": "USDCHF",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-01T21:55:00.000Z",
+      "exitTimestamp": "2026-02-01T22:00:00.000Z",
+      "exitReason": "breakeven_stop",
+      "pnlR": -0.729,
+      "pnlCash": -7.29
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-01T22:00:00.000Z",
+      "exitTimestamp": "2026-02-01T22:05:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.438,
+      "pnlCash": -14.17
+    },
+    {
+      "symbol": "AUDUSD",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-01T22:00:00.000Z",
+      "exitTimestamp": "2026-02-01T22:05:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.568,
+      "pnlCash": -15.45
+    },
+    {
+      "symbol": "NZDUSD",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-01T22:00:00.000Z",
+      "exitTimestamp": "2026-02-01T22:05:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.468,
+      "pnlCash": -14.46
+    },
+    {
+      "symbol": "EURCHF",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-02T00:00:00.000Z",
+      "exitTimestamp": "2026-02-02T02:15:00.000Z",
+      "exitReason": "breakeven_stop",
+      "pnlR": -0.867,
+      "pnlCash": -7.78
+    },
+    {
+      "symbol": "GBPCHF",
+      "family": "donchian_breakout",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-02T00:00:00.000Z",
+      "exitTimestamp": "2026-02-02T00:05:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.761,
+      "pnlCash": -15.8
+    }
+  ],
+  "realism": {
+    "entryTiming": "signal candle closes, entry on next monitoring candle open",
+    "monitoring": "M5 when available, otherwise entry timeframe",
+    "spread": "average from backtest/prices when available, static fallback otherwise",
+    "slippagePips": 0.2,
+    "sameCandleAmbiguity": "conservative: stop is evaluated before take-profit",
+    "noLookahead": true,
+    "limitations": [
+      "no true bid/ask historical candle stream",
+      "portfolio margin model simplified to risk-cash sizing",
+      "M1 monitoring only used later if explicitly added"
+    ]
+  }
+}

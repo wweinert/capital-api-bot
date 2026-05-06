@@ -1,0 +1,330 @@
+{
+  "timestamp": "2026-05-06T04:23:10.704Z",
+  "experimentId": "intraday_00030_5e9c9fb3eb53",
+  "configHash": "5e9c9fb3eb53",
+  "candidate": {
+    "label": "intraday_00030",
+    "strategyFamily": {
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "rangeMinutes": 60,
+      "breakoutBufferPips": 0.5,
+      "falseBreakFilter": "close_outside",
+      "maxEntriesPerSession": 1,
+      "onlyTradeFirstBreakout": true
+    },
+    "entryProfile": {
+      "timeframe": "M15",
+      "entryMode": "next_open"
+    },
+    "exitProfile": {
+      "kind": "fixed_r",
+      "stopModel": "candle",
+      "stopAtrMultiplier": 0.8,
+      "stopPips": 10,
+      "minStopPips": 2,
+      "maxStopPips": 18,
+      "noOvernight": true,
+      "tpR": 3
+    },
+    "managementProfile": {
+      "kind": "session_flat",
+      "closeBeforeSessionEndMinutes": 30,
+      "maxHoldBars": 12
+    },
+    "riskProfile": {
+      "kind": "balanced",
+      "riskPerTrade": 0.04,
+      "maxPositions": 3,
+      "maxTradesPerDay": 8,
+      "maxTradesPerSymbolPerDay": 2,
+      "dailyStopLossPct": 0.06,
+      "dailyTakeProfitLockPct": 0.1,
+      "stopAfterLosses": 4,
+      "reduceRiskAfterDrawdownPct": 18,
+      "reducedRiskMultiplier": 0.65
+    },
+    "notes": "Intraday lab candidate: strategy family + entry + exit + management + risk."
+  },
+  "strategyFamily": "opening_range_breakout",
+  "entryProfile": {
+    "timeframe": "M15",
+    "entryMode": "next_open"
+  },
+  "exitProfile": {
+    "kind": "fixed_r",
+    "stopModel": "candle",
+    "stopAtrMultiplier": 0.8,
+    "stopPips": 10,
+    "minStopPips": 2,
+    "maxStopPips": 18,
+    "noOvernight": true,
+    "tpR": 3
+  },
+  "managementProfile": {
+    "kind": "session_flat",
+    "closeBeforeSessionEndMinutes": 30,
+    "maxHoldBars": 12
+  },
+  "riskProfile": {
+    "kind": "balanced",
+    "riskPerTrade": 0.04,
+    "maxPositions": 3,
+    "maxTradesPerDay": 8,
+    "maxTradesPerSymbolPerDay": 2,
+    "dailyStopLossPct": 0.06,
+    "dailyTakeProfitLockPct": 0.1,
+    "stopAfterLosses": 4,
+    "reduceRiskAfterDrawdownPct": 18,
+    "reducedRiskMultiplier": 0.65
+  },
+  "symbols": [
+    "AUDCAD",
+    "AUDJPY",
+    "AUDUSD",
+    "EURAUD",
+    "EURCHF",
+    "EURGBP",
+    "EURJPY",
+    "EURUSD",
+    "GBPAUD",
+    "GBPCHF",
+    "GBPJPY",
+    "GBPUSD",
+    "NZDJPY",
+    "NZDUSD",
+    "USDCAD",
+    "USDCHF",
+    "USDJPY"
+  ],
+  "timeframes": [
+    "M15",
+    "M5"
+  ],
+  "dateRange": {
+    "from": "2026-02-04T17:30:00.000Z",
+    "to": "2026-05-05T17:30:00.000Z",
+    "days": 90
+  },
+  "metrics": {
+    "trades": 14,
+    "winRate": 28.57,
+    "profitFactor": 0.484,
+    "expectancyR": -0.2713,
+    "maxDrawdownPct": 16.31,
+    "startCapital": 500,
+    "endCapital": 423.77,
+    "rawPnl": -76.23,
+    "averageHoldBars": 10.79,
+    "days": 90
+  },
+  "score": -313.8101,
+  "scoreMode": "aggressiveIntraday",
+  "scores": {
+    "maxProfit": -277.222,
+    "aggressiveIntraday": -313.8101,
+    "profitWithControl": -316.6882,
+    "stable": -333.1105
+  },
+  "riskFlags": [
+    "low_sample",
+    "negative_profit",
+    "profit_factor_below_1",
+    "live_parity_risk",
+    "same_candle_ambiguity_conservative"
+  ],
+  "rejectionReason": "",
+  "counts": {
+    "symbolCounts": {
+      "EURUSD": 1,
+      "EURGBP": 1,
+      "GBPCHF": 1,
+      "AUDCAD": 3,
+      "EURCHF": 1,
+      "GBPJPY": 1,
+      "GBPUSD": 1,
+      "USDJPY": 1,
+      "AUDUSD": 2,
+      "EURJPY": 1,
+      "AUDJPY": 1
+    },
+    "familyCounts": {
+      "opening_range_breakout": 14
+    },
+    "exitCounts": {
+      "fixed_r": 14
+    },
+    "sessionCounts": {
+      "asian": 14
+    }
+  },
+  "sampleTrades": [
+    {
+      "symbol": "EURUSD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-05T01:05:00.000Z",
+      "exitTimestamp": "2026-02-05T02:05:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.271,
+      "pnlCash": -25.42
+    },
+    {
+      "symbol": "EURGBP",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-05T01:20:00.000Z",
+      "exitTimestamp": "2026-02-05T02:20:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 0.333,
+      "pnlCash": 6.67
+    },
+    {
+      "symbol": "GBPCHF",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-05T01:20:00.000Z",
+      "exitTimestamp": "2026-02-05T02:20:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.43,
+      "pnlCash": -8.61
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-05T02:05:00.000Z",
+      "exitTimestamp": "2026-02-05T03:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.105,
+      "pnlCash": -1.98
+    },
+    {
+      "symbol": "EURCHF",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-05T02:20:00.000Z",
+      "exitTimestamp": "2026-02-05T03:20:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -1.288,
+      "pnlCash": -24.36
+    },
+    {
+      "symbol": "GBPJPY",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-05T02:30:00.000Z",
+      "exitTimestamp": "2026-02-05T05:30:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 0.8,
+      "pnlCash": 15.12
+    },
+    {
+      "symbol": "GBPUSD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-06T01:05:00.000Z",
+      "exitTimestamp": "2026-02-06T02:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 0.815,
+      "pnlCash": 15.04
+    },
+    {
+      "symbol": "USDJPY",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-06T01:20:00.000Z",
+      "exitTimestamp": "2026-02-06T01:35:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 1.621,
+      "pnlCash": 29.92
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-06T01:35:00.000Z",
+      "exitTimestamp": "2026-02-06T02:35:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.532,
+      "pnlCash": -10.46
+    },
+    {
+      "symbol": "AUDUSD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-06T01:35:00.000Z",
+      "exitTimestamp": "2026-02-06T02:35:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.606,
+      "pnlCash": -11.92
+    },
+    {
+      "symbol": "EURJPY",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-06T02:05:00.000Z",
+      "exitTimestamp": "2026-02-06T03:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.341,
+      "pnlCash": -6.9
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-09T01:05:00.000Z",
+      "exitTimestamp": "2026-02-09T02:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.877,
+      "pnlCash": -16.73
+    },
+    {
+      "symbol": "AUDJPY",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-09T01:05:00.000Z",
+      "exitTimestamp": "2026-02-09T01:25:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.149,
+      "pnlCash": -21.93
+    },
+    {
+      "symbol": "AUDUSD",
+      "family": "opening_range_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-09T01:05:00.000Z",
+      "exitTimestamp": "2026-02-09T02:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.769,
+      "pnlCash": -14.67
+    }
+  ],
+  "realism": {
+    "entryTiming": "signal candle closes, entry on next monitoring candle open",
+    "monitoring": "M5 when available, otherwise entry timeframe",
+    "spread": "average from backtest/prices when available, static fallback otherwise",
+    "slippagePips": 0.2,
+    "sameCandleAmbiguity": "conservative: stop is evaluated before take-profit",
+    "noLookahead": true,
+    "limitations": [
+      "no true bid/ask historical candle stream",
+      "portfolio margin model simplified to risk-cash sizing",
+      "M1 monitoring only used later if explicitly added"
+    ]
+  }
+}

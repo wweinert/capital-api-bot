@@ -1,0 +1,791 @@
+{
+  "generatedAt": "2026-05-05T18:14:51.824Z",
+  "seed": 202605052,
+  "minutes": 30,
+  "elapsedMinutes": 32.65085,
+  "completed": 15472,
+  "symbols": [
+    "GBPAUD",
+    "EURAUD",
+    "EURJPY",
+    "GBPUSD"
+  ],
+  "days": 90,
+  "baseline": {
+    "timestamp": "2026-05-05T17:42:13.082Z",
+    "experimentId": "baseline_live_config_60fb97fcf225",
+    "configHash": "60fb97fcf225",
+    "strategyName": "PA_HIGHER_LOW_LOWER_HIGH",
+    "symbols": [
+      "GBPAUD",
+      "EURAUD",
+      "EURJPY",
+      "GBPUSD"
+    ],
+    "dateRange": {
+      "from": "2026-02-04T17:30:00.000Z",
+      "to": "2026-05-05T17:30:00.000Z",
+      "days": 90
+    },
+    "candidate": {
+      "label": "baseline_live_config",
+      "overrides": {},
+      "changedKnobs": 0,
+      "notes": "Current live HLLH symbol profiles from config.js"
+    },
+    "resolvedConfigs": {
+      "GBPAUD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 352
+        }
+      },
+      "EURAUD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 529
+        }
+      },
+      "EURJPY": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 473
+        }
+      },
+      "GBPUSD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 389
+        }
+      }
+    },
+    "metrics": {
+      "trades": 948,
+      "winRate": 46.73,
+      "profitFactor": 0.543,
+      "expectancyR": -0.3236,
+      "maxDrawdownPct": 89.83,
+      "startCapital": 500,
+      "endCapital": 53.9,
+      "rawPnl": -446.1,
+      "averageHoldBars": 2.62
+    },
+    "score": -214.5981,
+    "penalties": {
+      "overfitPenalty": 0,
+      "lowTradeCountPenalty": 0,
+      "symbolConcentrationPenalty": 0,
+      "liveReplayMismatchPenalty": 0,
+      "complexityPenalty": 0
+    },
+    "rejectionReason": "high_drawdown,non_positive_expectancy",
+    "symbolCounts": {
+      "GBPAUD": 150,
+      "EURAUD": 297,
+      "EURJPY": 266,
+      "GBPUSD": 235
+    },
+    "todayComparison": {
+      "date": "2026-05-05",
+      "simulatedTrades": [
+        {
+          "symbol": "EURAUD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T00:30:00.000Z",
+          "exitTimestamp": "2026-05-05T00:45:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.692
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T02:45:00.000Z",
+          "exitTimestamp": "2026-05-05T04:45:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.442
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T05:15:00.000Z",
+          "exitTimestamp": "2026-05-05T05:45:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.489
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T07:00:00.000Z",
+          "exitTimestamp": "2026-05-05T07:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.736
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T07:45:00.000Z",
+          "exitTimestamp": "2026-05-05T08:00:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.993
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T09:15:00.000Z",
+          "exitTimestamp": "2026-05-05T09:30:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.434
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T10:00:00.000Z",
+          "exitTimestamp": "2026-05-05T10:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.592
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T11:30:00.000Z",
+          "exitTimestamp": "2026-05-05T12:15:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 1.471
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T12:30:00.000Z",
+          "exitTimestamp": "2026-05-05T13:00:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 1.226
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T13:15:00.000Z",
+          "exitTimestamp": "2026-05-05T14:00:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.171
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T14:15:00.000Z",
+          "exitTimestamp": "2026-05-05T15:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.777
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T16:15:00.000Z",
+          "exitTimestamp": "2026-05-05T16:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.437
+        }
+      ],
+      "actualTrades": [
+        {
+          "symbol": "EURAUD",
+          "dealId": "00005552-0005-511e-0000-0000804e27b6",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T09:45:12.830Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURAUD|LONG|2026-05-05T10:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "GBPUSD",
+          "dealId": "00007090-0055-311e-0000-00008118f5a1",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T10:15:19.298Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "GBPUSD|LONG|2026-05-05T11:00:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75c41",
+          "signal": "SELL",
+          "openedAt": "2026-05-05T11:45:15.453Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURJPY|SHORT|2026-05-05T12:30:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75c5e",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T12:45:15.415Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURJPY|LONG|2026-05-05T13:30:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "GBPUSD",
+          "dealId": "00007090-0055-311e-0000-00008118f6da",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T14:30:19.396Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "GBPUSD|LONG|2026-05-05T15:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75ca7",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T16:30:15.330Z",
+          "status": "open",
+          "closeReason": null,
+          "normalizedCandidateId": "EURJPY|LONG|2026-05-05T17:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        }
+      ]
+    }
+  },
+  "best": {
+    "timestamp": "2026-05-05T17:42:13.082Z",
+    "experimentId": "baseline_live_config_60fb97fcf225",
+    "configHash": "60fb97fcf225",
+    "strategyName": "PA_HIGHER_LOW_LOWER_HIGH",
+    "symbols": [
+      "GBPAUD",
+      "EURAUD",
+      "EURJPY",
+      "GBPUSD"
+    ],
+    "dateRange": {
+      "from": "2026-02-04T17:30:00.000Z",
+      "to": "2026-05-05T17:30:00.000Z",
+      "days": 90
+    },
+    "candidate": {
+      "label": "baseline_live_config",
+      "overrides": {},
+      "changedKnobs": 0,
+      "notes": "Current live HLLH symbol profiles from config.js"
+    },
+    "resolvedConfigs": {
+      "GBPAUD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 352
+        }
+      },
+      "EURAUD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 529
+        }
+      },
+      "EURJPY": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 473
+        }
+      },
+      "GBPUSD": {
+        "setupMode": "aggressive",
+        "pivotWindow": 2,
+        "signalMode": "simple",
+        "h1TrendMode": null,
+        "entryMode": "entry_on_close",
+        "stopVariant": "signal_candle_extreme_with_buffer_2pip",
+        "exitVariant": "adaptive_trail_1r_0_5",
+        "managementTimeframe": "M15",
+        "stopModel": "signal_2pip",
+        "exitModel": "atr_trail_after_1r",
+        "atrTrailAfterR": 1,
+        "atrTrailMultiplier": 1.1,
+        "safetyTakeProfitR": 20,
+        "maxSignalWaitBars": 8,
+        "entryBreakMaxBars": 3,
+        "minStopDistancePips": 2,
+        "realismStopThresholdPips": 2,
+        "enabled": true,
+        "timeframe": "M15",
+        "takeProfitR": 20,
+        "avoidHoursUTC": [],
+        "maxStopPips": 12,
+        "dailyForcedCloseUTC": true,
+        "managementProfile": {
+          "mode": "adaptive_trail_r",
+          "activationR": 1,
+          "trailR": 0.5,
+          "breakevenR": 1,
+          "maxHoldBars": 96,
+          "timeframe": "M15"
+        },
+        "research": {
+          "report": "pa_hllh_m15_portfolio_deep_decision_logs_avg_slip0_overnight0p5_2026-05-03T17-26-35-686Z",
+          "portfolioTrades": 1743,
+          "winRate": 56.91,
+          "profitFactor": 2.44,
+          "expectancyR": 0.772,
+          "maxDrawdownPct": 22.29,
+          "startCapital": 500,
+          "endCapital": 6241.53,
+          "overnightTradeCount": 0,
+          "symbolTrades": 389
+        }
+      }
+    },
+    "metrics": {
+      "trades": 948,
+      "winRate": 46.73,
+      "profitFactor": 0.543,
+      "expectancyR": -0.3236,
+      "maxDrawdownPct": 89.83,
+      "startCapital": 500,
+      "endCapital": 53.9,
+      "rawPnl": -446.1,
+      "averageHoldBars": 2.62
+    },
+    "score": -214.5981,
+    "penalties": {
+      "overfitPenalty": 0,
+      "lowTradeCountPenalty": 0,
+      "symbolConcentrationPenalty": 0,
+      "liveReplayMismatchPenalty": 0,
+      "complexityPenalty": 0
+    },
+    "rejectionReason": "high_drawdown,non_positive_expectancy",
+    "symbolCounts": {
+      "GBPAUD": 150,
+      "EURAUD": 297,
+      "EURJPY": 266,
+      "GBPUSD": 235
+    },
+    "todayComparison": {
+      "date": "2026-05-05",
+      "simulatedTrades": [
+        {
+          "symbol": "EURAUD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T00:30:00.000Z",
+          "exitTimestamp": "2026-05-05T00:45:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.692
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T02:45:00.000Z",
+          "exitTimestamp": "2026-05-05T04:45:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.442
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T05:15:00.000Z",
+          "exitTimestamp": "2026-05-05T05:45:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.489
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T07:00:00.000Z",
+          "exitTimestamp": "2026-05-05T07:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.736
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T07:45:00.000Z",
+          "exitTimestamp": "2026-05-05T08:00:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.993
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T09:15:00.000Z",
+          "exitTimestamp": "2026-05-05T09:30:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.434
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T10:00:00.000Z",
+          "exitTimestamp": "2026-05-05T10:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.592
+        },
+        {
+          "symbol": "EURAUD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T11:30:00.000Z",
+          "exitTimestamp": "2026-05-05T12:15:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 1.471
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T12:30:00.000Z",
+          "exitTimestamp": "2026-05-05T13:00:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 1.226
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SHORT",
+          "entryTimestamp": "2026-05-05T13:15:00.000Z",
+          "exitTimestamp": "2026-05-05T14:00:00.000Z",
+          "exitReason": "stop_loss",
+          "pnlRNet": -1.171
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T14:15:00.000Z",
+          "exitTimestamp": "2026-05-05T15:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.777
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "LONG",
+          "entryTimestamp": "2026-05-05T16:15:00.000Z",
+          "exitTimestamp": "2026-05-05T16:30:00.000Z",
+          "exitReason": "adaptive_trailing_stop",
+          "pnlRNet": 0.437
+        }
+      ],
+      "actualTrades": [
+        {
+          "symbol": "EURAUD",
+          "dealId": "00005552-0005-511e-0000-0000804e27b6",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T09:45:12.830Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURAUD|LONG|2026-05-05T10:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "GBPUSD",
+          "dealId": "00007090-0055-311e-0000-00008118f5a1",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T10:15:19.298Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "GBPUSD|LONG|2026-05-05T11:00:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75c41",
+          "signal": "SELL",
+          "openedAt": "2026-05-05T11:45:15.453Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURJPY|SHORT|2026-05-05T12:30:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75c5e",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T12:45:15.415Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "EURJPY|LONG|2026-05-05T13:30:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "GBPUSD",
+          "dealId": "00007090-0055-311e-0000-00008118f6da",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T14:30:19.396Z",
+          "status": "closed",
+          "closeReason": "unknown",
+          "normalizedCandidateId": "GBPUSD|LONG|2026-05-05T15:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        },
+        {
+          "symbol": "EURJPY",
+          "dealId": "00005552-0029-065e-0000-000080a75ca7",
+          "signal": "BUY",
+          "openedAt": "2026-05-05T16:30:15.330Z",
+          "status": "open",
+          "closeReason": null,
+          "normalizedCandidateId": "EURJPY|LONG|2026-05-05T17:15:00.000Z|aggressive|simple|entry_on_close|adaptive_trail_1r_0_5|pivot2"
+        }
+      ]
+    }
+  },
+  "kept": []
+}

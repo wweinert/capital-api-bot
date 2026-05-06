@@ -2,6 +2,13 @@ import "dotenv/config";
 
 const ENV = process.env;
 
+export const TRADING_STRATEGY_MODE = ENV.TRADING_STRATEGY_MODE || "hllh";
+export const DEFAULT_INTRADAY_PROFILE_ID = "intraday_09473_be83a91c4f2b";
+export const EXECUTION = {
+    MODE: ENV.TRADING_EXECUTION_MODE || "live",
+    ALLOW_INTRADAY_LIVE_ORDERS: ENV.ALLOW_INTRADAY_LIVE_ORDERS === "true",
+};
+
 // API Configuration
 export const API = {
     KEY: ENV.API_KEY,
@@ -43,9 +50,91 @@ export const SESSIONS = {
     }
 };
 
+export const INTRADAY_PROFILES = {
+    intraday_09473_be83a91c4f2b: {
+        id: "intraday_09473_be83a91c4f2b",
+        source: "research/intraday/candidates/aggressiveIntraday/best-maxDD-lt60__intraday_09473_be83a91c4f2b.json",
+        strategyFamily: {
+            family: "session_momentum",
+            session: "ny",
+            minAtrPct: 0,
+            trendFilter: "ema8_20",
+        },
+        entryProfile: {
+            timeframe: "M15",
+            entryMode: "next_open",
+        },
+        exitProfile: {
+            kind: "adaptive_r_trail",
+            stopModel: "fixed_pips",
+            stopAtrMultiplier: 1.5,
+            stopPips: 6,
+            minStopPips: 2,
+            maxStopPips: 35,
+            noOvernight: true,
+            tpR: null,
+            activationR: 0.5,
+            trailR: 1,
+            breakevenR: 1.2,
+        },
+        managementProfile: {
+            kind: "protect_profit",
+            minProfitR: 2,
+            givebackPct: 0.6,
+        },
+        riskProfile: {
+            kind: "aggressive_3pct",
+            riskPerTrade: 0.03,
+            maxPositions: 1,
+            maxTradesPerDay: 12,
+            maxTradesPerSymbolPerDay: 3,
+            dailyStopLossPct: 0.09,
+            dailyTakeProfitLockPct: 0.16,
+            stopAfterLosses: 5,
+            reduceRiskAfterDrawdownPct: 25,
+            reducedRiskMultiplier: 0.7,
+        },
+        symbols: [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY",
+        ],
+        metrics: {
+            trades: 542,
+            winRate: 65.68,
+            profitFactor: 1.575,
+            expectancyR: 0.3004,
+            maxDrawdownPct: 41.65,
+            startCapital: 500,
+            endCapital: 33008.39,
+            rawPnl: 32508.39,
+            averageHoldBars: 1.9,
+            days: 90,
+        },
+        riskFlags: ["very_interesting", "reliability_bonus", "elevated_drawdown", "live_parity_risk"],
+    },
+};
+
+export const ACTIVE_INTRADAY_PROFILE = INTRADAY_PROFILES[DEFAULT_INTRADAY_PROFILE_ID];
+const IS_INTRADAY_LAB_MODE = TRADING_STRATEGY_MODE === "intraday_lab";
+
 export const RISK = {
-    PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
-    MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous position
+    PER_TRADE: IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.riskProfile.riskPerTrade : 0.03,
+    MAX_POSITIONS: IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.riskProfile.maxPositions : 1,
     MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
     DAILY_FORCED_CLOSE_UTC: true,
     DAILY_LAST_ENTRY_MINUTE_UTC: 23 * 60 + 30,
@@ -131,9 +220,10 @@ export const HLLH_SYMBOL_PROFILES = {
     },
 };
 
-const PORTFOLIO_SYMBOLS = Object.entries(HLLH_SYMBOL_PROFILES)
+const HLLH_PORTFOLIO_SYMBOLS = Object.entries(HLLH_SYMBOL_PROFILES)
     .filter(([, profile]) => profile.enabled)
     .map(([symbol]) => symbol);
+const PORTFOLIO_SYMBOLS = IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.symbols : HLLH_PORTFOLIO_SYMBOLS;
 
 // Technical Analysis Configuration
 export const ANALYSIS = {

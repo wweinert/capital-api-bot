@@ -1,8 +1,9 @@
 import { placePosition, updateTrailingStop, getDealConfirmation, closePosition as apiClosePosition, getOpenPositions, getHistorical, getMarketDetails } from "../api.js";
-import { RISK, ANALYSIS } from "../config.js";
+import { RISK, ANALYSIS, EXECUTION, TRADING_STRATEGY_MODE } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
 import strategyRouter from "../strategies/Router.js";
+import { logStrategyDecision } from "../utils/strategyDecisionLogger.js";
 
 const { PER_TRADE, MAX_POSITIONS } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -18,6 +19,7 @@ class TradingService {
         this.dailyLossLimitPct = 0.05;
         this.executedHllhSignals = new Set();
         this.quotePerEurCache = new Map();
+        this.intradayDealState = new Map();
     }
 
     setAccountBalance(balance) {
@@ -120,28 +122,71 @@ class TradingService {
 
             if (this.openTrades.length >= MAX_POSITIONS) {
                 logger.info(`[ProcessPrice] Max trades reached. Skipping ${symbol}.`);
+                logStrategyDecision({
+                    strategyMode: TRADING_STRATEGY_MODE,
+                    symbol,
+                    decision: "blocked",
+                    blockedReason: "max_positions_reached",
+                    bid,
+                    ask,
+                    candidateContext: { openTrades: this.openTrades.length, maxPositions: MAX_POSITIONS },
+                });
                 return;
             }
             if (this.isSymbolTraded(symbol)) {
                 logger.debug(`[ProcessPrice] ${symbol} already in market.`);
+                logStrategyDecision({
+                    strategyMode: TRADING_STRATEGY_MODE,
+                    symbol,
+                    decision: "blocked",
+                    blockedReason: "symbol_already_traded",
+                    bid,
+                    ask,
+                    candidateContext: { openTrades: this.openTrades },
+                });
                 return;
             }
             const primary = strategyRouter.evaluate({ symbol, indicators, candles, bid, ask });
             let { signal, reason = "", context = {} } = primary;
+            const decisionBase = {
+                strategyMode: context.strategyMode || TRADING_STRATEGY_MODE,
+                profileId: context.profileId,
+                strategyFamily: context.strategyFamily || context.strategyType,
+                symbol,
+                timeframe: context.timeframe,
+                entrySignalReason: reason,
+                exitProfile: context.exitProfile,
+                managementProfile: context.managementProfile,
+                riskProfile: context.riskProfile,
+                bid,
+                ask,
+                spreadPips: context.currentSpreadPips,
+                normalizedCandidateId: context.normalizedCandidateId,
+                candidateContext: context.candidateContext || context,
+            };
 
             if (!signal) {
-                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}: ${reason}`);
+                logger.debug(`[ProcessPrice] No strategy signal for ${symbol}: ${reason}`);
+                logStrategyDecision({ ...decisionBase, decision: "no_signal", blockedReason: reason });
                 return;
             }
             if (context?.normalizedCandidateId && this.executedHllhSignals.has(context.normalizedCandidateId)) {
-                logger.debug(`[ProcessPrice] Duplicate HLLH signal blocked for ${symbol}: ${context.normalizedCandidateId}`);
+                logger.debug(`[ProcessPrice] Duplicate strategy signal blocked for ${symbol}: ${context.normalizedCandidateId}`);
+                logStrategyDecision({ ...decisionBase, decision: "blocked", blockedReason: "duplicate_signal" });
                 return;
             }
             // Re-check just placing
-            if (this.openTrades.length >= MAX_POSITIONS) return;
-            if (this.isSymbolTraded(symbol)) return;
+            if (this.openTrades.length >= MAX_POSITIONS) {
+                logStrategyDecision({ ...decisionBase, decision: "blocked", blockedReason: "max_positions_reached_before_order" });
+                return;
+            }
+            if (this.isSymbolTraded(symbol)) {
+                logStrategyDecision({ ...decisionBase, decision: "blocked", blockedReason: "symbol_already_traded_before_order" });
+                return;
+            }
 
             logger.info(`[Signal] ${symbol}: ${signal} ${reason} ${context?.normalizedCandidateId || ""}`);
+            logStrategyDecision({ ...decisionBase, decision: "signal" });
 
             const toIsoTimestamp = (value) => {
                 if (value === undefined || value === null || value === "") return null;
@@ -454,6 +499,30 @@ class TradingService {
     // ============================================================
     async executeTrade(symbol, signal, bid, ask, indicators, reason, context, candlesSnapshot) {
         try {
+            if (EXECUTION.MODE === "demo" || (TRADING_STRATEGY_MODE === "intraday_lab" && !EXECUTION.ALLOW_INTRADAY_LIVE_ORDERS)) {
+                logger.info(
+                    `[DemoOrder] ${symbol} ${signal} blocked before broker order. strategyMode=${TRADING_STRATEGY_MODE} executionMode=${EXECUTION.MODE} allowIntradayLive=${EXECUTION.ALLOW_INTRADAY_LIVE_ORDERS}`,
+                );
+                logStrategyDecision({
+                    strategyMode: context?.strategyMode || TRADING_STRATEGY_MODE,
+                    profileId: context?.profileId,
+                    strategyFamily: context?.strategyFamily || context?.strategyType,
+                    symbol,
+                    timeframe: context?.timeframe,
+                    entrySignalReason: reason,
+                    exitProfile: context?.exitProfile,
+                    managementProfile: context?.managementProfile,
+                    riskProfile: context?.riskProfile,
+                    decision: "demo_order_blocked",
+                    blockedReason: EXECUTION.MODE === "demo" ? "execution_mode_demo" : "intraday_live_orders_not_allowed",
+                    candidateContext: context?.candidateContext || context,
+                    bid,
+                    ask,
+                    spreadPips: context?.currentSpreadPips,
+                    normalizedCandidateId: context?.normalizedCandidateId,
+                });
+                return;
+            }
             const { size, price, stopLossPrice, takeProfitPrice, positionSizing } = await this.calculateTradeParameters(signal, symbol, bid, ask, context);
             if (!(Number.isFinite(size) && size > 0)) {
                 logger.warn(`[Order] Skipping ${symbol}: calculated size is not tradable (${size}).`);
@@ -663,6 +732,25 @@ class TradingService {
         const activationR = Number.isFinite(Number(managementProfile?.activationR)) ? Number(managementProfile.activationR) : 1;
         const trailR = Number.isFinite(Number(managementProfile?.trailR)) ? Number(managementProfile.trailR) : 0.5;
         const breakevenR = Number.isFinite(Number(managementProfile?.breakevenR)) ? Number(managementProfile.breakevenR) : activationR;
+
+        const protectProfit = managementProfile?.protectProfit || {};
+        const minProfitR = Number(protectProfit.minProfitR);
+        const givebackPct = Number(protectProfit.givebackPct);
+        if (Number.isFinite(minProfitR) && Number.isFinite(givebackPct) && minProfitR > 0 && givebackPct > 0) {
+            const state = this.intradayDealState.get(dealId) || { maxFavorableR: currentR };
+            state.maxFavorableR = Math.max(Number(state.maxFavorableR || 0), currentR);
+            this.intradayDealState.set(dealId, state);
+            if (state.maxFavorableR >= minProfitR) {
+                const giveback = state.maxFavorableR > 0 ? (state.maxFavorableR - currentR) / state.maxFavorableR : 0;
+                if (giveback >= givebackPct) {
+                    logger.info(
+                        `[ProtectProfit] Closing ${symbol} ${dealId}: currentR=${currentR.toFixed(2)} maxR=${state.maxFavorableR.toFixed(2)} giveback=${giveback.toFixed(2)}`,
+                    );
+                    await this.closePosition(dealId, "intraday_protect_profit_giveback");
+                    return;
+                }
+            }
+        }
         if (currentR < Math.min(activationR, breakevenR)) return;
 
         let desiredStop = null;

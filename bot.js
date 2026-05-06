@@ -1,6 +1,6 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, PROD, ANALYSIS } from "./config.js";
+import { DEV, PROD, ANALYSIS, EXECUTION, TRADING_STRATEGY_MODE } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
@@ -70,8 +70,12 @@ class TradingBot {
             // startWebSocket(this);
             this.startSessionPing();
             this.startAnalysisInterval();
-            this.startMonitorOpenTrades();
-            this.startPriceMonitor();
+            if (EXECUTION.MODE === "demo") {
+                logger.info("[Bot] Demo execution mode: broker order/position monitors are disabled.");
+            } else {
+                this.startMonitorOpenTrades();
+                this.startPriceMonitor();
+            }
             this.isRunning = true;
         } catch (error) {
             logger.error("[bot.js][Bot] Error starting live trading:", error);
@@ -179,7 +183,7 @@ class TradingBot {
         }
 
         logger.info(
-            `[Bot] HLLH sessionMode=off | Configured symbols: ${sessionSymbols.join(", ")} | Tradable symbols: ${
+            `[Bot] strategyMode=${TRADING_STRATEGY_MODE} executionMode=${EXECUTION.MODE} | Configured symbols: ${sessionSymbols.join(", ")} | Tradable symbols: ${
                 tradableSymbols.length ? tradableSymbols.join(", ") : "none"
             }`,
         );

@@ -1,10 +1,16 @@
 import { createPaHigherLowLowerHighLiveStrategy } from "./paHigherLowLowerHigh.js";
+import { TRADING_STRATEGY_MODE } from "../config.js";
+import { createSessionMomentumIntradayStrategy } from "./sessionMomentumIntraday.js";
 
 const NO_SIGNAL = { signal: null, reason: "no_strategy_signal", context: {} };
 
 export class Router {
-    constructor({ strategies = [createPaHigherLowLowerHighLiveStrategy()] } = {}) {
-        this.strategies = strategies.filter(Boolean);
+    constructor({ strategies = null } = {}) {
+        const defaultStrategies =
+            TRADING_STRATEGY_MODE === "intraday_lab"
+                ? [createSessionMomentumIntradayStrategy()]
+                : [createPaHigherLowLowerHighLiveStrategy()];
+        this.strategies = (strategies || defaultStrategies).filter(Boolean);
     }
 
     evaluate(input = {}) {

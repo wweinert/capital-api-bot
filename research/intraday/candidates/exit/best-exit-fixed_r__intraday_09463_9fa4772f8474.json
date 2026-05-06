@@ -1,0 +1,396 @@
+{
+  "timestamp": "2026-05-06T04:40:04.669Z",
+  "experimentId": "intraday_09463_9fa4772f8474",
+  "configHash": "9fa4772f8474",
+  "candidate": {
+    "label": "intraday_09463",
+    "strategyFamily": {
+      "family": "liquidity_sweep_reversal",
+      "sweepBufferPips": 3,
+      "rejectionCandleMode": "close_back_inside",
+      "confirmationBars": 1
+    },
+    "entryProfile": {
+      "timeframe": "M15",
+      "entryMode": "next_open"
+    },
+    "exitProfile": {
+      "kind": "fixed_r",
+      "stopModel": "fixed_pips",
+      "stopAtrMultiplier": 1.2,
+      "stopPips": 12,
+      "minStopPips": 3,
+      "maxStopPips": 25,
+      "noOvernight": true,
+      "tpR": 5
+    },
+    "managementProfile": {
+      "kind": "passive",
+      "maxHoldBars": 96
+    },
+    "riskProfile": {
+      "kind": "balanced",
+      "riskPerTrade": 0.03,
+      "maxPositions": 1,
+      "maxTradesPerDay": 8,
+      "maxTradesPerSymbolPerDay": 2,
+      "dailyStopLossPct": 0.06,
+      "dailyTakeProfitLockPct": 0.1,
+      "stopAfterLosses": 4,
+      "reduceRiskAfterDrawdownPct": 18,
+      "reducedRiskMultiplier": 0.65
+    },
+    "notes": "Intraday lab candidate: strategy family + entry + exit + management + risk."
+  },
+  "strategyFamily": "liquidity_sweep_reversal",
+  "entryProfile": {
+    "timeframe": "M15",
+    "entryMode": "next_open"
+  },
+  "exitProfile": {
+    "kind": "fixed_r",
+    "stopModel": "fixed_pips",
+    "stopAtrMultiplier": 1.2,
+    "stopPips": 12,
+    "minStopPips": 3,
+    "maxStopPips": 25,
+    "noOvernight": true,
+    "tpR": 5
+  },
+  "managementProfile": {
+    "kind": "passive",
+    "maxHoldBars": 96
+  },
+  "riskProfile": {
+    "kind": "balanced",
+    "riskPerTrade": 0.03,
+    "maxPositions": 1,
+    "maxTradesPerDay": 8,
+    "maxTradesPerSymbolPerDay": 2,
+    "dailyStopLossPct": 0.06,
+    "dailyTakeProfitLockPct": 0.1,
+    "stopAfterLosses": 4,
+    "reduceRiskAfterDrawdownPct": 18,
+    "reducedRiskMultiplier": 0.65
+  },
+  "symbols": [
+    "AUDCAD",
+    "AUDJPY",
+    "AUDUSD",
+    "EURAUD",
+    "EURCHF",
+    "EURGBP",
+    "EURJPY",
+    "EURUSD",
+    "GBPAUD",
+    "GBPCHF",
+    "GBPJPY",
+    "GBPUSD",
+    "NZDJPY",
+    "NZDUSD",
+    "USDCAD",
+    "USDCHF",
+    "USDJPY"
+  ],
+  "timeframes": [
+    "M15",
+    "M5"
+  ],
+  "dateRange": {
+    "from": "2026-02-04T17:30:00.000Z",
+    "to": "2026-05-05T17:30:00.000Z",
+    "days": 90
+  },
+  "metrics": {
+    "trades": 49,
+    "winRate": 42.86,
+    "profitFactor": 1.746,
+    "expectancyR": 0.5149,
+    "maxDrawdownPct": 19.47,
+    "startCapital": 500,
+    "endCapital": 950.18,
+    "rawPnl": 450.18,
+    "averageHoldBars": 39.73,
+    "days": 90
+  },
+  "score": 474.7707,
+  "scoreMode": "aggressiveIntraday",
+  "scores": {
+    "maxProfit": 529.1167,
+    "aggressiveIntraday": 474.7707,
+    "profitWithControl": 403.9639,
+    "stable": 265.9277
+  },
+  "riskFlags": [
+    "weak_sample",
+    "live_parity_risk"
+  ],
+  "rejectionReason": "",
+  "counts": {
+    "symbolCounts": {
+      "USDJPY": 4,
+      "AUDCAD": 5,
+      "USDCAD": 1,
+      "EURAUD": 3,
+      "GBPJPY": 2,
+      "EURJPY": 6,
+      "NZDUSD": 2,
+      "GBPUSD": 4,
+      "GBPAUD": 3,
+      "AUDJPY": 4,
+      "EURUSD": 3,
+      "NZDJPY": 3,
+      "EURGBP": 3,
+      "AUDUSD": 3,
+      "GBPCHF": 2,
+      "USDCHF": 1
+    },
+    "familyCounts": {
+      "liquidity_sweep_reversal": 49
+    },
+    "exitCounts": {
+      "fixed_r": 49
+    },
+    "sessionCounts": {
+      "asian": 25,
+      "off_session": 9,
+      "london": 8,
+      "ny": 7
+    }
+  },
+  "sampleTrades": [
+    {
+      "symbol": "USDJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-05T00:35:00.000Z",
+      "exitTimestamp": "2026-02-05T05:00:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.241,
+      "pnlCash": -18.62
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-05T05:20:00.000Z",
+      "exitTimestamp": "2026-02-05T12:40:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.34,
+      "pnlCash": -19.35
+    },
+    {
+      "symbol": "AUDCAD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-06T00:20:00.000Z",
+      "exitTimestamp": "2026-02-06T08:20:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 4.002,
+      "pnlCash": 55.46
+    },
+    {
+      "symbol": "USDCAD",
+      "family": "liquidity_sweep_reversal",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-08T21:00:00.000Z",
+      "exitTimestamp": "2026-02-08T21:15:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.301,
+      "pnlCash": -20.19
+    },
+    {
+      "symbol": "EURAUD",
+      "family": "liquidity_sweep_reversal",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-08T22:30:00.000Z",
+      "exitTimestamp": "2026-02-08T23:00:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.259,
+      "pnlCash": -18.78
+    },
+    {
+      "symbol": "GBPJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-09T00:00:00.000Z",
+      "exitTimestamp": "2026-02-09T00:30:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 4.783,
+      "pnlCash": 68.67
+    },
+    {
+      "symbol": "EURJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-10T04:50:00.000Z",
+      "exitTimestamp": "2026-02-10T04:55:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.261,
+      "pnlCash": -20.7
+    },
+    {
+      "symbol": "EURJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-10T05:50:00.000Z",
+      "exitTimestamp": "2026-02-10T10:45:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.261,
+      "pnlCash": -19.92
+    },
+    {
+      "symbol": "NZDUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-11T02:50:00.000Z",
+      "exitTimestamp": "2026-02-11T10:50:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": -0.307,
+      "pnlCash": -4.67
+    },
+    {
+      "symbol": "GBPUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "london",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-11T11:35:00.000Z",
+      "exitTimestamp": "2026-02-11T13:30:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 4.839,
+      "pnlCash": 72.86
+    },
+    {
+      "symbol": "GBPAUD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-12T02:00:00.000Z",
+      "exitTimestamp": "2026-02-12T08:00:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 4.814,
+      "pnlCash": 83
+    },
+    {
+      "symbol": "GBPUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-13T06:05:00.000Z",
+      "exitTimestamp": "2026-02-13T14:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 2.714,
+      "pnlCash": 53.56
+    },
+    {
+      "symbol": "AUDJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "ny",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-13T14:35:00.000Z",
+      "exitTimestamp": "2026-02-13T14:40:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.223,
+      "pnlCash": -26.11
+    },
+    {
+      "symbol": "AUDJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "ny",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-13T15:05:00.000Z",
+      "exitTimestamp": "2026-02-13T15:20:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.223,
+      "pnlCash": -25.15
+    },
+    {
+      "symbol": "EURUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "ny",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-13T16:05:00.000Z",
+      "exitTimestamp": "2026-02-13T21:55:00.000Z",
+      "exitReason": "no_overnight_flat",
+      "pnlR": 1.192,
+      "pnlCash": 23.6
+    },
+    {
+      "symbol": "NZDJPY",
+      "family": "liquidity_sweep_reversal",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-15T22:50:00.000Z",
+      "exitTimestamp": "2026-02-15T23:55:00.000Z",
+      "exitReason": "no_overnight_flat",
+      "pnlR": 0.896,
+      "pnlCash": 18.38
+    },
+    {
+      "symbol": "EURUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-16T01:05:00.000Z",
+      "exitTimestamp": "2026-02-16T09:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 0.408,
+      "pnlCash": 8.6
+    },
+    {
+      "symbol": "EURGBP",
+      "family": "liquidity_sweep_reversal",
+      "session": "london",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-16T09:35:00.000Z",
+      "exitTimestamp": "2026-02-16T17:35:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 0.383,
+      "pnlCash": 8.17
+    },
+    {
+      "symbol": "EURGBP",
+      "family": "liquidity_sweep_reversal",
+      "session": "off_session",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-16T22:05:00.000Z",
+      "exitTimestamp": "2026-02-16T23:55:00.000Z",
+      "exitReason": "no_overnight_flat",
+      "pnlR": 0.542,
+      "pnlCash": 11.68
+    },
+    {
+      "symbol": "AUDUSD",
+      "family": "liquidity_sweep_reversal",
+      "session": "asian",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-17T01:05:00.000Z",
+      "exitTimestamp": "2026-02-17T09:05:00.000Z",
+      "exitReason": "time_based_exit",
+      "pnlR": 1.466,
+      "pnlCash": 32.12
+    }
+  ],
+  "realism": {
+    "entryTiming": "signal candle closes, entry on next monitoring candle open",
+    "monitoring": "M5 when available, otherwise entry timeframe",
+    "spread": "average from backtest/prices when available, static fallback otherwise",
+    "slippagePips": 0.2,
+    "sameCandleAmbiguity": "conservative: stop is evaluated before take-profit",
+    "noLookahead": true,
+    "limitations": [
+      "no true bid/ask historical candle stream",
+      "portfolio margin model simplified to risk-cash sizing",
+      "M1 monitoring only used later if explicitly added"
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-05-06T04:25:16.693Z",
+  "experimentId": "intraday_01255_20e1d058f573",
+  "configHash": "20e1d058f573",
+  "candidate": {
+    "label": "intraday_01255",
+    "strategyFamily": {
+      "family": "volatility_squeeze_breakout",
+      "compressionLookback": 32,
+      "breakoutBufferPips": 2,
+      "maxCompressionAtr": 3.5,
+      "atrExpansion": 1.35
+    },
+    "entryProfile": {
+      "timeframe": "M15",
+      "entryMode": "next_open"
+    },
+    "exitProfile": {
+      "kind": "fixed_r",
+      "stopModel": "fixed_pips",
+      "stopAtrMultiplier": 1.5,
+      "stopPips": 6,
+      "minStopPips": 2,
+      "maxStopPips": 25,
+      "noOvernight": true,
+      "tpR": 1
+    },
+    "managementProfile": {
+      "kind": "daily_flat",
+      "closeMinuteUTC": 1245,
+      "maxHoldBars": 96
+    },
+    "riskProfile": {
+      "kind": "aggressive_4pct",
+      "riskPerTrade": 0.02,
+      "maxPositions": 1,
+      "maxTradesPerDay": 16,
+      "maxTradesPerSymbolPerDay": 4,
+      "dailyStopLossPct": 0.14,
+      "dailyTakeProfitLockPct": 0.24,
+      "stopAfterLosses": 6,
+      "reduceRiskAfterDrawdownPct": 35,
+      "reducedRiskMultiplier": 0.75
+    },
+    "notes": "Intraday lab candidate: strategy family + entry + exit + management + risk."
+  },
+  "strategyFamily": "volatility_squeeze_breakout",
+  "entryProfile": {
+    "timeframe": "M15",
+    "entryMode": "next_open"
+  },
+  "exitProfile": {
+    "kind": "fixed_r",
+    "stopModel": "fixed_pips",
+    "stopAtrMultiplier": 1.5,
+    "stopPips": 6,
+    "minStopPips": 2,
+    "maxStopPips": 25,
+    "noOvernight": true,
+    "tpR": 1
+  },
+  "managementProfile": {
+    "kind": "daily_flat",
+    "closeMinuteUTC": 1245,
+    "maxHoldBars": 96
+  },
+  "riskProfile": {
+    "kind": "aggressive_4pct",
+    "riskPerTrade": 0.02,
+    "maxPositions": 1,
+    "maxTradesPerDay": 16,
+    "maxTradesPerSymbolPerDay": 4,
+    "dailyStopLossPct": 0.14,
+    "dailyTakeProfitLockPct": 0.24,
+    "stopAfterLosses": 6,
+    "reduceRiskAfterDrawdownPct": 35,
+    "reducedRiskMultiplier": 0.75
+  },
+  "symbols": [
+    "AUDCAD",
+    "AUDJPY",
+    "AUDUSD",
+    "EURAUD",
+    "EURCHF",
+    "EURGBP",
+    "EURJPY",
+    "EURUSD",
+    "GBPAUD",
+    "GBPCHF",
+    "GBPJPY",
+    "GBPUSD",
+    "NZDJPY",
+    "NZDUSD",
+    "USDCAD",
+    "USDCHF",
+    "USDJPY"
+  ],
+  "timeframes": [
+    "M15",
+    "M5"
+  ],
+  "dateRange": {
+    "from": "2026-02-04T17:30:00.000Z",
+    "to": "2026-05-05T17:30:00.000Z",
+    "days": 90
+  },
+  "metrics": {
+    "trades": 2,
+    "winRate": 100,
+    "profitFactor": 99,
+    "expectancyR": 0.542,
+    "maxDrawdownPct": 0,
+    "startCapital": 500,
+    "endCapital": 510.9,
+    "rawPnl": 10.9,
+    "averageHoldBars": 1,
+    "days": 90
+  },
+  "score": 3396.2329,
+  "scoreMode": "aggressiveIntraday",
+  "scores": {
+    "maxProfit": 1960.0603,
+    "aggressiveIntraday": 3396.2329,
+    "profitWithControl": 4077.6162,
+    "stable": 4838.3805
+  },
+  "riskFlags": [
+    "low_sample",
+    "live_parity_risk"
+  ],
+  "rejectionReason": "too_few_trades",
+  "counts": {
+    "symbolCounts": {
+      "USDJPY": 1,
+      "GBPJPY": 1
+    },
+    "familyCounts": {
+      "volatility_squeeze_breakout": 2
+    },
+    "exitCounts": {
+      "fixed_r": 2
+    },
+    "sessionCounts": {
+      "london": 1,
+      "asian": 1
+    }
+  },
+  "sampleTrades": [
+    {
+      "symbol": "USDJPY",
+      "family": "volatility_squeeze_breakout",
+      "session": "london",
+      "side": "SHORT",
+      "entryTimestamp": "2026-03-23T11:05:00.000Z",
+      "exitTimestamp": "2026-03-23T11:10:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 0.517,
+      "pnlCash": 5.17
+    },
+    {
+      "symbol": "GBPJPY",
+      "family": "volatility_squeeze_breakout",
+      "session": "asian",
+      "side": "SHORT",
+      "entryTimestamp": "2026-04-28T02:15:00.000Z",
+      "exitTimestamp": "2026-04-28T02:30:00.000Z",
+      "exitReason": "take_profit",
+      "pnlR": 0.567,
+      "pnlCash": 5.73
+    }
+  ],
+  "realism": {
+    "entryTiming": "signal candle closes, entry on next monitoring candle open",
+    "monitoring": "M5 when available, otherwise entry timeframe",
+    "spread": "average from backtest/prices when available, static fallback otherwise",
+    "slippagePips": 0.2,
+    "sameCandleAmbiguity": "conservative: stop is evaluated before take-profit",
+    "noLookahead": true,
+    "limitations": [
+      "no true bid/ask historical candle stream",
+      "portfolio margin model simplified to risk-cash sizing",
+      "M1 monitoring only used later if explicitly added"
+    ]
+  }
+}

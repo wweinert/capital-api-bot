@@ -1,0 +1,236 @@
+{
+  "timestamp": "2026-05-06T04:23:08.136Z",
+  "experimentId": "intraday_00007_d3fb34902203",
+  "configHash": "d3fb34902203",
+  "candidate": {
+    "label": "intraday_00007",
+    "strategyFamily": {
+      "family": "volatility_squeeze_breakout",
+      "compressionLookback": 48,
+      "breakoutBufferPips": 0.5,
+      "maxCompressionAtr": 4,
+      "atrExpansion": 1.1
+    },
+    "entryProfile": {
+      "timeframe": "M5",
+      "entryMode": "next_open"
+    },
+    "exitProfile": {
+      "kind": "momentum_decay_exit",
+      "stopModel": "fixed_pips",
+      "stopAtrMultiplier": 0.8,
+      "stopPips": 8,
+      "minStopPips": 1.5,
+      "maxStopPips": 35,
+      "noOvernight": true,
+      "tpR": 5,
+      "minProfitR": 1.5,
+      "decayBars": 3
+    },
+    "managementProfile": {
+      "kind": "fast_cut",
+      "adverseBars": 1,
+      "maxAdverseR": 0.4
+    },
+    "riskProfile": {
+      "kind": "aggressive_4pct",
+      "riskPerTrade": 0.04,
+      "maxPositions": 3,
+      "maxTradesPerDay": 16,
+      "maxTradesPerSymbolPerDay": 4,
+      "dailyStopLossPct": 0.14,
+      "dailyTakeProfitLockPct": 0.24,
+      "stopAfterLosses": 6,
+      "reduceRiskAfterDrawdownPct": 35,
+      "reducedRiskMultiplier": 0.75
+    },
+    "notes": "Intraday lab candidate: strategy family + entry + exit + management + risk."
+  },
+  "strategyFamily": "volatility_squeeze_breakout",
+  "entryProfile": {
+    "timeframe": "M5",
+    "entryMode": "next_open"
+  },
+  "exitProfile": {
+    "kind": "momentum_decay_exit",
+    "stopModel": "fixed_pips",
+    "stopAtrMultiplier": 0.8,
+    "stopPips": 8,
+    "minStopPips": 1.5,
+    "maxStopPips": 35,
+    "noOvernight": true,
+    "tpR": 5,
+    "minProfitR": 1.5,
+    "decayBars": 3
+  },
+  "managementProfile": {
+    "kind": "fast_cut",
+    "adverseBars": 1,
+    "maxAdverseR": 0.4
+  },
+  "riskProfile": {
+    "kind": "aggressive_4pct",
+    "riskPerTrade": 0.04,
+    "maxPositions": 3,
+    "maxTradesPerDay": 16,
+    "maxTradesPerSymbolPerDay": 4,
+    "dailyStopLossPct": 0.14,
+    "dailyTakeProfitLockPct": 0.24,
+    "stopAfterLosses": 6,
+    "reduceRiskAfterDrawdownPct": 35,
+    "reducedRiskMultiplier": 0.75
+  },
+  "symbols": [
+    "AUDCAD",
+    "AUDJPY",
+    "AUDUSD",
+    "EURAUD",
+    "EURCHF",
+    "EURGBP",
+    "EURJPY",
+    "EURUSD",
+    "GBPAUD",
+    "GBPCHF",
+    "GBPJPY",
+    "GBPUSD",
+    "NZDJPY",
+    "NZDUSD",
+    "USDCAD",
+    "USDCHF",
+    "USDJPY"
+  ],
+  "timeframes": [
+    "M5"
+  ],
+  "dateRange": {
+    "from": "2026-01-04T22:00:00.000Z",
+    "to": "2026-05-01T18:55:00.000Z",
+    "days": 90
+  },
+  "metrics": {
+    "trades": 6,
+    "winRate": 0,
+    "profitFactor": 0,
+    "expectancyR": -1.2561,
+    "maxDrawdownPct": 26.85,
+    "startCapital": 500,
+    "endCapital": 365.77,
+    "rawPnl": -134.23,
+    "averageHoldBars": 4.17,
+    "days": 90
+  },
+  "score": -517.2127,
+  "scoreMode": "aggressiveIntraday",
+  "scores": {
+    "maxProfit": -441.2149,
+    "aggressiveIntraday": -517.2127,
+    "profitWithControl": -525.0953,
+    "stable": -556.8219
+  },
+  "riskFlags": [
+    "low_sample",
+    "negative_profit",
+    "profit_factor_below_1",
+    "live_parity_risk"
+  ],
+  "rejectionReason": "too_few_trades",
+  "counts": {
+    "symbolCounts": {
+      "NZDJPY": 2,
+      "GBPCHF": 2,
+      "AUDJPY": 1,
+      "USDCAD": 1
+    },
+    "familyCounts": {
+      "volatility_squeeze_breakout": 6
+    },
+    "exitCounts": {
+      "momentum_decay_exit": 6
+    },
+    "sessionCounts": {
+      "ny": 1,
+      "off_session": 5
+    }
+  },
+  "sampleTrades": [
+    {
+      "symbol": "NZDJPY",
+      "family": "volatility_squeeze_breakout",
+      "session": "ny",
+      "side": "LONG",
+      "entryTimestamp": "2026-02-02T13:35:00.000Z",
+      "exitTimestamp": "2026-02-02T14:50:00.000Z",
+      "exitReason": "momentum_decay_exit",
+      "pnlR": -0.406,
+      "pnlCash": -8.11
+    },
+    {
+      "symbol": "GBPCHF",
+      "family": "volatility_squeeze_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-02T21:10:00.000Z",
+      "exitTimestamp": "2026-02-02T21:15:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.563,
+      "pnlCash": -30.76
+    },
+    {
+      "symbol": "NZDJPY",
+      "family": "volatility_squeeze_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-09T21:10:00.000Z",
+      "exitTimestamp": "2026-02-09T21:15:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.731,
+      "pnlCash": -31.92
+    },
+    {
+      "symbol": "AUDJPY",
+      "family": "volatility_squeeze_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-16T21:10:00.000Z",
+      "exitTimestamp": "2026-02-16T21:15:00.000Z",
+      "exitReason": "fast_cut_adverse",
+      "pnlR": -1.023,
+      "pnlCash": -17.55
+    },
+    {
+      "symbol": "USDCAD",
+      "family": "volatility_squeeze_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-16T21:10:00.000Z",
+      "exitTimestamp": "2026-02-16T21:25:00.000Z",
+      "exitReason": "fast_cut_adverse",
+      "pnlR": -1.251,
+      "pnlCash": -21.48
+    },
+    {
+      "symbol": "GBPCHF",
+      "family": "volatility_squeeze_breakout",
+      "session": "off_session",
+      "side": "SHORT",
+      "entryTimestamp": "2026-02-17T21:10:00.000Z",
+      "exitTimestamp": "2026-02-17T21:30:00.000Z",
+      "exitReason": "stop_loss_or_trailing_stop",
+      "pnlR": -1.563,
+      "pnlCash": -24.4
+    }
+  ],
+  "realism": {
+    "entryTiming": "signal candle closes, entry on next monitoring candle open",
+    "monitoring": "M5 when available, otherwise entry timeframe",
+    "spread": "average from backtest/prices when available, static fallback otherwise",
+    "slippagePips": 0.2,
+    "sameCandleAmbiguity": "conservative: stop is evaluated before take-profit",
+    "noLookahead": true,
+    "limitations": [
+      "no true bid/ask historical candle stream",
+      "portfolio margin model simplified to risk-cash sizing",
+      "M1 monitoring only used later if explicitly added"
+    ]
+  }
+}
