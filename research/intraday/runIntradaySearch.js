@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { EXIT_PROFILE_DEFINITIONS } from "./exitProfiles.js";
 import { MANAGEMENT_PROFILE_DEFINITIONS } from "./managementProfiles.js";
-import { RISK_PROFILE_DEFINITIONS } from "./riskProfiles.js";
+import { enforceLiveResearchRiskGuards, RISK_PROFILE_DEFINITIONS } from "./riskProfiles.js";
 import {
     appendIntradayResult,
     baselineCandidate,
@@ -180,10 +180,11 @@ function buildManagementProfile(next) {
 }
 
 function buildRiskProfile(next) {
-    const base = { ...pick(next, Object.values(RISK_PROFILE_DEFINITIONS)) };
-    base.riskPerTrade = pick(next, [0.01, 0.02, 0.03, 0.04]);
-    base.maxPositions = pick(next, [1, 2, 3]);
-    return base;
+    const safeProfiles = Object.values(RISK_PROFILE_DEFINITIONS).map((profile) => enforceLiveResearchRiskGuards(profile));
+    const base = { ...pick(next, safeProfiles) };
+    base.riskPerTrade = pick(next, [0.01, 0.02, 0.03]);
+    base.maxPositions = 1;
+    return enforceLiveResearchRiskGuards(base);
 }
 
 function buildCandidate(index, next) {
@@ -191,13 +192,19 @@ function buildCandidate(index, next) {
         label: `intraday_${String(index).padStart(5, "0")}`,
         strategyFamily: buildStrategyFamily(index, next),
         entryProfile: {
-            timeframe: pick(next, ["M5", "M15"]),
-            entryMode: "next_open",
+            signalTimeframe: "M15",
+            executionTimeframe: pick(next, ["M5", "M1"]),
+            entryMode: pick(next, ["next_open", "lower_tf_pullback", "lower_tf_breakout", "lower_tf_momentum_confirm"]),
+            entryWindowBars: pick(next, [3, 6, 9, 12]),
+            pullbackPips: pick(next, [1, 2, 3, 4]),
+            breakoutBufferPips: pick(next, [0.3, 0.5, 1, 1.5]),
+            momentumAtrMultiplier: pick(next, [0.35, 0.45, 0.6, 0.8]),
+            stopBufferPips: pick(next, [0.5, 1, 1.5, 2]),
         },
         exitProfile: buildExitProfile(next),
         managementProfile: buildManagementProfile(next),
         riskProfile: buildRiskProfile(next),
-        notes: "Intraday lab candidate: strategy family + entry + exit + management + risk.",
+        notes: "Intraday lab candidate: M15 signal + lower-timeframe entry + exit + management + risk.",
     };
 }
 

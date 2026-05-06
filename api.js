@@ -144,13 +144,18 @@ export async function getHistorical(symbol, resolution, count) {
         try {
             const response = await axios.get(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
             return {
-                prices: response.data.prices.map((p) => ({
-                    close: p.closePrice?.bid,
-                    high: p.highPrice?.bid,
-                    low: p.lowPrice?.bid,
-                    open: p.openPrice?.bid,
-                    timestamp: new Date(p.snapshotTime).toLocaleString(), // Human readable timestamp
-                })),
+                prices: response.data.prices.map((p) => {
+                    const timestamp = normalizeCapitalTimestamp(p);
+                    return {
+                        close: p.closePrice?.bid,
+                        high: p.highPrice?.bid,
+                        low: p.lowPrice?.bid,
+                        open: p.openPrice?.bid,
+                        timestamp,
+                        snapshotTime: p.snapshotTime,
+                        snapshotTimeUTC: p.snapshotTimeUTC,
+                    };
+                }),
             };
         } catch (error) {
             if (error.response?.status === 429 && attempt < maxAttempts) {
@@ -162,6 +167,23 @@ export async function getHistorical(symbol, resolution, count) {
             throw error;
         }
     }
+}
+
+function normalizeCapitalTimestamp(price = {}) {
+    const rawUtc = price.snapshotTimeUTC;
+    const raw = rawUtc || price.snapshotTime;
+    if (!raw) return null;
+
+    const text = String(raw).trim();
+    if (!text) return null;
+
+    const hasExplicitZone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(text);
+    const parseTarget = hasExplicitZone ? text : `${text}Z`;
+    const parsed = new Date(parseTarget);
+    if (Number.isFinite(parsed.getTime())) return parsed.toISOString();
+
+    const fallback = new Date(text);
+    return Number.isFinite(fallback.getTime()) ? fallback.toISOString() : null;
 }
 
 export async function placeOrder(symbol, direction, size, level, orderType = "LIMIT") {

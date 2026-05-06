@@ -14,7 +14,7 @@ export const RISK_PROFILE_DEFINITIONS = {
     balanced: {
         kind: "balanced",
         riskPerTrade: 0.02,
-        maxPositions: 2,
+        maxPositions: 1,
         maxTradesPerDay: 8,
         maxTradesPerSymbolPerDay: 2,
         dailyStopLossPct: 0.06,
@@ -26,7 +26,7 @@ export const RISK_PROFILE_DEFINITIONS = {
     aggressive_3pct: {
         kind: "aggressive_3pct",
         riskPerTrade: 0.03,
-        maxPositions: 2,
+        maxPositions: 1,
         maxTradesPerDay: 12,
         maxTradesPerSymbolPerDay: 3,
         dailyStopLossPct: 0.09,
@@ -36,9 +36,9 @@ export const RISK_PROFILE_DEFINITIONS = {
         reducedRiskMultiplier: 0.7,
     },
     aggressive_4pct: {
-        kind: "aggressive_4pct",
-        riskPerTrade: 0.04,
-        maxPositions: 3,
+        kind: "aggressive_guarded_3pct",
+        riskPerTrade: 0.03,
+        maxPositions: 1,
         maxTradesPerDay: 16,
         maxTradesPerSymbolPerDay: 4,
         dailyStopLossPct: 0.14,
@@ -48,6 +48,21 @@ export const RISK_PROFILE_DEFINITIONS = {
         reducedRiskMultiplier: 0.75,
     },
 };
+
+export const LIVE_RESEARCH_RISK_GUARDS = {
+    maxRiskPerTrade: 0.03,
+    maxPositions: 1,
+};
+
+export function enforceLiveResearchRiskGuards(profile = {}) {
+    const riskPerTrade = Number(profile.riskPerTrade || 0.03);
+    const maxPositions = Number(profile.maxPositions || 1);
+    return {
+        ...profile,
+        riskPerTrade: Math.min(Math.max(riskPerTrade, 0), LIVE_RESEARCH_RISK_GUARDS.maxRiskPerTrade),
+        maxPositions: Math.min(Math.max(maxPositions, 1), LIVE_RESEARCH_RISK_GUARDS.maxPositions),
+    };
+}
 
 export function riskProfileId(profile = {}) {
     return [profile.kind, `${Math.round(Number(profile.riskPerTrade || 0) * 100)}pct`, `pos${profile.maxPositions}`, `day${profile.maxTradesPerDay}`].join("_");

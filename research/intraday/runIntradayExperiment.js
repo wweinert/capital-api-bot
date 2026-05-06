@@ -7,7 +7,7 @@ import { configHash, parseArgs, stableStringify } from "../experimentTarget.js";
 import { buildSignals } from "./strategyFamilies.js";
 import { exitProfileId } from "./exitProfiles.js";
 import { managementProfileId } from "./managementProfiles.js";
-import { riskProfileId, RISK_PROFILE_DEFINITIONS } from "./riskProfiles.js";
+import { enforceLiveResearchRiskGuards, riskProfileId, RISK_PROFILE_DEFINITIONS } from "./riskProfiles.js";
 import { rejectionReasonFor, riskFlagsFor, scoreIntradayExperiment, scoreSet } from "./scoreIntradayExperiment.js";
 
 export const INTRADAY_DIR = path.join(process.cwd(), "research", "intraday");
@@ -263,6 +263,94 @@ function closeTrade(trade, row, index, price, reason, pip, warnings = []) {
     };
 }
 
+function sideFavorable(signal, row) {
+    return signal.side === "LONG" ? row.close > row.open : row.close < row.open;
+}
+
+function sideMomentum(signal, row, multiplier = 0.45) {
+    const body = Math.abs(row.close - row.open);
+    const atr = Number(row.atr);
+    if (!sideFavorable(signal, row)) return false;
+    if (!(Number.isFinite(atr) && atr > 0)) return body > 0;
+    return body >= atr * multiplier;
+}
+
+function trendAligned(signal, row) {
+    if (signal.side === "LONG") return row.close >= row.ema8 || row.ema8 >= row.ema20;
+    return row.close <= row.ema8 || row.ema8 <= row.ema20;
+}
+
+function resolveLowerTimeframeEntry({ signal, monitorRows, entryProfile = {}, pip }) {
+    const mode = String(entryProfile.entryMode || "next_open");
+    const startIndex = rowIndexAfter(monitorRows, signal.signalRow.tsMs);
+    if (startIndex >= monitorRows.length) return null;
+
+    const maxBars = Number(entryProfile.entryWindowBars || entryProfile.maxEntryWaitBars || 6);
+    const pullbackPips = Number(entryProfile.pullbackPips || 2) * pip;
+    const breakoutBuffer = Number(entryProfile.breakoutBufferPips || 0.5) * pip;
+    const stopBuffer = Number(entryProfile.stopBufferPips || 1) * pip;
+    const endIndex = Math.min(monitorRows.length - 1, startIndex + Math.max(0, maxBars));
+    const signalClose = Number(signal.signalRow.close);
+    const signalHigh = Number(signal.signalRow.high);
+    const signalLow = Number(signal.signalRow.low);
+
+    if (mode === "next_open") {
+        const row = monitorRows[startIndex];
+        return { row, index: startIndex, entryPrice: row.open, reason: "next_lower_tf_open", stopAnchorRow: row };
+    }
+
+    for (let index = startIndex; index <= endIndex; index += 1) {
+        const row = monitorRows[index];
+        const next = monitorRows[index + 1] || row;
+        if (mode === "lower_tf_pullback") {
+            const touched =
+                signal.side === "LONG"
+                    ? row.low <= signalClose - pullbackPips || (Number.isFinite(row.ema8) && row.low <= row.ema8)
+                    : row.high >= signalClose + pullbackPips || (Number.isFinite(row.ema8) && row.high >= row.ema8);
+            if (touched && sideFavorable(signal, row)) {
+                return {
+                    row: next,
+                    index: Math.min(index + 1, monitorRows.length - 1),
+                    entryPrice: next.open,
+                    reason: "lower_tf_pullback_confirmed",
+                    stopAnchorRow: row,
+                    suggestedStopPrice: signal.side === "LONG" ? row.low - stopBuffer : row.high + stopBuffer,
+                };
+            }
+        }
+
+        if (mode === "lower_tf_breakout") {
+            const broke = signal.side === "LONG" ? row.close >= signalHigh + breakoutBuffer : row.close <= signalLow - breakoutBuffer;
+            if (broke && sideFavorable(signal, row)) {
+                return {
+                    row: next,
+                    index: Math.min(index + 1, monitorRows.length - 1),
+                    entryPrice: next.open,
+                    reason: "lower_tf_breakout_confirmed",
+                    stopAnchorRow: row,
+                    suggestedStopPrice: signal.side === "LONG" ? row.low - stopBuffer : row.high + stopBuffer,
+                };
+            }
+        }
+
+        if (mode === "lower_tf_momentum_confirm") {
+            const multiplier = Number(entryProfile.momentumAtrMultiplier || 0.45);
+            if (sideMomentum(signal, row, multiplier) && trendAligned(signal, row)) {
+                return {
+                    row: next,
+                    index: Math.min(index + 1, monitorRows.length - 1),
+                    entryPrice: next.open,
+                    reason: "lower_tf_momentum_confirmed",
+                    stopAnchorRow: row,
+                    suggestedStopPrice: signal.side === "LONG" ? row.low - stopBuffer : row.high + stopBuffer,
+                };
+            }
+        }
+    }
+
+    return null;
+}
+
 function shouldCloseByManagement(trade, row, index, managementProfile) {
     const kind = managementProfile.kind;
     const rNow = currentR(trade, row.close);
@@ -283,13 +371,15 @@ function shouldCloseByManagement(trade, row, index, managementProfile) {
     return null;
 }
 
-function simulateSignalTrade({ signal, entryRows, monitorRows, exitProfile, managementProfile, slippagePips = 0.2 }) {
+function simulateSignalTrade({ signal, entryRows, monitorRows, exitProfile, managementProfile, entryProfile = {}, slippagePips = 0.2 }) {
     const pip = pipSizeForSymbol(signal.symbol);
-    const entryIndex = rowIndexAfter(monitorRows, signal.signalRow.tsMs);
-    if (entryIndex >= monitorRows.length) return null;
-    const entryRow = monitorRows[entryIndex];
-    const entryPrice = entryRow.open;
-    const stopPrice = buildStop(signal, entryPrice, entryRow, exitProfile, pip);
+    const entry = resolveLowerTimeframeEntry({ signal, monitorRows, entryProfile, pip });
+    if (!entry) return null;
+    const entryIndex = entry.index;
+    const entryRow = entry.row;
+    const entryPrice = entry.entryPrice;
+    const stopSignal = entry.suggestedStopPrice ? { ...signal, suggestedStopPrice: entry.suggestedStopPrice } : signal;
+    const stopPrice = buildStop(stopSignal, entryPrice, entry.stopAnchorRow || entryRow, exitProfile, pip);
     const riskDistance = signal.side === "LONG" ? entryPrice - stopPrice : stopPrice - entryPrice;
     if (!(riskDistance > pip * 0.5)) return null;
     const trade = {
@@ -299,7 +389,11 @@ function simulateSignalTrade({ signal, entryRows, monitorRows, exitProfile, mana
         reason: signal.reason,
         session: signal.session || sessionName(signal.signalTimestamp),
         signalTimestamp: signal.signalTimestamp,
+        signalTimeframe: entryProfile.signalTimeframe || entryProfile.timeframe || "M15",
         entryTimestamp: entryRow.timestamp,
+        entryMode: entryProfile.entryMode || "next_open",
+        entryReason: entry.reason,
+        executionTimeframe: entryProfile.executionTimeframe || entryProfile.monitorTimeframe || "M5",
         entryIndex,
         entryPrice,
         stopPrice,
@@ -467,7 +561,7 @@ export function baselineCandidate() {
             signalMode: "strict",
             stopVariant: "structure_pivot_with_buffer_2pip",
         },
-        entryProfile: { timeframe: "M15", entryMode: "next_open" },
+        entryProfile: { signalTimeframe: "M15", executionTimeframe: "M5", entryMode: "next_open", entryWindowBars: 6 },
         exitProfile: { kind: "fixed_r", tpR: 5, stopModel: "candle", minStopPips: 2, maxStopPips: 25, noOvernight: true },
         managementProfile: { kind: "passive", maxHoldBars: 96 },
         riskProfile: RISK_PROFILE_DEFINITIONS.aggressive_3pct,
@@ -479,44 +573,62 @@ function candidateId(candidate, symbols, days) {
     return crypto.createHash("sha256").update(stableStringify({ candidate, symbols, days })).digest("hex").slice(0, 12);
 }
 
-export function runIntradayExperiment({ candidate = baselineCandidate(), symbols = resolveIntradaySymbols(), days = 90, mode = "aggressiveIntraday" } = {}) {
+export function runIntradayExperiment({ candidate = baselineCandidate(), symbols = resolveIntradaySymbols(), days = 90, mode = "aggressiveIntraday", includeTrades = false } = {}) {
     ensureIntradayDirs();
-    const entryTimeframe = candidate.entryProfile?.timeframe || "M15";
+    const guardedCandidate = {
+        ...candidate,
+        riskProfile: enforceLiveResearchRiskGuards(candidate.riskProfile || RISK_PROFILE_DEFINITIONS.aggressive_3pct),
+    };
+    const signalTimeframe = guardedCandidate.entryProfile?.signalTimeframe || guardedCandidate.entryProfile?.timeframe || "M15";
+    const requestedExecutionTimeframe = guardedCandidate.entryProfile?.executionTimeframe || guardedCandidate.entryProfile?.monitorTimeframe || "M5";
     let globalFrom = null;
     let globalTo = null;
     const tradeCandidates = [];
     const warnings = new Set(["live_parity_risk"]);
-    const timeframesUsed = new Set([entryTimeframe]);
+    const timeframesUsed = new Set([signalTimeframe]);
 
     for (const symbol of symbols) {
-        const entryRows = loadRows(symbol, entryTimeframe, days);
-        if (!entryRows.length) continue;
-        const monitorTimeframe = fs.existsSync(path.join(DATA_DIR, `${symbol}_M5.jsonl`)) ? "M5" : entryTimeframe;
+        const signalRows = loadRows(symbol, signalTimeframe, days);
+        if (!signalRows.length) continue;
+        let monitorTimeframe = requestedExecutionTimeframe;
+        if (!fs.existsSync(path.join(DATA_DIR, `${symbol}_${monitorTimeframe}.jsonl`))) {
+            if (monitorTimeframe === "M1" && fs.existsSync(path.join(DATA_DIR, `${symbol}_M5.jsonl`))) {
+                monitorTimeframe = "M5";
+                warnings.add("m1_missing_fallback_m5");
+            } else if (fs.existsSync(path.join(DATA_DIR, `${symbol}_M5.jsonl`))) {
+                monitorTimeframe = "M5";
+                warnings.add("execution_timeframe_fallback_m5");
+            } else {
+                monitorTimeframe = signalTimeframe;
+                warnings.add("execution_timeframe_fallback_signal_tf");
+            }
+        }
         timeframesUsed.add(monitorTimeframe);
         const monitorRows = loadRows(symbol, monitorTimeframe, days);
         if (!monitorRows.length) continue;
-        globalFrom = globalFrom === null ? entryRows[0].tsMs : Math.min(globalFrom, entryRows[0].tsMs);
-        globalTo = globalTo === null ? entryRows.at(-1).tsMs : Math.max(globalTo, entryRows.at(-1).tsMs);
-        const signals = buildSignals({ symbol, rows: entryRows, familyConfig: candidate.strategyFamily });
+        globalFrom = globalFrom === null ? signalRows[0].tsMs : Math.min(globalFrom, signalRows[0].tsMs);
+        globalTo = globalTo === null ? signalRows.at(-1).tsMs : Math.max(globalTo, signalRows.at(-1).tsMs);
+        const signals = buildSignals({ symbol, rows: signalRows, familyConfig: guardedCandidate.strategyFamily });
         for (const signal of signals) {
             const trade = simulateSignalTrade({
                 signal,
-                entryRows,
+                entryRows: signalRows,
                 monitorRows,
-                exitProfile: candidate.exitProfile,
-                managementProfile: candidate.managementProfile || {},
+                exitProfile: guardedCandidate.exitProfile,
+                managementProfile: guardedCandidate.managementProfile || {},
+                entryProfile: { ...guardedCandidate.entryProfile, signalTimeframe, executionTimeframe: monitorTimeframe },
             });
             if (trade) {
-                trade.exitProfileKind = candidate.exitProfile.kind;
-                trade.managementProfileKind = candidate.managementProfile?.kind || "passive";
-                trade.riskProfileKind = candidate.riskProfile?.kind || "custom";
+                trade.exitProfileKind = guardedCandidate.exitProfile.kind;
+                trade.managementProfileKind = guardedCandidate.managementProfile?.kind || "passive";
+                trade.riskProfileKind = guardedCandidate.riskProfile?.kind || "custom";
                 tradeCandidates.push(trade);
                 if (trade.warnings?.includes("same_candle_ambiguity_conservative_stop_first")) warnings.add("same_candle_ambiguity_conservative");
             }
         }
     }
 
-    const portfolio = simulatePortfolio(tradeCandidates, candidate.riskProfile || RISK_PROFILE_DEFINITIONS.aggressive_3pct, days);
+    const portfolio = simulatePortfolio(tradeCandidates, guardedCandidate.riskProfile, days);
     const metrics = {
         trades: portfolio.metrics.trades,
         winRate: round(portfolio.metrics.winRate, 2),
@@ -532,19 +644,19 @@ export function runIntradayExperiment({ candidate = baselineCandidate(), symbols
     const scores = scoreSet(metrics);
     const score = scoreIntradayExperiment(metrics, mode);
     const riskFlags = riskFlagsFor(metrics, [...warnings]);
-    const hash = candidateId(candidate, symbols, days);
-    const experimentId = `${candidate.label || "intraday"}_${hash}`;
+    const hash = candidateId(guardedCandidate, symbols, days);
+    const experimentId = `${guardedCandidate.label || "intraday"}_${hash}`;
 
     return {
         timestamp: new Date().toISOString(),
         experimentId,
         configHash: hash,
-        candidate,
-        strategyFamily: candidate.strategyFamily.family,
-        entryProfile: candidate.entryProfile,
-        exitProfile: candidate.exitProfile,
-        managementProfile: candidate.managementProfile,
-        riskProfile: candidate.riskProfile,
+        candidate: guardedCandidate,
+        strategyFamily: guardedCandidate.strategyFamily.family,
+        entryProfile: guardedCandidate.entryProfile,
+        exitProfile: guardedCandidate.exitProfile,
+        managementProfile: guardedCandidate.managementProfile,
+        riskProfile: guardedCandidate.riskProfile,
         symbols,
         timeframes: [...timeframesUsed].sort(),
         dateRange: {
@@ -564,20 +676,25 @@ export function runIntradayExperiment({ candidate = baselineCandidate(), symbols
         riskFlags,
         rejectionReason: rejectionReasonFor(metrics, [...warnings]),
         counts: portfolio.counts,
+        trades: includeTrades ? portfolio.trades : undefined,
         sampleTrades: portfolio.trades.slice(0, 20).map((trade) => ({
             symbol: trade.symbol,
             family: trade.family,
             session: trade.session,
             side: trade.side,
             entryTimestamp: trade.entryTimestamp,
+            signalTimestamp: trade.signalTimestamp,
+            entryMode: trade.entryMode,
+            entryReason: trade.entryReason,
+            executionTimeframe: trade.executionTimeframe,
             exitTimestamp: trade.exitTimestamp,
             exitReason: trade.exitReason,
             pnlR: round(trade.pnlR, 3),
             pnlCash: round(trade.pnlCash, 2),
         })),
         realism: {
-            entryTiming: "signal candle closes, entry on next monitoring candle open",
-            monitoring: "M5 when available, otherwise entry timeframe",
+            entryTiming: "signal candle closes on signalTimeframe, entry waits for configured lower-timeframe rule and then enters on the next lower-timeframe open",
+            monitoring: "requested executionTimeframe, with M1 when available, M5 fallback, otherwise signal timeframe",
             spread: "average from backtest/prices when available, static fallback otherwise",
             slippagePips: 0.2,
             sameCandleAmbiguity: "conservative: stop is evaluated before take-profit",
@@ -599,7 +716,7 @@ export function appendIntradayResult(result) {
         experimentId: result.experimentId,
         configHash: result.configHash,
         strategyFamily: result.strategyFamily,
-        entryProfile: `${result.entryProfile?.timeframe || ""}:${result.entryProfile?.entryMode || ""}`,
+        entryProfile: `${result.entryProfile?.signalTimeframe || result.entryProfile?.timeframe || ""}->${result.entryProfile?.executionTimeframe || result.entryProfile?.monitorTimeframe || ""}:${result.entryProfile?.entryMode || ""}`,
         exitProfile: exitProfileId(result.exitProfile),
         managementProfile: managementProfileId(result.managementProfile),
         riskProfile: riskProfileId(result.riskProfile),

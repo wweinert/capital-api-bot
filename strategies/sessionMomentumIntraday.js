@@ -93,7 +93,7 @@ function stopPriceFor({ side, entryPrice, symbol, exitProfile }) {
 function stableSignalId({ symbol, side, row, profileId, reason }) {
     return crypto
         .createHash("sha256")
-        .update(JSON.stringify({ profileId, family: "session_momentum", symbol, side, timestamp: row.timestamp, reason }))
+        .update(JSON.stringify({ profileId, symbol, side, timestamp: row.timestamp, reason }))
         .digest("hex")
         .slice(0, 16);
 }
@@ -105,16 +105,110 @@ function spreadPips(symbol, bid, ask) {
 }
 
 function buildRuntimeManagementProfile(profile) {
+    const timeframe = profile.entryProfile.signalTimeframe || profile.entryProfile.timeframe || "M15";
     return {
         mode: "adaptive_trail_r",
         activationR: profile.exitProfile.activationR,
         trailR: profile.exitProfile.trailR,
         breakevenR: profile.exitProfile.breakevenR,
-        timeframe: profile.entryProfile.timeframe,
+        timeframe,
         profileKind: profile.managementProfile.kind,
+        maxHoldBars: profile.managementProfile.maxHoldBars,
+        closeBeforeSessionEndMinutes: profile.managementProfile.closeBeforeSessionEndMinutes,
         protectProfit: {
             minProfitR: profile.managementProfile.minProfitR,
             givebackPct: profile.managementProfile.givebackPct,
+        },
+    };
+}
+
+function evaluateSessionMomentum({ symbol, row, profile, baseContext, bid, ask }) {
+    const session = profile.strategyFamily.session || "ny";
+    const win = sessionWindow(session);
+    if (!inWindow(row.timestamp, win.start, win.end)) {
+        return { signal: null, reason: "intraday_outside_session", context: { ...baseContext, session, sessionWindowUTC: win } };
+    }
+    if (row.atrPct < Number(profile.strategyFamily.minAtrPct || 0)) {
+        return { signal: null, reason: "intraday_atr_filter_block", context: { ...baseContext, atrPct: row.atrPct, minAtrPct: profile.strategyFamily.minAtrPct } };
+    }
+
+    let side = null;
+    let reason = null;
+    if (row.ema8 > row.ema20 && row.close > row.ema8 && row.close > row.open) {
+        side = "LONG";
+        reason = `${session}_long_momentum`;
+    } else if (row.ema8 < row.ema20 && row.close < row.ema8 && row.close < row.open) {
+        side = "SHORT";
+        reason = `${session}_short_momentum`;
+    }
+    if (!side) {
+        return {
+            signal: null,
+            reason: "intraday_no_session_momentum",
+            context: { ...baseContext, session, ema8: row.ema8, ema20: row.ema20 },
+        };
+    }
+    return buildSignalResult({ symbol, side, row, profile, baseContext, bid, ask, reason, session });
+}
+
+function evaluateMomentumContinuation({ symbol, row, profile, baseContext, bid, ask }) {
+    const body = Math.abs(row.close - row.open);
+    const multiplier = Number(profile.strategyFamily.impulseAtrMultiplier || 1.5);
+    if (!(row.atr > 0 && body >= row.atr * multiplier)) {
+        return {
+            signal: null,
+            reason: "intraday_no_momentum_impulse",
+            context: { ...baseContext, body, atr: row.atr, impulseAtrMultiplier: multiplier },
+        };
+    }
+    if (profile.strategyFamily.avoidAfterTooLargeCandle && body > row.atr * 3.5) {
+        return {
+            signal: null,
+            reason: "intraday_momentum_candle_too_large",
+            context: { ...baseContext, body, atr: row.atr, maxBodyAtr: 3.5 },
+        };
+    }
+    const side = row.close > row.open ? "LONG" : row.close < row.open ? "SHORT" : null;
+    if (!side) {
+        return { signal: null, reason: "intraday_momentum_neutral_candle", context: { ...baseContext, body, atr: row.atr } };
+    }
+    const reason = side === "LONG" ? "bull_impulse" : "bear_impulse";
+    return buildSignalResult({ symbol, side, row, profile, baseContext, bid, ask, reason, session: "momentum" });
+}
+
+function buildSignalResult({ symbol, side, row, profile, baseContext, bid, ask, reason, session }) {
+    const direction = side === "LONG" ? "BUY" : "SELL";
+    const liveEntryPrice = direction === "BUY" && Number.isFinite(Number(ask)) ? Number(ask) : direction === "SELL" && Number.isFinite(Number(bid)) ? Number(bid) : row.close;
+    const expectedStopPrice = stopPriceFor({ side, entryPrice: liveEntryPrice, symbol, exitProfile: profile.exitProfile });
+    const profileId = profile?.id || DEFAULT_INTRADAY_PROFILE_ID;
+    const normalizedCandidateId = stableSignalId({ symbol, side, row, profileId, reason });
+    return {
+        signal: direction,
+        reason,
+        context: {
+            ...baseContext,
+            side,
+            direction,
+            session,
+            signalTimestamp: row.timestamp,
+            normalizedCandidateId,
+            expectedEntryPrice: liveEntryPrice,
+            expectedStopPrice,
+            takeProfitR: profile.exitProfile.tpR,
+            safetyTakeProfitR: profile.exitProfile.tpR,
+            runtimeEntryTiming: "next_open_live_approximation",
+            researchManagementProfile: profile.managementProfile,
+            runtimeManagementProfile: buildRuntimeManagementProfile(profile),
+            managementProfile: buildRuntimeManagementProfile(profile),
+            candidateContext: {
+                ema8: row.ema8,
+                ema20: row.ema20,
+                atr: row.atr,
+                atrPct: row.atrPct,
+                closeAboveOpen: row.close > row.open,
+                closeBelowOpen: row.close < row.open,
+                body: Math.abs(row.close - row.open),
+            },
         },
     };
 }
@@ -130,29 +224,29 @@ export function createSessionMomentumIntradayStrategy({ profile = ACTIVE_INTRADA
             if (TRADING_STRATEGY_MODE !== "intraday_lab") {
                 return { signal: null, reason: "intraday_lab_mode_disabled", context: { strategyMode: TRADING_STRATEGY_MODE, profileId } };
             }
-            if (profile.strategyFamily.family !== "session_momentum") {
-                return { signal: null, reason: "unsupported_intraday_family", context: { strategyMode: TRADING_STRATEGY_MODE, profileId, strategyFamily: profile.strategyFamily.family } };
+            const strategyFamily = profile.strategyFamily.family;
+            if (!["session_momentum", "momentum_continuation"].includes(strategyFamily)) {
+                return { signal: null, reason: "unsupported_intraday_family", context: { strategyMode: TRADING_STRATEGY_MODE, profileId, strategyFamily } };
             }
 
-            const timeframe = profile.entryProfile.timeframe || "M15";
+            const timeframe = profile.entryProfile.signalTimeframe || profile.entryProfile.timeframe || "M15";
             const rows = enrichRows(liveClosedRows(candles, timeframe));
             const row = rows[rows.length - 1];
             if (rows.length < 21 || !row) {
                 return {
                     signal: null,
                     reason: "intraday_insufficient_timeframe_history",
-                    context: { strategyMode: TRADING_STRATEGY_MODE, profileId, strategyFamily: "session_momentum", timeframe, rows: rows.length },
+                    context: { strategyMode: TRADING_STRATEGY_MODE, profileId, strategyFamily, timeframe, rows: rows.length },
                 };
             }
 
-            const session = profile.strategyFamily.session || "ny";
-            const win = sessionWindow(session);
             const currentSpreadPips = spreadPips(symbol, bid, ask);
             const baseContext = {
                 strategyMode: TRADING_STRATEGY_MODE,
                 profileId,
-                strategyFamily: "session_momentum",
+                strategyFamily,
                 timeframe,
+                executionTimeframe: profile.entryProfile.executionTimeframe || "M5",
                 entryMode: profile.entryProfile.entryMode,
                 exitProfile: profile.exitProfile,
                 managementProfile: profile.managementProfile,
@@ -163,62 +257,8 @@ export function createSessionMomentumIntradayStrategy({ profile = ACTIVE_INTRADA
                 latestClosedCandle: row,
             };
 
-            if (!inWindow(row.timestamp, win.start, win.end)) {
-                return { signal: null, reason: "intraday_outside_session", context: { ...baseContext, session, sessionWindowUTC: win } };
-            }
-            if (row.atrPct < Number(profile.strategyFamily.minAtrPct || 0)) {
-                return { signal: null, reason: "intraday_atr_filter_block", context: { ...baseContext, atrPct: row.atrPct, minAtrPct: profile.strategyFamily.minAtrPct } };
-            }
-
-            let side = null;
-            let reason = null;
-            if (row.ema8 > row.ema20 && row.close > row.ema8 && row.close > row.open) {
-                side = "LONG";
-                reason = `${session}_long_momentum`;
-            } else if (row.ema8 < row.ema20 && row.close < row.ema8 && row.close < row.open) {
-                side = "SHORT";
-                reason = `${session}_short_momentum`;
-            }
-            if (!side) {
-                return {
-                    signal: null,
-                    reason: "intraday_no_session_momentum",
-                    context: { ...baseContext, session, ema8: row.ema8, ema20: row.ema20 },
-                };
-            }
-
-            const direction = side === "LONG" ? "BUY" : "SELL";
-            const liveEntryPrice = direction === "BUY" && Number.isFinite(Number(ask)) ? Number(ask) : direction === "SELL" && Number.isFinite(Number(bid)) ? Number(bid) : row.close;
-            const expectedStopPrice = stopPriceFor({ side, entryPrice: liveEntryPrice, symbol, exitProfile: profile.exitProfile });
-            const normalizedCandidateId = stableSignalId({ symbol, side, row, profileId, reason });
-            return {
-                signal: direction,
-                reason,
-                context: {
-                    ...baseContext,
-                    side,
-                    direction,
-                    session,
-                    signalTimestamp: row.timestamp,
-                    normalizedCandidateId,
-                    expectedEntryPrice: liveEntryPrice,
-                    expectedStopPrice,
-                    takeProfitR: profile.exitProfile.tpR,
-                    safetyTakeProfitR: profile.exitProfile.tpR,
-                    runtimeEntryTiming: "next_open_live_approximation",
-                    researchManagementProfile: profile.managementProfile,
-                    runtimeManagementProfile: buildRuntimeManagementProfile(profile),
-                    managementProfile: buildRuntimeManagementProfile(profile),
-                    candidateContext: {
-                        ema8: row.ema8,
-                        ema20: row.ema20,
-                        atr: row.atr,
-                        atrPct: row.atrPct,
-                        closeAboveOpen: row.close > row.open,
-                        closeBelowOpen: row.close < row.open,
-                    },
-                },
-            };
+            if (strategyFamily === "momentum_continuation") return evaluateMomentumContinuation({ symbol, row, profile, baseContext, bid, ask });
+            return evaluateSessionMomentum({ symbol, row, profile, baseContext, bid, ask });
         },
     };
 }

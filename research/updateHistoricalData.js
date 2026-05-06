@@ -5,6 +5,8 @@ import { ANALYSIS } from "../config.js";
 import { DATA_DIR, parseArgs } from "./experimentTarget.js";
 
 const TIMEFRAME_TO_RESOLUTION = {
+    M1: "MINUTE",
+    M5: "MINUTE_5",
     M15: "MINUTE_15",
 };
 

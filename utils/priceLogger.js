@@ -69,6 +69,20 @@ class PriceLogger {
         };
     }
 
+    collectSnapshotWarnings(candles = {}, snapshotTimestamp = new Date().toISOString()) {
+        const warnings = [];
+        const snapshotMs = Date.parse(snapshotTimestamp);
+        if (!Number.isFinite(snapshotMs)) return warnings;
+
+        for (const [timeframe, candle] of Object.entries(candles || {})) {
+            const candleMs = Date.parse(candle?.t || "");
+            if (Number.isFinite(candleMs) && candleMs > snapshotMs + 60_000) {
+                warnings.push(`future_${timeframe}_candle_timestamp`);
+            }
+        }
+        return warnings;
+    }
+
     getActiveSessionsUtc() {
         const now = new Date();
         const hour = now.getUTCHours();
@@ -183,9 +197,15 @@ class PriceLogger {
                 logger.warn(`[PriceLogger] News check failed for ${symbol}: ${error.message}`);
             }
 
+            const timestamp = new Date().toISOString();
+            const warnings = this.collectSnapshotWarnings(candles, timestamp);
+            if (warnings.length) {
+                logger.warn(`[PriceLogger] Snapshot timestamp warnings for ${symbol}: ${warnings.join(", ")}`);
+            }
+
             const payload = {
                 symbol,
-                timestamp: new Date().toISOString(),
+                timestamp,
                 bid,
                 ask,
                 mid,
@@ -193,6 +213,7 @@ class PriceLogger {
                 price: referencePrice,
                 sessions,
                 newsBlocked,
+                warnings,
                 candles,
                 indicators,
             };

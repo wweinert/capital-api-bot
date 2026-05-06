@@ -15,6 +15,7 @@
     "research:intraday:baseline": "node research/intraday/runIntradayExperiment.js",
     "research:intraday:search": "node research/intraday/runIntradaySearch.js",
     "research:intraday:report": "node research/intraday/runIntradayReport.js",
+    "research:intraday:candidate-backtest": "node research/intraday/runIntradayCandidateBacktest.js",
     "demo:intraday": "TRADING_STRATEGY_MODE=intraday_lab TRADING_EXECUTION_MODE=demo node bot.js"
   },
   "keywords": [],

@@ -2,8 +2,8 @@ import "dotenv/config";
 
 const ENV = process.env;
 
-export const TRADING_STRATEGY_MODE = ENV.TRADING_STRATEGY_MODE || "hllh";
-export const DEFAULT_INTRADAY_PROFILE_ID = "intraday_09473_be83a91c4f2b";
+export const TRADING_STRATEGY_MODE = ENV.TRADING_STRATEGY_MODE || "intraday_lab";
+export const DEFAULT_INTRADAY_PROFILE_ID = "intraday_15012_5bcdee846128";
 export const EXECUTION = {
     MODE: ENV.TRADING_EXECUTION_MODE || "live",
     ALLOW_INTRADAY_LIVE_ORDERS: ENV.ALLOW_INTRADAY_LIVE_ORDERS === "true",
@@ -51,6 +51,95 @@ export const SESSIONS = {
 };
 
 export const INTRADAY_PROFILES = {
+    intraday_15012_5bcdee846128: {
+        id: "intraday_15012_5bcdee846128",
+        source: "research/intraday/candidates/aggressiveIntraday/best-endCapital__intraday_15012_5bcdee846128.json",
+        strategyFamily: {
+            family: "momentum_continuation",
+            impulseAtrMultiplier: 1.25,
+            followThroughBars: 2,
+            avoidAfterTooLargeCandle: true,
+        },
+        entryProfile: {
+            signalTimeframe: "M15",
+            executionTimeframe: "M5",
+            entryMode: "next_open",
+            entryWindowBars: 12,
+            pullbackPips: 3,
+            breakoutBufferPips: 1.5,
+            momentumAtrMultiplier: 0.35,
+            stopBufferPips: 1,
+        },
+        exitProfile: {
+            kind: "adaptive_r_trail",
+            stopModel: "fixed_pips",
+            stopAtrMultiplier: 1.2,
+            stopPips: 10,
+            minStopPips: 3,
+            maxStopPips: 18,
+            noOvernight: true,
+            tpR: 5,
+            activationR: 0.5,
+            trailR: 1.5,
+            breakevenR: 1.2,
+        },
+        managementProfile: {
+            kind: "session_flat",
+            closeBeforeSessionEndMinutes: 30,
+            maxHoldBars: 48,
+        },
+        riskProfile: {
+            kind: "aggressive_guarded_3pct",
+            riskPerTrade: 0.03,
+            maxPositions: 1,
+            maxTradesPerDay: 16,
+            maxTradesPerSymbolPerDay: 4,
+            dailyStopLossPct: 0.14,
+            dailyTakeProfitLockPct: 0.24,
+            stopAfterLosses: 6,
+            reduceRiskAfterDrawdownPct: 35,
+            reducedRiskMultiplier: 0.75,
+            marginCapPct: 0.75,
+        },
+        symbols: [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY",
+        ],
+        metrics: {
+            trades: 947,
+            winRate: 66,
+            profitFactor: 1.544,
+            expectancyR: 0.2256,
+            maxDrawdownPct: 28.69,
+            startCapital: 500,
+            endCapital: 160469.94,
+            rawPnl: 159969.94,
+            averageHoldBars: 7.19,
+            days: 90,
+        },
+        riskFlags: [
+            "very_interesting",
+            "reliability_bonus",
+            "live_parity_risk",
+            "same_candle_ambiguity_conservative",
+            "execution_timeframe_fallback_signal_tf",
+        ],
+    },
     intraday_09473_be83a91c4f2b: {
         id: "intraday_09473_be83a91c4f2b",
         source: "research/intraday/candidates/aggressiveIntraday/best-maxDD-lt60__intraday_09473_be83a91c4f2b.json",
@@ -135,6 +224,7 @@ const IS_INTRADAY_LAB_MODE = TRADING_STRATEGY_MODE === "intraday_lab";
 export const RISK = {
     PER_TRADE: IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.riskProfile.riskPerTrade : 0.03,
     MAX_POSITIONS: IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.riskProfile.maxPositions : 1,
+    MARGIN_CAP_PCT: IS_INTRADAY_LAB_MODE ? ACTIVE_INTRADAY_PROFILE.riskProfile.marginCapPct || 0.75 : 0.75,
     MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
     DAILY_FORCED_CLOSE_UTC: true,
     DAILY_LAST_ENTRY_MINUTE_UTC: 23 * 60 + 30,
