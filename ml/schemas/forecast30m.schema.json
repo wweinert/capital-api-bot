@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Forecast30m",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "type",
+    "symbol",
+    "timeframe",
+    "createdAt",
+    "validUntil",
+    "horizonMinutes",
+    "preferredDirection",
+    "confidence",
+    "probabilityProfitBuy",
+    "probabilityProfitSell",
+    "expectedMovePips",
+    "expectedR",
+    "marketBias",
+    "noTradeZone",
+    "reason",
+    "modelVersion"
+  ],
+  "properties": {
+    "type": { "const": "FORECAST_30M" },
+    "symbol": { "type": "string", "minLength": 1 },
+    "timeframe": { "const": "M5" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "validUntil": { "type": "string", "format": "date-time" },
+    "horizonMinutes": { "const": 30 },
+    "preferredDirection": { "enum": ["BUY", "SELL", "NEUTRAL", "NO_TRADE"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "probabilityProfitBuy": { "type": "number", "minimum": 0, "maximum": 1 },
+    "probabilityProfitSell": { "type": "number", "minimum": 0, "maximum": 1 },
+    "expectedMovePips": { "type": "number" },
+    "expectedR": { "type": "number" },
+    "marketBias": { "enum": ["bullish", "bearish", "neutral", "unclear"] },
+    "noTradeZone": { "type": "boolean" },
+    "reason": { "type": "string" },
+    "modelVersion": { "type": "string" }
+  }
+}
+

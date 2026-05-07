@@ -406,6 +406,26 @@ function simulateSignalTrade({ signal, entryRows, monitorRows, exitProfile, mana
         partialTaken: false,
         partialAtR: Number(exitProfile.partialAtR || 0),
         partialClosePct: Number(exitProfile.partialClosePct || 0),
+        signalContext: {
+            signalTimestamp: signal.signalTimestamp,
+            session: signal.session || sessionName(signal.signalTimestamp),
+            reason: signal.reason,
+            row: {
+                timestamp: signal.signalRow?.timestamp,
+                open: signal.signalRow?.open,
+                high: signal.signalRow?.high,
+                low: signal.signalRow?.low,
+                close: signal.signalRow?.close,
+                ema8: signal.signalRow?.ema8,
+                ema20: signal.signalRow?.ema20,
+                ema50: signal.signalRow?.ema50,
+                atr: signal.signalRow?.atr,
+                atrPct: signal.signalRow?.atrPct,
+                rsi14: signal.signalRow?.rsi14,
+                body: signal.signalRow?.body,
+                range: signal.signalRow?.range,
+            },
+        },
     };
     const maxHoldBars = Number(exitProfile.maxHoldBars || managementProfile.maxHoldBars || 96);
     const warnings = [];

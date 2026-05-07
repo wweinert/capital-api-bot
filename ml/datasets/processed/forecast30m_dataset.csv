@@ -1,0 +1,3 @@
+datasetSource,symbol,mode,forecastTimestamp,forecastId,preferredDirection,confidence,probabilityProfitBuy,probabilityProfitSell,expectedMovePips,expectedR,marketBias,noTradeZone,modelVersion,actualDirection30m,actualMovePips30m,maxFavorablePipsBuy30m,maxAdversePipsBuy30m,maxFavorablePipsSell30m,maxAdversePipsSell30m,rowCount30m
+model_forecast_log,GBPUSD,shadow,2026-05-06T18:56:42.516Z,forecast_gbpusd_20260506185642,BUY,0.58,0.56,0.44,20,0.35,bullish,false,mock-v0,BUY,2.2,2.8,-1.8,1.8,-2.8,26
+model_forecast_log,GBPUSD,forecast_filter,2026-05-06T18:57:08.030Z,forecast_gbpusd_20260506185708,BUY,0.58,0.56,0.44,20,0.35,bullish,false,mock-v0,BUY,2.2,2.8,-1.8,1.8,-2.8,26

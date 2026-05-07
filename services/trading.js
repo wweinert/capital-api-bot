@@ -4,6 +4,7 @@ import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
 import strategyRouter from "../strategies/Router.js";
 import { logStrategyDecision } from "../utils/strategyDecisionLogger.js";
+import modelDecisionService from "./modelDecisionService.js";
 
 const { PER_TRADE, MAX_POSITIONS } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -119,33 +120,8 @@ class TradingService {
         try {
             await this.syncOpenTradesFromBroker();
             logger.info(`[ProcessPrice] Open trades: ${this.openTrades.length}/${MAX_POSITIONS} | Balance: ${this.accountBalance}€`);
-
-            if (this.openTrades.length >= MAX_POSITIONS) {
-                logger.info(`[ProcessPrice] Max trades reached. Skipping ${symbol}.`);
-                logStrategyDecision({
-                    strategyMode: TRADING_STRATEGY_MODE,
-                    symbol,
-                    decision: "blocked",
-                    blockedReason: "max_positions_reached",
-                    bid,
-                    ask,
-                    candidateContext: { openTrades: this.openTrades.length, maxPositions: MAX_POSITIONS },
-                });
-                return;
-            }
-            if (this.isSymbolTraded(symbol)) {
-                logger.debug(`[ProcessPrice] ${symbol} already in market.`);
-                logStrategyDecision({
-                    strategyMode: TRADING_STRATEGY_MODE,
-                    symbol,
-                    decision: "blocked",
-                    blockedReason: "symbol_already_traded",
-                    bid,
-                    ask,
-                    candidateContext: { openTrades: this.openTrades },
-                });
-                return;
-            }
+            const portfolioBlockedReason =
+                this.openTrades.length >= MAX_POSITIONS ? "max_positions_reached" : this.isSymbolTraded(symbol) ? "symbol_already_traded" : null;
             const primary = strategyRouter.evaluate({ symbol, indicators, candles, bid, ask });
             let { signal, reason = "", context = {} } = primary;
             const decisionBase = {
@@ -162,12 +138,40 @@ class TradingService {
                 ask,
                 spreadPips: context.currentSpreadPips,
                 normalizedCandidateId: context.normalizedCandidateId,
-                candidateContext: context.candidateContext || context,
+                candidateContext: {
+                    ...context,
+                    candidateContext: context.candidateContext || null,
+                },
             };
 
             if (!signal) {
                 logger.debug(`[ProcessPrice] No strategy signal for ${symbol}: ${reason}`);
+                await modelDecisionService.observeMarket({
+                    symbol,
+                    indicators,
+                    candles,
+                    bid,
+                    ask,
+                    strategyContext: context,
+                    openPositionsContext: { openTrades: this.openTrades, maxPositions: MAX_POSITIONS },
+                });
                 logStrategyDecision({ ...decisionBase, decision: "no_signal", blockedReason: reason });
+                return;
+            }
+            if (portfolioBlockedReason) {
+                logger.info(`[ProcessPrice] ${symbol} signal observed but blocked by portfolio guard: ${portfolioBlockedReason}`);
+                logStrategyDecision({
+                    ...decisionBase,
+                    decision: "blocked",
+                    blockedReason: portfolioBlockedReason,
+                    candidateContext: {
+                        ...(context || {}),
+                        candidateContext: context?.candidateContext || null,
+                        openTrades: this.openTrades.length,
+                        maxPositions: MAX_POSITIONS,
+                        openTradeSymbols: [...this.openTrades],
+                    },
+                });
                 return;
             }
             if (context?.normalizedCandidateId && this.executedHllhSignals.has(context.normalizedCandidateId)) {
@@ -187,6 +191,44 @@ class TradingService {
 
             logger.info(`[Signal] ${symbol}: ${signal} ${reason} ${context?.normalizedCandidateId || ""}`);
             logStrategyDecision({ ...decisionBase, decision: "signal" });
+
+            const modelDecision = await modelDecisionService.evaluateTradeSignal({
+                symbol,
+                signal,
+                reason,
+                strategyContext: context,
+                indicators,
+                candles,
+                bid,
+                ask,
+                riskContext: {
+                    riskPct: PER_TRADE,
+                    maxPositions: MAX_POSITIONS,
+                    accountBalance: this.accountBalance,
+                    availableMargin: this.availableMargin,
+                },
+                openPositionsContext: { openTrades: this.openTrades, maxPositions: MAX_POSITIONS },
+            });
+
+            if (modelDecision.shouldBlock) {
+                logger.info(`[ModelDecision] Blocked ${symbol} ${signal}: ${modelDecision.blockedReason}`);
+                logStrategyDecision({
+                    ...decisionBase,
+                    decision: "blocked",
+                    blockedReason: modelDecision.blockedReason,
+                    candidateContext: {
+                        ...(context || {}),
+                        candidateContext: context?.candidateContext || null,
+                        modelDecision: {
+                            mode: modelDecision.mode,
+                            finalBotDecision: modelDecision.finalBotDecision,
+                            forecast: modelDecision.forecast,
+                            qualityDecision: modelDecision.qualityDecision,
+                        },
+                    },
+                });
+                return;
+            }
 
             const toIsoTimestamp = (value) => {
                 if (value === undefined || value === null || value === "") return null;

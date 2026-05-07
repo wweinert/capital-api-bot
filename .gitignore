@@ -11,3 +11,4 @@ backtest/logs/
 backtest/prices/
 backtest/capital-dataset/
 backtest/decision-logs/
+logs/*.jsonl
