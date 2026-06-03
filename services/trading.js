@@ -1,8 +1,16 @@
-import { placePosition, updateTrailingStop, getDealConfirmation, closePosition as apiClosePosition, getOpenPositions, getHistorical, getMarketDetails } from "../api.js";
+import {
+    placePosition,
+    updateTrailingStop,
+    getDealConfirmation,
+    closePosition as apiClosePosition,
+    getOpenPositions,
+    getHistorical,
+    getMarketDetails,
+} from "../api.js";
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-import strategyRouter from "../strategies/Router.js";
+import shouldEnter from "../strategies/entry.js";
 
 const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT = 0.7 } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -126,22 +134,27 @@ class TradingService {
                 logger.debug(`[ProcessPrice] ${symbol} already in market.`);
                 return;
             }
-            const primary = strategyRouter.evaluate({ symbol, indicators, candles, bid, ask });
-            let { signal, reason = "", context = {} } = primary;
+
+            const m15Bars = candles?.m15Candles || [];
+
+            const primary = shouldEnter({
+                bars: m15Bars,
+                m5AtrPct: indicators?.m5?.atrPct,
+                spread: ask - bid,
+                symbol: symbol,
+                equity: this.accountBalance,
+            });
+
+            let { signal, reason = "" } = primary;
 
             if (!signal) {
                 logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}: ${reason}`);
                 return;
             }
-            if (context?.normalizedCandidateId && this.executedHllhSignals.has(context.normalizedCandidateId)) {
-                logger.debug(`[ProcessPrice] Duplicate HLLH signal blocked for ${symbol}: ${context.normalizedCandidateId}`);
-                return;
-            }
+
             // Re-check just placing
             if (this.openTrades.length >= MAX_POSITIONS) return;
             if (this.isSymbolTraded(symbol)) return;
-
-            logger.info(`[Signal] ${symbol}: ${signal} ${reason} ${context?.normalizedCandidateId || ""}`);
 
             const toIsoTimestamp = (value) => {
                 if (value === undefined || value === null || value === "") return null;
@@ -169,7 +182,7 @@ class TradingService {
                 m1: toLastClosedCandle(candles?.m1Candles),
             };
 
-            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, context, candlesSnapshot);
+            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot);
         } catch (error) {
             logger.error("[ProcessPrice] Error:", error);
         }
@@ -178,32 +191,8 @@ class TradingService {
     // ============================================================
     //               ATR-Based Trade Parameters
     // ============================================================
-    async calculateATR(symbol) {
-        try {
-            const data = await getHistorical(symbol, ANALYSIS.TIMEFRAMES.M15, 15);
-            if (!data?.prices || data.prices.length < 14) {
-                throw new Error("Insufficient data for ATR calculation");
-            }
-            let tr = [];
-            const prices = data.prices;
-            for (let i = 1; i < prices.length; i++) {
-                const high = prices[i].highPrice?.ask || prices[i].high;
-                const low = prices[i].lowPrice?.bid || prices[i].low;
-                const prevClose = prices[i - 1].closePrice?.bid || prices[i - 1].close;
-                const tr1 = high - low;
-                const tr2 = Math.abs(high - prevClose);
-                const tr3 = Math.abs(low - prevClose);
-                tr.push(Math.max(tr1, tr2, tr3));
-            }
-            const atr = tr.slice(-14).reduce((sum, val) => sum + val, 0) / 14;
-            return atr;
-        } catch (error) {
-            logger.error(`[ATR] Error calculating ATR for ${symbol}: ${error.message}`);
-            return 0.001;
-        }
-    }
 
-    async calculateTradeParameters(signal, symbol, bid, ask, context = {}) {
+    async calculateTradeParameters(signal, symbol, bid, ask) {
         const direction = this.normalizeDirection(signal);
         if (!["BUY", "SELL"].includes(direction)) {
             throw new Error(`[Trade Params] Invalid signal for ${symbol}: ${signal}`);
@@ -215,40 +204,7 @@ class TradingService {
             throw new Error(`[Trade Params] Missing valid market price for ${symbol} (${direction})`);
         }
 
-        const contextStopPrice = this.toNumber(context?.expectedStopPrice);
-        if (Number.isFinite(contextStopPrice)) {
-            const expectedStop = this.toNumber(context.expectedStopPrice);
-            if (!Number.isFinite(expectedStop)) {
-                throw new Error(`[Trade Params] Missing strategy stop price for ${symbol}`);
-            }
-            const riskDistance = isBuy ? price - expectedStop : expectedStop - price;
-            if (!(Number.isFinite(riskDistance) && riskDistance > 0)) {
-                throw new Error(`[Trade Params] Invalid strategy risk distance for ${symbol}: entry=${price} stop=${expectedStop}`);
-            }
-            const takeProfitR = Number.isFinite(Number(context.takeProfitR)) ? Number(context.takeProfitR) : 1.5;
-            const stopLossPrice = this.roundPrice(expectedStop, symbol);
-            const takeProfitPrice = this.roundPrice(isBuy ? price + riskDistance * takeProfitR : price - riskDistance * takeProfitR, symbol);
-            const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
-            const size = positionSizing.size;
-
-            return {
-                size,
-                positionSizing,
-                stopLossPrice,
-                takeProfitPrice,
-                stopLossPips: riskDistance,
-                takeProfitPips: riskDistance * takeProfitR,
-                trailingStopParams: {
-                    activationPrice: isBuy ? price + riskDistance * HLLH_TRAIL_ACTIVATION_TP_PROGRESS : price - riskDistance * HLLH_TRAIL_ACTIVATION_TP_PROGRESS,
-                    trailingDistance: Math.abs(takeProfitPrice - price) * HLLH_TRAIL_DISTANCE_TP_FRACTION,
-                },
-                partialTakeProfit: isBuy ? price + riskDistance : price - riskDistance,
-                price,
-                patternMeta: context,
-            };
-        }
-
-        const atr = await this.calculateATR(symbol);
+        const atr = await calculateATR(symbol);
         const spread = Number.isFinite(bid) && Number.isFinite(ask) ? Math.abs(ask - bid) : 0;
         const stopLossPips = Math.max(1.5 * atr, spread * 2);
         const stopLossPrice = isBuy ? price - stopLossPips : price + stopLossPips;
@@ -455,9 +411,9 @@ class TradingService {
     // ============================================================
     //                    Place the Trade
     // ============================================================
-    async executeTrade(symbol, signal, bid, ask, indicators, reason, context, candlesSnapshot) {
+    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot) {
         try {
-            const { size, price, stopLossPrice, takeProfitPrice, positionSizing } = await this.calculateTradeParameters(signal, symbol, bid, ask, context);
+            const { size, price, stopLossPrice, takeProfitPrice, positionSizing } = await this.calculateTradeParameters(signal, symbol, bid, ask);
             if (!(Number.isFinite(size) && size > 0)) {
                 logger.warn(`[Order] Skipping ${symbol}: calculated size is not tradable (${size}).`);
                 return;
@@ -504,7 +460,6 @@ class TradingService {
                         takeProfit: takeProfitRounded,
                         indicatorsOnOpening: indicators,
                         candlesOnOpening: candlesSnapshot,
-                        strategyContext: context,
                         positionSizing: {
                             planned: positionSizing,
                             actual: actualPositionSizing,
@@ -513,8 +468,6 @@ class TradingService {
                     });
 
                     tradeTracker.registerOpenDeal(affectedDealId, symbol);
-                    if (context?.normalizedCandidateId) this.executedHllhSignals.add(context.normalizedCandidateId);
-                    // track open deal in memory
                 }
             } catch (logError) {
                 logger.error(`[Order] Failed to log open trade for ${symbol}:`, logError);
@@ -558,21 +511,21 @@ class TradingService {
         }
 
         // --- Trend misalignment → Breakeven exit ---
-        const m5 = indicators.m5;
-        const m15 = indicators.m15;
-        if (m5 && m15 && tpProgress >= HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS) {
-            const m5Trend = strategyRouter.pickTrend(m5, { symbol, timeframe: "M5", atr: m5.atr });
-            const m15Trend = strategyRouter.pickTrend(m15, { symbol, timeframe: "M15", atr: m15.atr });
+        // const m5 = indicators.m5;
+        // const m15 = indicators.m15;
+        // if (m5 && m15 && tpProgress >= HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS) {
+        //     const m5Trend = strategyRouter.pickTrend(m5, { symbol, timeframe: "M5", atr: m5.atr });
+        //     const m15Trend = strategyRouter.pickTrend(m15, { symbol, timeframe: "M15", atr: m15.atr });
 
-            const broken =
-                (direction === "BUY" && (m5Trend === "bearish" || m15Trend === "bearish")) ||
-                (direction === "SELL" && (m5Trend === "bullish" || m15Trend === "bullish"));
+        //     const broken =
+        //         (direction === "BUY" && (m5Trend === "bearish" || m15Trend === "bearish")) ||
+        //         (direction === "SELL" && (m5Trend === "bullish" || m15Trend === "bullish"));
 
-            if (broken) {
-                await this.softExitToBreakeven(position);
-                return;
-            }
-        }
+        //     if (broken) {
+        //         await this.softExitToBreakeven(position);
+        //         return;
+        //     }
+        // }
 
         const entry = Number(entryPrice);
         const tp = Number(takeProfit);
@@ -812,6 +765,31 @@ class TradingService {
         } catch (logErr) {
             logger.error(`[ClosePos] Failed to log closure for ${dealId}:`, logErr);
         }
+    }
+}
+
+async function calculateATR(symbol) {
+    try {
+        const data = await getHistorical(symbol, ANALYSIS.TIMEFRAMES.M15, 15);
+        if (!data?.prices || data.prices.length < 14) {
+            throw new Error("Insufficient data for ATR calculation");
+        }
+        let tr = [];
+        const prices = data.prices;
+        for (let i = 1; i < prices.length; i++) {
+            const high = prices[i].highPrice?.ask || prices[i].high;
+            const low = prices[i].lowPrice?.bid || prices[i].low;
+            const prevClose = prices[i - 1].closePrice?.bid || prices[i - 1].close;
+            const tr1 = high - low;
+            const tr2 = Math.abs(high - prevClose);
+            const tr3 = Math.abs(low - prevClose);
+            tr.push(Math.max(tr1, tr2, tr3));
+        }
+        const atr = tr.slice(-14).reduce((sum, val) => sum + val, 0) / 14;
+        return atr;
+    } catch (error) {
+        logger.error(`[ATR] Error calculating ATR for ${symbol}: ${error.message}`);
+        return 0.001;
     }
 }
 

@@ -282,7 +282,6 @@ export function logTradeOpen({
     takeProfit,
     indicatorsOnOpening,
     candlesOnOpening,
-    strategyContext,
     positionSizing,
     timestamp,
 }) {
@@ -300,7 +299,6 @@ export function logTradeOpen({
         takeProfit,
         indicatorsOnOpening: compactOpening,
         candlesOnOpening: compactCandlesOpening,
-        strategyContext: compactIndicators(strategyContext),
         positionSizing: compactIndicators(positionSizing),
         openedAt: timestamp,
         status: "open",

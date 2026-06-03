@@ -149,21 +149,6 @@ class TradingBot {
         }
     }
 
-    parseMinutes(hhmm) {
-        if (typeof hhmm !== "string") return NaN;
-        const [hh, mm] = hhmm.split(":").map((p) => Number(p));
-        if (!Number.isInteger(hh) || !Number.isInteger(mm)) return NaN;
-        return hh * 60 + mm;
-    }
-
-    inSession(currentMinutes, startMinutes, endMinutes, { inclusiveEnd = false } = {}) {
-        if (!Number.isFinite(startMinutes) || !Number.isFinite(endMinutes)) return false;
-        if (startMinutes < endMinutes) {
-            return currentMinutes >= startMinutes && (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes);
-        }
-        return currentMinutes >= startMinutes || (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes); // Overnight session
-    }
-
     async getActiveSymbols() {
         // SESSIONS in config.js are defined in UTC (see config.js), so we must evaluate in UTC as well.
         const now = new Date();
@@ -360,6 +345,14 @@ class TradingBot {
             m5: await calcIndicators(m5Candles),
             m1: await calcIndicators(m1Candles),
         };
+    }
+
+    inSession(currentMinutes, startMinutes, endMinutes, { inclusiveEnd = false } = {}) {
+        if (!Number.isFinite(startMinutes) || !Number.isFinite(endMinutes)) return false;
+        if (startMinutes < endMinutes) {
+            return currentMinutes >= startMinutes && (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes);
+        }
+        return currentMinutes >= startMinutes || (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes); // Overnight session
     }
 
     async isTradingAllowed(symbol, context = {}) {

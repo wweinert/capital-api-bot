@@ -9,6 +9,13 @@ function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function toRoundedNumber(value, decimals = 0) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return NaN;
+    const digits = Number.isInteger(decimals) && decimals >= 0 ? decimals : 0;
+    return Number(num.toFixed(digits));
+}
+
 export const getHeaders = (includeContentType = false) => {
     const baseHeaders = {
         "X-SECURITY-TOKEN": xsecurity,
@@ -29,7 +36,7 @@ export const startSession = async () => {
             },
             {
                 headers: getHeaders(true),
-            }
+            },
         );
 
         console.log("");
@@ -234,7 +241,7 @@ export async function updateTrailingStop(positionId, currentPrice, entryPrice, t
                 trailingStop: true,
                 stopDistance: Number(trailingDistance.toFixed(6)), // round safely
             },
-            { headers: getHeaders(true) }
+            { headers: getHeaders(true) },
         );
         logger.info(`[API] Trailing stop for ${positionId} set to distance ${trailingDistance}`);
         return response.data;
@@ -244,27 +251,102 @@ export async function updateTrailingStop(positionId, currentPrice, entryPrice, t
     }
 }
 
+function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, bid, offer, minSLDistancePrice, minTPDistancePrice }) {
+    const isBuy = String(direction).toUpperCase() === "BUY";
+    const hasBid = Number.isFinite(bid);
+    const hasOffer = Number.isFinite(offer);
+
+    // Without a market reference we cannot validate distances; let the order through.
+    if (!hasBid && !hasOffer) return { skipped: false };
+
+    const reference = hasBid && hasOffer ? (bid + offer) / 2 : hasBid ? bid : offer;
+    const minSL = Number.isFinite(minSLDistancePrice) ? minSLDistancePrice : 0;
+    const minTP = Number.isFinite(minTPDistancePrice) ? minTPDistancePrice : 0;
+    const skip = (reason, minDistance) => ({ skipped: true, reason, bid, offer, minDistance, symbol });
+
+    if (isBuy) {
+        if (stopLevel >= reference) return skip("stop loss not below market for BUY", minSL);
+        if (profitLevel <= reference) return skip("take profit not above market for BUY", minTP);
+        if (reference - stopLevel < minSL) return skip("stop loss closer than minimum distance", minSL);
+        if (profitLevel - reference < minTP) return skip("take profit closer than minimum distance", minTP);
+    } else {
+        if (stopLevel <= reference) return skip("stop loss not above market for SELL", minSL);
+        if (profitLevel >= reference) return skip("take profit not below market for SELL", minTP);
+        if (stopLevel - reference < minSL) return skip("stop loss closer than minimum distance", minSL);
+        if (reference - profitLevel < minTP) return skip("take profit closer than minimum distance", minTP);
+    }
+
+    return { skipped: false };
+}
+
 export async function placePosition(symbol, direction, size, price, SL, TP) {
     try {
         const range = await getAllowedTPRange(symbol);
-        const decimals = range.decimals || (symbol.includes("JPY") ? 3 : 5);
+        const decimals = Number.isInteger(range.decimals) ? range.decimals : symbol.includes("JPY") ? 3 : 5;
+        const stopLevel = toRoundedNumber(SL, decimals);
+        const profitLevel = toRoundedNumber(TP, decimals);
 
-        logger.info(`[API] Placing ${direction} position for ${symbol} at market price. Size: ${size}, SL: ${SL}, TP: ${TP}`);
+        if (!Number.isFinite(stopLevel) || !Number.isFinite(profitLevel)) {
+            throw new Error(`Invalid stop/profit levels for ${symbol}. stop=${SL} profit=${TP}`);
+        }
+
+        const protectionSkip = validateMarketProtection({
+            symbol,
+            direction,
+            stopLevel,
+            profitLevel,
+            bid: Number(range.market?.bid),
+            offer: Number(range.market?.offer),
+            minSLDistancePrice: range.minSLDistancePrice,
+            minTPDistancePrice: range.minTPDistancePrice,
+        });
+        if (protectionSkip?.skipped) {
+            logger.warn(
+                `[API] Skip ${direction} ${symbol} position: ${protectionSkip.reason} ` +
+                    `(SL=${stopLevel} TP=${profitLevel} bid=${protectionSkip.bid} offer=${protectionSkip.offer} minDist=${protectionSkip.minDistance})`,
+            );
+            return protectionSkip;
+        }
+
+        logger.info(`[API] Placing ${direction} position for ${symbol} at market price. Size: ${size}, SL: ${stopLevel}, TP: ${profitLevel}`);
         const position = {
             epic: symbol,
             direction: direction.toUpperCase(),
             size: Number(size),
             orderType: "MARKET",
             guaranteedStop: false,
-            stopLevel: Number(SL).toFixed(decimals),
-            profitLevel: Number(TP).toFixed(decimals),
+            stopLevel,
+            profitLevel,
         };
-        logger.info("[API] Sending position request:", position);
+        logger.info(`[API] Sending position request: ${JSON.stringify(position)}`);
 
-        const response = await axios.post(`${API.BASE_URL}/positions`, position, { headers: getHeaders(true) });
+        const requestedAt = new Date().toISOString();
+        const response = await apiPost("/positions", position, { label: `placePosition ${symbol}` });
 
-        logger.info("[API] Position created successfully:", response.data);
-        return response.data;
+        logger.info(`[API] Position created successfully: ${JSON.stringify(response.data)}`);
+        return {
+            ...response.data,
+            executionSnapshot: {
+                requestedAt,
+                symbol,
+                direction: direction.toUpperCase(),
+                requestedPrice: Number(price),
+                bid: Number(range.market?.bid),
+                offer: Number(range.market?.offer),
+                mid:
+                    Number.isFinite(Number(range.market?.bid)) && Number.isFinite(Number(range.market?.offer))
+                        ? (Number(range.market.bid) + Number(range.market.offer)) / 2
+                        : null,
+                spread:
+                    Number.isFinite(Number(range.market?.bid)) && Number.isFinite(Number(range.market?.offer))
+                        ? Math.abs(Number(range.market.offer) - Number(range.market.bid))
+                        : null,
+                minSLDistancePrice: range.minSLDistancePrice,
+                minTPDistancePrice: range.minTPDistancePrice,
+                decimals,
+                source: "pre_order_market_snapshot",
+            },
+        };
     } catch (error) {
         logger.error(`[API] Error placing position for ${symbol}:`, error.response ? JSON.stringify(error.response.data) : error.message);
         if (error.response) {
