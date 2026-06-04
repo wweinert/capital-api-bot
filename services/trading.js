@@ -139,7 +139,7 @@ class TradingService {
 
             const entryParams = {
                 ...ENTRY_RESEARCH_PROFILE.params,
-                allowedHoursUtc: ENTRY_RESEARCH_PROFILE.allowedHoursUtc,
+                allowedHoursUtc: [],
             };
 
             const m5AtrPct = indicators?.m5?.atrPct;
