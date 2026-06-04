@@ -1,17 +1,70 @@
-// PA HLLH entry decision — one function, no helpers.
+// Autoresearch-selected PA HLLH entry decision.
 //
 // Called by services/trading.js once per evaluation tick. Decides if we
 // should open a new position right now. Returns either:
 //   { signal: null, reason: "..." }                       — don't enter
 //   { signal: "BUY"|"SELL", entry, sl, tp, size, ... }    — enter at "entry"
 //
-// Inputs (caller must provide):
+// Inputs for shouldEnter (caller must provide):
 //   bars       — array of last ~30+ closed M15 bars, oldest→newest.
-//                Each bar: { timestamp, open, high, low, close }
+//                Each bar: { timestamp, open, high, low, close } or { t, o, h, l, c }
 //   m5AtrPct   — M5 ATR%/close at the moment of evaluation (regime filter)
 //   spread     — current bid-ask spread in price units (live), or 0/null for BT
 //   symbol     — e.g. "EURUSD" / "GBPJPY"   (sets pip size)
 //   equity     — account balance in account currency (for position sizing)
+
+export const ENTRY_RESEARCH_PROFILE = {
+    id: "ENTRY_RR2_1831",
+    name: "entry_rr2_1831",
+    timeframe: "M15",
+    allowedHoursUtc: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    params: {
+        pivotWindow: 1,
+        maxWaitBars: 6,
+        stopBufferPips: 3,
+        minStopPips: 2.5,
+        maxStopPips: 22,
+        minM5AtrPct: 0.00012,
+        maxSpreadPctOfStop: 1,
+        maxSpreadAbsPips: 99,
+        requiredSequence: 1,
+        takeProfitR: 2,
+    },
+};
+
+function toNum(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+}
+
+function barTimeMs(bar) {
+    const direct = toNum(bar?.tsMs);
+    if (direct !== null) return direct;
+    const raw = bar?.timestamp ?? bar?.t;
+    const parsed = raw ? Date.parse(raw) : NaN;
+    return Number.isFinite(parsed) ? parsed : null;
+}
+
+function barOpen(bar) {
+    return toNum(bar?.open ?? bar?.o);
+}
+
+function barHigh(bar) {
+    return toNum(bar?.high ?? bar?.h);
+}
+
+function barLow(bar) {
+    return toNum(bar?.low ?? bar?.l);
+}
+
+function barClose(bar) {
+    return toNum(bar?.close ?? bar?.c);
+}
+
+//
+// Default profile is the 2026-06-04 10-minute entry search winner:
+//   entry_rr2_1831, M15, 150d local Capital dataset, 17 FX symbols.
+//   2508 trades, TP-before-SL 53.39%, PF 2.00, expectancy 0.606R at TP=2R.
 //
 // Strategy (all 5 steps inline below):
 //   1. Find pivot-low (LONG) or pivot-high (SHORT) on M15 — a swing
@@ -21,32 +74,25 @@
 //   3. Within 8 bars after arming, wait for a candle of matching colour:
 //      bullish (LONG) or bearish (SHORT) — that's the signal bar.
 //   4. Build entry/SL/TP from the signal bar: entry = close, SL = bar
-//      extreme ± 2 pips, TP = entry ± 20R (safety net; usually exit by trail).
-//   5. Apply filters: M5 ATR regime, signal age, stop distance, spread.
+//      extreme ± buffer, TP = entry ± 2R.
+//   5. Apply filters: UTC hour window, M5 ATR regime, signal age, stop distance, spread.
 
 export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, nowMs }) {
-    // ── PARAMETERS (defaults; backtest/autoresearch passes overrides via `params`) ──
-    // Defaults = autoresearch winner 2026-05-28 (1390-combo, 1yr, 5 pairs):
-    //   WR 55.7%, PF 4.24, expR 1.43 (vs prior 50.5% / 2.59 / 0.78).
-    //   Key edge: minM5AtrPct 0.0004 + maxStopPips 8 (trade only in real
-    //   volatility, reject wide stops).
-    const P = params || {};
+    // ── PARAMETERS (defaults; backtest/research passes overrides via `params`) ──
+    const P = { ...ENTRY_RESEARCH_PROFILE.params, ...(params || {}) };
     const PIVOT_WINDOW = P.pivotWindow ?? 1; // bars before/after a swing
-    const MAX_WAIT_BARS = P.maxWaitBars ?? 4; // expire armed structure after N bars
-    const STOP_BUFFER_PIPS = P.stopBufferPips ?? 2; // SL = bar extreme ± 2 pips
-    const MIN_STOP_PIPS = P.minStopPips ?? 2;
-    const MAX_STOP_PIPS = P.maxStopPips ?? 8;
-    const SAFETY_TP_R = P.safetyTpR ?? 20; // far TP (exit normally via trail)
+    const MAX_WAIT_BARS = P.maxWaitBars ?? 6; // expire armed structure after N bars
+    const STOP_BUFFER_PIPS = P.stopBufferPips ?? 3; // SL = bar extreme ± buffer
+    const MIN_STOP_PIPS = P.minStopPips ?? 2.5;
+    const MAX_STOP_PIPS = P.maxStopPips ?? 22;
+    const TAKE_PROFIT_R = P.takeProfitR ?? P.safetyTpR ?? 2; // research target is strict 1:2 RR
     const RISK_PCT = P.riskPct ?? 0.03; // 3% of equity per trade
-    const MIN_M5_ATR_PCT = P.minM5AtrPct ?? 0.00035; // dead-market threshold (0.035%)
-    // 2026-05-29: lowered 0.0004→0.00035 after finding the BT's atrPct was ~20%
-    // inflated vs live calcIndicators. On the live-aligned scale, 0.0004 blocked
-    // ~all signals (live had 0 trades on quiet days). 0.00035 = best realistic
-    // (stress) netR + low maxDD, +42% trade activity. See handoff.md.
-    const MAX_SPREAD_PCT_OF_STOP = P.maxSpreadPctOfStop ?? 0.3; // drop if spread > 30% of stop
-    const MAX_SPREAD_ABS_PIPS = P.maxSpreadAbsPips ?? 3; // hard spread cap
+    const MIN_M5_ATR_PCT = P.minM5AtrPct ?? 0.00012; // dead-market threshold
+    const MAX_SPREAD_PCT_OF_STOP = P.maxSpreadPctOfStop ?? 1; // research default: permissive
+    const MAX_SPREAD_ABS_PIPS = P.maxSpreadAbsPips ?? 99; // research default: permissive
     const STALE_SIGNAL_MS = P.staleSignalMs ?? 90 * 1000; // drop if signal bar closed > N ago
     const REQUIRED_SEQUENCE = P.requiredSequence ?? 1; // 1 = aggressive (first HL/LH), 2 = confirmed
+    const ALLOWED_HOURS_UTC = Array.isArray(P.allowedHoursUtc) ? P.allowedHoursUtc : ENTRY_RESEARCH_PROFILE.allowedHoursUtc;
 
     // "now" — live uses wall clock; backtest passes the bar-close ms so the
     // staleness filter behaves identically to live without time-travel issues.
@@ -57,6 +103,13 @@ export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, no
         .endsWith("JPY")
         ? 0.01
         : 0.0001;
+
+    if (ALLOWED_HOURS_UTC.length) {
+        const hour = new Date(NOW).getUTCHours();
+        if (!ALLOWED_HOURS_UTC.map(Number).includes(hour)) {
+            return { signal: null, reason: "outside_research_hours" };
+        }
+    }
 
     // ── INPUT CHECK ──
     if (!Array.isArray(bars) || bars.length < PIVOT_WINDOW * 2 + 2) {
@@ -89,48 +142,56 @@ export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, no
 
         if (pivotIdx >= PIVOT_WINDOW) {
             const p = bars[pivotIdx];
+            const pivotLow = barLow(p);
+            const pivotHigh = barHigh(p);
 
             // Pivot-low check: p.low strictly lower than N bars before AND N bars after.
-            let isLow = true;
+            let isLow = Number.isFinite(pivotLow);
             for (let k = 1; k <= PIVOT_WINDOW; k++) {
-                if (!(p.low < bars[pivotIdx - k].low && p.low < bars[pivotIdx + k].low)) {
+                const leftLow = barLow(bars[pivotIdx - k]);
+                const rightLow = barLow(bars[pivotIdx + k]);
+                if (![leftLow, rightLow].every(Number.isFinite) || !(pivotLow < leftLow && pivotLow < rightLow)) {
                     isLow = false;
                     break;
                 }
             }
             if (isLow) {
                 // STEP 2 (LONG): count the run of consecutive HIGHER lows.
-                const seq = prevPivotLow && p.low > prevPivotLow.price ? prevPivotLow.seq + 1 : 0;
+                const seq = prevPivotLow && pivotLow > prevPivotLow.price ? prevPivotLow.seq + 1 : 0;
                 if (seq >= REQUIRED_SEQUENCE) {
-                    longArm = { pivotPrice: p.low, expiresAt: i + MAX_WAIT_BARS };
+                    longArm = { pivotPrice: pivotLow, expiresAt: i + MAX_WAIT_BARS };
                 }
-                prevPivotLow = { price: p.low, seq };
+                prevPivotLow = { price: pivotLow, seq };
             }
 
 
             // Pivot-high check.
-            let isHigh = true;
+            let isHigh = Number.isFinite(pivotHigh);
             for (let k = 1; k <= PIVOT_WINDOW; k++) {
-                if (!(p.high > bars[pivotIdx - k].high && p.high > bars[pivotIdx + k].high)) {
+                const leftHigh = barHigh(bars[pivotIdx - k]);
+                const rightHigh = barHigh(bars[pivotIdx + k]);
+                if (![leftHigh, rightHigh].every(Number.isFinite) || !(pivotHigh > leftHigh && pivotHigh > rightHigh)) {
                     isHigh = false;
                     break;
                 }
             }
             if (isHigh) {
                 // STEP 2 (SHORT): count the run of consecutive LOWER highs.
-                const seq = prevPivotHigh && p.high < prevPivotHigh.price ? prevPivotHigh.seq + 1 : 0;
+                const seq = prevPivotHigh && pivotHigh < prevPivotHigh.price ? prevPivotHigh.seq + 1 : 0;
                 if (seq >= REQUIRED_SEQUENCE) {
-                    shortArm = { pivotPrice: p.high, expiresAt: i + MAX_WAIT_BARS };
+                    shortArm = { pivotPrice: pivotHigh, expiresAt: i + MAX_WAIT_BARS };
                 }
-                prevPivotHigh = { price: p.high, seq };
+                prevPivotHigh = { price: pivotHigh, seq };
             }
         }
 
         // STEP 3: signal bar = current bar (i) of matching colour while structure is armed.
         // Only emit a signal if i is the LAST bar (we trade fresh signals on the just-closed M15).
         const row = bars[i];
-        const bullish = row.close > row.open;
-        const bearish = row.close < row.open;
+        const open = barOpen(row);
+        const close = barClose(row);
+        const bullish = close > open;
+        const bearish = close < open;
 
         if (longArm && bullish) {
             if (i === lastIdx) {
@@ -151,15 +212,15 @@ export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, no
     if (!signal) return { signal: null, reason: "no_signal" };
 
     // ── FILTER 2: signal staleness (M15 bar closes 15 min after its open timestamp) ──
-    const sigCloseMs = Date.parse(signal.row.timestamp) + 15 * 60 * 1000;
+    const sigCloseMs = barTimeMs(signal.row) + 15 * 60 * 1000;
     if (STALE_SIGNAL_MS > 0 && Number.isFinite(sigCloseMs) && NOW - sigCloseMs > STALE_SIGNAL_MS) {
         return { signal: null, reason: "signal_stale" };
     }
 
     // ── STEP 4: entry / stop / take-profit ──
-    const entry = signal.row.close;
+    const entry = barClose(signal.row);
     const stopBuffer = STOP_BUFFER_PIPS * PIP;
-    const sl = signal.side === "LONG" ? signal.row.low - stopBuffer : signal.row.high + stopBuffer;
+    const sl = signal.side === "LONG" ? barLow(signal.row) - stopBuffer : barHigh(signal.row) + stopBuffer;
     const stopDistance = Math.abs(entry - sl);
     const stopPips = stopDistance / PIP;
 
@@ -175,7 +236,7 @@ export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, no
     }
 
     // ── STEP 5: take-profit + size from risk amount ──
-    const tp = signal.side === "LONG" ? entry + stopDistance * SAFETY_TP_R : entry - stopDistance * SAFETY_TP_R;
+    const tp = signal.side === "LONG" ? entry + stopDistance * TAKE_PROFIT_R : entry - stopDistance * TAKE_PROFIT_R;
     const riskAmount = Number.isFinite(equity) && equity > 0 ? equity * RISK_PCT : null;
     const size = riskAmount ? riskAmount / stopDistance : null;
 
@@ -189,6 +250,7 @@ export function shouldEnter({ bars, m5AtrPct, spread, symbol, equity, params, no
         size,
         riskPct: RISK_PCT,
         riskAmount,
+        takeProfitR: TAKE_PROFIT_R,
         reason: "signal",
     };
 }

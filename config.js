@@ -146,7 +146,7 @@ export const ANALYSIS = {
 // Development overrides for faster testing
 export const DEV = {
     INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
-    MODE: false,
+    MODE: true,
 };
 
 

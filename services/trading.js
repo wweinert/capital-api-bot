@@ -10,7 +10,7 @@ import {
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-import shouldEnter from "../strategies/entry.js";
+import shouldEnter, { ENTRY_RESEARCH_PROFILE } from "../strategies/entry.js";
 
 const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT = 0.7 } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -137,18 +137,26 @@ class TradingService {
 
             const m15Bars = candles?.m15Candles || [];
 
+            const entryParams = {
+                ...ENTRY_RESEARCH_PROFILE.params,
+                allowedHoursUtc: ENTRY_RESEARCH_PROFILE.allowedHoursUtc,
+            };
+
+            const m5AtrPct = indicators?.m5?.atrPct;
             const primary = shouldEnter({
                 bars: m15Bars,
-                m5AtrPct: indicators?.m5?.atrPct,
+                m5AtrPct,
                 spread: ask - bid,
                 symbol: symbol,
                 equity: this.accountBalance,
+                params: entryParams,
+                nowMs: Date.now(),
             });
 
             let { signal, reason = "" } = primary;
 
             if (!signal) {
-                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}: ${reason}`);
+                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}: ${reason} | m5AtrPct=${m5AtrPct?.toFixed(6) ?? "null"}`);
                 return;
             }
 
@@ -182,7 +190,7 @@ class TradingService {
                 m1: toLastClosedCandle(candles?.m1Candles),
             };
 
-            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot);
+            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, primary);
         } catch (error) {
             logger.error("[ProcessPrice] Error:", error);
         }
@@ -411,9 +419,20 @@ class TradingService {
     // ============================================================
     //                    Place the Trade
     // ============================================================
-    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot) {
+    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, entrySignal) {
         try {
-            const { size, price, stopLossPrice, takeProfitPrice, positionSizing } = await this.calculateTradeParameters(signal, symbol, bid, ask);
+            const stopLossPrice = entrySignal?.sl;
+            const takeProfitPrice = entrySignal?.tp;
+            const price = entrySignal?.entry ?? this.resolveMarketPrice(signal, bid, ask);
+
+            if (!(Number.isFinite(stopLossPrice) && Number.isFinite(takeProfitPrice) && Number.isFinite(price))) {
+                logger.warn(`[Order] Skipping ${symbol}: missing entry/SL/TP from signal (entry=${price} sl=${stopLossPrice} tp=${takeProfitPrice}).`);
+                return;
+            }
+
+            const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
+            const size = positionSizing.size;
+
             if (!(Number.isFinite(size) && size > 0)) {
                 logger.warn(`[Order] Skipping ${symbol}: calculated size is not tradable (${size}).`);
                 return;
