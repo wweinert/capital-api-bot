@@ -9,6 +9,22 @@ const RSI_CONFIG = {
   EXIT_OVERSOLD: 35,
 }; // Added missing properties
 
+const AUTORESEARCH_ENTRY_PROFILE = {
+  id: "candidate_25881",
+  symbols: ["AUDUSD", "EURGBP", "GBPUSD", "USDCAD"],
+  allowedHoursUtc: [13, 14, 15, 16, 17, 18, 19, 20],
+  minBuyScore: 2,
+  minSellScore: 2,
+  scoreEdge: 0,
+  m15RsiBuyMax: 43,
+  m15RsiSellMin: 43,
+  bbTolerance: 0.00137,
+  stopAtrMultiplier: 2.43,
+  rewardRisk: 2.4,
+  marginUse: 0.9,
+  leverage: 30,
+};
+
 class TradingService {
   constructor() {
     this.openTrades = [];
@@ -66,13 +82,35 @@ class TradingService {
     const sellScore = sellConditions.filter(Boolean).length;
     console.log(`[Signal] BuyScore: ${buyScore}/${buyConditions.length}, SellScore: ${sellScore}/${sellConditions.length}`);
     let signal = null;
-    // Relaxed: only 3/6 conditions needed for a signal
-    if (buyScore >= 3) {
+    if (buyScore >= AUTORESEARCH_ENTRY_PROFILE.minBuyScore && buyScore >= sellScore + AUTORESEARCH_ENTRY_PROFILE.scoreEdge) {
       signal = "buy";
-    } else if (sellScore >= 3) {
+    } else if (sellScore >= AUTORESEARCH_ENTRY_PROFILE.minSellScore && sellScore >= buyScore + AUTORESEARCH_ENTRY_PROFILE.scoreEdge) {
       signal = "sell";
     }
     return { signal, buyScore, sellScore };
+  }
+
+  getSignalTimestampMs(message) {
+    const raw =
+      message?.timestamp ||
+      message?.snapshotTimeUTC ||
+      message?.snapshotTime ||
+      message?.updateTimeUTC ||
+      message?.updateTime;
+    const parsed = raw ? Date.parse(raw) : NaN;
+    return Number.isFinite(parsed) ? parsed : Date.now();
+  }
+
+  isAutoresearchProfileActive(symbol, timestampMs = Date.now()) {
+    const upperSymbol = String(symbol || "").toUpperCase();
+    if (!AUTORESEARCH_ENTRY_PROFILE.symbols.includes(upperSymbol)) {
+      return { active: false, reason: "symbol_not_in_profile" };
+    }
+    const hourUtc = new Date(timestampMs).getUTCHours();
+    if (!AUTORESEARCH_ENTRY_PROFILE.allowedHoursUtc.includes(hourUtc)) {
+      return { active: false, reason: `outside_profile_hours_${hourUtc}` };
+    }
+    return { active: true, reason: "active" };
   }
 
   async generateAndValidateSignal(candle, message, symbol, bid, ask) {
@@ -83,51 +121,36 @@ class TradingService {
     // console.log("[Indicators] H1:", indicators.h1);
     // console.log("[Indicators] M15:", indicators.m15);
     const trendAnalysis = message.trendAnalysis;
-    const result = this.generateSignals(symbol, message.h4Data, indicators.h4, indicators.h1, indicators.m15, trendAnalysis, bid, ask);
+    const timestampMs = this.getSignalTimestampMs(message);
+    const result = this.generateSignals(symbol, message.h4Data, indicators.h4, indicators.h1, indicators.m15, trendAnalysis, bid, ask, timestampMs);
     if (!result.signal) {
-      console.log(`[Signal] No valid signal for ${symbol}. BuyScore: ${result.buyScore}, SellScore: ${result.sellScore}`);
+      console.log(`[Signal] No valid signal for ${symbol}. Reason: ${result.reason || "no_signal"} BuyScore: ${result.buyScore}, SellScore: ${result.sellScore}`);
     } else {
-      console.log(`[Signal] Signal for ${symbol}: ${result.signal.toUpperCase()}`);
+      console.log(`[Signal] Signal for ${symbol}: ${result.signal.toUpperCase()} (${AUTORESEARCH_ENTRY_PROFILE.id})`);
     }
     return result;
   }
   generateBuyConditions(h4Indicators, h1Indicators, m15Indicators, trendAnalysis, bid) {
     return [
-      // H4 Trend conditions
-      h4Indicators.emaFast > h4Indicators.emaSlow, // Primary trend filter
-      h4Indicators.macd?.histogram > 0, // Trend confirmation
-
-      // H1 Setup confirmation
+      h4Indicators.macd?.histogram > 0,
       h1Indicators.ema9 > h1Indicators.ema21,
-      h1Indicators.rsi < RSI_CONFIG.EXIT_OVERSOLD, // Slightly relaxed RSI
-
-      // M15 Entry conditions
-      m15Indicators.isBullishCross,
-      m15Indicators.rsi < RSI_CONFIG.OVERSOLD,
-      bid <= m15Indicators.bb?.lower,
+      m15Indicators.rsi < AUTORESEARCH_ENTRY_PROFILE.m15RsiBuyMax,
+      bid <= (m15Indicators.bb?.lower ?? -Infinity) * (1 + AUTORESEARCH_ENTRY_PROFILE.bbTolerance),
     ];
   }
 
   generateSellConditions(h4Indicators, h1Indicators, m15Indicators, trendAnalysis, ask) {
     return [
-      // H4 Trend conditions
-      !h4Indicators.isBullishTrend,
       h4Indicators.macd?.histogram < 0,
-
-      // H1 Setup confirmation
       h1Indicators.ema9 < h1Indicators.ema21,
-      h1Indicators.rsi > RSI_CONFIG.EXIT_OVERBOUGHT,
-
-      // M15 Entry conditions
-      m15Indicators.isBearishCross,
-      m15Indicators.rsi > RSI_CONFIG.OVERBOUGHT,
-      ask >= m15Indicators.bb?.upper,
+      m15Indicators.rsi > AUTORESEARCH_ENTRY_PROFILE.m15RsiSellMin,
+      ask >= (m15Indicators.bb?.upper ?? Infinity) * (1 - AUTORESEARCH_ENTRY_PROFILE.bbTolerance),
     ];
   }
 
-  async executeTrade(signal, symbol, bid, ask) {
+  async executeTrade(signal, symbol, bid, ask, indicators = {}) {
     console.log(`\n🎯 ${symbol} ${signal.toUpperCase()} signal generated!`);
-    const params = await this.calculateTradeParameters(signal, symbol, bid, ask);
+    const params = await this.calculateTradeParameters(signal, symbol, bid, ask, indicators);
     // this.logTradeParameters(signal, params.size, params.stopLossPrice, params.takeProfitPrice, params.stopLossPips);
     try {
       await this.executePosition(signal, symbol, params);
@@ -137,22 +160,22 @@ class TradingService {
     }
   }
 
-  async calculateTradeParameters(signal, symbol, bid, ask) {
+  async calculateTradeParameters(signal, symbol, bid, ask, indicators = {}) {
     const price = signal === "buy" ? ask : bid;
-    const atr = await this.calculateATR(symbol);
-    const stopLossPips = 1.5 * atr;
-    const stopLossPrice = signal === "buy" ? price - stopLossPips : price + stopLossPips;
-    const takeProfitPips = 2 * stopLossPips; // 2:1 reward-risk ratio
-    const takeProfitPrice = signal === "buy" ? price + takeProfitPips : price - takeProfitPips;
-    const size = this.positionSize(this.accountBalance, price, stopLossPips, symbol);
+    const atr = Number.isFinite(indicators?.m15?.atr) && indicators.m15.atr > 0 ? indicators.m15.atr : await this.calculateATR(symbol);
+    const stopLossDistance = AUTORESEARCH_ENTRY_PROFILE.stopAtrMultiplier * atr;
+    const stopLossPrice = signal === "buy" ? price - stopLossDistance : price + stopLossDistance;
+    const takeProfitDistance = AUTORESEARCH_ENTRY_PROFILE.rewardRisk * stopLossDistance;
+    const takeProfitPrice = signal === "buy" ? price + takeProfitDistance : price - takeProfitDistance;
+    const size = this.positionSize(this.accountBalance, price, stopLossDistance, symbol);
     console.log(`[calculateTradeParameters] Size: ${size}`);
 
     // Trailing stop parameters
     const trailingStopParams = {
       activationPrice:
         signal === "buy"
-          ? price + stopLossPips // Activate at 1R profit
-          : price - stopLossPips,
+          ? price + stopLossDistance // Activate at 1R profit
+          : price - stopLossDistance,
       trailingDistance: atr, // Trail by 1 ATR
     };
 
@@ -160,13 +183,13 @@ class TradingService {
       size,
       stopLossPrice,
       takeProfitPrice,
-      stopLossPips,
-      takeProfitPips,
+      stopLossPips: stopLossDistance / this.getPipValue(symbol),
+      takeProfitPips: takeProfitDistance / this.getPipValue(symbol),
       trailingStopParams,
       partialTakeProfit:
         signal === "buy"
-          ? price + stopLossPips // Take partial at 1R
-          : price - stopLossPips,
+          ? price + stopLossDistance // Take partial at 1R
+          : price - stopLossDistance,
     };
   }
 
@@ -267,7 +290,7 @@ class TradingService {
       // --- ADD THIS ---
       const { signal } = await this.generateAndValidateSignal(candle, message, symbol, bid, ask);
       if (signal) {
-        await this.executeTrade(signal, symbol, bid, ask);
+        await this.executeTrade(signal, symbol, bid, ask, candle.indicators || {});
       }
       // ---------------
     } catch (error) {
@@ -275,41 +298,12 @@ class TradingService {
     }
   }
 
-  positionSize(balance, entryPrice, stopLossPrice, symbol) {
-    const riskAmount = balance * RISK_PER_TRADE;
-    const pipValue = this.getPipValue(symbol); // Dynamic pip value
-
-    if (!pipValue || pipValue <= 0) {
-      console.error("Invalid pip value calculation");
-      return 100; // Fallback with warning
-    }
-
-    const stopLossPips = Math.abs(entryPrice - stopLossPrice) / pipValue;
-    if (stopLossPips === 0) return 0;
-
-    let size = riskAmount / (stopLossPips * pipValue);
-    // Convert to units (assuming size is in lots, so multiply by 1000)
-    size = size * 1000;
-    // Floor to nearest 100
-    size = Math.floor(size / 100) * 100;
+  positionSize(balance, entryPrice, stopLossDistance, symbol) {
+    const maxMargin = balance * AUTORESEARCH_ENTRY_PROFILE.marginUse;
+    let size = Math.floor((maxMargin * AUTORESEARCH_ENTRY_PROFILE.leverage) / entryPrice / 100) * 100;
     if (size < 100) size = 100;
-
-    // --- Margin check for 5 simultaneous trades ---
-    // Assume leverage is 30:1 for forex (can be adjusted)
-    const leverage = 30;
-    // Margin required = (size * entryPrice) / leverage
-    const marginRequired = (size * entryPrice) / leverage;
-    // Use available margin from account (set by updateAccountInfo)
-    const availableMargin = this.accountBalance; // You may want to use a more precise available margin if tracked
-    // Ensure margin for one trade is no more than 1/5 of available
-    const maxMarginPerTrade = availableMargin / 5;
-    if (marginRequired > maxMarginPerTrade) {
-        // Reduce size so marginRequired == maxMarginPerTrade
-        size = Math.floor((maxMarginPerTrade * leverage) / entryPrice / 100) * 100;
-        if (size < 100) size = 100;
-        console.log(`[PositionSize] Adjusted for margin: New size: ${size}`);
-    }
-    console.log(`[PositionSize] Raw size: ${riskAmount / (stopLossPips * pipValue)}, Final size: ${size}, Margin required: ${marginRequired}, Max per trade: ${maxMarginPerTrade}`);
+    const marginRequired = (size * entryPrice) / AUTORESEARCH_ENTRY_PROFILE.leverage;
+    console.log(`[PositionSize] ${AUTORESEARCH_ENTRY_PROFILE.id} size=${size}, margin=${marginRequired.toFixed(2)}, maxMargin=${maxMargin.toFixed(2)}`);
     return size;
   }
 
@@ -318,9 +312,13 @@ class TradingService {
     return symbol.includes("JPY") ? 0.01 : 0.0001;
   }
 
-  generateSignals(symbol, h4Data, h4Indicators, h1Indicators, m15Indicators, trendAnalysis, bid, ask) {
+  generateSignals(symbol, h4Data, h4Indicators, h1Indicators, m15Indicators, trendAnalysis, bid, ask, timestampMs = Date.now()) {
     if (!this.validateIndicatorData(h4Data, h4Indicators, h1Indicators, m15Indicators, trendAnalysis)) {
       return { signal: null };
+    }
+    const profileStatus = this.isAutoresearchProfileActive(symbol, timestampMs);
+    if (!profileStatus.active) {
+      return { signal: null, reason: profileStatus.reason, buyScore: 0, sellScore: 0 };
     }
     // this.logMarketConditions(symbol, bid, ask, h4Indicators, h1Indicators, m15Indicators, trendAnalysis);
     const buyConditions = this.generateBuyConditions(h4Indicators, h1Indicators, m15Indicators, trendAnalysis, bid);

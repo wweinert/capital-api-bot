@@ -3,3 +3,7 @@
 node_modules/
 .DS_Store
 logs/
+backtest/capital-dataset
+backtest/autoresearch/
+backtest/prices/
+backtest/reports/
