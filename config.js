@@ -45,7 +45,7 @@ export const SESSIONS = {
 
 export const RISK = {
     PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
-    MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous position
+    MAX_POSITIONS: 5, // HLLH approved candidate: max 5 simultaneous positions
     MARGIN_RESERVE_PCT: 0.7, // Used margin budget; split across MAX_POSITIONS by positionSize
     MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
     DAILY_FORCED_CLOSE_UTC: true,
@@ -145,7 +145,7 @@ export const ANALYSIS = {
 
 // Development overrides for faster testing
 export const DEV = {
-    INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
+    INTERVAL: 10 * 1000, // 60 seconds between analyses for live-safe HLLH polling
     MODE: true,
 };
 

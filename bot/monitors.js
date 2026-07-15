@@ -3,7 +3,6 @@ import { RISK } from "../config.js";
 import { calcIndicators } from "../indicators/indicators.js";
 import tradingService from "../services/trading.js";
 import webSocketService from "../services/websocket.js";
-import { tradeWatchIndicators } from "../indicators/indicators.js";
 
 import { getTradeEntry, tradeTracker } from "../utils/tradeLogger.js";
 import logger from "../utils/logger.js";

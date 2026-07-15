@@ -10,7 +10,7 @@ import {
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-import shouldEnter, { ENTRY_RESEARCH_PROFILE } from "../strategies/entry.js";
+import shouldEnter, { ENTRY_RESEARCH_PROFILE } from "../strategies/scoring/entry.js";
 
 const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT = 0.7 } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -136,6 +136,11 @@ class TradingService {
             }
 
             const m15Bars = candles?.m15Candles || [];
+            const scoringContext = {
+                h4: candles?.h4Candles || [],
+                h1: candles?.h1Candles || [],
+                m15: m15Bars,
+            };
 
             const entryParams = {
                 ...ENTRY_RESEARCH_PROFILE.params,
@@ -145,12 +150,15 @@ class TradingService {
             const m5AtrPct = indicators?.m5?.atrPct;
             const primary = shouldEnter({
                 bars: m15Bars,
+                context: scoringContext,
                 m5AtrPct,
                 spread: ask - bid,
                 symbol: symbol,
                 equity: this.accountBalance,
                 params: entryParams,
                 nowMs: Date.now(),
+                bid,
+                ask,
             });
 
             let { signal, reason = "" } = primary;

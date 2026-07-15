@@ -181,6 +181,8 @@ class TradingBot {
 
     async fetchAllCandles(symbol, timeframes, historyLength) {
         try {
+            const h4Data = await getHistorical(symbol, timeframes.H4, historyLength);
+            await this.delay(400);
             const h1Data = await getHistorical(symbol, timeframes.H1, historyLength);
             await this.delay(400);
             const m15Data = await getHistorical(symbol, timeframes.M15, historyLength);
@@ -188,8 +190,8 @@ class TradingBot {
             const m5Data = await getHistorical(symbol, timeframes.M5, historyLength);
             await this.delay(400);
             const m1Data = await getHistorical(symbol, timeframes.M1, historyLength);
-            logger.debug(`[CandleFetch] ${symbol}: fetched ${timeframes.H1}, ${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
-            return { d1Data: { prices: [] }, h4Data: { prices: [] }, h1Data, m15Data, m5Data, m1Data };
+            logger.debug(`[CandleFetch] ${symbol}: fetched  ${timeframes.H4}, ${timeframes.H1}, ${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
+            return { d1Data: { prices: [] }, h4Data, h1Data, m15Data, m5Data, m1Data };
         } catch (error) {
             logger.error(`[CandleFetch] Error fetching candles for ${symbol}: ${error.message}`);
             return {};
