@@ -1,0 +1,52 @@
+[
+  {
+    "symbol": "GBPUSD",
+    "direction": "buy",
+    "openedAt": "2026-07-15T15:43:34.324Z",
+    "entry": 1.34919,
+    "size": 1900,
+    "stopLoss": 1.34646,
+    "takeProfit": 1.35183,
+    "source": "Capital history/activity, pre-current-PM2 session"
+  },
+  {
+    "symbol": "USDCAD",
+    "direction": "sell",
+    "openedAt": "2026-07-15T12:48:50.059Z",
+    "entry": 1.40544,
+    "size": 1700,
+    "stopLoss": 1.40701,
+    "takeProfit": 1.40369,
+    "source": "Capital history/activity, pre-current-PM2 session"
+  },
+  {
+    "symbol": "AUDUSD",
+    "direction": "buy",
+    "openedAt": "2026-07-15T15:44:39.070Z",
+    "entry": 0.70005,
+    "size": 3700,
+    "stopLoss": 0.69909,
+    "takeProfit": 0.70151,
+    "source": "Capital history/activity, pre-current-PM2 session"
+  },
+  {
+    "symbol": "EURUSD",
+    "direction": "buy",
+    "openedAt": "2026-07-15T12:49:39.960Z",
+    "entry": 1.14276,
+    "size": 2100,
+    "stopLoss": 1.14119,
+    "takeProfit": 1.14421,
+    "source": "Capital history/activity, pre-current-PM2 session"
+  },
+  {
+    "symbol": "EURGBP",
+    "direction": "sell",
+    "openedAt": "2026-07-15T15:48:24.468Z",
+    "entry": 0.84741,
+    "size": 3000,
+    "stopLoss": 0.84893,
+    "takeProfit": 0.84649,
+    "source": "Capital history/activity, pre-current-PM2 session"
+  }
+]

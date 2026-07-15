@@ -9,30 +9,48 @@ export const API = {
   WS_URL: process.env.WS_BASE_URL,
 };
 
+
+export const SESSIONS = {
+  LONDON: {
+    START: "08:00",
+    END: "17:00",
+    SYMBOLS: ["EURJPY", "USDJPY", "EURUSD", "GBPUSD", "EURGBP", "USDCHF"],
+  },
+  NY: {
+    START: "13:00",
+    END: "21:00",
+    SYMBOLS:  ["USDJPY", "EURJPY", "EURUSD", "GBPUSD", "USDCAD", "USDCHF"],
+  },
+  SYDNEY: {
+    START: "22:00",
+    END: "07:00",
+    SYMBOLS:["EURJPY", "USDJPY", "AUDUSD", "AUDJPY", "NZDUSD", "NZDJPY"],
+  },
+  TOKYO: {
+    START: "00:00",
+    END: "09:00",
+    SYMBOLS: ["EURJPY", "USDJPY", "AUDUSD", "AUDJPY", "NZDUSD", "NZDJPY"],
+  },
+};
+
 // Trading Configuration
 export const TRADING = {
   // Instruments and timeframes
-  SYMBOLS: ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD"],
-  TIMEFRAMES: ["MINUTE", "MINUTE_5", "MINUTE_15", "MINUTE_30", "HOUR", "HOUR_4", "DAY"],
+  // s : ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD"],
+  TIMEFRAMES: [
+    "MINUTE",
+    "MINUTE_5",
+    "MINUTE_15",
+    "MINUTE_30",
+    "HOUR",
+    "HOUR_4",
+    "DAY",
+  ],
 
   // Position sizing and risk management
   LEVERAGE: 30,
   RISK_PER_TRADE: 0.02,
   MAX_POSITIONS: 5,
-  PROFIT_THRESHOLD: 0.05,
-  POSITION_SIZE_INCREASE: 0.5,
-
-  // Take profit and stop loss
-  REWARD_RISK_RATIO: 2,
-  TRAILING_STOP_ACTIVATION: 0.5,
-  TRAILING_STOP_PIPS: 10,
-
-  // Position sizing limits
-  FOREX_MIN_SIZE: 100,
-
-  // Partial profit taking
-  PARTIAL_TP_ENABLED: true,
-  PARTIAL_TP_PERCENTAGE: 0.5,
 
   // Slippage control (in pips)
   MAX_SLIPPAGE_PIPS: 2, // Maximum allowed slippage in pips
@@ -109,14 +127,6 @@ export const ANALYSIS = {
     MIN_BB_WIDTH_PCT: 0.001, // BB width must be at least 0.1% of price
     MIN_EMA_DIST_PCT: 0.0003, // Fast/slow EMA must be at least 0.03% apart
   },
-};
-
-// Trading Sessions (UTC times)
-export const SESSIONS = {
-  LONDON_START: "08:00",
-  LONDON_END: "16:00",
-  NY_START: "13:00",
-  NY_END: "21:00",
 };
 
 // Mode Configuration
