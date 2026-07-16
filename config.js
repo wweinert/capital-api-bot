@@ -14,12 +14,14 @@ export const SESSIONS = {
   LONDON: {
     START: "08:00",
     END: "17:00",
-    SYMBOLS: ["EURJPY", "USDJPY", "EURUSD", "GBPUSD", "EURGBP", "USDCHF"],
+    // SYMBOLS: ["EURJPY", "USDJPY", "EURUSD", "GBPUSD", "EURGBP", "USDCHF"],
+    SYMBOLS: ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD"],
   },
   NY: {
     START: "13:00",
     END: "21:00",
-    SYMBOLS:  ["USDJPY", "EURJPY", "EURUSD", "GBPUSD", "USDCAD", "USDCHF"],
+    // SYMBOLS:  ["USDJPY", "EURJPY", "EURUSD", "GBPUSD", "USDCAD", "USDCHF"],
+    SYMBOLS:  ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD"],
   },
   SYDNEY: {
     START: "22:00",
