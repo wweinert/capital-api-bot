@@ -10,6 +10,11 @@ import { getNewsStatus } from "./utils/newsChecker.js";
 const { SYMBOLS, MAX_POSITIONS } = TRADING;
 const { BACKTEST_MODE } = MODE;
 
+function timeToMinutes(time) {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+}
+
 class TradingBot {
     constructor() {
         this.isRunning = false;
@@ -236,27 +241,18 @@ class TradingBot {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        let sessionSymbols = [];
-
-        Object.values(SESSIONS).forEach((session) => {
-            const start = session.START;
-            const end = session.END;
-
-            if (start == "08:00" && end == "17:00") {
-                sessionSymbols = session.SYMBOLS;
-            } else if (start == "13:00" && end == "21:00") {
-                sessionSymbols = session.SYMBOLS;
-            } else if (start == "22:00" && end == "07:00") {
-                sessionSymbols = session.SYMBOLS;
-            } else if (start == "00:00" && end == "09:00") {
-                sessionSymbols = session.SYMBOLS;
-            }
+        // More than one session can be active at once, e.g. London and New York.
+        const activeSessions = Object.values(SESSIONS).filter((session) => {
+            const startMinutes = timeToMinutes(session.START);
+            const endMinutes = timeToMinutes(session.END);
+            return this.inSession(currentMinutes, startMinutes, endMinutes);
         });
 
-        console.log("sessionSymbols:", sessionSymbols);
+        // A Set keeps shared symbols, such as EURUSD, from being checked twice.
+        const symbolsInActiveSessions = new Set(activeSessions.flatMap((session) => session.SYMBOLS));
 
         const tradableSymbols = [];
-        for (const symbol of sessionSymbols) {
+        for (const symbol of symbolsInActiveSessions) {
             if (await this.isTradingAllowed(symbol, { now, currentMinutes })) {
                 tradableSymbols.push(symbol);
             }
