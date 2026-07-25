@@ -1,0 +1,809 @@
+{
+  "generatedAt": "2026-07-20T15:19:28.749Z",
+  "cases": {
+    "leader": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "EURUSD",
+        "GBPUSD",
+        "EURGBP",
+        "AUDUSD",
+        "USDCAD",
+        "EURJPY",
+        "USDJPY",
+        "AUDJPY",
+        "NZDUSD",
+        "NZDJPY"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": true,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 2,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "without_break_even": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "EURUSD",
+        "GBPUSD",
+        "EURGBP",
+        "AUDUSD",
+        "USDCAD",
+        "EURJPY",
+        "USDJPY",
+        "AUDJPY",
+        "NZDUSD",
+        "NZDJPY"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": true,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 0,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "fixed_rr_2_5": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "EURUSD",
+        "GBPUSD",
+        "EURGBP",
+        "AUDUSD",
+        "USDCAD",
+        "EURJPY",
+        "USDJPY",
+        "AUDJPY",
+        "NZDUSD",
+        "NZDJPY"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": false,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 2,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "without_both": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "EURUSD",
+        "GBPUSD",
+        "EURGBP",
+        "AUDUSD",
+        "USDCAD",
+        "EURJPY",
+        "USDJPY",
+        "AUDJPY",
+        "NZDUSD",
+        "NZDJPY"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": false,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 0,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "two_profitable_pairs": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "AUDJPY",
+        "NZDUSD"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": true,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 2,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "two_pairs_without_break_even": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "AUDJPY",
+        "NZDUSD"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": true,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 0,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    },
+    "two_pairs_fixed_rr": {
+      "mtf": true,
+      "objectiveMode": "adaptive-walk-forward",
+      "startCapital": 500,
+      "capitalMode": "compound",
+      "maxAllowedDrawdownPct": 20,
+      "symbols": [
+        "AUDJPY",
+        "NZDUSD"
+      ],
+      "session": "london-new-york-overlap",
+      "sessionWindows": [
+        [
+          780,
+          1020
+        ]
+      ],
+      "method": "mtf-strict",
+      "frames": [
+        "M15",
+        "H1",
+        "H4"
+      ],
+      "componentWeights": [
+        0.5,
+        1.5,
+        0,
+        1.5,
+        1,
+        1.5
+      ],
+      "weights": [
+        1.5,
+        3,
+        1
+      ],
+      "tfMin": 3.9,
+      "alignMin": 3,
+      "threshold": 24.75,
+      "highMin": 3.9,
+      "lowMin": 2.7,
+      "trigger": "any",
+      "hold": 1440,
+      "stopATR": 1.5,
+      "rewardRisk": 2.5,
+      "tpATR": 3.75,
+      "dynamicReward": false,
+      "dynamicScore": 4.5,
+      "highRewardRisk": 5,
+      "breakEvenR": 2,
+      "trailATR": 0,
+      "cooldown": 30,
+      "maxDaily": 2,
+      "maxTotalDaily": 1,
+      "maxPositions": 1,
+      "riskDivisor": 4,
+      "minAtrPct": 0.0005,
+      "minBbWidthPct": 0.00075,
+      "minEmaDistPct": 0.0005
+    }
+  },
+  "result": {
+    "leader": {
+      "finalBalance": 722.95,
+      "returnPct": 44.59,
+      "pnl": 222.95,
+      "pf": 1.447,
+      "maxDDPct": 10.5,
+      "trades": 115,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": 120.39,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 58.3
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 71.78,
+          "positiveWeeks": 4,
+          "positiveWeekPct": 50
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 30.78,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 95,
+        "positiveTrades": 23,
+        "winRate": 24.2,
+        "takeProfits": 18,
+        "tpRate": 18.9,
+        "stopLosses": 72,
+        "timeExits": 5,
+        "tradesPerDay": 0.95,
+        "averagePnl": 2.023
+      },
+      "holdoutPrecision": {
+        "trades": 20,
+        "positiveTrades": 5,
+        "winRate": 25,
+        "takeProfits": 1,
+        "tpRate": 5,
+        "stopLosses": 15,
+        "timeExits": 4,
+        "tradesPerDay": 1,
+        "averagePnl": 1.54
+      }
+    },
+    "without_break_even": {
+      "finalBalance": 666.98,
+      "returnPct": 33.4,
+      "pnl": 166.98,
+      "pf": 1.192,
+      "maxDDPct": 15.5,
+      "trades": 115,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": 72.58,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 58.3
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 22.01,
+          "positiveWeeks": 4,
+          "positiveWeekPct": 50
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 72.39,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 95,
+        "positiveTrades": 23,
+        "winRate": 24.2,
+        "takeProfits": 18,
+        "tpRate": 18.9,
+        "stopLosses": 71,
+        "timeExits": 6,
+        "tradesPerDay": 0.95,
+        "averagePnl": 0.996
+      },
+      "holdoutPrecision": {
+        "trades": 20,
+        "positiveTrades": 8,
+        "winRate": 40,
+        "takeProfits": 2,
+        "tpRate": 10,
+        "stopLosses": 12,
+        "timeExits": 6,
+        "tradesPerDay": 1,
+        "averagePnl": 3.62
+      }
+    },
+    "fixed_rr_2_5": {
+      "finalBalance": 536.96,
+      "returnPct": 7.39,
+      "pnl": 36.96,
+      "pf": 1.044,
+      "maxDDPct": 10.8,
+      "trades": 115,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": -2.58,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 50
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 18.19,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 75
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 21.34,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 95,
+        "positiveTrades": 31,
+        "winRate": 32.6,
+        "takeProfits": 29,
+        "tpRate": 30.5,
+        "stopLosses": 64,
+        "timeExits": 2,
+        "tradesPerDay": 0.95,
+        "averagePnl": 0.164
+      },
+      "holdoutPrecision": {
+        "trades": 20,
+        "positiveTrades": 7,
+        "winRate": 35,
+        "takeProfits": 6,
+        "tpRate": 30,
+        "stopLosses": 13,
+        "timeExits": 1,
+        "tradesPerDay": 1,
+        "averagePnl": 1.067
+      }
+    },
+    "without_both": {
+      "finalBalance": 512.68,
+      "returnPct": 2.54,
+      "pnl": 12.68,
+      "pf": 0.954,
+      "maxDDPct": 12.4,
+      "trades": 115,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": -23.03,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 50
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 5.74,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 62.5
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 29.99,
+          "positiveWeeks": 3,
+          "positiveWeekPct": 75
+        }
+      },
+      "selectionPrecision": {
+        "trades": 95,
+        "positiveTrades": 31,
+        "winRate": 32.6,
+        "takeProfits": 29,
+        "tpRate": 30.5,
+        "stopLosses": 63,
+        "timeExits": 3,
+        "tradesPerDay": 0.95,
+        "averagePnl": -0.182
+      },
+      "holdoutPrecision": {
+        "trades": 20,
+        "positiveTrades": 8,
+        "winRate": 40,
+        "takeProfits": 7,
+        "tpRate": 35,
+        "stopLosses": 12,
+        "timeExits": 1,
+        "tradesPerDay": 1,
+        "averagePnl": 1.499
+      }
+    },
+    "two_profitable_pairs": {
+      "finalBalance": 849.22,
+      "returnPct": 69.84,
+      "pnl": 349.22,
+      "pf": 1.758,
+      "maxDDPct": 10.3,
+      "trades": 94,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": 160.61,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 50
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 133.09,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 62.5
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 55.53,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 80,
+        "positiveTrades": 25,
+        "winRate": 31.3,
+        "takeProfits": 15,
+        "tpRate": 18.8,
+        "stopLosses": 55,
+        "timeExits": 10,
+        "tradesPerDay": 0.8,
+        "averagePnl": 3.671
+      },
+      "holdoutPrecision": {
+        "trades": 14,
+        "positiveTrades": 5,
+        "winRate": 35.7,
+        "takeProfits": 1,
+        "tpRate": 7.1,
+        "stopLosses": 9,
+        "timeExits": 4,
+        "tradesPerDay": 0.7,
+        "averagePnl": 3.966
+      }
+    },
+    "two_pairs_without_break_even": {
+      "finalBalance": 757.01,
+      "returnPct": 51.4,
+      "pnl": 257.01,
+      "pf": 1.452,
+      "maxDDPct": 13.3,
+      "trades": 94,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": 121.67,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 50
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 81.45,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 62.5
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 53.91,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 80,
+        "positiveTrades": 26,
+        "winRate": 32.5,
+        "takeProfits": 15,
+        "tpRate": 18.8,
+        "stopLosses": 54,
+        "timeExits": 11,
+        "tradesPerDay": 0.8,
+        "averagePnl": 2.539
+      },
+      "holdoutPrecision": {
+        "trades": 14,
+        "positiveTrades": 6,
+        "winRate": 42.9,
+        "takeProfits": 1,
+        "tpRate": 7.1,
+        "stopLosses": 8,
+        "timeExits": 5,
+        "tradesPerDay": 0.7,
+        "averagePnl": 3.85
+      }
+    },
+    "two_pairs_fixed_rr": {
+      "finalBalance": 587.44,
+      "returnPct": 17.49,
+      "pnl": 87.44,
+      "pf": 1.204,
+      "maxDDPct": 9.4,
+      "trades": 95,
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": 24.98,
+          "positiveWeeks": 4,
+          "positiveWeekPct": 33.3
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": 43.1,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 62.5
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": 19.35,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50
+        }
+      },
+      "selectionPrecision": {
+        "trades": 80,
+        "positiveTrades": 29,
+        "winRate": 36.3,
+        "takeProfits": 26,
+        "tpRate": 32.5,
+        "stopLosses": 51,
+        "timeExits": 3,
+        "tradesPerDay": 0.8,
+        "averagePnl": 0.851
+      },
+      "holdoutPrecision": {
+        "trades": 15,
+        "positiveTrades": 6,
+        "winRate": 40,
+        "takeProfits": 6,
+        "tpRate": 40,
+        "stopLosses": 9,
+        "timeExits": 0,
+        "tradesPerDay": 0.75,
+        "averagePnl": 1.29
+      }
+    }
+  }
+}

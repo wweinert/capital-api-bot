@@ -1,0 +1,846 @@
+{
+  "generatedAt": "2026-07-20T11:53:30.992Z",
+  "period": {
+    "start": "2026-01-16T04:00:00.000Z",
+    "end": "2026-06-29T12:57:00.000Z"
+  },
+  "config": {
+    "mtf": true,
+    "objectiveMode": "entry-precision",
+    "requirePositiveExpectancy": true,
+    "symbols": [
+      "EURUSD",
+      "USDCAD",
+      "EURJPY",
+      "USDJPY",
+      "AUDJPY"
+    ],
+    "method": "mtf-majority",
+    "frames": [
+      "M15",
+      "H1",
+      "H4"
+    ],
+    "componentWeights": [
+      1,
+      3,
+      0.5,
+      3,
+      0,
+      2
+    ],
+    "weights": [
+      1,
+      1,
+      1.5
+    ],
+    "tfMin": 8.07,
+    "alignMin": 3,
+    "threshold": 24.94,
+    "highMin": 8.07,
+    "lowMin": 6.17,
+    "trigger": "BB",
+    "hold": 720,
+    "stopATR": 1.5,
+    "tpATR": 4.5,
+    "rewardRisk": 3,
+    "cooldown": 240,
+    "maxDaily": 3,
+    "maxPositions": 1,
+    "riskDivisor": 10
+  },
+  "fixed": {
+    "objective": 39.2002,
+    "startCapital": 500,
+    "finalBalance": 520.17,
+    "returnPct": 4.03,
+    "trades": 105,
+    "pnl": 20.17,
+    "profitFactor": 1.248,
+    "maxDDPct": 5.8,
+    "selection": {
+      "weeks": 20,
+      "positiveWeeks": 12,
+      "positiveWeekPct": 60,
+      "medianR": 1.122,
+      "worstR": -4.395,
+      "totalR": 10.263,
+      "maxDrawdownR": 7.899
+    },
+    "holdout": {
+      "weeks": 4,
+      "positiveWeeks": 2,
+      "positiveWeekPct": 50,
+      "medianR": 2.733,
+      "worstR": -6.718,
+      "totalR": 1.398,
+      "maxDrawdownR": 6.813
+    },
+    "selectionPrecision": {
+      "trades": 80,
+      "positiveTrades": 30,
+      "winRate": 37.5,
+      "takeProfits": 18,
+      "tpRate": 22.5,
+      "stopLosses": 48,
+      "timeExits": 14,
+      "tradesPerDay": 0.8,
+      "averagePnl": 0.279
+    },
+    "holdoutPrecision": {
+      "trades": 25,
+      "positiveTrades": 9,
+      "winRate": 36,
+      "takeProfits": 5,
+      "tpRate": 20,
+      "stopLosses": 15,
+      "timeExits": 5,
+      "tradesPerDay": 1.25,
+      "averagePnl": -0.086
+    },
+    "symbolStats": {
+      "EURUSD": {
+        "selection": {
+          "trades": 12,
+          "positiveTrades": 5,
+          "winRate": 41.7,
+          "takeProfits": 2,
+          "tpRate": 16.7,
+          "stopLosses": 7,
+          "timeExits": 3,
+          "tradesPerDay": 0.12,
+          "averagePnl": 0.64
+        },
+        "holdout": {
+          "trades": 6,
+          "positiveTrades": 4,
+          "winRate": 66.7,
+          "takeProfits": 3,
+          "tpRate": 50,
+          "stopLosses": 1,
+          "timeExits": 2,
+          "tradesPerDay": 0.3,
+          "averagePnl": 1.982
+        },
+        "selectionR": 2.1,
+        "holdoutR": 9.614,
+        "pnl": 19.57
+      },
+      "USDCAD": {
+        "selection": {
+          "trades": 7,
+          "positiveTrades": 2,
+          "winRate": 28.6,
+          "takeProfits": 2,
+          "tpRate": 28.6,
+          "stopLosses": 5,
+          "timeExits": 0,
+          "tradesPerDay": 0.07,
+          "averagePnl": -0.416
+        },
+        "holdout": {
+          "trades": 4,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 4,
+          "timeExits": 0,
+          "tradesPerDay": 0.2,
+          "averagePnl": -1.133
+        },
+        "selectionR": -0.342,
+        "holdoutR": -4.967,
+        "pnl": -7.45
+      },
+      "EURJPY": {
+        "selection": {
+          "trades": 16,
+          "positiveTrades": 7,
+          "winRate": 43.8,
+          "takeProfits": 5,
+          "tpRate": 31.3,
+          "stopLosses": 9,
+          "timeExits": 2,
+          "tradesPerDay": 0.16,
+          "averagePnl": 0.111
+        },
+        "holdout": {
+          "trades": 4,
+          "positiveTrades": 1,
+          "winRate": 25,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 3,
+          "timeExits": 1,
+          "tradesPerDay": 0.2,
+          "averagePnl": -0.512
+        },
+        "selectionR": 5.784,
+        "holdoutR": -2.591,
+        "pnl": -0.27
+      },
+      "USDJPY": {
+        "selection": {
+          "trades": 21,
+          "positiveTrades": 5,
+          "winRate": 23.8,
+          "takeProfits": 2,
+          "tpRate": 9.5,
+          "stopLosses": 16,
+          "timeExits": 3,
+          "tradesPerDay": 0.21,
+          "averagePnl": -0.575
+        },
+        "holdout": {
+          "trades": 5,
+          "positiveTrades": 4,
+          "winRate": 80,
+          "takeProfits": 2,
+          "tpRate": 40,
+          "stopLosses": 1,
+          "timeExits": 2,
+          "tradesPerDay": 0.25,
+          "averagePnl": 0.778
+        },
+        "selectionR": -9.642,
+        "holdoutR": 6.221,
+        "pnl": -8.19
+      },
+      "AUDJPY": {
+        "selection": {
+          "trades": 24,
+          "positiveTrades": 11,
+          "winRate": 45.8,
+          "takeProfits": 7,
+          "tpRate": 29.2,
+          "stopLosses": 11,
+          "timeExits": 6,
+          "tradesPerDay": 0.24,
+          "averagePnl": 1.16
+        },
+        "holdout": {
+          "trades": 6,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 6,
+          "timeExits": 0,
+          "tradesPerDay": 0.3,
+          "averagePnl": -1.89
+        },
+        "selectionR": 12.364,
+        "holdoutR": -6.88,
+        "pnl": 16.5
+      }
+    },
+    "bestSelectionWeek": {
+      "week": "2026-W11",
+      "r": 6.375,
+      "pnl": 19.2
+    },
+    "bestWeek": {
+      "week": "2026-W11",
+      "r": 6.375,
+      "pnl": 19.2
+    },
+    "weekly": [
+      {
+        "week": "2026-W03",
+        "r": 0.967,
+        "pnl": 1.5
+      },
+      {
+        "week": "2026-W04",
+        "r": 3.237,
+        "pnl": 7.16
+      },
+      {
+        "week": "2026-W05",
+        "r": -2.147,
+        "pnl": -7
+      },
+      {
+        "week": "2026-W06",
+        "r": 1.576,
+        "pnl": 2.08
+      },
+      {
+        "week": "2026-W07",
+        "r": -4.395,
+        "pnl": -8.99
+      },
+      {
+        "week": "2026-W08",
+        "r": -2.935,
+        "pnl": -8.48
+      },
+      {
+        "week": "2026-W09",
+        "r": 0.735,
+        "pnl": 4.76
+      },
+      {
+        "week": "2026-W10",
+        "r": 1.122,
+        "pnl": 2.93
+      },
+      {
+        "week": "2026-W11",
+        "r": 6.375,
+        "pnl": 19.2
+      },
+      {
+        "week": "2026-W12",
+        "r": -2.375,
+        "pnl": -2.54
+      },
+      {
+        "week": "2026-W13",
+        "r": 7.551,
+        "pnl": 8.86
+      },
+      {
+        "week": "2026-W14",
+        "r": 1.49,
+        "pnl": 1.71
+      },
+      {
+        "week": "2026-W15",
+        "r": 1.374,
+        "pnl": 0.63
+      },
+      {
+        "week": "2026-W16",
+        "r": 2.859,
+        "pnl": 4.83
+      },
+      {
+        "week": "2026-W17",
+        "r": -3.237,
+        "pnl": -3.87
+      },
+      {
+        "week": "2026-W18",
+        "r": 3.992,
+        "pnl": 3.08
+      },
+      {
+        "week": "2026-W19",
+        "r": -2.139,
+        "pnl": -2.75
+      },
+      {
+        "week": "2026-W20",
+        "r": 2.417,
+        "pnl": 5.06
+      },
+      {
+        "week": "2026-W21",
+        "r": -2.973,
+        "pnl": -3.11
+      },
+      {
+        "week": "2026-W22",
+        "r": -3.232,
+        "pnl": -2.74
+      },
+      {
+        "week": "2026-W23",
+        "r": -6.718,
+        "pnl": -7.69
+      },
+      {
+        "week": "2026-W24",
+        "r": -0.096,
+        "pnl": -2.82
+      },
+      {
+        "week": "2026-W25",
+        "r": 5.479,
+        "pnl": 4.03
+      },
+      {
+        "week": "2026-W26",
+        "r": 2.733,
+        "pnl": 4.34
+      }
+    ],
+    "monthly": {
+      "2026-01": {
+        "pnl": 1.66,
+        "r": 2.057,
+        "trades": 11,
+        "wins": 4,
+        "winRate": 36.4
+      },
+      "2026-02": {
+        "pnl": -10.63,
+        "r": -5.018,
+        "trades": 13,
+        "wins": 2,
+        "winRate": 15.4
+      },
+      "2026-03": {
+        "pnl": 29.22,
+        "r": 13.493,
+        "trades": 22,
+        "wins": 12,
+        "winRate": 54.5
+      },
+      "2026-04": {
+        "pnl": 7.32,
+        "r": 6.713,
+        "trades": 15,
+        "wins": 7,
+        "winRate": 46.7
+      },
+      "2026-05": {
+        "pnl": -5.25,
+        "r": -6.982,
+        "trades": 19,
+        "wins": 5,
+        "winRate": 26.3
+      },
+      "2026-06": {
+        "pnl": -2.14,
+        "r": 1.398,
+        "trades": 25,
+        "wins": 9,
+        "winRate": 36
+      }
+    }
+  },
+  "compound": {
+    "objective": 39.2002,
+    "startCapital": 500,
+    "finalBalance": 519.71,
+    "returnPct": 3.94,
+    "trades": 105,
+    "pnl": 19.71,
+    "profitFactor": 1.24,
+    "maxDDPct": 5.8,
+    "selection": {
+      "weeks": 20,
+      "positiveWeeks": 12,
+      "positiveWeekPct": 60,
+      "medianR": 1.122,
+      "worstR": -4.395,
+      "totalR": 10.263,
+      "maxDrawdownR": 7.899
+    },
+    "holdout": {
+      "weeks": 4,
+      "positiveWeeks": 2,
+      "positiveWeekPct": 50,
+      "medianR": 2.733,
+      "worstR": -6.718,
+      "totalR": 1.398,
+      "maxDrawdownR": 6.813
+    },
+    "selectionPrecision": {
+      "trades": 80,
+      "positiveTrades": 30,
+      "winRate": 37.5,
+      "takeProfits": 18,
+      "tpRate": 22.5,
+      "stopLosses": 48,
+      "timeExits": 14,
+      "tradesPerDay": 0.8,
+      "averagePnl": 0.275
+    },
+    "holdoutPrecision": {
+      "trades": 25,
+      "positiveTrades": 9,
+      "winRate": 36,
+      "takeProfits": 5,
+      "tpRate": 20,
+      "stopLosses": 15,
+      "timeExits": 5,
+      "tradesPerDay": 1.25,
+      "averagePnl": -0.093
+    },
+    "symbolStats": {
+      "EURUSD": {
+        "selection": {
+          "trades": 12,
+          "positiveTrades": 5,
+          "winRate": 41.7,
+          "takeProfits": 2,
+          "tpRate": 16.7,
+          "stopLosses": 7,
+          "timeExits": 3,
+          "tradesPerDay": 0.12,
+          "averagePnl": 0.617
+        },
+        "holdout": {
+          "trades": 6,
+          "positiveTrades": 4,
+          "winRate": 66.7,
+          "takeProfits": 3,
+          "tpRate": 50,
+          "stopLosses": 1,
+          "timeExits": 2,
+          "tradesPerDay": 0.3,
+          "averagePnl": 2.038
+        },
+        "selectionR": 2.1,
+        "holdoutR": 9.614,
+        "pnl": 19.63
+      },
+      "USDCAD": {
+        "selection": {
+          "trades": 7,
+          "positiveTrades": 2,
+          "winRate": 28.6,
+          "takeProfits": 2,
+          "tpRate": 28.6,
+          "stopLosses": 5,
+          "timeExits": 0,
+          "tradesPerDay": 0.07,
+          "averagePnl": -0.406
+        },
+        "holdout": {
+          "trades": 4,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 4,
+          "timeExits": 0,
+          "tradesPerDay": 0.2,
+          "averagePnl": -1.17
+        },
+        "selectionR": -0.342,
+        "holdoutR": -4.967,
+        "pnl": -7.52
+      },
+      "EURJPY": {
+        "selection": {
+          "trades": 16,
+          "positiveTrades": 7,
+          "winRate": 43.8,
+          "takeProfits": 5,
+          "tpRate": 31.3,
+          "stopLosses": 9,
+          "timeExits": 2,
+          "tradesPerDay": 0.16,
+          "averagePnl": 0.123
+        },
+        "holdout": {
+          "trades": 4,
+          "positiveTrades": 1,
+          "winRate": 25,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 3,
+          "timeExits": 1,
+          "tradesPerDay": 0.2,
+          "averagePnl": -0.534
+        },
+        "selectionR": 5.784,
+        "holdoutR": -2.591,
+        "pnl": -0.17
+      },
+      "USDJPY": {
+        "selection": {
+          "trades": 21,
+          "positiveTrades": 5,
+          "winRate": 23.8,
+          "takeProfits": 2,
+          "tpRate": 9.5,
+          "stopLosses": 16,
+          "timeExits": 3,
+          "tradesPerDay": 0.21,
+          "averagePnl": -0.594
+        },
+        "holdout": {
+          "trades": 5,
+          "positiveTrades": 4,
+          "winRate": 80,
+          "takeProfits": 2,
+          "tpRate": 40,
+          "stopLosses": 1,
+          "timeExits": 2,
+          "tradesPerDay": 0.25,
+          "averagePnl": 0.8
+        },
+        "selectionR": -9.642,
+        "holdoutR": 6.221,
+        "pnl": -8.48
+      },
+      "AUDJPY": {
+        "selection": {
+          "trades": 24,
+          "positiveTrades": 11,
+          "winRate": 45.8,
+          "takeProfits": 7,
+          "tpRate": 29.2,
+          "stopLosses": 11,
+          "timeExits": 6,
+          "tradesPerDay": 0.24,
+          "averagePnl": 1.166
+        },
+        "holdout": {
+          "trades": 6,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 6,
+          "timeExits": 0,
+          "tradesPerDay": 0.3,
+          "averagePnl": -1.954
+        },
+        "selectionR": 12.364,
+        "holdoutR": -6.88,
+        "pnl": 16.26
+      }
+    },
+    "bestSelectionWeek": {
+      "week": "2026-W11",
+      "r": 6.375,
+      "pnl": 19.19
+    },
+    "bestWeek": {
+      "week": "2026-W11",
+      "r": 6.375,
+      "pnl": 19.19
+    },
+    "weekly": [
+      {
+        "week": "2026-W03",
+        "r": 0.967,
+        "pnl": 1.5
+      },
+      {
+        "week": "2026-W04",
+        "r": 3.237,
+        "pnl": 7.12
+      },
+      {
+        "week": "2026-W05",
+        "r": -2.147,
+        "pnl": -7.1
+      },
+      {
+        "week": "2026-W06",
+        "r": 1.576,
+        "pnl": 2.02
+      },
+      {
+        "week": "2026-W07",
+        "r": -4.395,
+        "pnl": -9
+      },
+      {
+        "week": "2026-W08",
+        "r": -2.935,
+        "pnl": -8.34
+      },
+      {
+        "week": "2026-W09",
+        "r": 0.735,
+        "pnl": 4.57
+      },
+      {
+        "week": "2026-W10",
+        "r": 1.122,
+        "pnl": 2.82
+      },
+      {
+        "week": "2026-W11",
+        "r": 6.375,
+        "pnl": 19.19
+      },
+      {
+        "week": "2026-W12",
+        "r": -2.375,
+        "pnl": -2.62
+      },
+      {
+        "week": "2026-W13",
+        "r": 7.551,
+        "pnl": 9.07
+      },
+      {
+        "week": "2026-W14",
+        "r": 1.49,
+        "pnl": 1.75
+      },
+      {
+        "week": "2026-W15",
+        "r": 1.374,
+        "pnl": 0.63
+      },
+      {
+        "week": "2026-W16",
+        "r": 2.859,
+        "pnl": 5.05
+      },
+      {
+        "week": "2026-W17",
+        "r": -3.237,
+        "pnl": -4.07
+      },
+      {
+        "week": "2026-W18",
+        "r": 3.992,
+        "pnl": 3.21
+      },
+      {
+        "week": "2026-W19",
+        "r": -2.139,
+        "pnl": -2.89
+      },
+      {
+        "week": "2026-W20",
+        "r": 2.417,
+        "pnl": 5.29
+      },
+      {
+        "week": "2026-W21",
+        "r": -2.973,
+        "pnl": -3.28
+      },
+      {
+        "week": "2026-W22",
+        "r": -3.232,
+        "pnl": -2.89
+      },
+      {
+        "week": "2026-W23",
+        "r": -6.718,
+        "pnl": -7.98
+      },
+      {
+        "week": "2026-W24",
+        "r": -0.096,
+        "pnl": -2.9
+      },
+      {
+        "week": "2026-W25",
+        "r": 5.479,
+        "pnl": 4.1
+      },
+      {
+        "week": "2026-W26",
+        "r": 2.733,
+        "pnl": 4.46
+      }
+    ],
+    "monthly": {
+      "2026-01": {
+        "pnl": 1.53,
+        "r": 2.057,
+        "trades": 11,
+        "wins": 4,
+        "winRate": 36.4
+      },
+      "2026-02": {
+        "pnl": -10.76,
+        "r": -5.018,
+        "trades": 13,
+        "wins": 2,
+        "winRate": 15.4
+      },
+      "2026-03": {
+        "pnl": 29.24,
+        "r": 13.493,
+        "trades": 22,
+        "wins": 12,
+        "winRate": 54.5
+      },
+      "2026-04": {
+        "pnl": 7.6,
+        "r": 6.713,
+        "trades": 15,
+        "wins": 7,
+        "winRate": 46.7
+      },
+      "2026-05": {
+        "pnl": -5.58,
+        "r": -6.982,
+        "trades": 19,
+        "wins": 5,
+        "winRate": 26.3
+      },
+      "2026-06": {
+        "pnl": -2.31,
+        "r": 1.398,
+        "trades": 25,
+        "wins": 9,
+        "winRate": 36
+      }
+    },
+    "monthlyEquity": [
+      {
+        "month": "2026-01",
+        "startBalance": 500,
+        "pnl": 1.53,
+        "r": 2.057,
+        "trades": 11,
+        "wins": 4,
+        "winRate": 36.4,
+        "endBalance": 501.53,
+        "returnPct": 0.31
+      },
+      {
+        "month": "2026-02",
+        "startBalance": 501.53,
+        "pnl": -10.76,
+        "r": -5.018,
+        "trades": 13,
+        "wins": 2,
+        "winRate": 15.4,
+        "endBalance": 490.77,
+        "returnPct": -2.15
+      },
+      {
+        "month": "2026-03",
+        "startBalance": 490.77,
+        "pnl": 29.24,
+        "r": 13.493,
+        "trades": 22,
+        "wins": 12,
+        "winRate": 54.5,
+        "endBalance": 520.01,
+        "returnPct": 5.96
+      },
+      {
+        "month": "2026-04",
+        "startBalance": 520.01,
+        "pnl": 7.6,
+        "r": 6.713,
+        "trades": 15,
+        "wins": 7,
+        "winRate": 46.7,
+        "endBalance": 527.61,
+        "returnPct": 1.46
+      },
+      {
+        "month": "2026-05",
+        "startBalance": 527.61,
+        "pnl": -5.58,
+        "r": -6.982,
+        "trades": 19,
+        "wins": 5,
+        "winRate": 26.3,
+        "endBalance": 522.03,
+        "returnPct": -1.06
+      },
+      {
+        "month": "2026-06",
+        "startBalance": 522.03,
+        "pnl": -2.31,
+        "r": 1.398,
+        "trades": 25,
+        "wins": 9,
+        "winRate": 36,
+        "endBalance": 519.72,
+        "returnPct": -0.44
+      }
+    ]
+  }
+}

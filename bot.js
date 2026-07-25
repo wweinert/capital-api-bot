@@ -5,7 +5,6 @@ import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators.js";
 import logger from "./utils/logger.js";
 import { logTradeSnapshot } from "./utils/tradeLogger.js";
-import { getNewsStatus } from "./utils/newsChecker.js";
 
 const { SYMBOLS, MAX_POSITIONS } = TRADING;
 const { BACKTEST_MODE } = MODE;
@@ -289,28 +288,6 @@ class TradingBot {
         });
 
         if (!allowed) {
-            return false;
-        }
-
-        let news = null;
-        try {
-            news = await getNewsStatus(symbol, {
-                now,
-                includeImpacts: ["High", "Medium"],
-                windowsByImpact: {
-                    High: { preMinutes: 30, postMinutes: 5 },
-                    Medium: { preMinutes: 15, postMinutes: 2 },
-                },
-            });
-        } catch (error) {
-            logger.warn(`[Bot][News] News status unavailable for ${symbol}: ${error?.message || error}. Continuing without news block.`);
-        }
-
-        if (news?.blocked) {
-            const titles = news.blockingEvents.map((e) => `${e.impact}:${e.country}:${e.title}`);
-            logger.info(
-                `[Bot][News] Trading blocked for ${symbol} until ${news.blockUntilUtc?.toISOString()}. Events: ${titles.join(" | ")}`,
-            );
             return false;
         }
 

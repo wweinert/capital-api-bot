@@ -1,0 +1,1661 @@
+{
+  "generatedAt": "2026-07-16T23:58:56.926Z",
+  "searchSeconds": 600.5,
+  "experiments": 593,
+  "period": {
+    "start": "2026-01-16T04:00:00.000Z",
+    "end": "2026-06-29T12:58:00.000Z"
+  },
+  "leaderboard": [
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          1,
+          1.5,
+          1
+        ],
+        "tfMin": 3,
+        "alignMin": 2,
+        "threshold": 12,
+        "highMin": 5,
+        "lowMin": 3,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 60,
+        "maxDaily": 2,
+        "maxPositions": 1,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 80.7956,
+        "trades": 369,
+        "pnl": 83.59,
+        "profitFactor": 1.187,
+        "maxDDPct": 7.4,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 13,
+          "positiveWeekPct": 65,
+          "medianR": 0.943,
+          "worstR": -5.111,
+          "totalR": 18.503,
+          "maxDrawdownR": 11.509
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -1.759,
+          "worstR": -4.354,
+          "totalR": -2.532,
+          "maxDrawdownR": 7.382
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1.5,
+          1.5,
+          0.5
+        ],
+        "tfMin": 5,
+        "alignMin": 2,
+        "threshold": 18,
+        "highMin": 3,
+        "lowMin": 3,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 60,
+        "maxDaily": 6,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 55.4109,
+        "trades": 407,
+        "pnl": 32.83,
+        "profitFactor": 1.152,
+        "maxDDPct": 3.4,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 10,
+          "positiveWeekPct": 50,
+          "medianR": 0.636,
+          "worstR": -4.718,
+          "totalR": 5.489,
+          "maxDrawdownR": 8.959
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -0.119,
+          "worstR": -1.604,
+          "totalR": 1.775,
+          "maxDrawdownR": 1.692
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1,
+          1,
+          2
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 24,
+        "highMin": 4,
+        "lowMin": 5,
+        "trigger": "Cross",
+        "hold": 240,
+        "stopATR": 2,
+        "tpATR": 5,
+        "cooldown": 60,
+        "maxDaily": 1,
+        "maxPositions": 2,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 32.6461,
+        "trades": 372,
+        "pnl": -62.4,
+        "profitFactor": 0.912,
+        "maxDDPct": 14.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 11,
+          "positiveWeekPct": 55,
+          "medianR": 0.246,
+          "worstR": -9.819,
+          "totalR": -15.886,
+          "maxDrawdownR": 26.059
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -6.324,
+          "worstR": -12.162,
+          "totalR": -27.778,
+          "maxDrawdownR": 27.778
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1.5,
+          1,
+          0.5
+        ],
+        "tfMin": 5,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 5,
+        "lowMin": 4,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 5,
+        "cooldown": 30,
+        "maxDaily": 6,
+        "maxPositions": 1,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": 23.6097,
+        "trades": 236,
+        "pnl": 9.64,
+        "profitFactor": 0.947,
+        "maxDDPct": 26.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.968,
+          "worstR": -5.907,
+          "totalR": -7.622,
+          "maxDrawdownR": 23.497
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -0.202,
+          "worstR": -5.015,
+          "totalR": 5.428,
+          "maxDrawdownR": 6.977
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1,
+          2,
+          0.5
+        ],
+        "tfMin": 3,
+        "alignMin": 4,
+        "threshold": 12,
+        "highMin": 5,
+        "lowMin": 5,
+        "trigger": "Breakout",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 120,
+        "maxDaily": 2,
+        "maxPositions": 2,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 22.2005,
+        "trades": 476,
+        "pnl": -20.05,
+        "profitFactor": 0.997,
+        "maxDDPct": 17.7,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 45,
+          "medianR": -0.316,
+          "worstR": -10.954,
+          "totalR": -13.794,
+          "maxDrawdownR": 26.646
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -2.091,
+          "worstR": -4.943,
+          "totalR": -12.735,
+          "maxDrawdownR": 12.735
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1,
+          2,
+          1.5
+        ],
+        "tfMin": 5,
+        "alignMin": 3,
+        "threshold": 24,
+        "highMin": 4,
+        "lowMin": 3,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 5,
+        "cooldown": 120,
+        "maxDaily": 1,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 18.3054,
+        "trades": 293,
+        "pnl": 3.76,
+        "profitFactor": 0.985,
+        "maxDDPct": 6.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": -1.485,
+          "worstR": -4.781,
+          "totalR": -6.694,
+          "maxDrawdownR": 24.093
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -0.202,
+          "worstR": -4.604,
+          "totalR": 1.899,
+          "maxDrawdownR": 6.333
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1.5,
+          1,
+          1.5,
+          1
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 16,
+        "highMin": 3,
+        "lowMin": 4,
+        "trigger": "any",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 5,
+        "cooldown": 60,
+        "maxDaily": 6,
+        "maxPositions": 2,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 18.0784,
+        "trades": 527,
+        "pnl": -13.3,
+        "profitFactor": 0.999,
+        "maxDDPct": 9.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.952,
+          "worstR": -11.932,
+          "totalR": -9.517,
+          "maxDrawdownR": 27.086
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 0,
+          "positiveWeekPct": 0,
+          "medianR": -3.758,
+          "worstR": -4.641,
+          "totalR": -14.483,
+          "maxDrawdownR": 14.483
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1.5,
+          0.5,
+          1.5
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 20,
+        "highMin": 3,
+        "lowMin": 2,
+        "trigger": "BB",
+        "hold": 480,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 30,
+        "maxDaily": 2,
+        "maxPositions": 1,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 17.4836,
+        "trades": 361,
+        "pnl": -60.36,
+        "profitFactor": 0.804,
+        "maxDDPct": 17.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 45,
+          "medianR": -0.173,
+          "worstR": -6.931,
+          "totalR": -22.822,
+          "maxDrawdownR": 24.259
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -0.006,
+          "worstR": -4.085,
+          "totalR": 1.435,
+          "maxDrawdownR": 6.312
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          1.5,
+          2,
+          2
+        ],
+        "tfMin": 4,
+        "alignMin": 2,
+        "threshold": 18,
+        "highMin": 4,
+        "lowMin": 4,
+        "trigger": "any",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 5,
+        "cooldown": 120,
+        "maxDaily": 6,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 16.2029,
+        "trades": 370,
+        "pnl": -23.19,
+        "profitFactor": 0.893,
+        "maxDDPct": 9.2,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 45,
+          "medianR": -0.825,
+          "worstR": -11.337,
+          "totalR": -19.336,
+          "maxDrawdownR": 25.015
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -0.352,
+          "worstR": -2.706,
+          "totalR": 2.531,
+          "maxDrawdownR": 4.929
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          2,
+          2,
+          0.5
+        ],
+        "tfMin": 4,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 4,
+        "lowMin": 5,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 2,
+        "tpATR": 3,
+        "cooldown": 15,
+        "maxDaily": 3,
+        "maxPositions": 1,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 11.9503,
+        "trades": 518,
+        "pnl": -4.39,
+        "profitFactor": 0.985,
+        "maxDDPct": 12,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 10,
+          "positiveWeekPct": 50,
+          "medianR": 0.415,
+          "worstR": -9.97,
+          "totalR": -30.746,
+          "maxDrawdownR": 39.011
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -1.618,
+          "worstR": -8.805,
+          "totalR": -5.554,
+          "maxDrawdownR": 11.231
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1.5,
+          1.5,
+          1.5
+        ],
+        "tfMin": 5,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 4,
+        "lowMin": 5,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 2.5,
+        "tpATR": 4,
+        "cooldown": 120,
+        "maxDaily": 3,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 11.7498,
+        "trades": 293,
+        "pnl": -23.39,
+        "profitFactor": 0.822,
+        "maxDDPct": 8.8,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.275,
+          "worstR": -9.025,
+          "totalR": -20.306,
+          "maxDrawdownR": 28.451
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 3,
+          "positiveWeekPct": 60,
+          "medianR": 0.153,
+          "worstR": -3.419,
+          "totalR": 1.39,
+          "maxDrawdownR": 3.419
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          2,
+          2,
+          1.5
+        ],
+        "tfMin": 5,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 4,
+        "lowMin": 3,
+        "trigger": "Breakout",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 120,
+        "maxDaily": 6,
+        "maxPositions": 1,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": 11.4832,
+        "trades": 409,
+        "pnl": -183.14,
+        "profitFactor": 0.864,
+        "maxDDPct": 44.5,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.943,
+          "worstR": -6.416,
+          "totalR": -20.209,
+          "maxDrawdownR": 27.907
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -1.503,
+          "worstR": -5.24,
+          "totalR": -9.788,
+          "maxDrawdownR": 9.788
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1,
+          0.5,
+          0.5
+        ],
+        "tfMin": 5,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 3,
+        "lowMin": 3,
+        "trigger": "any",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 15,
+        "maxDaily": 2,
+        "maxPositions": 5,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 10.2461,
+        "trades": 127,
+        "pnl": -58.98,
+        "profitFactor": 0.694,
+        "maxDDPct": 14.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": -0.745,
+          "worstR": -5.842,
+          "totalR": -18.663,
+          "maxDrawdownR": 21.27
+        },
+        "holdout": {
+          "weeks": 4,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50,
+          "medianR": 1.243,
+          "worstR": -3.306,
+          "totalR": -1.281,
+          "maxDrawdownR": 3.894
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1,
+          1,
+          1.5
+        ],
+        "tfMin": 3,
+        "alignMin": 3,
+        "threshold": 24,
+        "highMin": 4,
+        "lowMin": 2,
+        "trigger": "Cross",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 5,
+        "cooldown": 15,
+        "maxDaily": 2,
+        "maxPositions": 3,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 10.2099,
+        "trades": 48,
+        "pnl": -9.96,
+        "profitFactor": 0.754,
+        "maxDDPct": 2.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": 0,
+          "worstR": -2.091,
+          "totalR": -5.074,
+          "maxDrawdownR": 7.716
+        },
+        "holdout": {
+          "weeks": 4,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50,
+          "medianR": 0.911,
+          "worstR": -4.058,
+          "totalR": -1.996,
+          "maxDrawdownR": 4.058
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1.5,
+          2,
+          1.5
+        ],
+        "tfMin": 4,
+        "alignMin": 4,
+        "threshold": 20,
+        "highMin": 3,
+        "lowMin": 2,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 2.5,
+        "tpATR": 5,
+        "cooldown": 120,
+        "maxDaily": 2,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 9.0349,
+        "trades": 284,
+        "pnl": -1.41,
+        "profitFactor": 0.926,
+        "maxDDPct": 6.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 30,
+          "medianR": -1.112,
+          "worstR": -6.662,
+          "totalR": -11.085,
+          "maxDrawdownR": 26.097
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -1.063,
+          "worstR": -5.895,
+          "totalR": 4.641,
+          "maxDrawdownR": 7.975
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          2,
+          0.5,
+          2
+        ],
+        "tfMin": 3,
+        "alignMin": 3,
+        "threshold": 18,
+        "highMin": 3,
+        "lowMin": 4,
+        "trigger": "BB",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 60,
+        "maxDaily": 1,
+        "maxPositions": 1,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 7.7212,
+        "trades": 431,
+        "pnl": -48.08,
+        "profitFactor": 0.844,
+        "maxDDPct": 11.2,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 10,
+          "positiveWeekPct": 50,
+          "medianR": 0.001,
+          "worstR": -10.478,
+          "totalR": -32.647,
+          "maxDrawdownR": 40.861
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 0,
+          "positiveWeekPct": 0,
+          "medianR": -1.835,
+          "worstR": -7.217,
+          "totalR": -14.104,
+          "maxDrawdownR": 14.104
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          2,
+          0.5,
+          0.5
+        ],
+        "tfMin": 4,
+        "alignMin": 2,
+        "threshold": 18,
+        "highMin": 3,
+        "lowMin": 2,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 2.5,
+        "tpATR": 4,
+        "cooldown": 120,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": 5.855,
+        "trades": 68,
+        "pnl": -1.44,
+        "profitFactor": 0.943,
+        "maxDDPct": 2.4,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 30,
+          "medianR": -0.204,
+          "worstR": -3.199,
+          "totalR": -4.391,
+          "maxDrawdownR": 6.262
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -0.545,
+          "worstR": -1.233,
+          "totalR": 1.825,
+          "maxDrawdownR": 2.269
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          2,
+          2,
+          1.5
+        ],
+        "tfMin": 5,
+        "alignMin": 2,
+        "threshold": 12,
+        "highMin": 5,
+        "lowMin": 5,
+        "trigger": "any",
+        "hold": 240,
+        "stopATR": 3,
+        "tpATR": 2,
+        "cooldown": 120,
+        "maxDaily": 2,
+        "maxPositions": 1,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": 5.5244,
+        "trades": 985,
+        "pnl": -264.44,
+        "profitFactor": 0.874,
+        "maxDDPct": 60.2,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 10,
+          "positiveWeekPct": 50,
+          "medianR": 0.779,
+          "worstR": -14.383,
+          "totalR": -35.153,
+          "maxDrawdownR": 42.841
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 0,
+          "positiveWeekPct": 0,
+          "medianR": -2.819,
+          "worstR": -7.922,
+          "totalR": -18.32,
+          "maxDrawdownR": 18.32
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          2,
+          2,
+          2,
+          1
+        ],
+        "tfMin": 3,
+        "alignMin": 4,
+        "threshold": 16,
+        "highMin": 5,
+        "lowMin": 2,
+        "trigger": "BB",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 60,
+        "maxDaily": 1,
+        "maxPositions": 5,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": 4.7234,
+        "trades": 535,
+        "pnl": -234,
+        "profitFactor": 0.856,
+        "maxDDPct": 58,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -1.795,
+          "worstR": -9.731,
+          "totalR": -21.47,
+          "maxDrawdownR": 32.208
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -1.253,
+          "worstR": -11.373,
+          "totalR": -18.705,
+          "maxDrawdownR": 20.06
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          2,
+          0.5,
+          0.5,
+          1
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 24,
+        "highMin": 3,
+        "lowMin": 3,
+        "trigger": "RSI",
+        "hold": 240,
+        "stopATR": 2,
+        "tpATR": 2,
+        "cooldown": 30,
+        "maxDaily": 1,
+        "maxPositions": 1,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 0.7438,
+        "trades": 340,
+        "pnl": -43.35,
+        "profitFactor": 0.798,
+        "maxDDPct": 13.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": -1.405,
+          "worstR": -5.051,
+          "totalR": -26.568,
+          "maxDrawdownR": 27.013
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 4,
+          "positiveWeekPct": 80,
+          "medianR": 0.603,
+          "worstR": -6.363,
+          "totalR": 0.289,
+          "maxDrawdownR": 6.363
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          1,
+          0.5,
+          1.5
+        ],
+        "tfMin": 4,
+        "alignMin": 3,
+        "threshold": 9,
+        "highMin": 4,
+        "lowMin": 5,
+        "trigger": "BB",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 60,
+        "maxDaily": 2,
+        "maxPositions": 2,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": 0.7385,
+        "trades": 814,
+        "pnl": -213.99,
+        "profitFactor": 0.952,
+        "maxDDPct": 56.5,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.087,
+          "worstR": -12.571,
+          "totalR": -26.512,
+          "maxDrawdownR": 43.757
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -4.417,
+          "worstR": -11.294,
+          "totalR": -27.486,
+          "maxDrawdownR": 27.678
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          1,
+          1.5
+        ],
+        "tfMin": 3,
+        "alignMin": 3,
+        "threshold": 9,
+        "highMin": 5,
+        "lowMin": 3,
+        "trigger": "any",
+        "hold": 720,
+        "stopATR": 2,
+        "tpATR": 3,
+        "cooldown": 120,
+        "maxDaily": 1,
+        "maxPositions": 2,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -1.9427,
+        "trades": 539,
+        "pnl": -188.7,
+        "profitFactor": 0.879,
+        "maxDDPct": 41.1,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -0.754,
+          "worstR": -14.074,
+          "totalR": -30.82,
+          "maxDrawdownR": 32.871
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -2.134,
+          "worstR": -17.522,
+          "totalR": -23.159,
+          "maxDrawdownR": 23.159
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1,
+          2,
+          1
+        ],
+        "tfMin": 3,
+        "alignMin": 2,
+        "threshold": 9,
+        "highMin": 3,
+        "lowMin": 5,
+        "trigger": "Breakout",
+        "hold": 240,
+        "stopATR": 3,
+        "tpATR": 2,
+        "cooldown": 60,
+        "maxDaily": 1,
+        "maxPositions": 1,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -2.6561,
+        "trades": 620,
+        "pnl": -130.89,
+        "profitFactor": 0.918,
+        "maxDDPct": 34.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": -0.681,
+          "worstR": -8.075,
+          "totalR": -29.272,
+          "maxDrawdownR": 33.798
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -1.707,
+          "worstR": -10.747,
+          "totalR": -17.595,
+          "maxDrawdownR": 17.595
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          0.5,
+          0.5,
+          1.5
+        ],
+        "tfMin": 3,
+        "alignMin": 4,
+        "threshold": 20,
+        "highMin": 5,
+        "lowMin": 2,
+        "trigger": "BB",
+        "hold": 480,
+        "stopATR": 2.5,
+        "tpATR": 2,
+        "cooldown": 30,
+        "maxDaily": 1,
+        "maxPositions": 5,
+        "riskDivisor": 20
+      },
+      "metrics": {
+        "objective": -3.4262,
+        "trades": 545,
+        "pnl": -53.9,
+        "profitFactor": 0.832,
+        "maxDDPct": 11.8,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -1.775,
+          "worstR": -8.295,
+          "totalR": -30.815,
+          "maxDrawdownR": 36.083
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -1.349,
+          "worstR": -15.722,
+          "totalR": -23.675,
+          "maxDrawdownR": 23.675
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          0.5,
+          2,
+          1
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 24,
+        "highMin": 4,
+        "lowMin": 5,
+        "trigger": "RSI",
+        "hold": 120,
+        "stopATR": 2.5,
+        "tpATR": 3,
+        "cooldown": 15,
+        "maxDaily": 3,
+        "maxPositions": 2,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -4.6675,
+        "trades": 23,
+        "pnl": -7.18,
+        "profitFactor": 0.569,
+        "maxDDPct": 5.3,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 4,
+          "positiveWeekPct": 20,
+          "medianR": 0,
+          "worstR": -2.112,
+          "totalR": -4.767,
+          "maxDrawdownR": 5.928
+        },
+        "holdout": {
+          "weeks": 4,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50,
+          "medianR": 1.154,
+          "worstR": -1.036,
+          "totalR": 2.053,
+          "maxDrawdownR": 1.264
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-strict",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          1,
+          2,
+          2
+        ],
+        "tfMin": 4,
+        "alignMin": 3,
+        "threshold": 12,
+        "highMin": 5,
+        "lowMin": 2,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 120,
+        "maxDaily": 6,
+        "maxPositions": 3,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -6.1042,
+        "trades": 804,
+        "pnl": -270.44,
+        "profitFactor": 0.898,
+        "maxDDPct": 72.5,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 40,
+          "medianR": -1.434,
+          "worstR": -16.286,
+          "totalR": -25.71,
+          "maxDrawdownR": 47.667
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 1,
+          "positiveWeekPct": 20,
+          "medianR": -4.268,
+          "worstR": -11.927,
+          "totalR": -19.992,
+          "maxDrawdownR": 23.099
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M5",
+          "M15",
+          "H1"
+        ],
+        "weights": [
+          0.5,
+          1.5,
+          1.5
+        ],
+        "tfMin": 4,
+        "alignMin": 2,
+        "threshold": 9,
+        "highMin": 5,
+        "lowMin": 4,
+        "trigger": "RSI",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 4,
+        "cooldown": 60,
+        "maxDaily": 2,
+        "maxPositions": 3,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": -8.9533,
+        "trades": 964,
+        "pnl": -123.1,
+        "profitFactor": 0.935,
+        "maxDDPct": 36.4,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 45,
+          "medianR": -0.257,
+          "worstR": -15.617,
+          "totalR": -34.494,
+          "maxDrawdownR": 61.484
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 0,
+          "positiveWeekPct": 0,
+          "medianR": -2.995,
+          "worstR": -12.047,
+          "totalR": -24.261,
+          "maxDrawdownR": 24.261
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-majority",
+        "frames": [
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          1.5,
+          2,
+          0.5
+        ],
+        "tfMin": 3,
+        "alignMin": 3,
+        "threshold": 9,
+        "highMin": 3,
+        "lowMin": 2,
+        "trigger": "RSI",
+        "hold": 480,
+        "stopATR": 2.5,
+        "tpATR": 3,
+        "cooldown": 120,
+        "maxDaily": 3,
+        "maxPositions": 1,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -9.9601,
+        "trades": 492,
+        "pnl": -6.76,
+        "profitFactor": 0.954,
+        "maxDDPct": 18.8,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 30,
+          "medianR": -1.735,
+          "worstR": -7.86,
+          "totalR": -30.123,
+          "maxDrawdownR": 30.123
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 3,
+          "positiveWeekPct": 60,
+          "medianR": 1.938,
+          "worstR": -2.48,
+          "totalR": 6.131,
+          "maxDrawdownR": 2.48
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-hierarchical",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          0.5,
+          1.5,
+          2
+        ],
+        "tfMin": 3,
+        "alignMin": 3,
+        "threshold": 20,
+        "highMin": 3,
+        "lowMin": 3,
+        "trigger": "Reclaim",
+        "hold": 720,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 120,
+        "maxDaily": 3,
+        "maxPositions": 1,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": -10.6152,
+        "trades": 461,
+        "pnl": -114.65,
+        "profitFactor": 0.817,
+        "maxDDPct": 32.1,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 35,
+          "medianR": -1.091,
+          "worstR": -11.617,
+          "totalR": -29.381,
+          "maxDrawdownR": 46.562
+        },
+        "holdout": {
+          "weeks": 5,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 40,
+          "medianR": -2.156,
+          "worstR": -7.834,
+          "totalR": -10.782,
+          "maxDrawdownR": 11.342
+        }
+      }
+    },
+    {
+      "config": {
+        "mtf": true,
+        "method": "mtf-weighted",
+        "frames": [
+          "M5",
+          "M15",
+          "H1",
+          "H4"
+        ],
+        "weights": [
+          0.5,
+          0.5,
+          1,
+          2
+        ],
+        "tfMin": 5,
+        "alignMin": 4,
+        "threshold": 24,
+        "highMin": 3,
+        "lowMin": 3,
+        "trigger": "RSI",
+        "hold": 480,
+        "stopATR": 3,
+        "tpATR": 3,
+        "cooldown": 120,
+        "maxDaily": 3,
+        "maxPositions": 2,
+        "riskDivisor": 5
+      },
+      "metrics": {
+        "objective": -13.2076,
+        "trades": 20,
+        "pnl": -29.32,
+        "profitFactor": 0.367,
+        "maxDDPct": 10.9,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 3,
+          "positiveWeekPct": 15,
+          "medianR": 0,
+          "worstR": -2.093,
+          "totalR": -6.93,
+          "maxDrawdownR": 8.813
+        },
+        "holdout": {
+          "weeks": 4,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50,
+          "medianR": 0.961,
+          "worstR": -1.26,
+          "totalR": 0.59,
+          "maxDrawdownR": 2.29
+        }
+      }
+    }
+  ]
+}
