@@ -164,7 +164,7 @@ class TradingBot {
         const tradableSymbols = [];
 
         for (const [symbol, profile] of Object.entries(PROFILES)) {
-            if (!profile.sessions.includes(session)) continue; // Symbol not tradable in current session
+            if (!profile.enabled || !profile.sessions.includes(session)) continue;
             if (await this.isTradingAllowed(symbol, { now, currentMinutes })) {
                 tradableSymbols.push(symbol);
             }
@@ -237,6 +237,7 @@ class TradingBot {
         // Pass bid/ask to trading logic
         await tradingService.processPrice({
             symbol,
+            profile: PROFILES[symbol],
             indicators,
             candles,
             bid,

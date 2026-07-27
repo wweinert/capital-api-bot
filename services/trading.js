@@ -10,9 +10,9 @@ import {
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-import shouldEnter, { ENTRY_RESEARCH_PROFILE } from "../strategies/entry.js";
+import shouldEnter from "../strategies/entry.js";
 
-const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT = 0.7 } = RISK;
+const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
 const HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS = 0.5;
 const HLLH_TRAIL_DISTANCE_TP_FRACTION = 0.12;
@@ -121,7 +121,7 @@ class TradingService {
     // ============================================================
     //                   MAIN PRICE LOOP
     // ============================================================
-    async processPrice({ symbol, indicators, candles, bid, ask }) {
+    async processPrice({ symbol, profile, indicators, candles, bid, ask }) {
         try {
             await this.syncOpenTradesFromBroker();
             logger.info(`[ProcessPrice] Open trades: ${this.openTrades.length}/${MAX_POSITIONS} | Balance: ${this.accountBalance}€`);
@@ -135,28 +135,13 @@ class TradingService {
                 return;
             }
 
-            const m15Bars = candles?.m15Candles || [];
-
-            const entryParams = {
-                ...ENTRY_RESEARCH_PROFILE.params,
-                allowedHoursUtc: [],
-            };
-
-            const m5AtrPct = indicators?.m5?.atrPct;
-            const primary = shouldEnter({
-                bars: m15Bars,
-                m5AtrPct,
-                spread: ask - bid,
-                symbol: symbol,
-                equity: this.accountBalance,
-                params: entryParams,
-                nowMs: Date.now(),
-            });
+            const m15Bars = (candles?.m15Candles || []).slice(0, -1);
+            const primary = shouldEnter({ bars: m15Bars, symbol, profile });
 
             let { signal, reason = "" } = primary;
 
             if (!signal) {
-                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}: ${reason} | m5AtrPct=${m5AtrPct?.toFixed(6) ?? "null"}`);
+                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}`);
                 return;
             }
 
@@ -190,7 +175,7 @@ class TradingService {
                 m1: toLastClosedCandle(candles?.m1Candles),
             };
 
-            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, primary);
+            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, primary, profile);
         } catch (error) {
             logger.error("[ProcessPrice] Error:", error);
         }
@@ -419,14 +404,31 @@ class TradingService {
     // ============================================================
     //                    Place the Trade
     // ============================================================
-    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, entrySignal) {
+    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, entrySignal, profile) {
         try {
             const stopLossPrice = entrySignal?.sl;
-            const takeProfitPrice = entrySignal?.tp;
-            const price = entrySignal?.entry ?? this.resolveMarketPrice(signal, bid, ask);
+            const price = this.resolveMarketPrice(signal, bid, ask);
+            const direction = this.normalizeDirection(signal);
+            const riskDistance = Math.abs(price - stopLossPrice);
+            const safetyTakeProfitR = Number(profile?.safetyTakeProfitR ?? profile?.takeProfitR ?? 20);
+            const takeProfitPrice =
+                direction === "BUY" ? price + riskDistance * safetyTakeProfitR : price - riskDistance * safetyTakeProfitR;
 
-            if (!(Number.isFinite(stopLossPrice) && Number.isFinite(takeProfitPrice) && Number.isFinite(price))) {
-                logger.warn(`[Order] Skipping ${symbol}: missing entry/SL/TP from signal (entry=${price} sl=${stopLossPrice} tp=${takeProfitPrice}).`);
+            const hasValidLevels =
+                Number.isFinite(stopLossPrice) &&
+                Number.isFinite(price) &&
+                Number.isFinite(riskDistance) &&
+                riskDistance > 0 &&
+                Number.isFinite(safetyTakeProfitR) &&
+                safetyTakeProfitR > 0;
+
+            if (!["BUY", "SELL"].includes(direction) || !hasValidLevels) {
+                logger.warn(`[Order] Skipping ${symbol}: invalid entry, stop loss, or safety TP ratio.`);
+                return;
+            }
+
+            if ((direction === "BUY" && stopLossPrice >= price) || (direction === "SELL" && stopLossPrice <= price)) {
+                logger.warn(`[Order] Skipping ${symbol}: market price crossed the structural stop loss.`);
                 return;
             }
 
@@ -479,6 +481,7 @@ class TradingService {
                         takeProfit: takeProfitRounded,
                         indicatorsOnOpening: indicators,
                         candlesOnOpening: candlesSnapshot,
+                        strategyContext: entrySignal?.strategyContext,
                         positionSizing: {
                             planned: positionSizing,
                             actual: actualPositionSizing,
