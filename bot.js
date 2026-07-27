@@ -1,6 +1,6 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, PROD, ANALYSIS } from "./config.js";
+import { DEV, PROD, ANALYSIS, SESSIONS, PROFILES } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
@@ -154,20 +154,23 @@ class TradingBot {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        const sessionSymbols = Array.isArray(ANALYSIS.SYMBOLS) ? ANALYSIS.SYMBOLS : [];
+        const session = ["LONDON", "NY", "TOKYO", "SYDNEY"].find((name) => {
+            const { START, END } = SESSIONS[name];
+            return this.inSession(currentMinutes, START, END);
+        });
+
+        if (!session) return []; // No active session, no tradable symbols
+
         const tradableSymbols = [];
 
-        for (const symbol of sessionSymbols) {
+        for (const [symbol, profile] of Object.entries(PROFILES)) {
+            if (!profile.sessions.includes(session)) continue; // Symbol not tradable in current session
             if (await this.isTradingAllowed(symbol, { now, currentMinutes })) {
                 tradableSymbols.push(symbol);
             }
         }
 
-        logger.info(
-            `[Bot] HLLH sessionMode=off | Configured symbols: ${sessionSymbols.join(", ")} | Tradable symbols: ${
-                tradableSymbols.length ? tradableSymbols.join(", ") : "none"
-            }`,
-        );
+        logger.info(`[Bot] Tradable symbols: ${tradableSymbols.length ? tradableSymbols.join(", ") : "none"}`);
         return tradableSymbols;
     }
 
@@ -358,11 +361,6 @@ class TradingBot {
     async isTradingAllowed(symbol, context = {}) {
         const now = context.now instanceof Date ? context.now : new Date();
         const currentMinutes = Number.isFinite(context.currentMinutes) ? context.currentMinutes : now.getUTCHours() * 60 + now.getUTCMinutes();
-
-        const day = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
-        if (day === 0 || day === 6) {
-            return false;
-        }
 
         // Check if current time is inside any allowed window
         const allowed = this.allowedTradingWindows.some((win) => {

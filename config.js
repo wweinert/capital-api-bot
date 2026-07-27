@@ -11,41 +11,9 @@ export const API = {
     WS_URL: ENV.WS_BASE_URL,
 };
 
-// Trading Sessions (UTC times)
-const SESSION_SYMBOLS = {
-    LONDON: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
-    NY: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
-    SYDNEY: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
-    TOKYO: ["GBPAUD", "EURAUD", "EURJPY", "GBPUSD"],
-};
-
-// export const CRYPTO_SYMBOLS = ["BTCUSD", "BTCEUR", "SOLUSD", "XRPUSD", "DOGEUSD", "ADAUSD"];
-export const SESSIONS = {
-    LONDON: {
-        START: "08:00",
-        END: "17:00",
-        SYMBOLS: SESSION_SYMBOLS.LONDON,
-    },
-    NY: {
-        START: "13:00",
-        END: "21:00",
-        SYMBOLS: SESSION_SYMBOLS.NY,
-    },
-    SYDNEY: {
-        START: "22:00",
-        END: "07:00",
-        SYMBOLS: SESSION_SYMBOLS.SYDNEY,
-    },
-    TOKYO: {
-        START: "00:00",
-        END: "09:00",
-        SYMBOLS: SESSION_SYMBOLS.TOKYO,
-    }
-};
-
 export const RISK = {
     PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
-    MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous position
+    MAX_POSITIONS: 5, // HLLH approved candidate: max 5 simultaneous positions
     MARGIN_RESERVE_PCT: 0.7, // Used margin budget; split across MAX_POSITIONS by positionSize
     MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
     DAILY_FORCED_CLOSE_UTC: true,
@@ -112,34 +80,50 @@ const BEST_ADAPTIVE_HLLH_PROFILE = {
         overnightTradeCount: 0,
     },
 };
+// export const CRYPTO_SYMBOLS = ["BTCUSD", "BTCEUR", "SOLUSD", "XRPUSD", "DOGEUSD", "ADAUSD"];
+export const SESSIONS = {
+    LONDON: { START: 8 * 60, END: 17 * 60 },
+    NY: { START: 13 * 60, END: 21 * 60 },
+    SYDNEY: { START: 22 * 60, END: 7 * 60 },
+    TOKYO: { START: 0, END: 9 * 60 },
+};
 
-export const HLLH_SYMBOL_PROFILES = {
+export const PROFILES = {
+    GBPJPY: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        enabled: true,
+        sessions: ["SYDNEY", "TOKYO", "LONDON", "NY"],
+    },
     GBPAUD: {
         ...BEST_ADAPTIVE_HLLH_PROFILE,
-        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 352 },
+        enabled: true,
+        sessions: ["SYDNEY", "TOKYO", "LONDON", "NY"],
     },
     EURAUD: {
         ...BEST_ADAPTIVE_HLLH_PROFILE,
-        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 529 },
-    },
-    EURJPY: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
-        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 473 },
+        enabled: true,
+        sessions: ["SYDNEY", "TOKYO", "LONDON"],
     },
     GBPUSD: {
         ...BEST_ADAPTIVE_HLLH_PROFILE,
-        research: { ...BEST_ADAPTIVE_HLLH_PROFILE.research, symbolTrades: 389 },
+        enabled: true,
+        sessions: ["LONDON", "NY"],
+    },
+    EURJPY: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        enabled: true,
+        sessions: ["TOKYO", "NY"],
+    },
+    AUDJPY: {
+        ...BEST_ADAPTIVE_HLLH_PROFILE,
+        enabled: true,
+        sessions: ["TOKYO", "LONDON", "NY"],
     },
 };
-
-const PORTFOLIO_SYMBOLS = Object.entries(HLLH_SYMBOL_PROFILES)
-    .filter(([, profile]) => profile.enabled)
-    .map(([symbol]) => symbol);
 
 // Technical Analysis Configuration
 export const ANALYSIS = {
     TIMEFRAMES,
-    SYMBOLS: PORTFOLIO_SYMBOLS,
     EMA,
 };
 
@@ -148,7 +132,6 @@ export const DEV = {
     INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
     MODE: true,
 };
-
 
 // M15 close + 5 seconds
 export const PROD = {

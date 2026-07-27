@@ -77,12 +77,9 @@ class PriceLogger {
 
         const sessions = [];
         for (const [name, win] of Object.entries(SESSIONS)) {
-            if (!win?.START || !win?.END) continue;
-            const [sh, sm] = win.START.split(":").map((v) => parseInt(v, 10));
-            const [eh, em] = win.END.split(":").map((v) => parseInt(v, 10));
-            if (!Number.isFinite(sh) || !Number.isFinite(sm) || !Number.isFinite(eh) || !Number.isFinite(em)) continue;
-            const start = sh * 60 + sm;
-            const end = eh * 60 + em;
+            const { START: start, END: end } = win;
+            if (!Number.isFinite(start) || !Number.isFinite(end)) continue;
+
             const active = start <= end ? currentMinutes >= start && currentMinutes <= end : currentMinutes >= start || currentMinutes <= end;
             if (active) sessions.push(name);
         }

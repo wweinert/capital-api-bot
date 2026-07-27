@@ -117,6 +117,14 @@ async function withSessionRetry(fn, ...args) {
     }
 }
 
+async function apiPost(path, payload) {
+    return await withSessionRetry(async () => {
+        return await axios.post(`${API.BASE_URL}${path}`, payload, {
+            headers: getHeaders(true),
+        });
+    });
+}
+
 export const getAccountInfo = async () =>
     withSessionRetry(async () => {
         const response = await axios.get(`${API.BASE_URL}/accounts`, { headers: getHeaders() });
