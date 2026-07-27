@@ -403,15 +403,11 @@ class TradingBot {
 
 const bot = new TradingBot();
 
-if (import.meta.url === pathToFileURL(process.argv[1] || "").href) {
-    const now = new Date();
-    const day = now.getUTCDay(); // 0 = Sunday, 6 = Saturday
-    if (day === 0 || day === 6) {
-        logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
-    } else {
-        bot.initialize().catch((error) => {
-            logger.error("[bot.js] Bot initialization failed:", error);
-            process.exit(1);
-        });
-    }
+if ([0, 6].includes(new Date().getUTCDay())) {
+    logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
+} else {
+    bot.initialize().catch((error) => {
+        logger.error("[bot.js] Bot initialization failed:", error);
+        process.exit(1);
+    });
 }
