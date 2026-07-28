@@ -1,0 +1,2603 @@
+{
+  "generatedAt": "2026-07-27T20:59:49.498Z",
+  "searchSeconds": 1200.1,
+  "experiments": 891,
+  "symbols": [
+    "EURUSD",
+    "GBPUSD",
+    "EURGBP",
+    "AUDUSD",
+    "USDCAD"
+  ],
+  "period": {
+    "start": "2026-01-16T04:00:00.000Z",
+    "end": "2026-06-29T12:58:00.000Z"
+  },
+  "fixedExit": "stop=2.5 ATR, take-profit=5 ATR (2R), max hold=120 minutes; only entry direction/filtering varies",
+  "baseline": {
+    "config": {
+      "method": "scoring-gated",
+      "objectiveMode": "direction",
+      "rankByScore": true,
+      "minSignalScore": 3,
+      "useM15Gate": true,
+      "minM15Trend": 1,
+      "useH1Gate": true,
+      "minH1Trend": 1,
+      "useH4Gate": true,
+      "minH4Trend": 3,
+      "useSetupGate": false,
+      "minSetupScore": 0,
+      "useTriggerGate": false,
+      "trigger": "any",
+      "sessionWindows": [
+        [
+          0,
+          1440
+        ]
+      ],
+      "minAtrPct": null,
+      "minBbWidthPct": null,
+      "minEmaDistPct": null,
+      "stopATR": 2.5,
+      "tpATR": 5,
+      "hold": 120,
+      "breakEvenR": 0,
+      "trailATR": 0,
+      "cooldown": 0,
+      "maxDaily": 8,
+      "maxTotalDaily": 12,
+      "maxPositions": 5,
+      "riskDivisor": 10
+    },
+    "metrics": {
+      "objective": -10000,
+      "qualified": false,
+      "startCapital": 500,
+      "finalBalance": 212.18,
+      "returnPct": -57.56,
+      "selectionFinalBalance": 288.71,
+      "selectionReturnPct": -42.26,
+      "forwardStartBalance": 288.71,
+      "forwardReturnPct": -26.51,
+      "trades": 1568,
+      "entries": 1568,
+      "partialExits": 0,
+      "pnl": -287.82,
+      "profitFactor": 0.75,
+      "maxDDPct": 57.8,
+      "selection": {
+        "weeks": 20,
+        "positiveWeeks": 3,
+        "positiveWeekPct": 15,
+        "medianR": -6.819,
+        "worstR": -16.592,
+        "totalR": -129.382,
+        "maxDrawdownR": 129.382
+      },
+      "holdout": {
+        "weeks": 5,
+        "positiveWeeks": 0,
+        "positiveWeekPct": 0,
+        "medianR": -7.468,
+        "worstR": -15.335,
+        "totalR": -44.198,
+        "maxDrawdownR": 44.198
+      },
+      "folds": {
+        "train": {
+          "weeks": 12,
+          "pnl": -147.68,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 16.7
+        },
+        "validation": {
+          "weeks": 8,
+          "pnl": -63.61,
+          "positiveWeeks": 3,
+          "positiveWeekPct": 37.5
+        },
+        "test": {
+          "weeks": 4,
+          "pnl": -71.64,
+          "positiveWeeks": 0,
+          "positiveWeekPct": 0
+        }
+      },
+      "selectionPrecision": {
+        "trades": 1283,
+        "positiveTrades": 507,
+        "winRate": 39.5,
+        "takeProfits": 15,
+        "tpRate": 1.2,
+        "stopLosses": 118,
+        "timeExits": 1150,
+        "tradesPerDay": 12.83,
+        "averagePnl": -0.165
+      },
+      "holdoutPrecision": {
+        "trades": 285,
+        "positiveTrades": 101,
+        "winRate": 35.4,
+        "takeProfits": 3,
+        "tpRate": 1.1,
+        "stopLosses": 32,
+        "timeExits": 250,
+        "tradesPerDay": 11.4,
+        "averagePnl": -0.269
+      },
+      "activeDayPct": 116,
+      "recent": {
+        "start": "2026-06-15T12:58:00.000Z",
+        "end": "2026-06-29T12:58:00.000Z",
+        "pnl": -24.03,
+        "profitFactor": 0.659,
+        "trades": 134,
+        "positiveTrades": 55,
+        "winRate": 41,
+        "takeProfits": 0,
+        "tpRate": 0,
+        "stopLosses": 14,
+        "timeExits": 120,
+        "tradesPerDay": 2.68,
+        "averagePnl": -0.179
+      },
+      "symbolStats": {
+        "EURUSD": {
+          "selection": {
+            "trades": 249,
+            "positiveTrades": 111,
+            "winRate": 44.6,
+            "takeProfits": 4,
+            "tpRate": 1.6,
+            "stopLosses": 23,
+            "timeExits": 222,
+            "tradesPerDay": 2.49,
+            "averagePnl": -0.097
+          },
+          "holdout": {
+            "trades": 54,
+            "positiveTrades": 24,
+            "winRate": 44.4,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 47,
+            "tradesPerDay": 2.16,
+            "averagePnl": -0.157
+          },
+          "selectionR": -9.695,
+          "holdoutR": -4.987,
+          "pnl": -32.65
+        },
+        "GBPUSD": {
+          "selection": {
+            "trades": 246,
+            "positiveTrades": 100,
+            "winRate": 40.7,
+            "takeProfits": 1,
+            "tpRate": 0.4,
+            "stopLosses": 19,
+            "timeExits": 226,
+            "tradesPerDay": 2.46,
+            "averagePnl": -0.172
+          },
+          "holdout": {
+            "trades": 54,
+            "positiveTrades": 18,
+            "winRate": 33.3,
+            "takeProfits": 1,
+            "tpRate": 1.9,
+            "stopLosses": 9,
+            "timeExits": 44,
+            "tradesPerDay": 2.16,
+            "averagePnl": -0.354
+          },
+          "selectionR": -15.665,
+          "holdoutR": -8.381,
+          "pnl": -61.33
+        },
+        "EURGBP": {
+          "selection": {
+            "trades": 265,
+            "positiveTrades": 69,
+            "winRate": 26,
+            "takeProfits": 3,
+            "tpRate": 1.1,
+            "stopLosses": 26,
+            "timeExits": 236,
+            "tradesPerDay": 2.65,
+            "averagePnl": -0.391
+          },
+          "holdout": {
+            "trades": 55,
+            "positiveTrades": 8,
+            "winRate": 14.5,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 3,
+            "timeExits": 52,
+            "tradesPerDay": 2.2,
+            "averagePnl": -0.425
+          },
+          "selectionR": -78.226,
+          "holdoutR": -19.517,
+          "pnl": -127.11
+        },
+        "AUDUSD": {
+          "selection": {
+            "trades": 266,
+            "positiveTrades": 123,
+            "winRate": 46.2,
+            "takeProfits": 7,
+            "tpRate": 2.6,
+            "stopLosses": 36,
+            "timeExits": 223,
+            "tradesPerDay": 2.66,
+            "averagePnl": 0.004
+          },
+          "holdout": {
+            "trades": 61,
+            "positiveTrades": 25,
+            "winRate": 41,
+            "takeProfits": 2,
+            "tpRate": 3.3,
+            "stopLosses": 9,
+            "timeExits": 50,
+            "tradesPerDay": 2.44,
+            "averagePnl": -0.226
+          },
+          "selectionR": -2.934,
+          "holdoutR": -4.172,
+          "pnl": -12.73
+        },
+        "USDCAD": {
+          "selection": {
+            "trades": 257,
+            "positiveTrades": 104,
+            "winRate": 40.5,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 14,
+            "timeExits": 243,
+            "tradesPerDay": 2.57,
+            "averagePnl": -0.164
+          },
+          "holdout": {
+            "trades": 61,
+            "positiveTrades": 26,
+            "winRate": 42.6,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 4,
+            "timeExits": 57,
+            "tradesPerDay": 2.44,
+            "averagePnl": -0.194
+          },
+          "selectionR": -22.861,
+          "holdoutR": -7.142,
+          "pnl": -54.01
+        }
+      },
+      "sessionStats": {
+        "asia": {
+          "trades": 1396,
+          "pnl": -274.16,
+          "r": -165.435
+        },
+        "london": {
+          "trades": 8,
+          "pnl": 1.57,
+          "r": 0.536
+        },
+        "offHours": {
+          "trades": 164,
+          "pnl": -15.23,
+          "r": -8.681
+        }
+      },
+      "regimeStats": {
+        "base": {
+          "trades": 1568,
+          "pnl": -287.82,
+          "r": -173.58
+        }
+      },
+      "bestSelectionWeek": {
+        "week": "2026-W11",
+        "r": 3.458,
+        "pnl": 17.67
+      },
+      "bestWeek": {
+        "week": "2026-W11",
+        "r": 3.458,
+        "pnl": 17.67
+      },
+      "daily": [
+        {
+          "day": "2026-01-16",
+          "pnl": -3.26,
+          "r": -2.798,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-19",
+          "pnl": -12.35,
+          "r": -5.679,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-01-20",
+          "pnl": 5.25,
+          "r": 3.102,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-21",
+          "pnl": -2.94,
+          "r": -1.126,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-22",
+          "pnl": 4.85,
+          "r": 1.189,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-23",
+          "pnl": -4.84,
+          "r": -3.214,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-26",
+          "pnl": -6.39,
+          "r": -1.485,
+          "entries": 12,
+          "closes": 17
+        },
+        {
+          "day": "2026-01-27",
+          "pnl": -5.83,
+          "r": -3.053,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-28",
+          "pnl": -5.73,
+          "r": -1.592,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-29",
+          "pnl": -1.62,
+          "r": -0.359,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-01-30",
+          "pnl": -19.79,
+          "r": -5.514,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-02",
+          "pnl": -4.67,
+          "r": -0.515,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-02-03",
+          "pnl": 2.88,
+          "r": -1.038,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-04",
+          "pnl": -0.49,
+          "r": -0.741,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-05",
+          "pnl": -2.07,
+          "r": 0.191,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-06",
+          "pnl": -18.46,
+          "r": -6.542,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-09",
+          "pnl": -0.73,
+          "r": 0.446,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-02-10",
+          "pnl": 1.05,
+          "r": 0.8,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-11",
+          "pnl": 13.34,
+          "r": 5.077,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-12",
+          "pnl": -12.4,
+          "r": -4.603,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-13",
+          "pnl": -7.36,
+          "r": -2.736,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-16",
+          "pnl": -2.02,
+          "r": -0.849,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-02-17",
+          "pnl": -2.88,
+          "r": -0.386,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-18",
+          "pnl": 1.27,
+          "r": 0.459,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-19",
+          "pnl": -9.69,
+          "r": -5.535,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-20",
+          "pnl": 6.44,
+          "r": 1.562,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-23",
+          "pnl": -2.93,
+          "r": -0.578,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-02-24",
+          "pnl": -5.06,
+          "r": -2.067,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-25",
+          "pnl": -12.5,
+          "r": -6.845,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-26",
+          "pnl": -4.98,
+          "r": -3.18,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-02-27",
+          "pnl": 2.99,
+          "r": 0.214,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-02",
+          "pnl": -0.07,
+          "r": 0.977,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-03-03",
+          "pnl": 2.54,
+          "r": 1.229,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-04",
+          "pnl": -3.79,
+          "r": -1.837,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-05",
+          "pnl": 8.24,
+          "r": 2.369,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-06",
+          "pnl": -5.15,
+          "r": -0.896,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-09",
+          "pnl": -0.1,
+          "r": -0.49,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-03-10",
+          "pnl": 10.83,
+          "r": 2.87,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-11",
+          "pnl": 11.56,
+          "r": 2.524,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-12",
+          "pnl": -9.98,
+          "r": -3.318,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-13",
+          "pnl": 12.08,
+          "r": 4.264,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-16",
+          "pnl": -4.14,
+          "r": -2.278,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-03-17",
+          "pnl": 3.46,
+          "r": 0.381,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-18",
+          "pnl": -1.16,
+          "r": -1.246,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-19",
+          "pnl": -2.55,
+          "r": -1.639,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-20",
+          "pnl": -4.09,
+          "r": -2.249,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-23",
+          "pnl": -6.33,
+          "r": -3.173,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-03-24",
+          "pnl": 2.42,
+          "r": 1.297,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-25",
+          "pnl": 0.34,
+          "r": -0.247,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-26",
+          "pnl": -3.22,
+          "r": -1.54,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-27",
+          "pnl": -6.81,
+          "r": -2.356,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-03-30",
+          "pnl": -10.66,
+          "r": -2.888,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-03-31",
+          "pnl": -13.15,
+          "r": -5.672,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-01",
+          "pnl": -3.3,
+          "r": -2.214,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-02",
+          "pnl": 1.42,
+          "r": 0.286,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-03",
+          "pnl": -2.92,
+          "r": -1.946,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-06",
+          "pnl": -11.05,
+          "r": -6.031,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-04-07",
+          "pnl": -0.08,
+          "r": -0.305,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-08",
+          "pnl": -9.93,
+          "r": -3.217,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-09",
+          "pnl": -3.96,
+          "r": -1.871,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-10",
+          "pnl": -1.12,
+          "r": -0.628,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-13",
+          "pnl": 2.45,
+          "r": -1.464,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-04-14",
+          "pnl": -4.17,
+          "r": -1.038,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-15",
+          "pnl": 0.9,
+          "r": -0.247,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-16",
+          "pnl": -2.7,
+          "r": -1.864,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-17",
+          "pnl": 4.31,
+          "r": 2.263,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-20",
+          "pnl": 1.57,
+          "r": -1.546,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-04-21",
+          "pnl": -5.82,
+          "r": -3.848,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-22",
+          "pnl": -7.94,
+          "r": -4.094,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-23",
+          "pnl": -8.26,
+          "r": -5.222,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-24",
+          "pnl": -0.28,
+          "r": -0.223,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-27",
+          "pnl": 2.11,
+          "r": -0.9,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-04-28",
+          "pnl": -12.62,
+          "r": -8.178,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-29",
+          "pnl": -7.38,
+          "r": -4.573,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-04-30",
+          "pnl": 3.32,
+          "r": 0.784,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-01",
+          "pnl": -3.26,
+          "r": -1.79,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-04",
+          "pnl": -10.46,
+          "r": -5.29,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-05-05",
+          "pnl": 0.18,
+          "r": -0.216,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-06",
+          "pnl": 5.11,
+          "r": 0.865,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-07",
+          "pnl": 4.73,
+          "r": 0.638,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-08",
+          "pnl": 3.41,
+          "r": -0.21,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-11",
+          "pnl": -5.49,
+          "r": -2.586,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-05-12",
+          "pnl": -5.83,
+          "r": -2.543,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-13",
+          "pnl": -3.61,
+          "r": -2.076,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-14",
+          "pnl": 0.52,
+          "r": -0.441,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-15",
+          "pnl": 11.6,
+          "r": 4.59,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-18",
+          "pnl": -13.21,
+          "r": -6.403,
+          "entries": 12,
+          "closes": 14
+        },
+        {
+          "day": "2026-05-19",
+          "pnl": 5.16,
+          "r": 0.857,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-20",
+          "pnl": -0.91,
+          "r": 0.156,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-21",
+          "pnl": -0.56,
+          "r": 0.845,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-22",
+          "pnl": -2.44,
+          "r": -1.79,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-25",
+          "pnl": -0.61,
+          "r": -0.397,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-05-26",
+          "pnl": -6.43,
+          "r": -5.502,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-27",
+          "pnl": -9.62,
+          "r": -5.506,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-28",
+          "pnl": 12.67,
+          "r": 6.292,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-05-29",
+          "pnl": -5.86,
+          "r": -3.622,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-01",
+          "pnl": -1.72,
+          "r": -0.276,
+          "entries": 12,
+          "closes": 14
+        },
+        {
+          "day": "2026-06-02",
+          "pnl": -3.07,
+          "r": -2.425,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-03",
+          "pnl": -7.44,
+          "r": -5.385,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-04",
+          "pnl": -1.09,
+          "r": -1.119,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-05",
+          "pnl": -2.33,
+          "r": -2.579,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-08",
+          "pnl": -7.52,
+          "r": -3.286,
+          "entries": 12,
+          "closes": 15
+        },
+        {
+          "day": "2026-06-09",
+          "pnl": -11.22,
+          "r": -5.883,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-10",
+          "pnl": -5.4,
+          "r": -4.57,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-11",
+          "pnl": -3.62,
+          "r": -1.6,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-12",
+          "pnl": -5.83,
+          "r": -3.096,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-15",
+          "pnl": -9.35,
+          "r": -3.303,
+          "entries": 12,
+          "closes": 16
+        },
+        {
+          "day": "2026-06-16",
+          "pnl": -6.15,
+          "r": -2.916,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-17",
+          "pnl": -0.89,
+          "r": -0.942,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-18",
+          "pnl": -1.49,
+          "r": -0.627,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-19",
+          "pnl": 2.02,
+          "r": 1.093,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-22",
+          "pnl": -5.3,
+          "r": -2.069,
+          "entries": 12,
+          "closes": 17
+        },
+        {
+          "day": "2026-06-23",
+          "pnl": 9.29,
+          "r": 2.746,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-24",
+          "pnl": -0.66,
+          "r": 0.06,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-25",
+          "pnl": -6.48,
+          "r": -2.812,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-26",
+          "pnl": -3.78,
+          "r": -2.325,
+          "entries": 12,
+          "closes": 12
+        },
+        {
+          "day": "2026-06-29",
+          "pnl": -4.89,
+          "r": -3.155,
+          "entries": 12,
+          "closes": 13
+        }
+      ],
+      "weekly": [
+        {
+          "week": "2026-W03",
+          "r": -8.032,
+          "pnl": -16.75
+        },
+        {
+          "week": "2026-W04",
+          "r": -6.912,
+          "pnl": -12.25
+        },
+        {
+          "week": "2026-W05",
+          "r": -13.173,
+          "pnl": -41.73
+        },
+        {
+          "week": "2026-W06",
+          "r": -8.644,
+          "pnl": -22.81
+        },
+        {
+          "week": "2026-W07",
+          "r": -1.016,
+          "pnl": -6.1
+        },
+        {
+          "week": "2026-W08",
+          "r": -6.819,
+          "pnl": -13.65
+        },
+        {
+          "week": "2026-W09",
+          "r": -10.493,
+          "pnl": -15.54
+        },
+        {
+          "week": "2026-W10",
+          "r": 1.374,
+          "pnl": 0.86
+        },
+        {
+          "week": "2026-W11",
+          "r": 3.458,
+          "pnl": 17.67
+        },
+        {
+          "week": "2026-W12",
+          "r": -5.066,
+          "pnl": -3.26
+        },
+        {
+          "week": "2026-W13",
+          "r": -2.521,
+          "pnl": -4.44
+        },
+        {
+          "week": "2026-W14",
+          "r": -13.134,
+          "pnl": -29.68
+        },
+        {
+          "week": "2026-W15",
+          "r": -13.634,
+          "pnl": -27.73
+        },
+        {
+          "week": "2026-W16",
+          "r": -0.641,
+          "pnl": 6.12
+        },
+        {
+          "week": "2026-W17",
+          "r": -15.183,
+          "pnl": -19.03
+        },
+        {
+          "week": "2026-W18",
+          "r": -16.592,
+          "pnl": -23.29
+        },
+        {
+          "week": "2026-W19",
+          "r": 1.446,
+          "pnl": 15.59
+        },
+        {
+          "week": "2026-W20",
+          "r": -1.09,
+          "pnl": 1.24
+        },
+        {
+          "week": "2026-W21",
+          "r": -5.635,
+          "pnl": -9.87
+        },
+        {
+          "week": "2026-W22",
+          "r": -7.076,
+          "pnl": -6.64
+        },
+        {
+          "week": "2026-W23",
+          "r": -12.321,
+          "pnl": -17.27
+        },
+        {
+          "week": "2026-W24",
+          "r": -15.335,
+          "pnl": -25.88
+        },
+        {
+          "week": "2026-W25",
+          "r": -7.468,
+          "pnl": -17.82
+        },
+        {
+          "week": "2026-W26",
+          "r": -5.918,
+          "pnl": -10.67
+        },
+        {
+          "week": "2026-W27",
+          "r": -3.155,
+          "pnl": -4.89
+        }
+      ],
+      "monthly": {
+        "2026-01": {
+          "pnl": -68.35,
+          "r": -26.947,
+          "trades": 147,
+          "wins": 48,
+          "winRate": 32.7
+        },
+        "2026-02": {
+          "pnl": -67.42,
+          "r": -30.107,
+          "trades": 258,
+          "wins": 96,
+          "winRate": 37.2
+        },
+        "2026-03": {
+          "pnl": -6.04,
+          "r": -9.35,
+          "trades": 298,
+          "wins": 133,
+          "winRate": 44.6
+        },
+        "2026-04": {
+          "pnl": -61.07,
+          "r": -46.898,
+          "trades": 294,
+          "wins": 114,
+          "winRate": 38.8
+        },
+        "2026-05": {
+          "pnl": -8.41,
+          "r": -16.08,
+          "trades": 286,
+          "wins": 116,
+          "winRate": 40.6
+        },
+        "2026-06": {
+          "pnl": -76.53,
+          "r": -44.198,
+          "trades": 285,
+          "wins": 101,
+          "winRate": 35.4
+        }
+      }
+    }
+  },
+  "qualifiedCount": 1,
+  "leaderboard": [
+    {
+      "config": {
+        "method": "scoring-gated",
+        "objectiveMode": "direction",
+        "rankByScore": true,
+        "minSignalScore": 3,
+        "useM15Gate": true,
+        "minM15Trend": 1,
+        "useH1Gate": true,
+        "minH1Trend": 3,
+        "useH4Gate": false,
+        "minH4Trend": 2,
+        "useSetupGate": false,
+        "minSetupScore": 3,
+        "useTriggerGate": false,
+        "trigger": "any",
+        "wBase": 1.5,
+        "wM15": 1.5,
+        "wH1": 2,
+        "wH4": 1.5,
+        "wSetup": 0.5,
+        "wTrigger": 1.5,
+        "weightedThreshold": 13,
+        "sessionWindows": [
+          [
+            780,
+            1260
+          ]
+        ],
+        "minAtrPct": 0.0005,
+        "minBbWidthPct": 0.0007,
+        "minEmaDistPct": null,
+        "stopATR": 2.5,
+        "tpATR": 5,
+        "hold": 120,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "cooldown": 30,
+        "maxDaily": 4,
+        "maxTotalDaily": 12,
+        "maxPositions": 5,
+        "riskDivisor": 10
+      },
+      "metrics": {
+        "objective": 123.7092,
+        "qualified": true,
+        "startCapital": 500,
+        "finalBalance": 564.25,
+        "returnPct": 12.85,
+        "selectionFinalBalance": 559.85,
+        "selectionReturnPct": 11.97,
+        "forwardStartBalance": 559.85,
+        "forwardReturnPct": 0.79,
+        "trades": 601,
+        "entries": 601,
+        "partialExits": 0,
+        "pnl": 64.25,
+        "profitFactor": 1.136,
+        "maxDDPct": 13.6,
+        "selection": {
+          "weeks": 20,
+          "positiveWeeks": 12,
+          "positiveWeekPct": 60,
+          "medianR": 1.644,
+          "worstR": -9.576,
+          "totalR": 22.172,
+          "maxDrawdownR": 13.663
+        },
+        "holdout": {
+          "weeks": 4,
+          "positiveWeeks": 2,
+          "positiveWeekPct": 50,
+          "medianR": 0.504,
+          "worstR": -5.409,
+          "totalR": 1.804,
+          "maxDrawdownR": 5.409
+        },
+        "folds": {
+          "train": {
+            "weeks": 12,
+            "pnl": 38.96,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 58.3
+          },
+          "validation": {
+            "weeks": 8,
+            "pnl": 20.9,
+            "positiveWeeks": 5,
+            "positiveWeekPct": 62.5
+          },
+          "test": {
+            "weeks": 4,
+            "pnl": 4.41,
+            "positiveWeeks": 2,
+            "positiveWeekPct": 50
+          }
+        },
+        "selectionPrecision": {
+          "trades": 526,
+          "positiveTrades": 264,
+          "winRate": 50.2,
+          "takeProfits": 9,
+          "tpRate": 1.7,
+          "stopLosses": 55,
+          "timeExits": 462,
+          "tradesPerDay": 5.26,
+          "averagePnl": 0.114
+        },
+        "holdoutPrecision": {
+          "trades": 75,
+          "positiveTrades": 37,
+          "winRate": 49.3,
+          "takeProfits": 3,
+          "tpRate": 4,
+          "stopLosses": 10,
+          "timeExits": 62,
+          "tradesPerDay": 3.75,
+          "averagePnl": 0.059
+        },
+        "activeDayPct": 91,
+        "recent": {
+          "start": "2026-06-15T12:58:00.000Z",
+          "end": "2026-06-29T12:58:00.000Z",
+          "pnl": 16.33,
+          "profitFactor": 1.763,
+          "trades": 39,
+          "positiveTrades": 22,
+          "winRate": 56.4,
+          "takeProfits": 3,
+          "tpRate": 7.7,
+          "stopLosses": 3,
+          "timeExits": 33,
+          "tradesPerDay": 0.78,
+          "averagePnl": 0.419
+        },
+        "symbolStats": {
+          "EURUSD": {
+            "selection": {
+              "trades": 108,
+              "positiveTrades": 57,
+              "winRate": 52.8,
+              "takeProfits": 2,
+              "tpRate": 1.9,
+              "stopLosses": 14,
+              "timeExits": 92,
+              "tradesPerDay": 1.08,
+              "averagePnl": 0.232
+            },
+            "holdout": {
+              "trades": 19,
+              "positiveTrades": 9,
+              "winRate": 47.4,
+              "takeProfits": 1,
+              "tpRate": 5.3,
+              "stopLosses": 4,
+              "timeExits": 14,
+              "tradesPerDay": 0.95,
+              "averagePnl": 0.16
+            },
+            "selectionR": 9.128,
+            "holdoutR": 1.178,
+            "pnl": 28.1
+          },
+          "GBPUSD": {
+            "selection": {
+              "trades": 119,
+              "positiveTrades": 57,
+              "winRate": 47.9,
+              "takeProfits": 2,
+              "tpRate": 1.7,
+              "stopLosses": 16,
+              "timeExits": 101,
+              "tradesPerDay": 1.19,
+              "averagePnl": 0.094
+            },
+            "holdout": {
+              "trades": 19,
+              "positiveTrades": 8,
+              "winRate": 42.1,
+              "takeProfits": 1,
+              "tpRate": 5.3,
+              "stopLosses": 2,
+              "timeExits": 16,
+              "tradesPerDay": 0.95,
+              "averagePnl": 0.012
+            },
+            "selectionR": 2.944,
+            "holdoutR": 0.813,
+            "pnl": 11.38
+          },
+          "EURGBP": {
+            "selection": {
+              "trades": 62,
+              "positiveTrades": 27,
+              "winRate": 43.5,
+              "takeProfits": 1,
+              "tpRate": 1.6,
+              "stopLosses": 5,
+              "timeExits": 56,
+              "tradesPerDay": 0.62,
+              "averagePnl": -0.237
+            },
+            "holdout": {
+              "trades": 2,
+              "positiveTrades": 2,
+              "winRate": 100,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 2,
+              "tradesPerDay": 0.1,
+              "averagePnl": 0.173
+            },
+            "selectionR": -5.294,
+            "holdoutR": 0.165,
+            "pnl": -14.37
+          },
+          "AUDUSD": {
+            "selection": {
+              "trades": 146,
+              "positiveTrades": 81,
+              "winRate": 55.5,
+              "takeProfits": 1,
+              "tpRate": 0.7,
+              "stopLosses": 11,
+              "timeExits": 134,
+              "tradesPerDay": 1.46,
+              "averagePnl": 0.283
+            },
+            "holdout": {
+              "trades": 18,
+              "positiveTrades": 11,
+              "winRate": 61.1,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 1,
+              "timeExits": 17,
+              "tradesPerDay": 0.9,
+              "averagePnl": 0.206
+            },
+            "selectionR": 13.736,
+            "holdoutR": 0.645,
+            "pnl": 44.95
+          },
+          "USDCAD": {
+            "selection": {
+              "trades": 91,
+              "positiveTrades": 42,
+              "winRate": 46.2,
+              "takeProfits": 3,
+              "tpRate": 3.3,
+              "stopLosses": 9,
+              "timeExits": 79,
+              "tradesPerDay": 0.91,
+              "averagePnl": -0.032
+            },
+            "holdout": {
+              "trades": 17,
+              "positiveTrades": 7,
+              "winRate": 41.2,
+              "takeProfits": 1,
+              "tpRate": 5.9,
+              "stopLosses": 3,
+              "timeExits": 13,
+              "tradesPerDay": 0.85,
+              "averagePnl": -0.171
+            },
+            "selectionR": 1.658,
+            "holdoutR": -0.997,
+            "pnl": -5.81
+          }
+        },
+        "sessionStats": {
+          "overlap": {
+            "trades": 386,
+            "pnl": 4.5,
+            "r": 7.574
+          },
+          "newYork": {
+            "trades": 215,
+            "pnl": 59.75,
+            "r": 16.402
+          }
+        },
+        "regimeStats": {
+          "base": {
+            "trades": 601,
+            "pnl": 64.25,
+            "r": 23.976
+          }
+        },
+        "bestSelectionWeek": {
+          "week": "2026-W05",
+          "r": 10.624,
+          "pnl": 45.94
+        },
+        "bestWeek": {
+          "week": "2026-W05",
+          "r": 10.624,
+          "pnl": 45.94
+        },
+        "daily": [
+          {
+            "day": "2026-01-16",
+            "pnl": -0.61,
+            "r": -0.136,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-01-19",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-01-20",
+            "pnl": -2.5,
+            "r": -0.969,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-01-21",
+            "pnl": -10.63,
+            "r": -3.972,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-01-22",
+            "pnl": 4.73,
+            "r": 1.863,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-01-23",
+            "pnl": 19.23,
+            "r": 6.693,
+            "entries": 10,
+            "closes": 8
+          },
+          {
+            "day": "2026-01-26",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-01-27",
+            "pnl": 24.74,
+            "r": 6.486,
+            "entries": 12,
+            "closes": 12
+          },
+          {
+            "day": "2026-01-28",
+            "pnl": 0.45,
+            "r": 0.692,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-01-29",
+            "pnl": -2.21,
+            "r": -0.328,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-01-30",
+            "pnl": 22.95,
+            "r": 3.775,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-02-02",
+            "pnl": 1.4,
+            "r": 0.549,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-02-03",
+            "pnl": -5.22,
+            "r": -0.447,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-02-04",
+            "pnl": -5.01,
+            "r": -1.699,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-02-05",
+            "pnl": 5.16,
+            "r": 1.627,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-02-06",
+            "pnl": 9.02,
+            "r": 2.585,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-02-09",
+            "pnl": 1.5,
+            "r": 0.58,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-02-10",
+            "pnl": 5.23,
+            "r": 2.217,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-02-11",
+            "pnl": -10.2,
+            "r": -2.016,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-02-12",
+            "pnl": -5.84,
+            "r": -2.631,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-02-13",
+            "pnl": -3.83,
+            "r": -0.836,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-02-16",
+            "pnl": -1.38,
+            "r": -0.453,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-02-17",
+            "pnl": -7.29,
+            "r": -1.582,
+            "entries": 12,
+            "closes": 12
+          },
+          {
+            "day": "2026-02-18",
+            "pnl": 11.57,
+            "r": 4.042,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-02-19",
+            "pnl": 0,
+            "r": 0.096,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-02-20",
+            "pnl": -0.96,
+            "r": -0.46,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-02-23",
+            "pnl": 3.71,
+            "r": 0.786,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-02-24",
+            "pnl": -5.67,
+            "r": -2.502,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-02-25",
+            "pnl": -1.63,
+            "r": -0.863,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-02-26",
+            "pnl": 0.66,
+            "r": 0.516,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-02-27",
+            "pnl": -2.97,
+            "r": 0.053,
+            "entries": 9,
+            "closes": 8
+          },
+          {
+            "day": "2026-03-02",
+            "pnl": -6.67,
+            "r": -0.729,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-03-03",
+            "pnl": -18.46,
+            "r": -3.578,
+            "entries": 11,
+            "closes": 11
+          },
+          {
+            "day": "2026-03-04",
+            "pnl": 1.29,
+            "r": 0.427,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-03-05",
+            "pnl": -6.73,
+            "r": -2.154,
+            "entries": 12,
+            "closes": 12
+          },
+          {
+            "day": "2026-03-06",
+            "pnl": -8.53,
+            "r": -2.863,
+            "entries": 9,
+            "closes": 8
+          },
+          {
+            "day": "2026-03-09",
+            "pnl": -3.39,
+            "r": -1.254,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-03-10",
+            "pnl": 1.91,
+            "r": -0.588,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-03-11",
+            "pnl": -0.13,
+            "r": 0.059,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-03-12",
+            "pnl": -1.35,
+            "r": -0.41,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-03-13",
+            "pnl": 23.99,
+            "r": 5.613,
+            "entries": 12,
+            "closes": 9
+          },
+          {
+            "day": "2026-03-16",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-03-17",
+            "pnl": -1.3,
+            "r": -0.34,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-03-18",
+            "pnl": 14.17,
+            "r": 3.184,
+            "entries": 10,
+            "closes": 10
+          },
+          {
+            "day": "2026-03-19",
+            "pnl": 3.09,
+            "r": 1.268,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-03-20",
+            "pnl": 0.81,
+            "r": -0.603,
+            "entries": 6,
+            "closes": 4
+          },
+          {
+            "day": "2026-03-23",
+            "pnl": -9.9,
+            "r": -1.04,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-03-24",
+            "pnl": -12.94,
+            "r": -1.995,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-03-25",
+            "pnl": -3.99,
+            "r": -0.735,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-03-26",
+            "pnl": 6.31,
+            "r": 1.09,
+            "entries": 11,
+            "closes": 11
+          },
+          {
+            "day": "2026-03-27",
+            "pnl": 3.36,
+            "r": 0.899,
+            "entries": 4,
+            "closes": 2
+          },
+          {
+            "day": "2026-03-30",
+            "pnl": 5.44,
+            "r": 1.65,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-03-31",
+            "pnl": -2.9,
+            "r": -0.803,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-04-01",
+            "pnl": 3.02,
+            "r": 0.999,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-04-02",
+            "pnl": -4.55,
+            "r": -1.063,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-04-03",
+            "pnl": 2.2,
+            "r": 1.019,
+            "entries": 3,
+            "closes": 2
+          },
+          {
+            "day": "2026-04-06",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-04-07",
+            "pnl": 6.55,
+            "r": 1.704,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-04-08",
+            "pnl": -8.69,
+            "r": -2.351,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-04-09",
+            "pnl": -0.89,
+            "r": 0.558,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-04-10",
+            "pnl": -0.04,
+            "r": 0.176,
+            "entries": 6,
+            "closes": 5
+          },
+          {
+            "day": "2026-04-13",
+            "pnl": 13.97,
+            "r": 4.186,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-04-14",
+            "pnl": -1.93,
+            "r": -1.204,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-04-15",
+            "pnl": 1.27,
+            "r": 0.41,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-04-16",
+            "pnl": -0.79,
+            "r": -0.311,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-04-17",
+            "pnl": -18.83,
+            "r": -5.891,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-04-20",
+            "pnl": 5.5,
+            "r": 2.537,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-04-21",
+            "pnl": 12.72,
+            "r": 4.436,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-04-22",
+            "pnl": -0.81,
+            "r": -0.276,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-04-23",
+            "pnl": -9.98,
+            "r": -3.215,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-04-24",
+            "pnl": 1.07,
+            "r": 0.298,
+            "entries": 2,
+            "closes": 1
+          },
+          {
+            "day": "2026-04-27",
+            "pnl": 1.51,
+            "r": 0.535,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-04-28",
+            "pnl": -1.19,
+            "r": -0.361,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-04-29",
+            "pnl": 12.93,
+            "r": 3.809,
+            "entries": 10,
+            "closes": 10
+          },
+          {
+            "day": "2026-04-30",
+            "pnl": 7.29,
+            "r": 3.145,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-05-01",
+            "pnl": -4.25,
+            "r": -1.092,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-05-04",
+            "pnl": 8.14,
+            "r": 2.618,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-05-05",
+            "pnl": -1.14,
+            "r": -0.48,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-05-06",
+            "pnl": 1.17,
+            "r": 0.272,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-05-07",
+            "pnl": -0.55,
+            "r": -0.793,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-05-08",
+            "pnl": -0.46,
+            "r": -0.317,
+            "entries": 7,
+            "closes": 5
+          },
+          {
+            "day": "2026-05-11",
+            "pnl": -2.47,
+            "r": -1.385,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-05-12",
+            "pnl": -3.93,
+            "r": -1.106,
+            "entries": 8,
+            "closes": 8
+          },
+          {
+            "day": "2026-05-13",
+            "pnl": 1.19,
+            "r": 0.516,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-05-14",
+            "pnl": 11.68,
+            "r": 4.472,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-05-15",
+            "pnl": 1.25,
+            "r": 0.51,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-05-18",
+            "pnl": 1.5,
+            "r": 0.765,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-05-19",
+            "pnl": 1.34,
+            "r": 0.498,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-05-20",
+            "pnl": -1.05,
+            "r": -0.724,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-05-21",
+            "pnl": -9.15,
+            "r": -2.703,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-05-22",
+            "pnl": 3.15,
+            "r": 1.272,
+            "entries": 4,
+            "closes": 4
+          },
+          {
+            "day": "2026-05-25",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-05-26",
+            "pnl": 3.07,
+            "r": 1.59,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-05-27",
+            "pnl": 2.07,
+            "r": 0.791,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-05-28",
+            "pnl": 0.48,
+            "r": 0.182,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-05-29",
+            "pnl": -3.31,
+            "r": -1.538,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-06-01",
+            "pnl": -7.32,
+            "r": -2.601,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-06-02",
+            "pnl": -2.48,
+            "r": -0.978,
+            "entries": 2,
+            "closes": 2
+          },
+          {
+            "day": "2026-06-03",
+            "pnl": -0.28,
+            "r": -0.303,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-06-04",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-06-05",
+            "pnl": 9.39,
+            "r": 2.09,
+            "entries": 8,
+            "closes": 5
+          },
+          {
+            "day": "2026-06-08",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-06-09",
+            "pnl": 0.53,
+            "r": 0.11,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-06-10",
+            "pnl": -0.05,
+            "r": -0.51,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-06-11",
+            "pnl": -19.37,
+            "r": -4.957,
+            "entries": 10,
+            "closes": 10
+          },
+          {
+            "day": "2026-06-12",
+            "pnl": -0.12,
+            "r": -0.053,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-06-15",
+            "pnl": 0.79,
+            "r": 0.407,
+            "entries": 1,
+            "closes": 1
+          },
+          {
+            "day": "2026-06-16",
+            "pnl": 3.05,
+            "r": 1.521,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-06-17",
+            "pnl": 10.01,
+            "r": 4.416,
+            "entries": 9,
+            "closes": 9
+          },
+          {
+            "day": "2026-06-18",
+            "pnl": 4.31,
+            "r": 1.306,
+            "entries": 5,
+            "closes": 5
+          },
+          {
+            "day": "2026-06-19",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          },
+          {
+            "day": "2026-06-22",
+            "pnl": -0.67,
+            "r": -0.238,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-06-23",
+            "pnl": 4.23,
+            "r": 1.399,
+            "entries": 7,
+            "closes": 7
+          },
+          {
+            "day": "2026-06-24",
+            "pnl": -2.75,
+            "r": -0.904,
+            "entries": 6,
+            "closes": 6
+          },
+          {
+            "day": "2026-06-25",
+            "pnl": -2.25,
+            "r": -0.684,
+            "entries": 3,
+            "closes": 3
+          },
+          {
+            "day": "2026-06-26",
+            "pnl": -2.11,
+            "r": -1.111,
+            "entries": 2,
+            "closes": 1
+          },
+          {
+            "day": "2026-06-29",
+            "pnl": 0,
+            "r": 0,
+            "entries": 0,
+            "closes": 0
+          }
+        ],
+        "weekly": [
+          {
+            "week": "2026-W03",
+            "r": -0.136,
+            "pnl": -0.61
+          },
+          {
+            "week": "2026-W04",
+            "r": 6.518,
+            "pnl": 21.73
+          },
+          {
+            "week": "2026-W05",
+            "r": 10.624,
+            "pnl": 45.94
+          },
+          {
+            "week": "2026-W06",
+            "r": 2.615,
+            "pnl": 5.35
+          },
+          {
+            "week": "2026-W07",
+            "r": -2.687,
+            "pnl": -13.14
+          },
+          {
+            "week": "2026-W08",
+            "r": 1.644,
+            "pnl": 1.94
+          },
+          {
+            "week": "2026-W09",
+            "r": -3.045,
+            "pnl": -9.75
+          },
+          {
+            "week": "2026-W10",
+            "r": -9.576,
+            "pnl": -41.48
+          },
+          {
+            "week": "2026-W11",
+            "r": 2.366,
+            "pnl": 17.05
+          },
+          {
+            "week": "2026-W12",
+            "r": 4.755,
+            "pnl": 23.22
+          },
+          {
+            "week": "2026-W13",
+            "r": -1.49,
+            "pnl": -16.03
+          },
+          {
+            "week": "2026-W14",
+            "r": 2.485,
+            "pnl": 4.74
+          },
+          {
+            "week": "2026-W15",
+            "r": -0.977,
+            "pnl": -5.5
+          },
+          {
+            "week": "2026-W16",
+            "r": -2.81,
+            "pnl": -6.32
+          },
+          {
+            "week": "2026-W17",
+            "r": 2.711,
+            "pnl": 6.29
+          },
+          {
+            "week": "2026-W18",
+            "r": 6.035,
+            "pnl": 16.29
+          },
+          {
+            "week": "2026-W19",
+            "r": 0.002,
+            "pnl": 4.31
+          },
+          {
+            "week": "2026-W20",
+            "r": 3.007,
+            "pnl": 7.73
+          },
+          {
+            "week": "2026-W21",
+            "r": -0.893,
+            "pnl": -4.21
+          },
+          {
+            "week": "2026-W22",
+            "r": 1.024,
+            "pnl": 2.31
+          },
+          {
+            "week": "2026-W23",
+            "r": 0.504,
+            "pnl": 7.08
+          },
+          {
+            "week": "2026-W24",
+            "r": -5.409,
+            "pnl": -19
+          },
+          {
+            "week": "2026-W25",
+            "r": 7.649,
+            "pnl": 18.16
+          },
+          {
+            "week": "2026-W26",
+            "r": -0.94,
+            "pnl": -1.83
+          }
+        ],
+        "monthly": {
+          "2026-01": {
+            "pnl": 67.06,
+            "r": 17.006,
+            "trades": 64,
+            "wins": 40,
+            "winRate": 62.5
+          },
+          "2026-02": {
+            "pnl": -11.76,
+            "r": -0.439,
+            "trades": 117,
+            "wins": 60,
+            "winRate": 51.3
+          },
+          "2026-03": {
+            "pnl": -18.55,
+            "r": -4.132,
+            "trades": 137,
+            "wins": 63,
+            "winRate": 46
+          },
+          "2026-04": {
+            "pnl": 17.21,
+            "r": 7.688,
+            "trades": 115,
+            "wins": 55,
+            "winRate": 47.8
+          },
+          "2026-05": {
+            "pnl": 5.89,
+            "r": 2.049,
+            "trades": 93,
+            "wins": 46,
+            "winRate": 49.5
+          },
+          "2026-06": {
+            "pnl": 4.41,
+            "r": 1.804,
+            "trades": 75,
+            "wins": 37,
+            "winRate": 49.3
+          }
+        }
+      }
+    }
+  ]
+}

@@ -19,7 +19,6 @@ export const RISK = {
     DAILY_FORCED_CLOSE_UTC: true,
     DAILY_LAST_ENTRY_MINUTE_UTC: 23 * 60 + 30,
     DAILY_CLOSE_MINUTE_UTC: 23 * 60 + 50,
-    WEEKEND_FLAT: true,
     FRIDAY_LAST_ENTRY_HOUR_UTC: 18,
     FRIDAY_CLOSE_HOUR_UTC: 20,
 };
@@ -92,32 +91,26 @@ export const SESSIONS = {
 
 export const PROFILES = {
     GBPJPY: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["SYDNEY", "TOKYO", "LONDON", "NY"],
     },
     GBPAUD: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["SYDNEY", "TOKYO", "LONDON", "NY"],
     },
     EURAUD: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["SYDNEY", "TOKYO", "LONDON"],
     },
     GBPUSD: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["LONDON", "NY"],
     },
     EURJPY: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["TOKYO", "NY"],
     },
     AUDJPY: {
-        ...BEST_ADAPTIVE_HLLH_PROFILE,
         enabled: true,
         sessions: ["TOKYO", "LONDON", "NY"],
     },

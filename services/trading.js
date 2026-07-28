@@ -22,9 +22,7 @@ class TradingService {
         this.openTrades = [];
         this.accountBalance = 0;
         this.availableMargin = 0;
-        this.dailyLoss = 0;
-        this.dailyLossLimitPct = 0.05;
-        this.executedHllhSignals = new Set();
+
         this.quotePerEurCache = new Map();
     }
 
@@ -135,8 +133,9 @@ class TradingService {
                 return;
             }
 
-            const m15Bars = (candles?.m15Candles || []).slice(0, -1);
-            const primary = shouldEnter({ bars: m15Bars, symbol, profile });
+            // const m15Bars = (candles?.m15Candles || []).slice(0, -1);
+            // const primary = shouldEnter({ bars: m15Bars, symbol, profile });
+            const primary = getSignal({ symbol, indicators, candles });
 
             let { signal, reason = "" } = primary;
 
@@ -411,8 +410,7 @@ class TradingService {
             const direction = this.normalizeDirection(signal);
             const riskDistance = Math.abs(price - stopLossPrice);
             const safetyTakeProfitR = Number(profile?.safetyTakeProfitR ?? profile?.takeProfitR ?? 20);
-            const takeProfitPrice =
-                direction === "BUY" ? price + riskDistance * safetyTakeProfitR : price - riskDistance * safetyTakeProfitR;
+            const takeProfitPrice = direction === "BUY" ? price + riskDistance * safetyTakeProfitR : price - riskDistance * safetyTakeProfitR;
 
             const hasValidLevels =
                 Number.isFinite(stopLossPrice) &&
