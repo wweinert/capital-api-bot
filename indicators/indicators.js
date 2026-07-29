@@ -45,6 +45,8 @@ export async function calcIndicators(bars) {
     const ema9 = last(EMA.calculate({ period: 9, values: closes }));
     const ema20 = last(EMA.calculate({ period: 20, values: closes }));
     const ema50 = last(EMA.calculate({ period: 50, values: closes }));
+    const emaFast = last(EMA.calculate({ period: 50, values: closes }));
+    const emaSlow = last(EMA.calculate({ period: 200, values: closes }));
 
     const rsiSeries = RSI.calculate({ period: RSI_PERIOD, values: closes });
     const rsi = last(rsiSeries);
@@ -85,9 +87,7 @@ export async function calcIndicators(bars) {
     const price_vs_ema9 = Number.isFinite(lastClose) && Number.isFinite(ema9) && ema9 !== 0 ? (lastClose - ema9) / ema9 : null;
     const atrPct = Number.isFinite(atr) && Number.isFinite(lastClose) && lastClose !== 0 ? atr / lastClose : null;
     const bbWidth =
-        Number.isFinite(bb?.upper) && Number.isFinite(bb?.lower) && Number.isFinite(bb?.middle) && bb.middle !== 0
-            ? (bb.upper - bb.lower) / bb.middle
-            : null;
+        Number.isFinite(bb?.upper) && Number.isFinite(bb?.lower) && Number.isFinite(bb?.middle) && bb.middle !== 0 ? (bb.upper - bb.lower) / bb.middle : null;
     const ema20_50_spreadPct = Number.isFinite(ema20) && Number.isFinite(ema50) && ema50 !== 0 ? (ema20 - ema50) / ema50 : null;
     const adxSlope = Number.isFinite(adxValue) && Number.isFinite(adxPrevValue) ? adxValue - adxPrevValue : null;
     const macdHistSlope = Number.isFinite(macdHist) && Number.isFinite(macdHistPrev) ? macdHist - macdHistPrev : null;
@@ -98,6 +98,8 @@ export async function calcIndicators(bars) {
         ema9: Number.isFinite(ema9) ? ema9 : null,
         ema20: Number.isFinite(ema20) ? ema20 : null,
         ema50: Number.isFinite(ema50) ? ema50 : null,
+        emaFast: Number.isFinite(emaFast) ? emaFast : null,
+        emaSlow: Number.isFinite(emaSlow) ? emaSlow : null,
         price_vs_ema9,
         bb: bb ?? null,
         lastClose: Number.isFinite(lastClose) ? lastClose : null,

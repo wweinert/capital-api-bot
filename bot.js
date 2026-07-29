@@ -5,7 +5,7 @@ import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { getNewsStatus } from "./utils/newsChecker.js";
-import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startPriceMonitor, startWebSocket } from "./bot/monitors.js";
+import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./bot/monitors.js";
 
 const { TIMEFRAMES } = ANALYSIS;
 const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
@@ -28,7 +28,7 @@ class TradingBot {
         this.monitorInProgress = false; // Prevent overlapping monitor runs
         this.priceMonitorInProgress = false;
         this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
-        this.maxCandleHistory = 200; // Rolling window size for indicators
+        this.maxCandleHistory = 201; // Rolling window size for indicators
         this.openedPositions = {}; // Track opened positions
         this.MONITOR_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
         this.openedBrockerDealIds = [];
@@ -71,7 +71,6 @@ class TradingBot {
             this.startSessionPing();
             this.startAnalysisInterval();
             this.startMonitorOpenTrades();
-            this.startPriceMonitor();
             this.isRunning = true;
         } catch (error) {
             logger.error("[bot.js][Bot] Error starting live trading:", error);
@@ -176,23 +175,32 @@ class TradingBot {
 
     async analyzeAllSymbols() {
         this.activeSymbols = await this.getActiveSymbols();
-        for (const symbol of this.activeSymbols) {
-            await this.analyzeSymbol(symbol);
-            await this.delay(2000);
+
+        const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol, TIMEFRAMES, this.maxCandleHistory)));
+
+        for (let i = 0; i < this.activeSymbols.length; i++) {
+            await this.analyzeSymbol(this.activeSymbols[i], allCandles[i]);
         }
     }
 
     async fetchAllCandles(symbol, timeframes, historyLength) {
         try {
-            const h1Data = await getHistorical(symbol, timeframes.H1, historyLength);
-            await this.delay(400);
-            const m15Data = await getHistorical(symbol, timeframes.M15, historyLength);
-            await this.delay(400);
-            const m5Data = await getHistorical(symbol, timeframes.M5, historyLength);
-            await this.delay(400);
-            const m1Data = await getHistorical(symbol, timeframes.M1, historyLength);
-            logger.debug(`[CandleFetch] ${symbol}: fetched ${timeframes.H1}, ${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
-            return { d1Data: { prices: [] }, h4Data: { prices: [] }, h1Data, m15Data, m5Data, m1Data };
+            const [h1Data, m15Data, m5Data, m1Data] = await Promise.all([
+                getHistorical(symbol, timeframes.H1, historyLength),
+                getHistorical(symbol, timeframes.M15, historyLength),
+                getHistorical(symbol, timeframes.M5, historyLength),
+                getHistorical(symbol, timeframes.M1, historyLength),
+            ]);
+            logger.debug(`[CandleFetch] ${symbol}: fetched ${timeframes.H1}, ` + `${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
+
+            return {
+                d1Data: { prices: [] },
+                h4Data: { prices: [] },
+                h1Data,
+                m15Data,
+                m5Data,
+                m1Data,
+            };
         } catch (error) {
             logger.error(`[CandleFetch] Error fetching candles for ${symbol}: ${error.message}`);
             return {};
@@ -200,10 +208,10 @@ class TradingBot {
     }
 
     // Analyzes a single symbol: fetches data, calculates indicators, and triggers trading logic.
-    async analyzeSymbol(symbol) {
+    async analyzeSymbol(symbol, candleData) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
 
-        const { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data } = await this.fetchAllCandles(symbol, TIMEFRAMES, this.maxCandleHistory);
+        const { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data } = candleData;
 
         if (!d1Data?.prices || !h4Data?.prices || !h1Data?.prices || !m15Data?.prices || !m5Data?.prices || !m1Data?.prices) {
             logger.warn(`[bot.js][analyzeSymbol] Missing candle data for ${symbol}, skipping analysis.`);
@@ -252,10 +260,6 @@ class TradingBot {
         clearInterval(this.sessionRefreshInterval);
         clearInterval(this.sessionPingInterval);
         clearInterval(this.monitorInterval);
-    }
-
-    startPriceMonitor() {
-        return startPriceMonitor(this);
     }
 
     async startMonitorOpenTrades() {

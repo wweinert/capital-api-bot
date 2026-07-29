@@ -13,7 +13,7 @@ export const API = {
 
 export const RISK = {
     PER_TRADE: 0.03, // HLLH approved candidate: 3% risk per trade
-    MAX_POSITIONS: 1, // HLLH approved candidate: max 1 simultaneous positions
+    MAX_POSITIONS: 5, // HLLH approved candidate: max 5 simultaneous positions
     MARGIN_RESERVE_PCT: 0.7, // Used margin budget; split across MAX_POSITIONS by positionSize
     MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
     DAILY_FORCED_CLOSE_UTC: true,
@@ -21,6 +21,7 @@ export const RISK = {
     DAILY_CLOSE_MINUTE_UTC: 23 * 60 + 50,
     FRIDAY_LAST_ENTRY_HOUR_UTC: 18,
     FRIDAY_CLOSE_HOUR_UTC: 20,
+    REQUIRED_SCORE: 3, // Minimum score for trade entry; 3 = all 3 conditions met (trend, entry, risk)
 };
 
 const TIMEFRAMES = {

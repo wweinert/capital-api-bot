@@ -5,6 +5,32 @@ import logger from "./utils/logger.js";
 let cst, xsecurity;
 let sessionStartTime = Date.now();
 
+const MAX_GET_REQUESTS_PER_SECOND = 8;
+const requestStarts = [];
+
+async function acquireGetSlot() {
+    while (true) {
+        const now = Date.now();
+
+        while (requestStarts.length && now - requestStarts[0] >= 1000) {
+            requestStarts.shift();
+        }
+
+        if (requestStarts.length < MAX_GET_REQUESTS_PER_SECOND) {
+            requestStarts.push(now);
+            return;
+        }
+
+        const waitMs = Math.max(1, 1000 - (now - requestStarts[0]) + 10);
+        await delay(waitMs);
+    }
+}
+
+async function apiGet(url, options = {}) {
+    await acquireGetSlot();
+    return axios.get(url, options);
+}
+
 function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -64,7 +90,7 @@ export const startSession = async () => {
 
 export const pingSession = async () => {
     try {
-        const response = await axios.get(`${API.BASE_URL}/ping`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/ping`, { headers: getHeaders() });
         logger.info(`[API] Ping response: ${JSON.stringify(response.data)}`);
         logger.info(`[API] securityToken: ${xsecurity}`);
         logger.info(`[API] CST: ${cst}`);
@@ -77,7 +103,7 @@ export const pingSession = async () => {
 export const refreshSession = async () => {
     if (Date.now() - sessionStartTime < 8.5 * 60 * 1000) return;
     try {
-        const response = await axios.get(`${API.BASE_URL}/session`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/session`, { headers: getHeaders() });
         cst = response.headers["cst"];
         xsecurity = response.headers["x-security-token"];
         sessionStartTime = Date.now();
@@ -90,7 +116,7 @@ export const refreshSession = async () => {
 
 export const getSessionDetails = async () => {
     try {
-        const response = await axios.get(`${API.BASE_URL}/session`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/session`, { headers: getHeaders() });
         logger.info(`[API] Session details: ${JSON.stringify(response.data)}`);
     } catch (error) {
         logger.error("[api.js][API] Session details error:", error.response?.data || error.message);
@@ -127,19 +153,19 @@ async function apiPost(path, payload) {
 
 export const getAccountInfo = async () =>
     withSessionRetry(async () => {
-        const response = await axios.get(`${API.BASE_URL}/accounts`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/accounts`, { headers: getHeaders() });
         return response.data;
     });
 
 export const getMarkets = async () =>
     withSessionRetry(async () => {
-        const response = await axios.get(`${API.BASE_URL}/markets?searchTerm=EURUSD`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/markets?searchTerm=EURUSD`, { headers: getHeaders() });
         return Array.isArray(response.data.markets) ? response.data.markets : [];
     });
 
 export async function getMarketDetails(symbol) {
     return await withSessionRetry(async () => {
-        const response = await axios.get(`${API.BASE_URL}/markets/${symbol}`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/markets/${symbol}`, { headers: getHeaders() });
         // logger.info(`Market details for ${symbol}: ${JSON.stringify(response.data)}`);
         return response.data;
     });
@@ -147,7 +173,7 @@ export async function getMarketDetails(symbol) {
 
 export const getOpenPositions = async () =>
     withSessionRetry(async () => {
-        const response = await axios.get(`${API.BASE_URL}/positions`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/positions`, { headers: getHeaders() });
         // logger.info("<========= open positions =========>\n" + JSON.stringify(response.data, null, 2) + "\n\n");
         return response.data;
     });
@@ -157,7 +183,7 @@ export async function getHistorical(symbol, resolution, count) {
     const maxAttempts = 3;
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
-            const response = await axios.get(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
+            const response = await apiGet(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
             return {
                 prices: response.data.prices.map((p) => ({
                     close: p.closePrice?.bid,
@@ -368,7 +394,7 @@ export async function placePosition(symbol, direction, size, price, SL, TP) {
 export async function gevtDealConfirmation(dealReference) {
     return await withSessionRetry(async () => {
         logger.info(`[API] Getting confirmation for deal: ${dealReference}`);
-        const response = await axios.get(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
         logger.info("[API] DealConfirmation", response.data);
         return response.data;
     });
@@ -378,7 +404,7 @@ export async function gevtDealConfirmation(dealReference) {
 export async function getDealConfirmation(dealReference) {
     return await withSessionRetry(async () => {
         logger.info(`[API] Getting confirmation for deal: ${dealReference}`);
-        const response = await axios.get(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
+        const response = await apiGet(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
 
         if (!response.data || !response.data.status) {
             throw new Error("Invalid deal confirmation data received");

@@ -10,7 +10,8 @@ import {
 import { RISK, ANALYSIS } from "../config.js";
 import logger from "../utils/logger.js";
 import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-import shouldEnter from "../strategies/entry.js";
+// import shouldEnter from "../strategies/entry.js";
+import Strategy from "../strategies/strategies.js";
 
 const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -91,9 +92,7 @@ class TradingService {
     async syncOpenTradesFromBroker() {
         const res = await getOpenPositions();
         const positions = Array.isArray(res?.positions) ? res.positions : [];
-        const symbols = positions.map((p) => p?.market?.epic ?? p?.position?.epic).filter(Boolean);
-
-        this.openTrades = [...new Set(symbols)];
+        this.openTrades = positions.map((p) => p?.market?.epic ?? p?.position?.epic).filter(Boolean);
     }
 
     async getPositionContext(dealId) {
@@ -135,7 +134,7 @@ class TradingService {
 
             // const m15Bars = (candles?.m15Candles || []).slice(0, -1);
             // const primary = shouldEnter({ bars: m15Bars, symbol, profile });
-            const primary = getSignal({ symbol, indicators, candles });
+            const primary = Strategy.getSignal({ symbol, indicators, candles });
 
             let { signal, reason = "" } = primary;
 
