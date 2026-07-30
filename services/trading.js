@@ -155,7 +155,7 @@ class TradingService {
             };
             const toLastClosedCandle = (series = []) => {
                 if (!Array.isArray(series) || series.length === 0) return null;
-                const candle = series.length > 1 ? series[series.length - 2] : series[series.length - 1];
+                const candle = series[series.length - 1];
                 return {
                     t: toIsoTimestamp(candle?.timestamp ?? candle?.snapshotTime ?? candle?.snapshotTimeUTC),
                     o: this.toNumber(candle?.open ?? candle?.openPrice?.bid ?? candle?.openPrice?.ask),
@@ -165,12 +165,12 @@ class TradingService {
                 };
             };
             const candlesSnapshot = {
-                d1: toLastClosedCandle(candles?.d1Candles),
-                h4: toLastClosedCandle(candles?.h4Candles),
-                h1: toLastClosedCandle(candles?.h1Candles),
-                m15: toLastClosedCandle(candles?.m15Candles),
-                m5: toLastClosedCandle(candles?.m5Candles),
-                m1: toLastClosedCandle(candles?.m1Candles),
+                d1: toLastClosedCandle(candles?.d1),
+                h4: toLastClosedCandle(candles?.h4),
+                h1: toLastClosedCandle(candles?.h1),
+                m15: toLastClosedCandle(candles?.m15),
+                m5: toLastClosedCandle(candles?.m5),
+                m1: toLastClosedCandle(candles?.m1),
             };
 
             await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, primary, profile);

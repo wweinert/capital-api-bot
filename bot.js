@@ -237,8 +237,14 @@ class TradingBot {
             m1Candles,
         });
 
-        const candles = { d1Candles, h4Candles, h1Candles, m15Candles, m5Candles, m1Candles };
-
+        const candles = {
+            d1: d1Candles.slice(0, -1),
+            h4: h4Candles.slice(0, -1),
+            h1: h1Candles.slice(0, -1),
+            m15: m15Candles.slice(0, -1),
+            m5: m5Candles.slice(0, -1),
+            m1: m1Candles.slice(0, -1),
+        };
         // --- Fetch real-time bid/ask ---
         const { bid, ask } = await this.getBidAsk(symbol);
 
