@@ -241,7 +241,7 @@ export const cancelWorkingOrder = async (dealId) =>
         return response.data;
     });
 
-export async function placeOrder({ symbol, direction, size, level, stopLevel, profitLevel, goodTillDate }) {
+export async function placeOrder({ symbol, type = "STOP", direction, size, level, stopLevel, profitLevel, goodTillDate }) {
     const rules = await getAllowedTPRange(symbol);
     const decimals = rules.decimals;
 
@@ -254,12 +254,15 @@ export async function placeOrder({ symbol, direction, size, level, stopLevel, pr
     }
 
     const isBuy = direction.toUpperCase() === "BUY";
+
     const marketPrice = isBuy ? Number(rules.market.offer) : Number(rules.market.bid);
 
-    const entryIsValid = isBuy ? entry > marketPrice : entry < marketPrice;
+    const orderType = type.toUpperCase();
+
+    const entryIsValid = orderType === "STOP" ? (isBuy ? entry > marketPrice : entry < marketPrice) : isBuy ? entry < marketPrice : entry > marketPrice;
 
     if (!entryIsValid) {
-        logger.warn(`[API] ${symbol}: STOP entry is behind market price`);
+        logger.warn(`[API] ${symbol}: ${orderType} entry is behind market price`);
         return { skipped: true };
     }
 
@@ -284,7 +287,7 @@ export async function placeOrder({ symbol, direction, size, level, stopLevel, pr
         direction: direction.toUpperCase(),
         size: Number(size),
         level: entry,
-        type: "STOP",
+        type: orderType,
         guaranteedStop: false,
         trailingStop: false,
         stopLevel: stop,
@@ -292,7 +295,7 @@ export async function placeOrder({ symbol, direction, size, level, stopLevel, pr
         goodTillDate,
     };
 
-    logger.info(`[API] Placing STOP order for ${symbol} at ${entry}`);
+    logger.info(`[API] Placing ${orderType} order for ${symbol} at ${entry}`);
 
     const response = await apiPost("/workingorders", order);
 

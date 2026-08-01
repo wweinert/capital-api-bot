@@ -1,4 +1,4 @@
-import { EMA, RSI, BollingerBands, MACD, ADX, ATR } from "technicalindicators";
+import { EMA, RSI, BollingerBands, MACD, ADX, ATR, Stochastic } from "technicalindicators";
 
 const RSI_PERIOD = 14;
 const ADX_PERIOD = 14;
@@ -51,6 +51,17 @@ export async function calcIndicators(bars) {
     const rsiSeries = RSI.calculate({ period: RSI_PERIOD, values: closes });
     const rsi = last(rsiSeries);
     const rsiPrev = rsiSeries.length > 1 ? rsiSeries[rsiSeries.length - 2] : undefined;
+
+    const stochasticSeries = Stochastic.calculate({
+        period: 14,
+        signalPeriod: 3,
+        high: highs,
+        low: lows,
+        close: closes,
+    });
+
+    const stochastic = last(stochasticSeries);
+    const stochasticPrev = stochasticSeries.length > 1 ? stochasticSeries[stochasticSeries.length - 2] : null;
 
     const bb = last(BollingerBands.calculate({ period: BB_PERIOD, stdDev: BB_STDDEV, values: closes }));
 
@@ -116,11 +127,8 @@ export async function calcIndicators(bars) {
         adxSlope,
         macdHistSlope,
         trend,
+        stochastic: stochastic ?? null,
+        stochasticPrev,
     };
 }
 
-export async function tradeWatchIndicators(bars) {
-    const closes = bars.map((b) => b.close || b.Close || b.closePrice?.bid || 0);
-    const highs = bars.map((b) => b.high || b.High || b.highPrice?.bid || 0);
-    const lows = bars.map((b) => b.low || b.Low || b.lowPrice?.bid || 0);
-}

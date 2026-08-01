@@ -206,7 +206,7 @@ class TradingService {
 
             const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= risk.cooldownMinutes * 60_000;
 
-            return currentMinute <= risk.lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
+            return currentMinute < risk.lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
         });
     }
 
@@ -449,7 +449,7 @@ class TradingService {
 
         let result;
 
-        if (entryType === "stop") {
+        if (entryType === "stop" || entryType === "limit") {
             const timeframeMinutes = {
                 M5: 5,
                 M15: 15,
@@ -462,6 +462,7 @@ class TradingService {
 
             result = await placeOrder({
                 symbol,
+                type: entryType.toUpperCase(),
                 direction: signal,
                 size: sizing.size,
                 level: entryPrice,

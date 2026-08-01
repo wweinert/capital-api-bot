@@ -116,6 +116,13 @@ class Strategy {
             return signal === "BUY" ? candle.high + buffer : candle.low - buffer;
         }
 
+        if (settings.type === "limit") {
+            const body = Math.abs(candle.close - candle.open);
+            const pullback = body * settings.pullbackRatio;
+
+            return signal === "BUY" ? candle.close - pullback : candle.close + pullback;
+        }
+
         return signal === "BUY" ? ask : bid;
     }
 
@@ -155,13 +162,19 @@ class Strategy {
             confirmationQuality = indicator.adx.adx / 25;
         }
 
+        if (settings.confirmation === "stochastic_turn" && Number.isFinite(indicator.stochastic?.k)) {
+            const k = indicator.stochastic.k;
+
+            confirmationQuality = (signal === "BUY" ? 100 - k : k) / 20;
+        }
+
         const engulfingQuality = this.getPatternSignal(previous, current, "engulfing") === signal ? 1 : 0;
 
         const closeBreakQuality = this.getPatternSignal(previous, current, "closeBreak") === signal ? 1 : 0;
 
         return confirmationQuality + engulfingQuality + closeBreakQuality + bodyRatio - spreadAtr;
     }
-    
+
     getPatternSignal(previous, current, pattern) {
         const buyFlip = previous.close < previous.open && current.close > current.open;
 
@@ -257,6 +270,17 @@ class Strategy {
             return Number.isFinite(adx) && adx >= settings.adxMin;
         }
 
+        if (settings.confirmation === "stochastic_turn") {
+            const currentK = indicator.stochastic?.k;
+            const previousK = indicator.stochasticPrev?.k;
+            const level = settings.stochasticLevel;
+
+            if (![currentK, previousK, level].every(Number.isFinite)) {
+                return false;
+            }
+
+            return signal === "BUY" ? previousK <= level && currentK > previousK : previousK >= 100 - level && currentK < previousK;
+        }
         return false;
     }
 }

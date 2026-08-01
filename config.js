@@ -12,24 +12,24 @@ export const API = {
 };
 
 export const RISK = {
-    PER_TRADE: 0.03, 
-    MAX_POSITIONS: 5, 
-    MARGIN_RESERVE_PCT: 0.7, // Used margin budget; split across MAX_POSITIONS by positionSize
-    MAX_HOLD_TIME: 24 * 60, // minutes; daily forced flat should normally close M15 trades before this fallback
+    PER_TRADE: 0.03,
+    MAX_POSITIONS: 3,
+    MARGIN_RESERVE_PCT: 0.7,
+    MAX_HOLD_TIME: 24 * 60,
     DAILY_FORCED_CLOSE_UTC: true,
-    DAILY_LAST_ENTRY_MINUTE_UTC: 23 * 60 + 30,
-    DAILY_CLOSE_MINUTE_UTC: 23 * 60 + 50,
+    DAILY_LAST_ENTRY_MINUTE_UTC: 22 * 60,
+    DAILY_CLOSE_MINUTE_UTC: 22 * 60,
     FRIDAY_LAST_ENTRY_HOUR_UTC: 18,
     FRIDAY_CLOSE_HOUR_UTC: 20,
-    REQUIRED_SCORE: 3, // Minimum score for trade entry; 3 = all 3 conditions met (trend, entry, risk)
-    WEEKEND_FLAT: true, 
+    REQUIRED_SCORE: 3,
+    WEEKEND_FLAT: true,
 };
 
 export const PORTFOLIO = {
-    MAX_POSITIONS: 5,
+    MAX_POSITIONS: 3,
     MAX_POSITIONS_PER_SYMBOL: 1,
-    MAX_DAILY_TRADES: 99,
-    MAX_DAILY_LOSS_PCT: 0.05,
+    MAX_DAILY_TRADES: 5,
+    MAX_DAILY_LOSS_PCT: 0.1,
     MAX_WEEKLY_LOSS_PCT: 0.2,
     MAX_LOSS_STREAK: 5,
 };
@@ -90,7 +90,7 @@ export const SESSIONS = {
 
 export const PROFILES = {
     AUDCAD: {
-        enabled: true,
+        enabled: false,
         signal: {
             timeframe: "H1",
             context: "h4",
@@ -125,7 +125,7 @@ export const PROFILES = {
     },
 
     AUDJPY: {
-        enabled: true,
+        enabled: false,
         signal: {
             timeframe: "H1",
             context: "h4",
@@ -315,7 +315,84 @@ export const PROFILES = {
             maxSpreadAtr: 0.3,
         },
         entry: {
-            type: "market",
+            type: "limit",
+            pullbackRatio: 0.25,
+            expiryBars: 12,
+        },
+        stop: {
+            type: "atr",
+            distanceAtr: 2,
+            minAtr: 0.5,
+            maxAtr: 4,
+        },
+        exit: {
+            trailActivationAtr: 2.5,
+            trailDistanceAtr: 1.5,
+            safetyTargetAtr: 8,
+            maxHoldMinutes: 480,
+            dailyCloseMinute: 1320,
+        },
+        risk: {
+            perTrade: 0.015,
+            maxDailyTrades: 5,
+            cooldownMinutes: 0,
+            lastEntryMinute: 1200,
+        },
+    },
+
+    EURGBP: {
+        enabled: true,
+        signal: {
+            timeframe: "M15",
+            context: "h4",
+            pattern: "flip",
+            confirmation: "none",
+            minBodyRatio: 0.25,
+            session: "london",
+            maxSpreadAtr: 0.5,
+        },
+        entry: {
+            type: "limit",
+            pullbackRatio: 0.5,
+            expiryBars: 2,
+        },
+        stop: {
+            type: "atr",
+            distanceAtr: 3,
+            minAtr: 0.25,
+            maxAtr: 4,
+        },
+        exit: {
+            trailActivationAtr: 1.5,
+            trailDistanceAtr: 1,
+            safetyTargetAtr: 10,
+            maxHoldMinutes: 480,
+            dailyCloseMinute: 1320,
+        },
+        risk: {
+            perTrade: 0.005,
+            maxDailyTrades: 1,
+            cooldownMinutes: 15,
+            lastEntryMinute: 1320,
+        },
+    },
+
+    EURUSD: {
+        enabled: true,
+        signal: {
+            timeframe: "M15",
+            context: "h1",
+            pattern: "closeBreak",
+            confirmation: "adx_strength",
+            adxMin: 10,
+            minBodyRatio: 0.5,
+            session: "all",
+            maxSpreadAtr: 0.5,
+        },
+        entry: {
+            type: "stop",
+            bufferAtr: 0.1,
+            expiryBars: 6,
         },
         stop: {
             type: "atr",
@@ -327,92 +404,19 @@ export const PROFILES = {
             trailActivationAtr: 1,
             trailDistanceAtr: 0.75,
             safetyTargetAtr: 5,
-            maxHoldMinutes: 480,
+            maxHoldMinutes: 1440,
             dailyCloseMinute: 1320,
         },
         risk: {
-            perTrade: 0.015,
-            maxDailyTrades: 2,
-            cooldownMinutes: 15,
+            perTrade: 0.03,
+            maxDailyTrades: 1,
+            cooldownMinutes: 0,
             lastEntryMinute: 1200,
         },
     },
 
-    EURGBP: {
-        enabled: true,
-        signal: {
-            timeframe: "M15",
-            context: "h1",
-            pattern: "closeBreak",
-            confirmation: "rsi_momentum",
-            rsiMomentumLevel: 50,
-            minBodyRatio: 0,
-            session: "newYork",
-            maxSpreadAtr: 0.5,
-        },
-        entry: {
-            type: "market",
-        },
-        stop: {
-            type: "swing2",
-            bufferAtr: 0.3,
-            minAtr: 0.75,
-            maxAtr: 3,
-        },
-        exit: {
-            trailActivationAtr: 3,
-            trailDistanceAtr: 3,
-            safetyTargetAtr: 5,
-            maxHoldMinutes: 120,
-            dailyCloseMinute: 1425,
-        },
-        risk: {
-            perTrade: 0.005,
-            maxDailyTrades: 1,
-            cooldownMinutes: 30,
-            lastEntryMinute: 1320,
-        },
-    },
-
-    EURUSD: {
-        enabled: true,
-        signal: {
-            timeframe: "M15",
-            context: "h1",
-            pattern: "flip",
-            confirmation: "none",
-            minBodyRatio: 0,
-            session: "asia",
-            maxSpreadAtr: 0.5,
-        },
-        entry: {
-            type: "stop",
-            bufferAtr: 0.1,
-            expiryBars: 12,
-        },
-        stop: {
-            type: "atr",
-            distanceAtr: 3,
-            minAtr: 0.5,
-            maxAtr: 4,
-        },
-        exit: {
-            trailActivationAtr: 1,
-            trailDistanceAtr: 1,
-            safetyTargetAtr: 10,
-            maxHoldMinutes: 480,
-            dailyCloseMinute: 1425,
-        },
-        risk: {
-            perTrade: 0.01,
-            maxDailyTrades: 1,
-            cooldownMinutes: 30,
-            lastEntryMinute: 1320,
-        },
-    },
-
     GBPCHF: {
-        enabled: true,
+        enabled: false,
         signal: {
             timeframe: "H1",
             context: "h4",
@@ -455,39 +459,39 @@ export const PROFILES = {
             context: "h1",
             pattern: "flip",
             confirmation: "rsi_momentum",
-            rsiMomentumLevel: 55,
-            minBodyRatio: 0.25,
+            rsiMomentumLevel: 50,
+            minBodyRatio: 0,
             session: "london",
             maxSpreadAtr: 0.5,
         },
         entry: {
             type: "stop",
             bufferAtr: 0.1,
-            expiryBars: 3,
+            expiryBars: 12,
         },
         stop: {
             type: "swing4",
             bufferAtr: 0.3,
             minAtr: 0.75,
-            maxAtr: 4,
+            maxAtr: 3,
         },
         exit: {
             trailActivationAtr: 1,
             trailDistanceAtr: 0.75,
-            safetyTargetAtr: 8,
+            safetyTargetAtr: 10,
             maxHoldMinutes: 120,
-            dailyCloseMinute: 1425,
+            dailyCloseMinute: 1320,
         },
         risk: {
             perTrade: 0.005,
             maxDailyTrades: 1,
-            cooldownMinutes: 60,
+            cooldownMinutes: 30,
             lastEntryMinute: 1320,
         },
     },
 
     GBPUSD: {
-        enabled: true,
+        enabled: false,
         signal: {
             timeframe: "M5",
             context: "h4",
@@ -536,26 +540,28 @@ export const PROFILES = {
             maxSpreadAtr: 0.3,
         },
         entry: {
-            type: "market",
+            type: "stop",
+            bufferAtr: 0.05,
+            expiryBars: 1,
         },
         stop: {
             type: "atr",
-            distanceAtr: 3,
+            distanceAtr: 2,
             minAtr: 0.5,
-            maxAtr: 4,
+            maxAtr: 3,
         },
         exit: {
             trailActivationAtr: 2,
-            trailDistanceAtr: 3,
-            safetyTargetAtr: 8,
+            trailDistanceAtr: 0.75,
+            safetyTargetAtr: 5,
             maxHoldMinutes: 240,
-            dailyCloseMinute: 1440,
+            dailyCloseMinute: 1320,
         },
         risk: {
-            perTrade: 0.02,
+            perTrade: 0.005,
             maxDailyTrades: 1,
-            cooldownMinutes: 0,
-            lastEntryMinute: 1440,
+            cooldownMinutes: 15,
+            lastEntryMinute: 1200,
         },
     },
 
@@ -565,10 +571,9 @@ export const PROFILES = {
             timeframe: "M15",
             context: "h1",
             pattern: "flip",
-            confirmation: "adx_strength",
-            adxMin: 15,
+            confirmation: "none",
             minBodyRatio: 0,
-            session: "newYork",
+            session: "overlap",
             maxSpreadAtr: 0.5,
         },
         entry: {
@@ -576,27 +581,26 @@ export const PROFILES = {
         },
         stop: {
             type: "atr",
-            distanceAtr: 2.5,
-            minAtr: 0.25,
+            distanceAtr: 3,
+            minAtr: 0.75,
             maxAtr: 4,
         },
         exit: {
-            trailActivationAtr: 1.5,
-            trailDistanceAtr: 1,
-            safetyTargetAtr: 5,
-            maxHoldMinutes: 240,
+            trailActivationAtr: 1,
+            trailDistanceAtr: 0.75,
+            safetyTargetAtr: 8,
+            maxHoldMinutes: 480,
             dailyCloseMinute: 1320,
         },
         risk: {
-            perTrade: 0.02,
+            perTrade: 0.005,
             maxDailyTrades: 1,
             cooldownMinutes: 30,
-            lastEntryMinute: 1200,
+            lastEntryMinute: 1320,
         },
     },
-
     USDJPY: {
-        enabled: true,
+        enabled: false,
         signal: {
             timeframe: "H1",
             context: "h1",
@@ -626,6 +630,82 @@ export const PROFILES = {
             perTrade: 0.03,
             maxDailyTrades: 2,
             cooldownMinutes: 60,
+            lastEntryMinute: 1200,
+        },
+    },
+
+    AUDUSD: {
+        enabled: true,
+        signal: {
+            timeframe: "M15",
+            context: "h1",
+            pattern: "flip",
+            confirmation: "stochastic_turn",
+            stochasticMode: "previousExtreme",
+            stochasticLevel: 40,
+            minBodyRatio: 0.5,
+            session: "all",
+            maxSpreadAtr: 0.2,
+        },
+        entry: {
+            type: "stop",
+            bufferAtr: 0.2,
+            expiryBars: 6,
+        },
+        stop: {
+            type: "atr",
+            distanceAtr: 2.5,
+            minAtr: 0.5,
+            maxAtr: 3,
+        },
+        exit: {
+            trailActivationAtr: 1,
+            trailDistanceAtr: 0.75,
+            safetyTargetAtr: 10,
+            maxHoldMinutes: 1440,
+            dailyCloseMinute: 1320,
+        },
+        risk: {
+            perTrade: 0.005,
+            maxDailyTrades: 1,
+            cooldownMinutes: 30,
+            lastEntryMinute: 1200,
+        },
+    },
+
+    EURAUD: {
+        enabled: true,
+        signal: {
+            timeframe: "M15",
+            context: "majority",
+            pattern: "flip",
+            confirmation: "none",
+            minBodyRatio: 0,
+            session: "overlap",
+            maxSpreadAtr: 0.5,
+        },
+        entry: {
+            type: "stop",
+            bufferAtr: 0.2,
+            expiryBars: 3,
+        },
+        stop: {
+            type: "atr",
+            distanceAtr: 3,
+            minAtr: 0.5,
+            maxAtr: 4,
+        },
+        exit: {
+            trailActivationAtr: 1,
+            trailDistanceAtr: 0.75,
+            safetyTargetAtr: 5,
+            maxHoldMinutes: 240,
+            dailyCloseMinute: 1320,
+        },
+        risk: {
+            perTrade: 0.015,
+            maxDailyTrades: 1,
+            cooldownMinutes: 15,
             lastEntryMinute: 1200,
         },
     },

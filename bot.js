@@ -195,9 +195,9 @@ class TradingBot {
         try {
             const profile = PROFILES[symbol];
             const signalTimeframe = profile.signal.timeframe;
-            const contextTimeframe = profile.signal.context.toUpperCase();
+            const contextTimeframes = profile.signal.context === "majority" ? ["H1", "H4", "D1"] : [profile.signal.context.toUpperCase()];
 
-            const timeframes = [...new Set([signalTimeframe, contextTimeframe])];
+            const timeframes = [...new Set([signalTimeframe, ...contextTimeframes])];
             const candleData = {};
 
             await Promise.all(
