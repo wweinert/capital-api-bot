@@ -1,15 +1,16 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, PROD, ANALYSIS, SESSIONS, PROFILES } from "./config.js";
+import { DEV, ANALYSIS, SESSIONS, PROFILES } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
-import { getNewsStatus } from "./utils/newsChecker.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./bot/monitors.js";
+import Strategy from "./strategies/strategies.js";
 
 const { TIMEFRAMES } = ANALYSIS;
-const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
 
+const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
+const ANALYSIS_DELAY_MS = 1 * 1000;
 class TradingBot {
     constructor() {
         this.isRunning = false;
@@ -22,22 +23,16 @@ class TradingBot {
         this.checkInterval = 15 * 1000;
         this.maxRetries = 3;
         this.retryDelay = 30000; // 30 seconds
-        this.latestCandles = {}; // Store latest candles for each symbol
-        this.candleHistory = {}; // symbol -> array of candles
         this.monitorInterval = null; // Add monitor interval for open trades
         this.monitorInProgress = false; // Prevent overlapping monitor runs
         this.priceMonitorInProgress = false;
         this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
         this.maxCandleHistory = 201; // Rolling window size for indicators
         this.openedPositions = {}; // Track opened positions
-        this.MONITOR_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+        this.MONITOR_INTERVAL_MS = 60 * 1000; // 1 minute
         this.openedBrockerDealIds = [];
         this.activeSymbols = [];
-
-        this.allowedTradingWindows = [
-            // HLLH approved candidate runs session-off on the configured symbol universe.
-            { start: 0, end: 24 * 60 - 1 },
-        ];
+        this.lastAnalyzedCandles = {};
         this.tokens = null;
     }
 
@@ -89,7 +84,6 @@ class TradingBot {
         }, this.pingInterval);
     }
 
-    // Starts the periodic analysis interval for scheduled trading logic.
     async startAnalysisInterval() {
         const runAnalysis = async () => {
             if (this.analysisInProgress) {
@@ -108,13 +102,15 @@ class TradingBot {
             }
         };
 
-        // First run: align to next M15 close + 5 seconds
+        // First run: align to the next M5 candle close + 5 seconds
         const interval = this.getInitialIntervalMs();
+
         logger.info(`[${DEV.MODE ? "DEV" : "PROD"}] Setting up analysis interval: ${interval}ms`);
 
         this.analysisStartTimeout = setTimeout(() => {
             void runAnalysis();
-            // After first run, repeat every 15 minutes
+
+            // Repeat after every M5 candle
             this.analysisInterval = setInterval(() => {
                 void runAnalysis();
             }, this.getRepeatIntervalMs());
@@ -148,115 +144,152 @@ class TradingBot {
         }
     }
 
-    async getActiveSymbols() {
-        // SESSIONS in config.js are defined in UTC (see config.js), so we must evaluate in UTC as well.
+    isProfileSessionActive(profile, currentMinutes) {
+        const sessionName = profile.signal?.session;
+        const session = SESSIONS[sessionName];
+
+        if (!session) {
+            logger.warn(`[Bot] Unknown session: ${sessionName}`);
+            return false;
+        }
+
+        return this.inSession(currentMinutes, session.START, session.END);
+    }
+
+    getActiveSymbols() {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        const session = ["LONDON", "NY", "TOKYO", "SYDNEY"].find((name) => {
-            const { START, END } = SESSIONS[name];
-            return this.inSession(currentMinutes, START, END);
-        });
+        const symbols = Object.entries(PROFILES)
+            .filter(([, profile]) => {
+                return profile.enabled && this.isProfileSessionActive(profile, currentMinutes);
+            })
+            .map(([symbol]) => symbol);
 
-        if (!session) return []; // No active session, no tradable symbols
+        logger.info(`[Bot] Tradable symbols: ${symbols.length ? symbols.join(", ") : "none"}`);
 
-        const tradableSymbols = [];
-
-        for (const [symbol, profile] of Object.entries(PROFILES)) {
-            if (!profile.enabled || !profile.sessions.includes(session)) continue;
-            if (await this.isTradingAllowed(symbol, { now, currentMinutes })) {
-                tradableSymbols.push(symbol);
-            }
-        }
-
-        logger.info(`[Bot] Tradable symbols: ${tradableSymbols.length ? tradableSymbols.join(", ") : "none"}`);
-        return tradableSymbols;
+        return symbols;
     }
 
     async analyzeAllSymbols() {
         this.activeSymbols = await this.getActiveSymbols();
 
-        const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol, TIMEFRAMES, this.maxCandleHistory)));
+        const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol)));
 
-        for (let i = 0; i < this.activeSymbols.length; i++) {
-            await this.analyzeSymbol(this.activeSymbols[i], allCandles[i]);
-        }
+        const results = await Promise.all(this.activeSymbols.map((symbol, index) => this.analyzeSymbol(symbol, allCandles[index])));
+
+        const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
+
+        logger.info(
+            `[Bot] Candidates: ${
+                candidates.length
+                    ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal} (${candidate.quality.toFixed(2)})`).join(", ")
+                    : "none"
+            }`,
+        );
+
+        return tradingService.processCandidates(candidates);
     }
 
-    async fetchAllCandles(symbol, timeframes, historyLength) {
+    async fetchAllCandles(symbol) {
         try {
-            const [h1Data, m15Data, m5Data, m1Data] = await Promise.all([
-                getHistorical(symbol, timeframes.H1, historyLength),
-                getHistorical(symbol, timeframes.M15, historyLength),
-                getHistorical(symbol, timeframes.M5, historyLength),
-                getHistorical(symbol, timeframes.M1, historyLength),
-            ]);
-            logger.debug(`[CandleFetch] ${symbol}: fetched ${timeframes.H1}, ` + `${timeframes.M15}, ${timeframes.M5}, ${timeframes.M1}`);
+            const profile = PROFILES[symbol];
+            const signalTimeframe = profile.signal.timeframe;
+            const contextTimeframe = profile.signal.context.toUpperCase();
 
-            return {
-                d1Data: { prices: [] },
-                h4Data: { prices: [] },
-                h1Data,
-                m15Data,
-                m5Data,
-                m1Data,
-            };
+            const timeframes = [...new Set([signalTimeframe, contextTimeframe])];
+            const candleData = {};
+
+            await Promise.all(
+                timeframes.map(async (tf) => {
+                    const data = await getHistorical(symbol, TIMEFRAMES[tf], this.maxCandleHistory);
+
+                    candleData[tf.toLowerCase()] = data.prices;
+                }),
+            );
+
+            return candleData;
         } catch (error) {
             logger.error(`[CandleFetch] Error fetching candles for ${symbol}: ${error.message}`);
             return {};
         }
     }
 
+    shouldAnalyzeCandle(symbol, profile, candles) {
+        const timeframe = profile.signal.timeframe.toLowerCase();
+        const signalCandles = candles[timeframe];
+
+        if (!Array.isArray(signalCandles) || signalCandles.length === 0) {
+            logger.warn(`[Bot] No ${profile.signal.timeframe} candles for ${symbol}`);
+
+            return false;
+        }
+
+        const lastCandle = signalCandles[signalCandles.length - 1];
+        const candleId = `${profile.signal.timeframe}:${lastCandle.timestamp}`;
+
+        if (this.lastAnalyzedCandles[symbol] === candleId) {
+            logger.debug(`[Bot] ${symbol}: ${candleId} already analyzed`);
+
+            return false;
+        }
+
+        this.lastAnalyzedCandles[symbol] = candleId;
+
+        return true;
+    }
+
     // Analyzes a single symbol: fetches data, calculates indicators, and triggers trading logic.
     async analyzeSymbol(symbol, candleData) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
 
-        const { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data } = candleData;
+        const profile = PROFILES[symbol];
+        const candles = {};
 
-        if (!d1Data?.prices || !h4Data?.prices || !h1Data?.prices || !m15Data?.prices || !m5Data?.prices || !m1Data?.prices) {
-            logger.warn(`[bot.js][analyzeSymbol] Missing candle data for ${symbol}, skipping analysis.`);
-            return;
+        for (const [tf, prices] of Object.entries(candleData)) {
+            if (!Array.isArray(prices) || prices.length < 2) {
+                logger.warn(`[Bot] Missing ${tf} candles for ${symbol}`);
+                return null;
+            }
+            candles[tf] = prices.slice(0, -1); // Exclude the last candle for analysis
         }
 
-        this.storeCandleHistory(symbol, { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data });
-        const { d1Candles, h4Candles, h1Candles, m15Candles, m5Candles, m1Candles } = this.getCandleHistory(symbol);
-
-        if (!d1Candles || !h4Candles || !h1Candles || !m15Candles || !m5Candles || !m1Candles) {
-            logger.error(
-                `[bot.js][analyzeSymbol] Incomplete candle data for ${symbol} ( D1: ${!!d1Candles}, H4: ${!!h4Candles}, H1: ${!!h1Candles}, M15: ${!!m15Candles}, M5: ${!!m5Candles}, M1: ${!!m1Candles} skipping analysis.`,
-            );
-            return;
+        if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
+            return null;
         }
 
-        const indicators = await this.buildIndicatorsSnapshot({
-            d1Candles,
-            h4Candles,
-            h1Candles,
-            m15Candles,
-            m5Candles,
-            m1Candles,
-        });
+        const indicators = {};
 
-        const candles = {
-            d1: d1Candles.slice(0, -1),
-            h4: h4Candles.slice(0, -1),
-            h1: h1Candles.slice(0, -1),
-            m15: m15Candles.slice(0, -1),
-            m5: m5Candles.slice(0, -1),
-            m1: m1Candles.slice(0, -1),
-        };
-        // --- Fetch real-time bid/ask ---
+        await Promise.all(
+            Object.entries(candleData).map(async ([tf, prices]) => {
+                indicators[tf] = await calcIndicators(prices);
+            }),
+        );
+
         const { bid, ask } = await this.getBidAsk(symbol);
 
-        // Pass bid/ask to trading logic
-        await tradingService.processPrice({
+        const candidate = Strategy.getSignal({
             symbol,
-            profile: PROFILES[symbol],
+            profile,
             indicators,
             candles,
             bid,
             ask,
         });
+
+        if (!candidate.signal) {
+            logger.debug(`[Bot] ${symbol}: ${candidate.reason}`);
+            return null;
+        }
+
+        return {
+            ...candidate,
+            profile,
+            indicators,
+            candles,
+            bid,
+            ask,
+        };
     }
 
     async shutdown() {
@@ -312,7 +345,23 @@ class TradingBot {
     }
 
     getInitialIntervalMs() {
-        return DEV.MODE ? DEV.INTERVAL : PROD.INTERVAL;
+        if (DEV.MODE) {
+            return DEV.INTERVAL;
+        }
+
+        const now = Date.now();
+
+        const currentCandleClose = Math.floor(now / ANALYSIS_REPEAT_MS) * ANALYSIS_REPEAT_MS;
+
+        const currentAnalysisTime = currentCandleClose + ANALYSIS_DELAY_MS;
+
+        if (currentAnalysisTime > now) {
+            return currentAnalysisTime - now;
+        }
+
+        const nextAnalysisTime = currentAnalysisTime + ANALYSIS_REPEAT_MS;
+
+        return nextAnalysisTime - now;
     }
 
     getRepeatIntervalMs() {
@@ -327,82 +376,12 @@ class TradingBot {
         };
     }
 
-    storeCandleHistory(symbol, { d1Data, h4Data, h1Data, m15Data, m5Data, m1Data }) {
-        this.candleHistory[symbol] = {
-            D1: d1Data.prices.slice(-this.maxCandleHistory) || [],
-            H4: h4Data.prices.slice(-this.maxCandleHistory) || [],
-            H1: h1Data.prices.slice(-this.maxCandleHistory) || [],
-            M15: m15Data.prices.slice(-this.maxCandleHistory) || [],
-            M5: m5Data.prices.slice(-this.maxCandleHistory) || [],
-            M1: m1Data.prices.slice(-this.maxCandleHistory) || [],
-        };
-    }
-
-    getCandleHistory(symbol) {
-        const history = this.candleHistory[symbol] || {};
-        return {
-            d1Candles: history.D1,
-            h4Candles: history.H4,
-            h1Candles: history.H1,
-            m15Candles: history.M15,
-            m5Candles: history.M5,
-            m1Candles: history.M1,
-        };
-    }
-
-    async buildIndicatorsSnapshot({ d1Candles, h4Candles, h1Candles, m15Candles, m5Candles, m1Candles }) {
-        return {
-            d1: null,
-            h4: null,
-            h1: await calcIndicators(h1Candles),
-            m15: await calcIndicators(m15Candles),
-            m5: await calcIndicators(m5Candles),
-            m1: await calcIndicators(m1Candles),
-        };
-    }
-
     inSession(currentMinutes, startMinutes, endMinutes, { inclusiveEnd = false } = {}) {
         if (!Number.isFinite(startMinutes) || !Number.isFinite(endMinutes)) return false;
         if (startMinutes < endMinutes) {
             return currentMinutes >= startMinutes && (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes);
         }
         return currentMinutes >= startMinutes || (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes); // Overnight session
-    }
-
-    async isTradingAllowed(symbol, context = {}) {
-        const now = context.now instanceof Date ? context.now : new Date();
-        const currentMinutes = Number.isFinite(context.currentMinutes) ? context.currentMinutes : now.getUTCHours() * 60 + now.getUTCMinutes();
-
-        // Check if current time is inside any allowed window
-        const allowed = this.allowedTradingWindows.some((win) => {
-            return this.inSession(currentMinutes, win.start, win.end, { inclusiveEnd: true });
-        });
-
-        if (!allowed) {
-            return false;
-        }
-
-        let news = null;
-        try {
-            news = await getNewsStatus(symbol, {
-                now,
-                includeImpacts: ["High", "Medium"],
-                windowsByImpact: {
-                    High: { preMinutes: 30, postMinutes: 5 },
-                    Medium: { preMinutes: 15, postMinutes: 2 },
-                },
-            });
-        } catch (error) {
-            logger.warn(`[Bot][News] News status unavailable for ${symbol}: ${error?.message || error}. Continuing without news block.`);
-        }
-
-        if (news?.blocked) {
-            const titles = news.blockingEvents.map((e) => `${e.impact}:${e.country}:${e.title}`);
-            logger.info(`[Bot][News] Trading blocked for ${symbol} until ${news.blockUntilUtc?.toISOString()}. Events: ${titles.join(" | ")}`);
-            return false;
-        }
-
-        return true;
     }
 
     delay(ms) {

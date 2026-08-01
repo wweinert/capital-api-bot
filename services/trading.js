@@ -1,17 +1,18 @@
 import {
     placePosition,
-    updateTrailingStop,
+    placeOrder,
+    updateStopLoss,
     getDealConfirmation,
     closePosition as apiClosePosition,
     getOpenPositions,
-    getHistorical,
+    getWorkingOrders,
     getMarketDetails,
+    getAccountActivity,
+    getAccountTransactions,
 } from "../api.js";
-import { RISK, ANALYSIS } from "../config.js";
+import { RISK, PORTFOLIO, PROFILES } from "../config.js";
 import logger from "../utils/logger.js";
-import { getTradeEntry, logTradeClose, logTradeOpen, tradeTracker } from "../utils/tradeLogger.js";
-// import shouldEnter from "../strategies/entry.js";
-import Strategy from "../strategies/strategies.js";
+import { logTradeClose, tradeTracker } from "../utils/tradeLogger.js";
 
 const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
@@ -25,6 +26,7 @@ class TradingService {
         this.availableMargin = 0;
 
         this.quotePerEurCache = new Map();
+        this.signalAtr = new Map();
     }
 
     setAccountBalance(balance) {
@@ -57,9 +59,11 @@ class TradingService {
 
     resolveMarketPrice(direction, bid, ask) {
         const dir = this.normalizeDirection(direction);
-        if (dir === "BUY" && Number.isFinite(ask)) return ask;
-        if (dir === "SELL" && Number.isFinite(bid)) return bid;
+
+        if (dir === "BUY" && Number.isFinite(bid)) return bid;
+        if (dir === "SELL" && Number.isFinite(ask)) return ask;
         if (Number.isFinite(bid) && Number.isFinite(ask)) return (bid + ask) / 2;
+
         return bid ?? ask ?? null;
     }
 
@@ -90,9 +94,17 @@ class TradingService {
     }
 
     async syncOpenTradesFromBroker() {
-        const res = await getOpenPositions();
-        const positions = Array.isArray(res?.positions) ? res.positions : [];
-        this.openTrades = positions.map((p) => p?.market?.epic ?? p?.position?.epic).filter(Boolean);
+        const [positionsResult, ordersResult] = await Promise.all([getOpenPositions(), getWorkingOrders()]);
+
+        const positions = positionsResult?.positions || [];
+
+        const orders = ordersResult?.workingOrders || [];
+
+        const positionSymbols = positions.map((item) => item?.market?.epic || item?.position?.epic);
+
+        const orderSymbols = orders.map((item) => item?.workingOrderData?.epic);
+
+        this.openTrades = [...new Set([...positionSymbols, ...orderSymbols].filter(Boolean))];
     }
 
     async getPositionContext(dealId) {
@@ -115,120 +127,132 @@ class TradingService {
         }
     }
 
-    // ============================================================
-    //                   MAIN PRICE LOOP
-    // ============================================================
-    async processPrice({ symbol, profile, indicators, candles, bid, ask }) {
+    async getAllowedCandidates(candidates) {
+        const now = new Date();
+
+        const dayStart = new Date(now);
+        dayStart.setUTCHours(0, 0, 0, 0);
+
+        const weekStart = new Date(dayStart);
+        const daysFromMonday = (weekStart.getUTCDay() + 6) % 7;
+        weekStart.setUTCDate(weekStart.getUTCDate() - daysFromMonday);
+
+        const formatDate = (date) => date.toISOString().slice(0, 19);
+
+        const getTime = (value) => {
+            const date = String(value || "");
+            return Date.parse(date.endsWith("Z") ? date : `${date}Z`);
+        };
+
+        const [activities, weeklyTransactions] = await Promise.all([
+            getAccountActivity(formatDate(dayStart), formatDate(now)),
+            getAccountTransactions(formatDate(weekStart), formatDate(now)),
+        ]);
+
+        const todayEntries = [
+            ...new Map(
+                activities
+                    .filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED" && activity.source === "USER")
+                    .map((activity) => [activity.dealId, activity]),
+            ).values(),
+        ];
+
+        const todayTransactions = weeklyTransactions.filter((transaction) => getTime(transaction.dateUtc || transaction.dateUTC) >= dayStart.getTime());
+
+        const getProfit = (transactions) => transactions.reduce((total, transaction) => total + Number(transaction.size || 0), 0);
+
+        const dailyProfit = getProfit(todayTransactions);
+        const weeklyProfit = getProfit(weeklyTransactions);
+
+        const dailyStartBalance = this.accountBalance - dailyProfit;
+        const weeklyStartBalance = this.accountBalance - weeklyProfit;
+
+        const latestTransactions = [...todayTransactions].sort((a, b) => getTime(b.dateUtc || b.dateUTC) - getTime(a.dateUtc || a.dateUTC));
+
+        let lossStreak = 0;
+
+        for (const transaction of latestTransactions) {
+            if (Number(transaction.size) < 0) {
+                lossStreak++;
+            } else {
+                break;
+            }
+        }
+
+        const tradingBlocked =
+            todayEntries.length >= PORTFOLIO.MAX_DAILY_TRADES ||
+            dailyProfit <= -dailyStartBalance * PORTFOLIO.MAX_DAILY_LOSS_PCT ||
+            weeklyProfit <= -weeklyStartBalance * PORTFOLIO.MAX_WEEKLY_LOSS_PCT ||
+            lossStreak >= PORTFOLIO.MAX_LOSS_STREAK;
+
+        if (tradingBlocked) {
+            logger.info("[Trading] Account entry limit reached");
+            return [];
+        }
+
+        const currentMinute = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+        const fridayEntryClosed = now.getUTCDay() === 5 && now.getUTCHours() >= RISK.FRIDAY_LAST_ENTRY_HOUR_UTC;
+
+        if (fridayEntryClosed) {
+            return [];
+        }
+        return candidates.filter((candidate) => {
+            const risk = candidate.profile.risk;
+
+            const symbolEntries = todayEntries.filter((entry) => entry.epic === candidate.symbol);
+
+            const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)));
+
+            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= risk.cooldownMinutes * 60_000;
+
+            return currentMinute <= risk.lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
+        });
+    }
+
+    async processCandidates(candidates = []) {
+        await this.syncOpenTradesFromBroker();
+
+        const freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
+
+        if (freePositions <= 0) {
+            logger.info("[Trading] No free positions");
+            return [];
+        }
+        const allowedCandidates = await this.getAllowedCandidates(candidates);
+
+        const selected = allowedCandidates.filter((candidate) => !this.isSymbolTraded(candidate.symbol)).slice(0, freePositions);
+
+        logger.info(`[Trading] Selected: ${selected.length ? selected.map((candidate) => candidate.symbol).join(", ") : "none"}`);
+
+        const executed = [];
+
+        for (const candidate of selected) {
+            const success = await this.executeCandidate(candidate);
+
+            if (success) {
+                this.openTrades.push(candidate.symbol);
+                executed.push(candidate);
+            }
+        }
+
+        return executed;
+    }
+
+    async leverageForSymbol(symbol) {
         try {
-            await this.syncOpenTradesFromBroker();
-            logger.info(`[ProcessPrice] Open trades: ${this.openTrades.length}/${MAX_POSITIONS} | Balance: ${this.accountBalance}€`);
+            const details = await getMarketDetails(symbol);
+            const marginFactor = Number(details?.instrument?.marginFactor);
 
-            if (this.openTrades.length >= MAX_POSITIONS) {
-                logger.info(`[ProcessPrice] Max trades reached. Skipping ${symbol}.`);
-                return;
-            }
-            if (this.isSymbolTraded(symbol)) {
-                logger.debug(`[ProcessPrice] ${symbol} already in market.`);
-                return;
+            if (details?.instrument?.marginFactorUnit !== "PERCENTAGE" || !Number.isFinite(marginFactor) || marginFactor <= 0) {
+                return null;
             }
 
-            // const m15Bars = (candles?.m15Candles || []).slice(0, -1);
-            // const primary = shouldEnter({ bars: m15Bars, symbol, profile });
-            const primary = Strategy.getSignal({ symbol, indicators, candles });
-
-            let { signal, reason = "" } = primary;
-
-            if (!signal) {
-                logger.debug(`[ProcessPrice] No HLLH signal for ${symbol}`);
-                return;
-            }
-
-            // Re-check just placing
-            if (this.openTrades.length >= MAX_POSITIONS) return;
-            if (this.isSymbolTraded(symbol)) return;
-
-            const toIsoTimestamp = (value) => {
-                if (value === undefined || value === null || value === "") return null;
-                if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value)) return value;
-                const parsed = new Date(value);
-                return Number.isFinite(parsed.getTime()) ? parsed.toISOString() : null;
-            };
-            const toLastClosedCandle = (series = []) => {
-                if (!Array.isArray(series) || series.length === 0) return null;
-                const candle = series[series.length - 1];
-                return {
-                    t: toIsoTimestamp(candle?.timestamp ?? candle?.snapshotTime ?? candle?.snapshotTimeUTC),
-                    o: this.toNumber(candle?.open ?? candle?.openPrice?.bid ?? candle?.openPrice?.ask),
-                    h: this.toNumber(candle?.high ?? candle?.highPrice?.bid ?? candle?.highPrice?.ask),
-                    l: this.toNumber(candle?.low ?? candle?.lowPrice?.bid ?? candle?.lowPrice?.ask),
-                    c: this.toNumber(candle?.close ?? candle?.closePrice?.bid ?? candle?.closePrice?.ask),
-                };
-            };
-            const candlesSnapshot = {
-                d1: toLastClosedCandle(candles?.d1),
-                h4: toLastClosedCandle(candles?.h4),
-                h1: toLastClosedCandle(candles?.h1),
-                m15: toLastClosedCandle(candles?.m15),
-                m5: toLastClosedCandle(candles?.m5),
-                m1: toLastClosedCandle(candles?.m1),
-            };
-
-            await this.executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, primary, profile);
+            return 100 / marginFactor;
         } catch (error) {
-            logger.error("[ProcessPrice] Error:", error);
+            logger.warn(`[PositionSize] Cannot get leverage for ${symbol}: ${error.message}`);
+            return null;
         }
-    }
-
-    // ============================================================
-    //               ATR-Based Trade Parameters
-    // ============================================================
-
-    async calculateTradeParameters(signal, symbol, bid, ask) {
-        const direction = this.normalizeDirection(signal);
-        if (!["BUY", "SELL"].includes(direction)) {
-            throw new Error(`[Trade Params] Invalid signal for ${symbol}: ${signal}`);
-        }
-
-        const isBuy = direction === "BUY";
-        const price = this.resolveMarketPrice(direction, bid, ask);
-        if (!Number.isFinite(price)) {
-            throw new Error(`[Trade Params] Missing valid market price for ${symbol} (${direction})`);
-        }
-
-        const atr = await calculateATR(symbol);
-        const spread = Number.isFinite(bid) && Number.isFinite(ask) ? Math.abs(ask - bid) : 0;
-        const stopLossPips = Math.max(1.5 * atr, spread * 2);
-        const stopLossPrice = isBuy ? price - stopLossPips : price + stopLossPips;
-        const takeProfitPips = 2 * stopLossPips; // 2:1 reward-risk ratio
-        const takeProfitPrice = isBuy ? price + takeProfitPips : price - takeProfitPips;
-        const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
-        const size = positionSizing.size;
-
-        // Trailing stop parameters
-        const trailingStopParams = {
-            activationPrice: isBuy
-                ? price + stopLossPips // Activate at 1R profit
-                : price - stopLossPips,
-            trailingDistance: atr, // Trail by 1 ATR
-        };
-
-        return {
-            size,
-            positionSizing,
-            stopLossPrice,
-            takeProfitPrice,
-            stopLossPips,
-            takeProfitPips,
-            trailingStopParams,
-            partialTakeProfit: isBuy
-                ? price + stopLossPips // Take partial at 1R
-                : price - stopLossPips,
-            price,
-        };
-    }
-
-    leverageForSymbol(symbol) {
-        return String(symbol || "").includes("USD") ? 30 : 20;
     }
 
     parseSymbol(symbol) {
@@ -302,7 +326,12 @@ class TradingService {
         };
     }
 
-    async positionSize(balance, entryPrice, stopLossPrice, symbol) {
+    async positionSize(balance, entryPrice, stopLossPrice, symbol, riskPct = PER_TRADE) {
+        const safeRiskPct = Math.min(Number(riskPct), 0.03);
+
+        if (!Number.isFinite(safeRiskPct) || safeRiskPct <= 0) {
+            return this.emptyPositionSizing(symbol, "invalid_risk");
+        }
         const accountBalance = this.toNumber(balance);
         if (!(Number.isFinite(accountBalance) && accountBalance > 0)) {
             logger.error(`[PositionSize] Invalid account balance for ${symbol}: ${balance}`);
@@ -329,9 +358,14 @@ class TradingService {
             return this.emptyPositionSizing(symbol, "missing_quote_conversion");
         }
 
-        const requestedRiskAmount = accountBalance * PER_TRADE;
+        const requestedRiskAmount = accountBalance * safeRiskPct;
         const rawSize = (requestedRiskAmount * quotePerEur) / riskDistance;
-        const leverage = this.leverageForSymbol(symbol);
+        const leverage = await this.leverageForSymbol(symbol);
+
+        if (!leverage) {
+            return this.emptyPositionSizing(symbol, "missing_leverage");
+        }
+
         const notionalEurForSize = (value) => (value * entry) / quotePerEur;
         const marginForSize = (value) => notionalEurForSize(value) / leverage;
 
@@ -376,7 +410,7 @@ class TradingService {
             quotePerEur,
             size,
             rawSize,
-            requestedRiskPct: PER_TRADE,
+            requestedRiskPct: safeRiskPct,
             requestedRiskAmount,
             effectiveRiskPct,
             effectiveRiskAmount,
@@ -394,7 +428,7 @@ class TradingService {
         };
 
         logger.debug(
-            `[PositionSize] ${symbol}: targetRisk=${(PER_TRADE * 100).toFixed(2)}% effectiveRisk=${(effectiveRiskPct * 100).toFixed(3)}% raw=${rawSize.toFixed(2)} final=${size} margin=${marginRequired.toFixed(2)}/${maxMarginPerTrade.toFixed(2)}`,
+            `[PositionSize] ${symbol}: targetRisk=${(safeRiskPct * 100).toFixed(2)}% effectiveRisk=${(effectiveRiskPct * 100).toFixed(3)}% raw=${rawSize.toFixed(2)} final=${size} margin=${marginRequired.toFixed(2)}/${maxMarginPerTrade.toFixed(2)}`,
         );
         return positionSizing;
     }
@@ -402,297 +436,107 @@ class TradingService {
     // ============================================================
     //                    Place the Trade
     // ============================================================
-    async executeTrade(symbol, signal, bid, ask, indicators, reason, candlesSnapshot, entrySignal, profile) {
-        try {
-            const stopLossPrice = entrySignal?.sl;
-            const price = this.resolveMarketPrice(signal, bid, ask);
-            const direction = this.normalizeDirection(signal);
-            const riskDistance = Math.abs(price - stopLossPrice);
-            const safetyTakeProfitR = Number(profile?.safetyTakeProfitR ?? profile?.takeProfitR ?? 20);
-            const takeProfitPrice = direction === "BUY" ? price + riskDistance * safetyTakeProfitR : price - riskDistance * safetyTakeProfitR;
+    async executeCandidate(candidate) {
+        const { symbol, signal, entryType, entryPrice, stopLoss, atr, profile } = candidate;
 
-            const hasValidLevels =
-                Number.isFinite(stopLossPrice) &&
-                Number.isFinite(price) &&
-                Number.isFinite(riskDistance) &&
-                riskDistance > 0 &&
-                Number.isFinite(safetyTakeProfitR) &&
-                safetyTakeProfitR > 0;
+        const takeProfit = signal === "BUY" ? entryPrice + atr * profile.exit.safetyTargetAtr : entryPrice - atr * profile.exit.safetyTargetAtr;
 
-            if (!["BUY", "SELL"].includes(direction) || !hasValidLevels) {
-                logger.warn(`[Order] Skipping ${symbol}: invalid entry, stop loss, or safety TP ratio.`);
-                return;
-            }
+        const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, profile.risk.perTrade);
 
-            if ((direction === "BUY" && stopLossPrice >= price) || (direction === "SELL" && stopLossPrice <= price)) {
-                logger.warn(`[Order] Skipping ${symbol}: market price crossed the structural stop loss.`);
-                return;
-            }
-
-            const positionSizing = await this.positionSize(this.accountBalance, price, stopLossPrice, symbol);
-            const size = positionSizing.size;
-
-            if (!(Number.isFinite(size) && size > 0)) {
-                logger.warn(`[Order] Skipping ${symbol}: calculated size is not tradable (${size}).`);
-                return;
-            }
-
-            const pos = await placePosition(symbol, signal, size, price, stopLossPrice, takeProfitPrice);
-
-            if (!pos?.dealReference) {
-                logger.error(`[Order] Missing deal reference for ${symbol}`);
-                return;
-            }
-
-            const confirmation = await getDealConfirmation(pos.dealReference);
-            if (!["ACCEPTED", "OPEN"].includes(confirmation.dealStatus)) {
-                logger.error(`[Order] Not placed: ${confirmation.reason}`);
-                return;
-            }
-
-            logger.info(
-                `[Order] OPENED ${symbol} ${signal} size=${size} entry=${price} SL=${stopLossPrice} TP=${takeProfitPrice} risk=${((positionSizing?.effectiveRiskPct || 0) * 100).toFixed(3)}% margin=${positionSizing?.marginRequired?.toFixed?.(2) ?? "n/a"}`,
-            );
-
-            const affectedDealId = confirmation?.affectedDeals?.find((d) => d?.status === "OPENED")?.dealId;
-            // or: const affectedDealId = confirmation?.affectedDeals?.[0]?.dealId;
-
-            try {
-                if (!affectedDealId) {
-                    logger.warn(`[Order] Missing dealId for ${symbol}, skipping trade log.`);
-                } else {
-                    // const indicatorSnapshot = this.buildIndicatorSnapshot(indicators, price, symbol);
-                    const entryPrice = confirmation?.level ?? price;
-                    const stopLossRounded = this.roundPrice(stopLossPrice, symbol);
-                    const takeProfitRounded = this.roundPrice(takeProfitPrice, symbol);
-                    const logTimestamp = new Date().toISOString();
-                    const actualPositionSizing = await this.positionSize(this.accountBalance, entryPrice, stopLossRounded, symbol);
-
-                    logTradeOpen({
-                        dealId: affectedDealId,
-                        symbol,
-                        signal,
-                        openReason: reason,
-                        entryPrice,
-                        stopLoss: stopLossRounded,
-                        takeProfit: takeProfitRounded,
-                        indicatorsOnOpening: indicators,
-                        candlesOnOpening: candlesSnapshot,
-                        strategyContext: entrySignal?.strategyContext,
-                        positionSizing: {
-                            planned: positionSizing,
-                            actual: actualPositionSizing,
-                        },
-                        timestamp: logTimestamp,
-                    });
-
-                    tradeTracker.registerOpenDeal(affectedDealId, symbol);
-                }
-            } catch (logError) {
-                logger.error(`[Order] Failed to log open trade for ${symbol}:`, logError);
-            }
-
-            this.openTrades.push(symbol);
-        } catch (error) {
-            logger.error(`[Order] Error placing order for ${symbol}:`, error);
+        if (!sizing.size) {
+            return false;
         }
-    }
 
+        let result;
+
+        if (entryType === "stop") {
+            const timeframeMinutes = {
+                M5: 5,
+                M15: 15,
+                H1: 60,
+            };
+
+            const expiryMinutes = timeframeMinutes[profile.signal.timeframe] * profile.entry.expiryBars;
+
+            const goodTillDate = new Date(Date.now() + expiryMinutes * 60_000).toISOString().slice(0, 19);
+
+            result = await placeOrder({
+                symbol,
+                direction: signal,
+                size: sizing.size,
+                level: entryPrice,
+                stopLevel: stopLoss,
+                profitLevel: takeProfit,
+                goodTillDate,
+            });
+        } else {
+            result = await placePosition(symbol, signal, sizing.size, entryPrice, stopLoss, takeProfit);
+        }
+
+        if (!result?.dealReference) {
+            logger.warn(`[Trading] ${symbol}: order was not created`);
+
+            return false;
+        }
+
+        const confirmation = await getDealConfirmation(result.dealReference);
+
+        if (!["ACCEPTED", "OPEN"].includes(confirmation.dealStatus)) {
+            logger.warn(`[Trading] ${symbol}: ${confirmation.reason}`);
+
+            return false;
+        }
+
+        this.signalAtr.set(symbol, atr);
+
+        logger.info(`[Trading] ${symbol} ${signal} ${entryType} accepted`);
+
+        return true;
+    }
     // ============================================================
     //               Trailing Stop (Improved)
     // ============================================================
+
     async updateTrailingStopIfNeeded(position, indicators) {
-        const { dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, symbol } = position;
+        const { symbol, dealId, direction, entryPrice, stopLoss, currentPrice } = position;
 
-        if (!dealId) return;
+        const profile = PROFILES[symbol];
+        const timeframe = profile?.signal?.timeframe?.toLowerCase();
 
-        const { entry: loggedEntry } = getTradeEntry(dealId, symbol);
-        const managementProfile = loggedEntry?.strategyContext?.managementProfile || {};
-        const managementMode = managementProfile?.mode;
-        if (managementMode === "none") {
-            logger.debug(`[Trail] Skipped for ${dealId}: strategy managementProfile=none`);
-            return;
-        }
-
-        if (managementMode === "atr_trail_after_r") {
-            await this.updateAtrTrailIfNeeded(position, indicators, loggedEntry, managementProfile);
-            return;
-        }
-
-        if (managementMode === "adaptive_trail_r") {
-            await this.updateAdaptiveRTrailIfNeeded(position, loggedEntry, managementProfile);
-            return;
-        }
-
-        const tpProgress = this.getTpProgress(direction, entryPrice, takeProfit, currentPrice);
-        if (tpProgress === null || tpProgress < HLLH_TRAIL_ACTIVATION_TP_PROGRESS) {
-            return; // HLLH tighter_trail activates after 45% TP progress.
-        }
-
-        // --- Trend misalignment → Breakeven exit ---
-        // const m5 = indicators.m5;
-        // const m15 = indicators.m15;
-        // if (m5 && m15 && tpProgress >= HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS) {
-        //     const m5Trend = strategyRouter.pickTrend(m5, { symbol, timeframe: "M5", atr: m5.atr });
-        //     const m15Trend = strategyRouter.pickTrend(m15, { symbol, timeframe: "M15", atr: m15.atr });
-
-        //     const broken =
-        //         (direction === "BUY" && (m5Trend === "bearish" || m15Trend === "bearish")) ||
-        //         (direction === "SELL" && (m5Trend === "bullish" || m15Trend === "bullish"));
-
-        //     if (broken) {
-        //         await this.softExitToBreakeven(position);
-        //         return;
-        //     }
-        // }
-
+        const atr = Number(this.signalAtr.get(symbol) ?? indicators?.[timeframe]?.atr);
         const entry = Number(entryPrice);
-        const tp = Number(takeProfit);
         const price = Number(currentPrice);
-        if (!Number.isFinite(entry) || !Number.isFinite(tp) || !Number.isFinite(price)) return;
-        const tpDist = Math.abs(tp - entry);
-        if (tpDist <= 0) return;
-
-        const dir = this.normalizeDirection(direction);
-        const activation = dir === "BUY" ? entry + tpDist * HLLH_TRAIL_ACTIVATION_TP_PROGRESS : entry - tpDist * HLLH_TRAIL_ACTIVATION_TP_PROGRESS;
-
-        const activated = (dir === "BUY" && price >= activation) || (dir === "SELL" && price <= activation);
-
-        if (!activated) return;
-
-        const trailDist = tpDist * HLLH_TRAIL_DISTANCE_TP_FRACTION;
-        let newSL = dir === "BUY" ? price - trailDist : price + trailDist;
-
-        const stop = Number(stopLoss);
-        if (Number.isFinite(stop)) {
-            if ((dir === "BUY" && newSL <= stop) || (dir === "SELL" && newSL >= stop)) return;
-        }
-
-        try {
-            await updateTrailingStop(dealId, price, entry, tp, dir, symbol, {
-                activationProgress: HLLH_TRAIL_ACTIVATION_TP_PROGRESS,
-                trailDistanceTpFraction: HLLH_TRAIL_DISTANCE_TP_FRACTION,
-            });
-            logger.info(`[Trail] Updated SL → ${newSL} for ${dealId}`);
-        } catch (error) {
-            logger.error(`[Trail] Error updating trailing stop:`, error);
-        }
-    }
-
-    async updateAtrTrailIfNeeded(position, indicators, loggedEntry, managementProfile) {
-        const { dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, symbol } = position;
-        const entry = Number(entryPrice);
-        const initialStop = this.toNumber(loggedEntry?.strategyContext?.expectedStopPrice) ?? this.toNumber(loggedEntry?.stopLoss) ?? this.toNumber(stopLoss);
-        const tp = Number(takeProfit);
-        const price = Number(currentPrice);
-        const atrSource = String(managementProfile?.atrTimeframe || "H1").toLowerCase();
-        const atr = this.toNumber(indicators?.[atrSource]?.atr) ?? this.toNumber(indicators?.h1?.atr) ?? this.toNumber(indicators?.m15?.atr);
-        const activationR = Number.isFinite(Number(managementProfile?.activationR)) ? Number(managementProfile.activationR) : 1.5;
-        const atrMultiplier = Number.isFinite(Number(managementProfile?.atrMultiplier)) ? Number(managementProfile.atrMultiplier) : 2;
-
-        if (![entry, initialStop, tp, price, atr].every(Number.isFinite) || atr <= 0) return;
-
-        const dir = this.normalizeDirection(direction);
-        const initialRisk = Math.abs(entry - initialStop);
-        const tpDistance = Math.abs(tp - entry);
-        if (!(initialRisk > 0 && tpDistance > 0)) return;
-
-        const currentR = dir === "BUY" ? (price - entry) / initialRisk : (entry - price) / initialRisk;
-        if (currentR < activationR) return;
-
-        const desiredDistance = atr * atrMultiplier;
-        const trailDistanceTpFraction = desiredDistance / tpDistance;
-        if (!(Number.isFinite(trailDistanceTpFraction) && trailDistanceTpFraction > 0)) return;
-
-        const newSL = dir === "BUY" ? price - desiredDistance : price + desiredDistance;
         const currentStop = Number(stopLoss);
-        if (Number.isFinite(currentStop)) {
-            if ((dir === "BUY" && newSL <= currentStop) || (dir === "SELL" && newSL >= currentStop)) return;
+
+        if (!profile || !dealId || !Number.isFinite(atr) || !Number.isFinite(entry) || !Number.isFinite(price) || atr <= 0) {
+            return;
         }
 
-        try {
-            await updateTrailingStop(dealId, price, entry, tp, dir, symbol, {
-                activationProgress: activationR / (tpDistance / initialRisk),
-                trailDistanceTpFraction,
-            });
-            logger.info(`[Trail] ATR profile updated SL distance for ${dealId}: atr=${atr}, multiplier=${atrMultiplier}, approxSL=${newSL}`);
-        } catch (error) {
-            logger.error(`[Trail] ATR profile error:`, error);
-        }
-    }
+        const isBuy = direction === "BUY";
 
-    async updateAdaptiveRTrailIfNeeded(position, loggedEntry, managementProfile) {
-        const { dealId, direction, entryPrice, stopLoss, currentPrice, symbol } = position;
-        const entry = Number(entryPrice);
-        const price = Number(currentPrice);
-        const initialStop = this.toNumber(loggedEntry?.strategyContext?.expectedStopPrice) ?? this.toNumber(loggedEntry?.stopLoss) ?? this.toNumber(stopLoss);
-        if (![entry, price, initialStop].every(Number.isFinite)) return;
+        const favorableMove = isBuy ? price - entry : entry - price;
 
-        const dir = this.normalizeDirection(direction);
-        if (!["BUY", "SELL"].includes(dir)) return;
+        const activationDistance = atr * profile.exit.trailActivationAtr;
 
-        const initialRisk = Math.abs(entry - initialStop);
-        if (!(initialRisk > 0)) return;
-
-        const currentR = dir === "BUY" ? (price - entry) / initialRisk : (entry - price) / initialRisk;
-        const activationR = Number.isFinite(Number(managementProfile?.activationR)) ? Number(managementProfile.activationR) : 1;
-        const trailR = Number.isFinite(Number(managementProfile?.trailR)) ? Number(managementProfile.trailR) : 0.5;
-        const breakevenR = Number.isFinite(Number(managementProfile?.breakevenR)) ? Number(managementProfile.breakevenR) : activationR;
-        if (currentR < Math.min(activationR, breakevenR)) return;
-
-        let desiredStop = null;
-        if (currentR >= breakevenR) {
-            desiredStop = entry;
-        }
-        if (currentR >= activationR) {
-            const trailingStop = dir === "BUY" ? price - initialRisk * trailR : price + initialRisk * trailR;
-            desiredStop = desiredStop === null ? trailingStop : dir === "BUY" ? Math.max(desiredStop, trailingStop) : Math.min(desiredStop, trailingStop);
-        }
-        if (!Number.isFinite(desiredStop)) return;
-
-        const currentStop = Number(stopLoss);
-        if (Number.isFinite(currentStop)) {
-            if ((dir === "BUY" && desiredStop <= currentStop) || (dir === "SELL" && desiredStop >= currentStop)) return;
+        if (favorableMove < activationDistance) {
+            return;
         }
 
-        const stopDistance = Math.abs(price - desiredStop);
-        if (!(Number.isFinite(stopDistance) && stopDistance > 0)) return;
+        const trailingDistance = atr * profile.exit.trailDistanceAtr;
 
-        try {
-            await updateTrailingStop(dealId, price, entry, null, dir, symbol, { stopDistance });
-            logger.info(
-                `[Trail] Adaptive R profile updated ${symbol} ${dealId}: currentR=${currentR.toFixed(2)} stopDistance=${stopDistance.toFixed(6)} approxSL=${desiredStop}`,
-            );
-        } catch (error) {
-            logger.error(`[Trail] Adaptive R profile error:`, error);
+        const newStop = isBuy ? price - trailingDistance : price + trailingDistance;
+
+        const improvesStop = isBuy ? newStop > currentStop : newStop < currentStop;
+
+        if (!improvesStop) {
+            return;
         }
-    }
 
-    // ============================================================
-    //               Breakeven Soft Exit
-    // ============================================================
-    async softExitToBreakeven(position) {
-        const { dealId, entryPrice, takeProfit, currentPrice, direction, symbol } = position;
+        const roundedStop = this.roundPrice(newStop, symbol);
 
-        const newSL = entryPrice;
-        try {
-            const tpProgress = this.getTpProgress(direction, entryPrice, takeProfit, currentPrice);
-            if (tpProgress === null || tpProgress < HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS) {
-                logger.info(
-                    `[SoftExit] Skipped breakeven: TP progress ${(tpProgress ?? 0).toFixed(2)} < ${HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS.toFixed(2)} for ${dealId}`,
-                );
-                return;
-            }
+        await updateStopLoss(dealId, roundedStop);
 
-            await updateTrailingStop(dealId, currentPrice, entryPrice, takeProfit, direction, symbol, {
-                activationProgress: HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS,
-                trailDistanceTpFraction: HLLH_TRAIL_DISTANCE_TP_FRACTION,
-            });
-
-            logger.info(`[SoftExit] ${symbol}: misalignment → moved SL to breakeven for ${dealId}`);
-        } catch (e) {
-            logger.error(`[SoftExit] Error updating SL to breakeven:`, e);
-        }
+        logger.info(`[Trail] ${symbol}: stop moved to ${roundedStop}`);
     }
 
     // ============================================================
@@ -784,31 +628,6 @@ class TradingService {
         } catch (logErr) {
             logger.error(`[ClosePos] Failed to log closure for ${dealId}:`, logErr);
         }
-    }
-}
-
-async function calculateATR(symbol) {
-    try {
-        const data = await getHistorical(symbol, ANALYSIS.TIMEFRAMES.M15, 15);
-        if (!data?.prices || data.prices.length < 14) {
-            throw new Error("Insufficient data for ATR calculation");
-        }
-        let tr = [];
-        const prices = data.prices;
-        for (let i = 1; i < prices.length; i++) {
-            const high = prices[i].highPrice?.ask || prices[i].high;
-            const low = prices[i].lowPrice?.bid || prices[i].low;
-            const prevClose = prices[i - 1].closePrice?.bid || prices[i - 1].close;
-            const tr1 = high - low;
-            const tr2 = Math.abs(high - prevClose);
-            const tr3 = Math.abs(low - prevClose);
-            tr.push(Math.max(tr1, tr2, tr3));
-        }
-        const atr = tr.slice(-14).reduce((sum, val) => sum + val, 0) / 14;
-        return atr;
-    } catch (error) {
-        logger.error(`[ATR] Error calculating ATR for ${symbol}: ${error.message}`);
-        return 0.001;
     }
 }
 

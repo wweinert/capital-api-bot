@@ -1,13 +1,12 @@
-import { getOpenPositions, getHistorical } from "../api.js";
-import { RISK } from "../config.js";
+import { getOpenPositions, getHistorical, getWorkingOrders, cancelWorkingOrder } from "../api.js";
+import { RISK, PROFILES } from "../config.js";
 import { calcIndicators } from "../indicators/indicators.js";
 import tradingService from "../services/trading.js";
 import webSocketService from "../services/websocket.js";
 import { tradeWatchIndicators } from "../indicators/indicators.js";
 
-import { getTradeEntry, tradeTracker } from "../utils/tradeLogger.js";
+import { tradeTracker } from "../utils/tradeLogger.js";
 import logger from "../utils/logger.js";
-
 
 export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
     logger.info(`[Monitoring] Checking open trades at ${new Date().toISOString()}`);
@@ -86,28 +85,54 @@ export async function trailingStopCheck(bot) {
     }
 }
 
+async function cancelOrders(shouldCancel) {
+    const result = await getWorkingOrders();
+    const orders = result?.workingOrders || [];
+
+    for (const item of orders) {
+        const order = item?.workingOrderData;
+
+        if (!order?.dealId || !shouldCancel(order.epic)) {
+            continue;
+        }
+
+        await cancelWorkingOrder(order.dealId);
+        logger.info(`[Orders] Cancelled ${order.epic}`);
+    }
+}
+
 export async function dailyFlatCheck(bot) {
     if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
 
     const now = new Date();
     const currentMinute = now.getUTCHours() * 60 + now.getUTCMinutes();
-    const closeMinute = Number.isFinite(Number(RISK.DAILY_CLOSE_MINUTE_UTC)) ? Number(RISK.DAILY_CLOSE_MINUTE_UTC) : 23 * 60 + 50;
-    if (currentMinute < closeMinute) return;
 
     try {
+        await cancelOrders((symbol) => {
+            const closeMinute = PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC;
+
+            return closeMinute < 24 * 60 && currentMinute >= closeMinute;
+        });
         const positions = await getOpenPositions();
         if (!positions?.positions?.length) return;
 
         for (const pos of positions.positions) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+
+            const closeMinute = PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC;
+
+            if (closeMinute >= 24 * 60 || currentMinute < closeMinute) {
+                continue;
+            }
+
             if (!dealId) {
                 logger.error(`[DailyFlat] Missing dealId for ${symbol}, cannot close.`);
                 continue;
             }
 
             await tradingService.closePosition(dealId, "daily_forced_close_utc");
-            logger.info(`[DailyFlat] Closed ${symbol} before UTC day rollover at/after minute ${closeMinute}`);
+            logger.info(`[DailyFlat] Closed ${symbol} before UTC day rollover at/after minute `);
             await bot.delay(500);
         }
     } catch (error) {
@@ -123,6 +148,7 @@ export async function weekendFlatCheck(bot) {
     if (now.getUTCDay() !== 5 || now.getUTCHours() < closeHour) return;
 
     try {
+        await cancelOrders(() => true);
         const positions = await getOpenPositions();
         if (!positions?.positions?.length) return;
 
@@ -185,39 +211,8 @@ export async function maxHoldCheck(bot) {
     }
 }
 
-function timeframeMinutes(timeframe) {
-    const normalized = String(timeframe || "").toUpperCase();
-    if (normalized === "M1") return 1;
-    if (normalized === "M5") return 5;
-    if (normalized === "M15") return 15;
-    if (normalized === "H1") return 60;
-    if (normalized === "H4") return 240;
-    if (normalized === "D1") return 1440;
-    return null;
-}
-
 function resolveMaxHoldMinutes(pos, symbol) {
-    const fallback = Number.isFinite(Number(RISK.MAX_HOLD_TIME)) ? Number(RISK.MAX_HOLD_TIME) : 3600;
-    const dealId = pos?.position?.dealId ?? pos?.dealId;
-    if (!dealId) return fallback;
-
-    const { entry } = getTradeEntry(dealId, symbol);
-    const context = entry?.strategyContext || {};
-    const managementProfile = context.managementProfile || {};
-    const maxHoldBars = Number(managementProfile.maxHoldBars);
-    const managementTimeframe = managementProfile.timeframe || context.timeframe;
-    const managementMinutes = timeframeMinutes(managementTimeframe);
-    if (Number.isFinite(maxHoldBars) && maxHoldBars > 0 && Number.isFinite(managementMinutes) && managementMinutes > 0) {
-        return maxHoldBars * managementMinutes;
-    }
-
-    const match = String(context.exitVariant || "").match(/^time_exit_(\d+)$/);
-    if (!match) return fallback;
-
-    const bars = Number(match[1]);
-    const minutes = timeframeMinutes(context.timeframe);
-    if (!(Number.isFinite(bars) && bars > 0 && Number.isFinite(minutes) && minutes > 0)) return fallback;
-    return bars * minutes;
+    return PROFILES[symbol]?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
 }
 
 export function logDeals(bot) {
@@ -302,8 +297,6 @@ function parseOpenTimeMs(openTime) {
 
     return NaN;
 }
-
-
 
 export async function startWebSocket(bot) {
     try {

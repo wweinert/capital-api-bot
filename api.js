@@ -51,6 +51,26 @@ export const getHeaders = (includeContentType = false) => {
     return includeContentType ? { ...baseHeaders, "Content-Type": "application/json" } : baseHeaders;
 };
 
+export const getAccountActivity = async (from, to) =>
+    withSessionRetry(async () => {
+        const response = await apiGet(`${API.BASE_URL}/history/activity`, {
+            headers: getHeaders(),
+            params: { from, to, detailed: true },
+        });
+
+        return response.data?.activities || [];
+    });
+
+export const getAccountTransactions = async (from, to) =>
+    withSessionRetry(async () => {
+        const response = await apiGet(`${API.BASE_URL}/history/transactions`, {
+            headers: getHeaders(),
+            params: { from, to, type: "TRADE" },
+        });
+
+        return response.data?.transactions || [];
+    });
+
 export const startSession = async () => {
     try {
         const response = await axios.post(
@@ -205,85 +225,95 @@ export async function getHistorical(symbol, resolution, count) {
     }
 }
 
-export async function placeOrder(symbol, direction, size, level, orderType = "LIMIT") {
-    return await withSessionRetry(async () => {
-        logger.info(`[API] Placing ${direction} order for ${symbol} at ${level}, size: ${size}`);
-        const order = {
-            epic: symbol,
-            direction: direction.toUpperCase(),
-            size: size,
-            level: level,
-            type: orderType,
-        };
-        const response = await axios.post(`${API.BASE_URL}/workingorders`, order, {
-            headers: getHeaders(true),
-        });
-        logger.info("[API] Order response:", response.data);
+export const getWorkingOrders = async () =>
+    withSessionRetry(async () => {
+        const response = await apiGet(`${API.BASE_URL}/workingorders`, { headers: getHeaders() });
+
         return response.data;
     });
-}
 
-export async function updateTrailingStop(positionId, currentPrice, entryPrice, takeProfit, direction, symbol, options = {}) {
-    const entry = Number(entryPrice);
-    const tp = Number(takeProfit);
-    const price = Number(currentPrice);
-    const directStopDistance = Number(options.stopDistance);
-    const hasDirectStopDistance = Number.isFinite(directStopDistance) && directStopDistance > 0;
-    if (!Number.isFinite(entry) || !Number.isFinite(price) || (!hasDirectStopDistance && !Number.isFinite(tp))) return;
+export const cancelWorkingOrder = async (dealId) =>
+    withSessionRetry(async () => {
+        const response = await axios.delete(`${API.BASE_URL}/workingorders/${dealId}`, {
+            headers: getHeaders(),
+        });
 
-    const dir = String(direction || "").toUpperCase();
-    let trailingDistance = directStopDistance;
-
-    if (!hasDirectStopDistance) {
-        const tpDistance = Math.abs(tp - entry);
-        if (tpDistance <= 0) return;
-
-        const activationProgress = Number.isFinite(Number(options.activationProgress)) ? Number(options.activationProgress) : 0.7;
-        const trailDistanceTpFraction = Number.isFinite(Number(options.trailDistanceTpFraction)) ? Number(options.trailDistanceTpFraction) : 0.1;
-        const thresholdPrice = dir === "BUY" ? entry + activationProgress * tpDistance : entry - activationProgress * tpDistance;
-
-        const thresholdMet = dir === "BUY" ? price >= thresholdPrice : price <= thresholdPrice;
-
-        if (!thresholdMet) {
-            return; // keep the original SL until the threshold is hit
-        }
-
-        trailingDistance = tpDistance * trailDistanceTpFraction || 0.001; // fallback if calculation fails
-    }
-
-    // --- Get symbol-specific minimum stop distance ---
-    let minStopDistance = 0.0003; // default fallback
-    try {
-        const market = await getMarketDetails(symbol);
-        if (market?.dealingRules?.minStopDistance) {
-            minStopDistance = market.dealingRules.minStopDistance;
-        }
-    } catch (err) {
-        logger.warn(`[API] Could not fetch minStopDistance for ${symbol}, using fallback ${minStopDistance}`);
-    }
-
-    // --- Ensure distance is not too small ---
-    if (trailingDistance < minStopDistance) {
-        logger.warn(`[API] Trailing distance (${trailingDistance}) too small for ${symbol}. Using min allowed: ${minStopDistance}`);
-        trailingDistance = minStopDistance;
-    }
-
-    try {
-        const response = await axios.put(
-            `${API.BASE_URL}/positions/${positionId}`,
-            {
-                trailingStop: true,
-                stopDistance: Number(trailingDistance.toFixed(6)), // round safely
-            },
-            { headers: getHeaders(true) },
-        );
-        logger.info(`[API] Trailing stop for ${positionId} set to distance ${trailingDistance}`);
         return response.data;
-    } catch (err) {
-        logger.error(`[API] updateTrailingStop error for ${positionId}:`, err.response?.data || err.message);
-        throw err;
+    });
+
+export async function placeOrder({ symbol, direction, size, level, stopLevel, profitLevel, goodTillDate }) {
+    const rules = await getAllowedTPRange(symbol);
+    const decimals = rules.decimals;
+
+    const entry = toRoundedNumber(level, decimals);
+    const stop = toRoundedNumber(stopLevel, decimals);
+    const target = toRoundedNumber(profitLevel, decimals);
+
+    if (!Number.isFinite(entry) || !Number.isFinite(stop) || !Number.isFinite(target)) {
+        throw new Error(`Invalid pending order prices for ${symbol}`);
     }
+
+    const isBuy = direction.toUpperCase() === "BUY";
+    const marketPrice = isBuy ? Number(rules.market.offer) : Number(rules.market.bid);
+
+    const entryIsValid = isBuy ? entry > marketPrice : entry < marketPrice;
+
+    if (!entryIsValid) {
+        logger.warn(`[API] ${symbol}: STOP entry is behind market price`);
+        return { skipped: true };
+    }
+
+    const protection = validateMarketProtection({
+        symbol,
+        direction,
+        stopLevel: stop,
+        profitLevel: target,
+        bid: entry,
+        offer: entry,
+        minSLDistancePrice: rules.minSLDistancePrice,
+        minTPDistancePrice: rules.minTPDistancePrice,
+    });
+
+    if (protection.skipped) {
+        logger.warn(`[API] ${symbol}: pending order skipped — ${protection.reason}`);
+        return protection;
+    }
+
+    const order = {
+        epic: symbol,
+        direction: direction.toUpperCase(),
+        size: Number(size),
+        level: entry,
+        type: "STOP",
+        guaranteedStop: false,
+        trailingStop: false,
+        stopLevel: stop,
+        profitLevel: target,
+        goodTillDate,
+    };
+
+    logger.info(`[API] Placing STOP order for ${symbol} at ${entry}`);
+
+    const response = await apiPost("/workingorders", order);
+
+    return response.data;
 }
+
+export const updateStopLoss = async (dealId, stopLevel) =>
+    withSessionRetry(async () => {
+        const response = await axios.put(
+            `${API.BASE_URL}/positions/${dealId}`,
+            {
+                trailingStop: false,
+                stopLevel: Number(stopLevel),
+            },
+            {
+                headers: getHeaders(true),
+            },
+        );
+
+        return response.data;
+    });
 
 function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, bid, offer, minSLDistancePrice, minTPDistancePrice }) {
     const isBuy = String(direction).toUpperCase() === "BUY";
@@ -433,38 +463,22 @@ export function getSessionTokens() {
 }
 
 export async function getAllowedTPRange(symbol) {
-    try {
-        const details = await getMarketDetails(symbol);
-        const instr = details.instrument;
-        const decimals = instr.scalingFactor || instr.lotSizeScale || 5;
-        const minSLDistance = instr.limits?.stopDistance?.min || instr.limits?.stopLevel?.min || 0;
-        const minTPDistance = instr.limits?.limitDistance?.min || instr.limits?.limitLevel?.min || 0;
+    const details = await getMarketDetails(symbol);
+    const snapshot = details?.snapshot || {};
+    const distanceRule = details?.dealingRules?.minStopOrProfitDistance;
 
-        // Umrechnung in Preisabstand
-        const minSLDistancePrice = minSLDistance * Math.pow(10, -decimals);
-        const minTPDistancePrice = minTPDistance * Math.pow(10, -decimals);
+    const bid = Number(snapshot.bid);
+    const offer = Number(snapshot.offer);
+    const marketPrice = (bid + offer) / 2;
 
-        return {
-            minTPDistance,
-            maxTPDistance: instr.limits?.limitDistance?.max || instr.limits?.limitLevel?.max || Number.POSITIVE_INFINITY,
-            minSLDistance,
-            maxSLDistance: instr.limits?.stopDistance?.max || instr.limits?.stopLevel?.max || Number.POSITIVE_INFINITY,
-            decimals,
-            minSLDistancePrice,
-            minTPDistancePrice,
-            market: details.snapshot,
-        };
-    } catch (error) {
-        logger.error(`[api.js][API] getAllowedTPRange error for ${symbol}:`, error.message);
-        return {
-            minTPDistance: 0,
-            maxTPDistance: Number.POSITIVE_INFINITY,
-            minSLDistance: 0,
-            maxSLDistance: Number.POSITIVE_INFINITY,
-            decimals: 5,
-            minSLDistancePrice: 0,
-            minTPDistancePrice: 0,
-            market: {},
-        };
-    }
+    const ruleValue = Number(distanceRule?.value);
+
+    const minDistance = distanceRule?.unit === "PERCENTAGE" ? marketPrice * (ruleValue / 100) : ruleValue;
+
+    return {
+        decimals: Number(snapshot.decimalPlacesFactor) || 5,
+        minSLDistancePrice: Number.isFinite(minDistance) ? minDistance : 0,
+        minTPDistancePrice: Number.isFinite(minDistance) ? minDistance : 0,
+        market: snapshot,
+    };
 }
