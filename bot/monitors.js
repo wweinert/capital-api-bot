@@ -100,6 +100,8 @@ async function cancelOrders(shouldCancel) {
     }
 }
 
+const getCloseMinute = (symbol) => Math.min(PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC, RISK.DAILY_CLOSE_MINUTE_UTC);
+
 export async function dailyFlatCheck(bot) {
     if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
 
@@ -108,7 +110,7 @@ export async function dailyFlatCheck(bot) {
 
     try {
         await cancelOrders((symbol) => {
-            const closeMinute = PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC;
+            const closeMinute = getCloseMinute(symbol);
 
             return closeMinute < 24 * 60 && currentMinute >= closeMinute;
         });
@@ -119,7 +121,7 @@ export async function dailyFlatCheck(bot) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
 
-            const closeMinute = PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC;
+            const closeMinute = getCloseMinute(symbol);
 
             if (closeMinute >= 24 * 60 || currentMinute < closeMinute) {
                 continue;

@@ -158,6 +158,10 @@ class Strategy {
             confirmationQuality = Math.abs(indicator.rsi - 50) / 10;
         }
 
+        if (settings.confirmation === "rsi_pullback" && Number.isFinite(indicator.rsi)) {
+            confirmationQuality = Math.abs(indicator.rsi - 50) / 10;
+        }
+
         if (settings.confirmation === "adx_strength") {
             confirmationQuality = indicator.adx.adx / 25;
         }
@@ -254,6 +258,18 @@ class Strategy {
     isConfirmed(signal, settings, indicator) {
         if (settings.confirmation === "none") {
             return true;
+        }
+
+        if (settings.confirmation === "rsi_pullback") {
+            const currentRsi = indicator.rsi;
+            const previousRsi = indicator.rsiPrev;
+            const level = settings.rsiPullbackLevel;
+
+            if (![currentRsi, previousRsi, level].every(Number.isFinite)) {
+                return false;
+            }
+
+            return signal === "BUY" ? previousRsi <= level && currentRsi > previousRsi : previousRsi >= 100 - level && currentRsi < previousRsi;
         }
 
         if (settings.confirmation === "rsi_momentum") {

@@ -14,7 +14,7 @@ import { RISK, PORTFOLIO, PROFILES } from "../config.js";
 import logger from "../utils/logger.js";
 import { logTradeClose, tradeTracker } from "../utils/tradeLogger.js";
 
-const { PER_TRADE, MAX_POSITIONS, MARGIN_RESERVE_PCT } = RISK;
+const { PER_TRADE, MARGIN_RESERVE_PCT } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
 const HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS = 0.5;
 const HLLH_TRAIL_DISTANCE_TP_FRACTION = 0.12;
@@ -206,7 +206,9 @@ class TradingService {
 
             const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= risk.cooldownMinutes * 60_000;
 
-            return currentMinute < risk.lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
+            const lastEntryMinute = Math.min(risk.lastEntryMinute, RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
+
+            return currentMinute < lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
         });
     }
 
@@ -372,8 +374,8 @@ class TradingService {
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
         const marginReservePct = Number.isFinite(Number(MARGIN_RESERVE_PCT)) && Number(MARGIN_RESERVE_PCT) > 0 ? Number(MARGIN_RESERVE_PCT) : 0.7;
-        const maxPositionsForMargin = Number.isFinite(Number(MAX_POSITIONS)) && Number(MAX_POSITIONS) > 0 ? Number(MAX_POSITIONS) : 1;
-        const maxMarginPerTrade = (availableMargin * marginReservePct) / maxPositionsForMargin;
+
+        const maxMarginPerTrade = availableMargin * marginReservePct;
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
@@ -423,7 +425,6 @@ class TradingService {
             availableMargin,
             maxMarginPerTrade,
             marginCapPct: marginReservePct,
-            marginSlots: maxPositionsForMargin,
             marginCapHit,
         };
 
@@ -487,6 +488,8 @@ class TradingService {
 
             return false;
         }
+
+        this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired);
 
         this.signalAtr.set(symbol, atr);
 
