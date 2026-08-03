@@ -199,7 +199,6 @@ export const getOpenPositions = async () =>
     });
 
 export async function getHistorical(symbol, resolution, count) {
-    // logger.info(`[API] Fetching historical: ${symbol} resolution=${resolution}`);
     const maxAttempts = 3;
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
@@ -210,7 +209,7 @@ export async function getHistorical(symbol, resolution, count) {
                     high: p.highPrice?.bid,
                     low: p.lowPrice?.bid,
                     open: p.openPrice?.bid,
-                    timestamp: new Date(p.snapshotTime).toLocaleString(), // Human readable timestamp
+                    timestamp: `${p.snapshotTimeUTC}Z`,
                 })),
             };
         } catch (error) {

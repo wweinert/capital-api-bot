@@ -11,6 +11,14 @@ const { TIMEFRAMES } = ANALYSIS;
 
 const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
 const ANALYSIS_DELAY_MS = 1 * 1000;
+const TIMEFRAME_MINUTES = {
+    m1: 1,
+    m5: 5,
+    m15: 15,
+    h1: 60,
+    h4: 240,
+    d1: 1440,
+};
 class TradingBot {
     constructor() {
         this.isRunning = false;
@@ -251,7 +259,11 @@ class TradingBot {
                 logger.warn(`[Bot] Missing ${tf} candles for ${symbol}`);
                 return null;
             }
-            candles[tf] = prices.slice(0, -1); // Exclude the last candle for analysis
+            candles[tf] = prices.filter((candle) => {
+                const closeTime = Date.parse(candle.timestamp) + TIMEFRAME_MINUTES[tf] * 60 * 1000;
+
+                return closeTime <= Date.now();
+            });
         }
 
         if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
@@ -261,7 +273,7 @@ class TradingBot {
         const indicators = {};
 
         await Promise.all(
-            Object.entries(candleData).map(async ([tf, prices]) => {
+            Object.entries(candles).map(async ([tf, prices]) => {
                 indicators[tf] = await calcIndicators(prices);
             }),
         );
