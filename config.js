@@ -13,8 +13,6 @@ export const API = {
 
 export const RISK = {
     PER_TRADE: 0.03,
-    MAX_POSITIONS: 3,
-    MARGIN_RESERVE_PCT: 1,
     MAX_HOLD_TIME: 24 * 60,
     DAILY_FORCED_CLOSE_UTC: true,
     DAILY_LAST_ENTRY_MINUTE_UTC: 22 * 60,
@@ -26,12 +24,10 @@ export const RISK = {
 };
 
 export const PORTFOLIO = {
-    MAX_POSITIONS: 3,
+    MAX_POSITIONS: 2,
     MAX_POSITIONS_PER_SYMBOL: 1,
-    MAX_DAILY_TRADES: 5,
     MAX_DAILY_LOSS_PCT: 0.1,
     MAX_WEEKLY_LOSS_PCT: 0.2,
-    MAX_LOSS_STREAK: 5,
 };
 
 const TIMEFRAMES = {

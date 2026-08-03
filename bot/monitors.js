@@ -7,6 +7,8 @@ import webSocketService from "../services/websocket.js";
 import { tradeTracker } from "../utils/tradeLogger.js";
 import logger from "../utils/logger.js";
 
+const closedCandles = (prices, minutes) => prices.filter((candle) => Date.parse(candle.timestamp) + minutes * 60_000 <= Date.now());
+
 export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
     logger.info(`[Monitoring] Checking open trades at ${new Date().toISOString()}`);
     if (bot.monitorInterval) clearInterval(bot.monitorInterval);
@@ -54,9 +56,9 @@ export async function trailingStopCheck(bot) {
                     continue;
                 }
                 indicators = {
-                    h1: await calcIndicators(h1Data.prices),
-                    m15: await calcIndicators(m15Data.prices),
-                    m5: await calcIndicators(m5Data.prices),
+                    h1: await calcIndicators(closedCandles(h1Data.prices, 60)),
+                    m15: await calcIndicators(closedCandles(m15Data.prices, 15)),
+                    m5: await calcIndicators(closedCandles(m5Data.prices, 5)),
                 };
             } catch (error) {
                 logger.warn(`[Monitoring] Failed to fetch indicators for ${symbol}: ${error.message}`);

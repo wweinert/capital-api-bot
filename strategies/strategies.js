@@ -131,6 +131,13 @@ class Strategy {
             return signal === "BUY" ? entryPrice - atr * settings.distanceAtr : entryPrice + atr * settings.distanceAtr;
         }
 
+        if (settings.type === "signal") {
+            const signalCandle = candles[candles.length - 1];
+            const buffer = atr * settings.bufferAtr;
+
+            return signal === "BUY" ? signalCandle.low - buffer : signalCandle.high + buffer;
+        }
+
         const candleCount = settings.type === "swing2" ? 2 : settings.type === "swing4" ? 4 : 0;
 
         if (!candleCount || candles.length < candleCount) {

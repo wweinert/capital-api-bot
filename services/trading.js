@@ -14,7 +14,7 @@ import { RISK, PORTFOLIO, PROFILES } from "../config.js";
 import logger from "../utils/logger.js";
 import { logTradeClose, tradeTracker } from "../utils/tradeLogger.js";
 
-const { PER_TRADE, MARGIN_RESERVE_PCT } = RISK;
+const { PER_TRADE } = RISK;
 const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
 const HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS = 0.5;
 const HLLH_TRAIL_DISTANCE_TP_FRACTION = 0.12;
@@ -167,23 +167,8 @@ class TradingService {
         const dailyStartBalance = this.accountBalance - dailyProfit;
         const weeklyStartBalance = this.accountBalance - weeklyProfit;
 
-        const latestTransactions = [...todayTransactions].sort((a, b) => getTime(b.dateUtc || b.dateUTC) - getTime(a.dateUtc || a.dateUTC));
-
-        let lossStreak = 0;
-
-        for (const transaction of latestTransactions) {
-            if (Number(transaction.size) < 0) {
-                lossStreak++;
-            } else {
-                break;
-            }
-        }
-
         const tradingBlocked =
-            todayEntries.length >= PORTFOLIO.MAX_DAILY_TRADES ||
-            dailyProfit <= -dailyStartBalance * PORTFOLIO.MAX_DAILY_LOSS_PCT ||
-            weeklyProfit <= -weeklyStartBalance * PORTFOLIO.MAX_WEEKLY_LOSS_PCT ||
-            lossStreak >= PORTFOLIO.MAX_LOSS_STREAK;
+            dailyProfit <= -dailyStartBalance * PORTFOLIO.MAX_DAILY_LOSS_PCT || weeklyProfit <= -weeklyStartBalance * PORTFOLIO.MAX_WEEKLY_LOSS_PCT;
 
         if (tradingBlocked) {
             logger.info("[Trading] Account entry limit reached");
@@ -373,9 +358,7 @@ class TradingService {
 
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
-        const marginReservePct = Number.isFinite(Number(MARGIN_RESERVE_PCT)) && Number(MARGIN_RESERVE_PCT) > 0 ? Number(MARGIN_RESERVE_PCT) : 0.7;
-
-        const maxMarginPerTrade = availableMargin * marginReservePct;
+        const maxMarginPerTrade = Math.min(availableMargin, accountBalance / PORTFOLIO.MAX_POSITIONS);
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
@@ -424,7 +407,6 @@ class TradingService {
             marginRequired,
             availableMargin,
             maxMarginPerTrade,
-            marginCapPct: marginReservePct,
             marginCapHit,
         };
 

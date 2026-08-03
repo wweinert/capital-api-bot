@@ -19,13 +19,11 @@ export async function calcIndicators(bars) {
         return null;
     }
 
-    // Use closed candles only to avoid indicator drift from a still-forming live bar.
-    const stableBars = bars.length > 1 ? bars.slice(0, -1) : bars;
     const toNum = (value) => {
         const num = typeof value === "number" ? value : Number(value);
         return Number.isFinite(num) ? num : null;
     };
-    const normalizedBars = stableBars
+    const normalizedBars = bars
         .map((b) => ({
             close: toNum(b?.close ?? b?.Close ?? b?.closePrice?.bid),
             high: toNum(b?.high ?? b?.High ?? b?.highPrice?.bid),
@@ -131,4 +129,3 @@ export async function calcIndicators(bars) {
         stochasticPrev,
     };
 }
-

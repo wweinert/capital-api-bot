@@ -112,8 +112,8 @@ export const pingSession = async () => {
     try {
         const response = await apiGet(`${API.BASE_URL}/ping`, { headers: getHeaders() });
         logger.info(`[API] Ping response: ${JSON.stringify(response.data)}`);
-        logger.info(`[API] securityToken: ${xsecurity}`);
-        logger.info(`[API] CST: ${cst}`);
+        // logger.info(`[API] securityToken: ${xsecurity}`);
+        // logger.info(`[API] CST: ${cst}`);
     } catch (error) {
         logger.error(`[api.js][API] Error pinging session: ${error.message}`);
         throw error;
