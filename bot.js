@@ -4,8 +4,9 @@ import { DEV, ANALYSIS, SESSIONS, PROFILES } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
-import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./bot/monitors.js";
-import Strategy from "./strategies/strategies.js";
+import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
+// import Strategy from "./strategies/strategies.js";
+import Strategy from "./strategies/strategy_2.js";
 
 const { TIMEFRAMES } = ANALYSIS;
 

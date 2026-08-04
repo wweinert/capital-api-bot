@@ -90,12 +90,11 @@ export const startSession = async () => {
         cst = response.headers["cst"];
         xsecurity = response.headers["x-security-token"];
 
+        sessionStartTime = Date.now();
         if (!cst || !xsecurity) {
             logger.warn("Session tokens not received in response headers");
             logger.info("Response headers:", response.headers);
         }
-
-        // console.log(`\n\ncst: ${cst} \nxsecurity: ${xsecurity} \n`);
 
         return response.data;
     } catch (error) {
@@ -121,17 +120,7 @@ export const pingSession = async () => {
 };
 
 export const refreshSession = async () => {
-    if (Date.now() - sessionStartTime < 8.5 * 60 * 1000) return;
-    try {
-        const response = await apiGet(`${API.BASE_URL}/session`, { headers: getHeaders() });
-        cst = response.headers["cst"];
-        xsecurity = response.headers["x-security-token"];
-        sessionStartTime = Date.now();
-        logger.info("[API] Session tokens refreshed");
-    } catch (error) {
-        logger.error(`[api.js][API] Error refreshing session: ${error.message}`);
-        throw error;
-    }
+    await startSession();
 };
 
 export const getSessionDetails = async () => {

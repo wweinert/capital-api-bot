@@ -12,12 +12,8 @@ import {
 } from "../api.js";
 import { RISK, PORTFOLIO, PROFILES } from "../config.js";
 import logger from "../utils/logger.js";
-import { logTradeClose, tradeTracker } from "../utils/tradeLogger.js";
 
 const { PER_TRADE } = RISK;
-const HLLH_TRAIL_ACTIVATION_TP_PROGRESS = 0.45;
-const HLLH_BREAKEVEN_ACTIVATION_TP_PROGRESS = 0.5;
-const HLLH_TRAIL_DISTANCE_TP_FRACTION = 0.12;
 
 class TradingService {
     constructor() {
@@ -26,7 +22,6 @@ class TradingService {
         this.availableMargin = 0;
 
         this.quotePerEurCache = new Map();
-        this.signalAtr = new Map();
     }
 
     setAccountBalance(balance) {
@@ -78,19 +73,6 @@ class TradingService {
     roundPrice(price, symbol) {
         const decimals = symbol.includes("JPY") ? 3 : 5;
         return Number(price).toFixed(decimals) * 1;
-    }
-
-    getTpProgress(direction, entryPrice, takeProfit, currentPrice) {
-        const entry = Number(entryPrice);
-        const tp = Number(takeProfit);
-        const price = Number(currentPrice);
-        if (!Number.isFinite(entry) || !Number.isFinite(tp) || !Number.isFinite(price)) return null;
-        const tpDist = Math.abs(tp - entry);
-        if (tpDist <= 0) return null;
-        const dir = this.normalizeDirection(direction);
-        if (dir === "BUY") return (price - entry) / tpDist;
-        if (dir === "SELL") return (entry - price) / tpDist;
-        return null;
     }
 
     async syncOpenTradesFromBroker() {
@@ -420,10 +402,11 @@ class TradingService {
     //                    Place the Trade
     // ============================================================
     async executeCandidate(candidate) {
-        const { symbol, signal, entryType, entryPrice, stopLoss, atr, profile } = candidate;
+        const { symbol, signal, entryType, entryPrice, stopLoss, profile } = candidate;
 
-        const takeProfit = signal === "BUY" ? entryPrice + atr * profile.exit.safetyTargetAtr : entryPrice - atr * profile.exit.safetyTargetAtr;
+        const riskDistance = Math.abs(entryPrice - stopLoss);
 
+        const takeProfit = signal === "BUY" ? entryPrice + riskDistance * profile.exit.targetR : entryPrice - riskDistance * profile.exit.targetR;
         const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, profile.risk.perTrade);
 
         if (!sizing.size) {
@@ -473,8 +456,6 @@ class TradingService {
 
         this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired);
 
-        this.signalAtr.set(symbol, atr);
-
         logger.info(`[Trading] ${symbol} ${signal} ${entryType} accepted`);
 
         return true;
@@ -482,37 +463,31 @@ class TradingService {
     // ============================================================
     //               Trailing Stop (Improved)
     // ============================================================
-
-    async updateTrailingStopIfNeeded(position, indicators) {
-        const { symbol, dealId, direction, entryPrice, stopLoss, currentPrice } = position;
+    async updateTrailingStopIfNeeded(position) {
+        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice } = position;
 
         const profile = PROFILES[symbol];
-        const timeframe = profile?.signal?.timeframe?.toLowerCase();
-
-        const atr = Number(this.signalAtr.get(symbol) ?? indicators?.[timeframe]?.atr);
         const entry = Number(entryPrice);
+        const stop = Number(stopLoss);
+        const target = Number(takeProfit);
         const price = Number(currentPrice);
-        const currentStop = Number(stopLoss);
+        const targetR = Number(profile?.exit?.targetR);
 
-        if (!profile || !dealId || !Number.isFinite(atr) || !Number.isFinite(entry) || !Number.isFinite(price) || atr <= 0) {
+        if (!profile || !dealId || ![entry, stop, target, price, targetR].every(Number.isFinite) || targetR <= 0) {
             return;
         }
 
+        const riskDistance = Math.abs(target - entry) / targetR;
         const isBuy = direction === "BUY";
-
         const favorableMove = isBuy ? price - entry : entry - price;
 
-        const activationDistance = atr * profile.exit.trailActivationAtr;
-
-        if (favorableMove < activationDistance) {
+        if (favorableMove < riskDistance * profile.exit.trailActivationR) {
             return;
         }
 
-        const trailingDistance = atr * profile.exit.trailDistanceAtr;
+        const newStop = isBuy ? price - riskDistance * profile.exit.trailDistanceR : price + riskDistance * profile.exit.trailDistanceR;
 
-        const newStop = isBuy ? price - trailingDistance : price + trailingDistance;
-
-        const improvesStop = isBuy ? newStop > currentStop : newStop < currentStop;
+        const improvesStop = isBuy ? newStop > stop : newStop < stop;
 
         if (!improvesStop) {
             return;
@@ -524,7 +499,6 @@ class TradingService {
 
         logger.info(`[Trail] ${symbol}: stop moved to ${roundedStop}`);
     }
-
     // ============================================================
     //                     Close Position
     // ============================================================
@@ -532,7 +506,6 @@ class TradingService {
         const requestedReason = label || "manual_close";
         let symbol;
         let priceHint;
-        let indicatorSnapshot = null;
         let closePayload;
         let confirmation;
 
@@ -544,14 +517,6 @@ class TradingService {
             }
         } catch (contextError) {
             logger.warn(`[ClosePos] Could not capture close snapshot for ${dealId}: ${contextError.message}`);
-        }
-
-        try {
-            if (symbol) {
-                indicatorSnapshot = await tradeTracker.getCloseIndicators(symbol);
-            }
-        } catch (snapshotError) {
-            logger.warn(`[ClosePos] Could not capture close indicators for ${dealId}: ${snapshotError.message}`);
         }
 
         try {
@@ -601,18 +566,8 @@ class TradingService {
                 priceHint,
                 hasConfirmation: Boolean(confirmation),
             });
-
-            const updated = logTradeClose({
-                dealId,
-                symbol,
-                closePrice: brokerPrice ?? priceHint ?? null,
-                closeReason: finalReason,
-                indicatorsOnClosing: indicatorSnapshot,
-                timestamp: new Date().toISOString(),
-            });
-            if (updated) tradeTracker.markDealClosed(dealId);
         } catch (logErr) {
-            logger.error(`[ClosePos] Failed to log closure for ${dealId}:`, logErr);
+            logger.error(`[ClosePos] Failed to process closure for ${dealId}:`, logErr);
         }
     }
 }

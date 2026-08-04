@@ -1,13 +1,4 @@
 .env*
 .DS_Store
 node_modules/
-client/
-backtest/data/
-backtest/signals/
-backtest/results/
-backtest/analysis/
-backtest/reports/
-backtest/logs/
-backtest/prices/
-backtest/capital-dataset/
-backtest/decision-logs/
+backtest/

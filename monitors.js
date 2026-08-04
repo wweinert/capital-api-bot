@@ -1,13 +1,10 @@
-import { getOpenPositions, getHistorical, getWorkingOrders, cancelWorkingOrder } from "../api.js";
-import { RISK, PROFILES } from "../config.js";
-import { calcIndicators } from "../indicators/indicators.js";
-import tradingService from "../services/trading.js";
-import webSocketService from "../services/websocket.js";
+import { getOpenPositions, getWorkingOrders, cancelWorkingOrder } from "./api.js";
+import { RISK, PROFILES } from "./config.js";
 
-import { tradeTracker } from "../utils/tradeLogger.js";
-import logger from "../utils/logger.js";
+import tradingService from "./services/trading.js";
+import webSocketService from "./services/websocket.js";
 
-const closedCandles = (prices, minutes) => prices.filter((candle) => Date.parse(candle.timestamp) + minutes * 60_000 <= Date.now());
+import logger from "./utils/logger.js";
 
 export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
     logger.info(`[Monitoring] Checking open trades at ${new Date().toISOString()}`);
@@ -36,53 +33,33 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
     }, intervalMs);
 }
 
-export async function trailingStopCheck(bot) {
+export async function trailingStopCheck() {
     try {
         logger.info(`[Monitoring] Trailing stop check at ${new Date().toISOString()}`);
+
         const positions = await getOpenPositions();
-        if (!positions?.positions?.length) return;
-        for (const pos of positions.positions) {
-            const symbol = pos.market ? pos.market.epic : pos.position.epic;
 
-            let indicators;
-            try {
-                const h1Data = await getHistorical(symbol, "HOUR", 50);
-                await bot.delay(400);
-                const m15Data = await getHistorical(symbol, "MINUTE_15", 50);
-                await bot.delay(400);
-                const m5Data = await getHistorical(symbol, "MINUTE_5", 50);
-                if (!h1Data?.prices || !m15Data?.prices || !m5Data?.prices) {
-                    logger.warn(`[Monitoring] Missing candles for ${symbol}, skipping trailing stop update.`);
-                    continue;
-                }
-                indicators = {
-                    h1: await calcIndicators(closedCandles(h1Data.prices, 60)),
-                    m15: await calcIndicators(closedCandles(m15Data.prices, 15)),
-                    m5: await calcIndicators(closedCandles(m5Data.prices, 5)),
-                };
-            } catch (error) {
-                logger.warn(`[Monitoring] Failed to fetch indicators for ${symbol}: ${error.message}`);
-                continue;
-            }
+        if (!positions?.positions?.length) {
+            return;
+        }
 
-            const positionData = {
+        for (const item of positions.positions) {
+            const position = item.position;
+            const market = item.market;
+            const symbol = market?.epic ?? position?.epic;
+
+            await tradingService.updateTrailingStopIfNeeded({
                 symbol,
-                dealId: pos.position.dealId,
-                currency: pos.position.currency,
-                direction: pos.position.direction,
-                size: pos.position.size,
-                leverage: pos.position.leverage,
-                entryPrice: pos.position.level,
-                takeProfit: pos.position.profitLevel,
-                stopLoss: pos.position.stopLevel,
-                currentPrice: tradingService.resolveMarketPrice(pos.position.direction, pos.market.bid, pos.market.offer ?? pos.market.ask),
-                trailingStop: pos.position.trailingStop,
-            };
-
-            await tradingService.updateTrailingStopIfNeeded(positionData, indicators);
+                dealId: position.dealId,
+                direction: position.direction,
+                entryPrice: position.level,
+                takeProfit: position.profitLevel,
+                stopLoss: position.stopLevel,
+                currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
+            });
         }
     } catch (error) {
-        logger.error("[bot.js][Bot] Error in monitorOpenTrades:", error);
+        logger.error("[Monitoring] Trailing stop error:", error);
     }
 }
 
@@ -237,31 +214,20 @@ export function logDeals(bot) {
             const res = await getOpenPositions();
             const positions = Array.isArray(res?.positions) ? res.positions : [];
 
-            const brokerDeals = positions
-                .map((p) => ({
-                    dealId: p?.position?.dealId ?? p?.dealId,
-                    symbol: p?.market?.epic ?? p?.position?.epic,
-                }))
-                .filter(Boolean);
+            const brokerDealIds = positions.map((position) => position?.position?.dealId ?? position?.dealId).filter(Boolean);
 
-            const brokerDealIds = brokerDeals.map((d) => d.dealId);
-
-            for (const { dealId, symbol } of brokerDeals) {
+            for (const dealId of brokerDealIds) {
                 if (!bot.openedBrockerDealIds.includes(dealId)) {
                     bot.openedBrockerDealIds.push(dealId);
-                    tradeTracker.registerOpenBrockerDeal(dealId, symbol);
                 }
             }
-            console.log("openedBrockerDealIds:", bot.openedBrockerDealIds);
 
             const closedDealIds = bot.openedBrockerDealIds.filter((id) => !brokerDealIds.includes(id));
 
             bot.openedBrockerDealIds = bot.openedBrockerDealIds.filter((id) => brokerDealIds.includes(id));
 
             if (closedDealIds.length) {
-                console.log("closedDealIds", closedDealIds);
-                await tradeTracker.reconcileClosedDeals(closedDealIds);
-                closedDealIds.length = 0;
+                logger.info(`[DealID Monitor] Closed deals: ${closedDealIds.join(", ")}`);
             }
             return [];
         } catch (error) {
