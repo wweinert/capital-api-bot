@@ -177,7 +177,7 @@ export async function maxHoldCheck(bot) {
 
             logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${maxHoldMinutes}`);
 
-            if (minutesHeld >= maxHoldMinutes) {
+            if (minutesHeld >= maxHoldMinutes && !pos.position.trailingStop) {
                 if (!dealId) {
                     logger.error(`[Bot] Missing dealId for ${pos?.market?.epic}, cannot close.`);
                     continue;
