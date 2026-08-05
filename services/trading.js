@@ -1,7 +1,7 @@
 import {
     placePosition,
     placeOrder,
-    updateStopLoss,
+    enableTrailingStop,
     getDealConfirmation,
     closePosition as apiClosePosition,
     getOpenPositions,
@@ -464,40 +464,36 @@ class TradingService {
     //               Trailing Stop (Improved)
     // ============================================================
     async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice } = position;
+        const { symbol, dealId, direction, entryPrice, stopLoss, currentPrice, trailingStop } = position;
+
+        if (trailingStop) return;
 
         const profile = PROFILES[symbol];
         const entry = Number(entryPrice);
         const stop = Number(stopLoss);
-        const target = Number(takeProfit);
         const price = Number(currentPrice);
-        const targetR = Number(profile?.exit?.targetR);
+        const activationR = Number(profile?.exit?.trailActivationR);
+        const configuredDistanceR = Number(profile?.exit?.trailDistanceR);
 
-        if (!profile || !dealId || ![entry, stop, target, price, targetR].every(Number.isFinite) || targetR <= 0) {
+        if (!profile || !dealId || ![entry, stop, price, activationR, configuredDistanceR].every(Number.isFinite)) {
             return;
         }
 
-        const riskDistance = Math.abs(target - entry) / targetR;
+        const riskDistance = Math.abs(entry - stop);
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;
 
-        if (favorableMove < riskDistance * profile.exit.trailActivationR) {
+        if (favorableMove < riskDistance * activationR) {
             return;
         }
 
-        const newStop = isBuy ? price - riskDistance * profile.exit.trailDistanceR : price + riskDistance * profile.exit.trailDistanceR;
+        // Не позволяет брокерскому trailing начать ниже безубытка.
+        const distanceR = Math.min(configuredDistanceR, activationR);
+        const stopDistance = this.roundPrice(riskDistance * distanceR, symbol);
 
-        const improvesStop = isBuy ? newStop > stop : newStop < stop;
+        await enableTrailingStop(dealId, stopDistance);
 
-        if (!improvesStop) {
-            return;
-        }
-
-        const roundedStop = this.roundPrice(newStop, symbol);
-
-        await updateStopLoss(dealId, roundedStop);
-
-        logger.info(`[Trail] ${symbol}: stop moved to ${roundedStop}`);
+        logger.info(`[Trail] ${symbol}: broker trailing enabled, distance=${stopDistance}`);
     }
     // ============================================================
     //                     Close Position

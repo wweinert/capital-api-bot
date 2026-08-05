@@ -290,13 +290,13 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
     return response.data;
 }
 
-export const updateStopLoss = async (dealId, stopLevel) =>
+export const enableTrailingStop = async (dealId, stopDistance) =>
     withSessionRetry(async () => {
         const response = await axios.put(
             `${API.BASE_URL}/positions/${dealId}`,
             {
-                trailingStop: false,
-                stopLevel: Number(stopLevel),
+                trailingStop: true,
+                stopDistance: Number(stopDistance),
             },
             {
                 headers: getHeaders(true),
