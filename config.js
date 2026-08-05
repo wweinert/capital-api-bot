@@ -29,6 +29,7 @@ export const PORTFOLIO = {
     MAX_POSITIONS_PER_SYMBOL: 1,
     MAX_DAILY_LOSS_PCT: 0.1,
     MAX_WEEKLY_LOSS_PCT: 0.2,
+    MARGIN_USAGE: 0.9,
 };
 
 const TIMEFRAMES = {
