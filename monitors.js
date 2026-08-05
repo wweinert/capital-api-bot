@@ -53,7 +53,7 @@ export async function trailingStopCheck() {
                 dealId: position.dealId,
                 direction: position.direction,
                 entryPrice: position.level,
-                stopLoss: position.stopLevel,
+                takeProfit: position.profitLevel,
                 currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
                 trailingStop: position.trailingStop,
             });

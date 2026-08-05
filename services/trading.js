@@ -341,7 +341,7 @@ class TradingService {
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
         const maxMarginPerTrade = Math.min(availableMargin, accountBalance / PORTFOLIO.MAX_POSITIONS) * PORTFOLIO.MARGIN_USAGE;
-        
+
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
             return this.emptyPositionSizing(symbol, "invalid_margin_budget");
@@ -464,22 +464,24 @@ class TradingService {
     //               Trailing Stop (Improved)
     // ============================================================
     async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, stopLoss, currentPrice, trailingStop } = position;
+        const { symbol, dealId, direction, entryPrice, takeProfit, currentPrice, trailingStop } = position;
 
         if (trailingStop) return;
 
         const profile = PROFILES[symbol];
         const entry = Number(entryPrice);
-        const stop = Number(stopLoss);
+        const target = Number(takeProfit);
         const price = Number(currentPrice);
+        const targetR = Number(profile?.exit?.targetR);
         const activationR = Number(profile?.exit?.trailActivationR);
         const configuredDistanceR = Number(profile?.exit?.trailDistanceR);
 
-        if (!profile || !dealId || ![entry, stop, price, activationR, configuredDistanceR].every(Number.isFinite)) {
+        if (!profile || !dealId || ![entry, target, price, targetR, activationR, configuredDistanceR].every(Number.isFinite)) {
             return;
         }
 
-        const riskDistance = Math.abs(entry - stop);
+        const riskDistance = Math.abs(target - entry) / targetR;
+
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;
 
@@ -491,7 +493,7 @@ class TradingService {
         const distanceR = Math.min(configuredDistanceR, activationR);
         const stopDistance = this.roundPrice(riskDistance * distanceR, symbol);
 
-        await enableTrailingStop(dealId, stopDistance);
+        await enableTrailingStop(dealId, stopDistance, target);
 
         logger.info(`[Trail] ${symbol}: broker trailing enabled, distance=${stopDistance}`);
     }
