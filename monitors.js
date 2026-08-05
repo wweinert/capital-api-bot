@@ -53,6 +53,7 @@ export async function trailingStopCheck() {
                 dealId: position.dealId,
                 direction: position.direction,
                 entryPrice: position.level,
+                stopLoss: position.stopLevel,
                 takeProfit: position.profitLevel,
                 currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
                 trailingStop: position.trailingStop,
@@ -192,7 +193,15 @@ export async function maxHoldCheck(bot) {
 }
 
 function resolveMaxHoldMinutes(pos, symbol) {
-    return PROFILES[symbol]?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
+    const position = pos?.position ?? pos;
+    const profile = tradingService.resolvePositionProfile(
+        symbol,
+        position?.level,
+        position?.stopLevel,
+        position?.profitLevel,
+    );
+
+    return profile?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
 }
 
 export function logDeals(bot) {

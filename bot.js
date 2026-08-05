@@ -6,7 +6,7 @@ import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
 // import Strategy from "./strategies/strategies.js";
-import Strategy from "./strategies/strategy_2.js";
+import Strategy, { getStrategyProfiles } from "./strategies/strategy_2.js";
 
 const { TIMEFRAMES } = ANALYSIS;
 
@@ -20,7 +20,7 @@ const TIMEFRAME_MINUTES = {
     h4: 240,
     d1: 1440,
 };
-class TradingBot {
+export class TradingBot {
     constructor() {
         this.isRunning = false;
         this.analysisInterval = null;
@@ -154,6 +154,12 @@ class TradingBot {
     }
 
     isProfileSessionActive(profile, currentMinutes) {
+        const { windowStart, windowEnd } = profile.signal ?? {};
+
+        if (Number.isFinite(windowStart) && Number.isFinite(windowEnd)) {
+            return this.inSession(currentMinutes, windowStart, windowEnd);
+        }
+
         const sessionName = profile.signal?.session;
         const session = SESSIONS[sessionName];
 
@@ -170,8 +176,10 @@ class TradingBot {
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
         const symbols = Object.entries(PROFILES)
-            .filter(([, profile]) => {
-                return profile.enabled && this.isProfileSessionActive(profile, currentMinutes);
+            .filter(([symbol]) => {
+                return getStrategyProfiles(symbol).some(
+                    (profile) => profile.enabled && this.isProfileSessionActive(profile, currentMinutes),
+                );
             })
             .map(([symbol]) => symbol);
 
@@ -187,12 +195,14 @@ class TradingBot {
 
         const results = await Promise.all(this.activeSymbols.map((symbol, index) => this.analyzeSymbol(symbol, allCandles[index])));
 
-        const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
+        const candidates = results.flat().filter(Boolean).sort((a, b) =>
+            b.priority - a.priority || b.quality - a.quality,
+        );
 
         logger.info(
             `[Bot] Candidates: ${
                 candidates.length
-                    ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal} (${candidate.quality.toFixed(2)})`).join(", ")
+                    ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal} ${candidate.profileId} (${candidate.quality.toFixed(2)})`).join(", ")
                     : "none"
             }`,
         );
@@ -202,11 +212,15 @@ class TradingBot {
 
     async fetchAllCandles(symbol) {
         try {
-            const profile = PROFILES[symbol];
-            const signalTimeframe = profile.signal.timeframe;
-            const contextTimeframes = profile.signal.context === "majority" ? ["H1", "H4", "D1"] : [profile.signal.context.toUpperCase()];
+            const profiles = getStrategyProfiles(symbol);
+            const timeframes = [...new Set(profiles.flatMap((profile) => {
+                const signalTimeframe = profile.signal.timeframe;
+                const contextTimeframes = profile.signal.context === "majority"
+                    ? ["H1", "H4", "D1"]
+                    : [profile.signal.context.toUpperCase()];
 
-            const timeframes = [...new Set([signalTimeframe, ...contextTimeframes])];
+                return [signalTimeframe, ...contextTimeframes];
+            }))];
             const candleData = {};
 
             await Promise.all(
@@ -237,13 +251,15 @@ class TradingBot {
         const lastCandle = signalCandles[signalCandles.length - 1];
         const candleId = `${profile.signal.timeframe}:${lastCandle.timestamp}`;
 
-        if (this.lastAnalyzedCandles[symbol] === candleId) {
+        const analysisKey = `${symbol}:${profile.id ?? "core"}`;
+
+        if (this.lastAnalyzedCandles[analysisKey] === candleId) {
             logger.debug(`[Bot] ${symbol}: ${candleId} already analyzed`);
 
             return false;
         }
 
-        this.lastAnalyzedCandles[symbol] = candleId;
+        this.lastAnalyzedCandles[analysisKey] = candleId;
 
         return true;
     }
@@ -252,23 +268,19 @@ class TradingBot {
     async analyzeSymbol(symbol, candleData) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
 
-        const profile = PROFILES[symbol];
+        const profiles = getStrategyProfiles(symbol);
         const candles = {};
 
         for (const [tf, prices] of Object.entries(candleData)) {
             if (!Array.isArray(prices) || prices.length < 2) {
                 logger.warn(`[Bot] Missing ${tf} candles for ${symbol}`);
-                return null;
+                return [];
             }
             candles[tf] = prices.filter((candle) => {
                 const closeTime = Date.parse(candle.timestamp) + TIMEFRAME_MINUTES[tf] * 60 * 1000;
 
                 return closeTime <= Date.now();
             });
-        }
-
-        if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
-            return null;
         }
 
         const indicators = {};
@@ -281,28 +293,22 @@ class TradingBot {
 
         const { bid, ask } = await this.getBidAsk(symbol);
 
-        const candidate = Strategy.getSignal({
-            symbol,
-            profile,
-            indicators,
-            candles,
-            bid,
-            ask,
-        });
+        const candidates = [];
 
-        if (!candidate.signal) {
-            logger.debug(`[Bot] ${symbol}: ${candidate.reason}`);
-            return null;
+        for (const profile of profiles) {
+            if (!this.shouldAnalyzeCandle(symbol, profile, candles)) continue;
+
+            const candidate = Strategy.getSignal({ symbol, profile, indicators, candles, bid, ask });
+
+            if (!candidate.signal) {
+                logger.debug(`[Bot] ${symbol} ${profile.id}: ${candidate.reason}`);
+                continue;
+            }
+
+            candidates.push({ ...candidate, profile, indicators, candles, bid, ask });
         }
 
-        return {
-            ...candidate,
-            profile,
-            indicators,
-            candles,
-            bid,
-            ask,
-        };
+        return candidates;
     }
 
     async shutdown() {
@@ -404,11 +410,13 @@ class TradingBot {
 
 const bot = new TradingBot();
 
-if ([0, 6].includes(new Date().getUTCDay())) {
-    logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
-} else {
-    bot.initialize().catch((error) => {
-        logger.error("[bot.js] Bot initialization failed:", error);
-        process.exit(1);
-    });
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    if ([0, 6].includes(new Date().getUTCDay())) {
+        logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
+    } else {
+        bot.initialize().catch((error) => {
+            logger.error("[bot.js] Bot initialization failed:", error);
+            process.exit(1);
+        });
+    }
 }

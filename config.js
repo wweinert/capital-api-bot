@@ -88,6 +88,18 @@ export const SESSIONS = {
         START: 13 * 60,
         END: 21 * 60,
     },
+    asiaCore: {
+        START: 0,
+        END: 7 * 60,
+    },
+    londonCore: {
+        START: 7 * 60,
+        END: 13 * 60,
+    },
+    newYorkCore: {
+        START: 13 * 60,
+        END: 20 * 60,
+    },
 };
 
 export const PROFILES = STRATEGY_2_PROFILES;

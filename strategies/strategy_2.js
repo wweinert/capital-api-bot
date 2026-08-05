@@ -157,7 +157,126 @@ export const STRATEGY_2_PROFILES = {
     ),
 };
 
-class Strategy {
+const addonProfile = (id, config) => {
+    const {
+        entryBufferAtr,
+        stopMode,
+        swingBars,
+        stopBufferAtr,
+        expiryBars,
+        targetR,
+        trailActivationR,
+        trailDistanceR,
+        maxHoldMinutes,
+        riskPct,
+        priority,
+        ...signal
+    } = config;
+
+    return {
+        ...profile(
+            signal,
+            { bufferAtr: entryBufferAtr, expiryBars },
+            { type: stopMode, swingBars, bufferAtr: stopBufferAtr },
+            { targetR, trailActivationR, trailDistanceR, maxHoldMinutes },
+            { perTrade: riskPct },
+        ),
+        id,
+        source: "addon",
+        priority,
+    };
+};
+
+export const STRATEGY_2_ADDONS = {
+    NZDJPY: [addonProfile("addon:asiaCore:NZDJPY", {
+        timeframe: "M15", pattern: "pullback", trendLookback: 6, minTrendAtr: 0.75, structure: "move",
+        consolidationBars: 3, pausePattern: "any", minSignalAtr: 0.2, maxSignalAtr: 1,
+        maxPauseAtr: 2.25, minBody: 0.5, breakout: "close", pressure: "rsiExhaustion", pressureLevel: 50,
+        flowLevel: 0.1, location: "bollingerRoom", locationAtr: 0.25, session: "asiaCore",
+        windowStart: 0, windowEnd: 180, entryBufferAtr: 0, stopMode: "swing", swingBars: 3,
+        stopBufferAtr: 0, expiryBars: 2, targetR: 1.25, trailActivationR: 0.7,
+        trailDistanceR: 0.75, maxHoldMinutes: 120, riskPct: 0.03, priority: 2,
+    })],
+
+    USDCAD: [addonProfile("addon:newYorkCore:USDCAD", {
+        timeframe: "M5", pattern: "pullback", trendLookback: 8, minTrendAtr: 1, structure: "move",
+        consolidationBars: 2, pausePattern: "lastOpposite", minSignalAtr: 1, maxSignalAtr: 2,
+        maxPauseAtr: 2.25, minBody: 0.2, breakout: "close", pressure: "rsiExhaustion", pressureLevel: 50,
+        flowLevel: 0.2, location: "bollingerExtreme", locationAtr: 0.25, session: "newYorkCore",
+        windowStart: 780, windowEnd: 960, entryBufferAtr: 0.05, stopMode: "swing", swingBars: 6,
+        stopBufferAtr: 0.2, expiryBars: 2, targetR: 2, trailActivationR: 1,
+        trailDistanceR: 1, maxHoldMinutes: 60, riskPct: 0.03, priority: 0,
+    })],
+
+    GBPUSD: [addonProfile("addon:newYorkCore:GBPUSD", {
+        timeframe: "M15", pattern: "continuation", trendLookback: 16, minTrendAtr: 1, structure: "move",
+        consolidationBars: 2, pausePattern: "opposite", minSignalAtr: 0.5, maxSignalAtr: 1,
+        maxPauseAtr: 1.5, minBody: 0.2, breakout: "wick", pressure: "rsi", pressureLevel: 52,
+        flowLevel: 0.3, location: "localLevel", locationAtr: 0.1, session: "newYorkCore",
+        windowStart: 780, windowEnd: 1200, entryBufferAtr: 0.1, stopMode: "signal", swingBars: 2,
+        stopBufferAtr: 0.1, expiryBars: 3, targetR: 3, trailActivationR: 1,
+        trailDistanceR: 0.75, maxHoldMinutes: 60, riskPct: 0.03, priority: 0,
+    })],
+
+    EURJPY: [addonProfile("addon:asiaCore:EURJPY", {
+        timeframe: "M15", pattern: "pullback", trendLookback: 24, minTrendAtr: 1.5, structure: "move",
+        consolidationBars: 2, pausePattern: "mixed", minSignalAtr: 0.2, maxSignalAtr: 1.5,
+        maxPauseAtr: 1, minBody: 0.2, breakout: "close", pressure: "rsi", pressureLevel: 55,
+        flowLevel: 0.2, location: "localLevel", locationAtr: 0, session: "asiaCore",
+        windowStart: 0, windowEnd: 420, entryBufferAtr: 0.05, stopMode: "swing", swingBars: 3,
+        stopBufferAtr: 0.1, expiryBars: 2, targetR: 3, trailActivationR: 1,
+        trailDistanceR: 1, maxHoldMinutes: 120, riskPct: 0.02, priority: 2,
+    })],
+
+    GBPJPY: [addonProfile("addon:londonCore:GBPJPY", {
+        timeframe: "M5", pattern: "pullback", trendLookback: 24, minTrendAtr: 1, structure: "both",
+        consolidationBars: 1, pausePattern: "any", minSignalAtr: 1, maxSignalAtr: 3,
+        maxPauseAtr: 1.5, minBody: 0.65, breakout: "wick", pressure: "flow", pressureLevel: 52,
+        flowLevel: 0.1, location: "bollingerRetest", locationAtr: 0.1, session: "londonCore",
+        windowStart: 420, windowEnd: 600, entryBufferAtr: 0, stopMode: "signal", swingBars: 4,
+        stopBufferAtr: 0.2, expiryBars: 3, targetR: 2, trailActivationR: 99,
+        trailDistanceR: 0.5, maxHoldMinutes: 120, riskPct: 0.03, priority: 0,
+    })],
+
+    AUDJPY: [addonProfile("addon:asiaCore:AUDJPY", {
+        timeframe: "M5", pattern: "pullback", trendLookback: 24, minTrendAtr: 0.75, structure: "move",
+        consolidationBars: 3, pausePattern: "mixed", minSignalAtr: 1, maxSignalAtr: 3,
+        maxPauseAtr: 1, minBody: 0.5, breakout: "wick", pressure: "flow", pressureLevel: 58,
+        flowLevel: 0.05, location: "bollingerRetest", locationAtr: 0.5, session: "asiaCore",
+        windowStart: 0, windowEnd: 420, entryBufferAtr: 0.05, stopMode: "swing", swingBars: 2,
+        stopBufferAtr: 0, expiryBars: 3, targetR: 1, trailActivationR: 99,
+        trailDistanceR: 0.35, maxHoldMinutes: 120, riskPct: 0.03, priority: 2,
+    })],
+
+    EURUSD: [addonProfile("addon:londonCore:EURUSD", {
+        timeframe: "M5", pattern: "pullback", trendLookback: 12, minTrendAtr: 1, structure: "halves",
+        consolidationBars: 3, pausePattern: "opposite", minSignalAtr: 0.2, maxSignalAtr: 1.5,
+        maxPauseAtr: 1.5, minBody: 0.2, breakout: "wick", pressure: "rsiExhaustion", pressureLevel: 52,
+        flowLevel: 0.05, location: "bollingerRetest", locationAtr: 0.25, session: "londonCore",
+        windowStart: 420, windowEnd: 780, entryBufferAtr: 0.1, stopMode: "signal", swingBars: 4,
+        stopBufferAtr: 0.1, expiryBars: 3, targetR: 3, trailActivationR: 99,
+        trailDistanceR: 0.75, maxHoldMinutes: 15, riskPct: 0.03, priority: 2,
+    })],
+
+    USDJPY: [addonProfile("addon:newYorkCore:USDJPY", {
+        timeframe: "M5", pattern: "pullback", trendLookback: 12, minTrendAtr: 0.75, structure: "halves",
+        consolidationBars: 3, pausePattern: "lastOpposite", minSignalAtr: 0.35, maxSignalAtr: 1.5,
+        maxPauseAtr: 2.25, minBody: 0.65, breakout: "none", pressure: "flow", pressureLevel: 52,
+        flowLevel: 0.2, location: "bollingerRetest", locationAtr: 0, session: "newYorkCore",
+        windowStart: 780, windowEnd: 960, entryBufferAtr: 0.1, stopMode: "swing", swingBars: 4,
+        stopBufferAtr: 0.1, expiryBars: 1, targetR: 2, trailActivationR: 99,
+        trailDistanceR: 0.5, maxHoldMinutes: 240, riskPct: 0.03, priority: 2,
+    })],
+};
+
+export function getStrategyProfiles(symbol) {
+    const core = STRATEGY_2_PROFILES[symbol];
+    const coreProfiles = core ? [{ ...core, id: `core:${symbol}`, source: "core", priority: 1 }] : [];
+
+    return [...coreProfiles, ...(STRATEGY_2_ADDONS[symbol] ?? [])];
+}
+
+export class Strategy {
     getSignal({ symbol, profile: configuredProfile, candles }) {
         const profile = configuredProfile ?? STRATEGY_2_PROFILES[symbol];
         const settings = profile?.signal;
@@ -177,7 +296,7 @@ class Strategy {
         const current = rows[index];
         const market = this.getMarketState(rows);
 
-        if (!market || !this.isSessionActive(settings.session, current.timestamp, settings.timeframe)) {
+        if (!market || !this.isSessionActive(settings, current.timestamp)) {
             return { signal: null, reason: "market_or_session_failed" };
         }
 
@@ -189,16 +308,41 @@ class Strategy {
 
         const range = current.high - current.low;
         const bodyRatio = range > 0 ? Math.abs(current.close - current.open) / range : 0;
+        const rangeAtr = range / market.atr;
 
         if (bodyRatio < settings.minBody) {
             return { signal: null, reason: "body_failed" };
         }
 
-        if (!this.trendPass(rows, index, settings, buy, market.atr)) {
+        if (Number.isFinite(settings.minSignalAtr) && rangeAtr < settings.minSignalAtr) {
+            return { signal: null, reason: "signal_range_failed" };
+        }
+
+        if (Number.isFinite(settings.maxSignalAtr) && rangeAtr > settings.maxSignalAtr) {
+            return { signal: null, reason: "signal_range_failed" };
+        }
+
+        const trendBuy = settings.pattern === "pullback" ? !buy : buy;
+
+        if (!this.trendPass(rows, index, settings, trendBuy, market.atr)) {
             return { signal: null, reason: "trend_failed" };
         }
 
         const pause = rows.slice(index - settings.consolidationBars, index);
+        const opposite = (candle) => buy ? candle.close < candle.open : candle.close > candle.open;
+
+        if (settings.pausePattern === "opposite" && !pause.some(opposite)) {
+            return { signal: null, reason: "pause_pattern_failed" };
+        }
+
+        if (settings.pausePattern === "lastOpposite" && !opposite(pause.at(-1))) {
+            return { signal: null, reason: "pause_pattern_failed" };
+        }
+
+        if (settings.pausePattern === "mixed" && (!pause.some(opposite) || pause.every(opposite))) {
+            return { signal: null, reason: "pause_pattern_failed" };
+        }
+
         const pauseHigh = Math.max(...pause.map((candle) => candle.high));
         const pauseLow = Math.min(...pause.map((candle) => candle.low));
         const pauseRange = pauseHigh - pauseLow;
@@ -224,6 +368,12 @@ class Strategy {
                 : market.rsi <= 100 - settings.pressureLevel;
 
             if (!passed) return { signal: null, reason: "pressure_failed" };
+        } else if (settings.pressure === "rsiExhaustion") {
+            const passed = buy
+                ? market.rsi <= 100 - settings.pressureLevel
+                : market.rsi >= settings.pressureLevel;
+
+            if (!passed) return { signal: null, reason: "pressure_failed" };
         } else {
             const passed = buy
                 ? market.flow >= settings.flowLevel
@@ -241,9 +391,16 @@ class Strategy {
             ? current.high + market.atr * profile.entry.bufferAtr
             : current.low - market.atr * profile.entry.bufferAtr;
 
-        const stopLoss = buy
+        const signalStop = buy
             ? current.low - market.atr * profile.stop.bufferAtr
             : current.high + market.atr * profile.stop.bufferAtr;
+
+        const swingRows = rows.slice(Math.max(0, index - (profile.stop.swingBars ?? 3) + 1), index + 1);
+        const stopLoss = profile.stop.type === "swing"
+            ? buy
+                ? Math.min(...swingRows.map((candle) => candle.low)) - market.atr * profile.stop.bufferAtr
+                : Math.max(...swingRows.map((candle) => candle.high)) + market.atr * profile.stop.bufferAtr
+            : signalStop;
 
         const stopDistanceAtr = Math.abs(entryPrice - stopLoss) / market.atr;
 
@@ -263,7 +420,9 @@ class Strategy {
             stopLoss,
             atr: market.atr,
             quality: trendStrength + bodyRatio + Math.abs(market.flow),
-            reason: `continuation_${settings.timeframe}`,
+            priority: profile.priority ?? 1,
+            profileId: profile.id,
+            reason: `${settings.pattern ?? "continuation"}_${settings.timeframe}`,
         };
     }
 
@@ -310,6 +469,12 @@ class Strategy {
             return buy
                 ? current.close < market.upper + market.atr * settings.locationAtr
                 : current.close > market.lower - market.atr * settings.locationAtr;
+        }
+
+        if (settings.location === "bollingerExtreme") {
+            return buy
+                ? current.low <= market.lower + market.atr * settings.locationAtr
+                : current.high >= market.upper - market.atr * settings.locationAtr;
         }
 
         return buy
@@ -379,19 +544,25 @@ class Strategy {
         };
     }
 
-    isSessionActive(session, timestamp, timeframe) {
-        const timeframeMinutes = { M15: 15, H1: 60 };
-        const decisionTime = Date.parse(timestamp) + timeframeMinutes[timeframe] * 60_000;
+    isSessionActive(settings, timestamp) {
+        const timeframeMinutes = { M5: 5, M15: 15, H1: 60 };
+        const decisionTime = Date.parse(timestamp) + timeframeMinutes[settings.timeframe] * 60_000;
         const date = new Date(decisionTime);
         const minute = date.getUTCHours() * 60 + date.getUTCMinutes();
 
-        if (session === "asia") return minute < 8 * 60;
-        if (session === "london") return minute >= 7 * 60 && minute < 13 * 60;
-        if (session === "overlap") return minute >= 12 * 60 && minute < 16 * 60;
+        if (Number.isFinite(settings.windowStart)) {
+            return minute >= settings.windowStart && minute < settings.windowEnd;
+        }
+
+        if (settings.session === "asia") return minute < 8 * 60;
+        if (settings.session === "london") return minute >= 7 * 60 && minute < 13 * 60;
+        if (settings.session === "overlap") return minute >= 12 * 60 && minute < 16 * 60;
+        if (settings.session === "asiaCore") return minute < 7 * 60;
+        if (settings.session === "londonCore") return minute >= 7 * 60 && minute < 13 * 60;
+        if (settings.session === "newYorkCore") return minute >= 13 * 60 && minute < 20 * 60;
 
         return false;
     }
 }
 
 export default new Strategy();
-

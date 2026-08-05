@@ -11,6 +11,7 @@ import {
     getAccountTransactions,
 } from "../api.js";
 import { RISK, PORTFOLIO, PROFILES } from "../config.js";
+import { getStrategyProfiles } from "../strategies/strategy_2.js";
 import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
@@ -23,6 +24,7 @@ class TradingService {
 
         this.quotePerEurCache = new Map();
         this.trailingStates = new Map();
+        this.activeProfiles = new Map();
     }
 
     setAccountBalance(balance) {
@@ -88,6 +90,30 @@ class TradingService {
         const orderSymbols = orders.map((item) => item?.workingOrderData?.epic);
 
         this.openTrades = [...new Set([...positionSymbols, ...orderSymbols].filter(Boolean))];
+
+        for (const symbol of this.activeProfiles.keys()) {
+            if (!this.openTrades.includes(symbol)) this.activeProfiles.delete(symbol);
+        }
+    }
+
+    resolvePositionProfile(symbol, entryPrice, stopLoss, takeProfit) {
+        const active = this.activeProfiles.get(symbol);
+        if (active) return active;
+
+        const entry = Number(entryPrice);
+        const stop = Number(stopLoss);
+        const target = Number(takeProfit);
+        const riskDistance = Math.abs(entry - stop);
+
+        if (![entry, stop, target, riskDistance].every(Number.isFinite) || riskDistance <= 0) {
+            return PROFILES[symbol];
+        }
+
+        const targetR = Math.abs(target - entry) / riskDistance;
+
+        return getStrategyProfiles(symbol).sort(
+            (left, right) => Math.abs(left.exit.targetR - targetR) - Math.abs(right.exit.targetR - targetR),
+        )[0] ?? PROFILES[symbol];
     }
 
     async getPositionContext(dealId) {
@@ -456,8 +482,9 @@ class TradingService {
         }
 
         this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired);
+        this.activeProfiles.set(symbol, profile);
 
-        logger.info(`[Trading] ${symbol} ${signal} ${entryType} accepted`);
+        logger.info(`[Trading] ${symbol} ${signal} ${entryType} ${profile.id} accepted`);
 
         return true;
     }
@@ -465,9 +492,9 @@ class TradingService {
     //               Trailing Stop (Improved)
     // ============================================================
     async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, takeProfit, currentPrice, trailingStop } = position;
+        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, trailingStop } = position;
 
-        const profile = PROFILES[symbol];
+        const profile = this.resolvePositionProfile(symbol, entryPrice, stopLoss, takeProfit);
         const entry = Number(entryPrice);
         const target = Number(takeProfit);
         const price = Number(currentPrice);
@@ -568,6 +595,8 @@ class TradingService {
                     logger.warn(`[ClosePos] Close confirmation failed for ${dealId}: ${confirmError.message}`);
                 }
             }
+
+            if (symbol) this.activeProfiles.delete(symbol);
 
             const brokerPrice = this.firstNumber(
                 confirmation?.closeLevel,
