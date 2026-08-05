@@ -22,6 +22,7 @@ class TradingService {
         this.availableMargin = 0;
 
         this.quotePerEurCache = new Map();
+        this.trailingStates = new Map();
     }
 
     setAccountBalance(balance) {
@@ -466,8 +467,6 @@ class TradingService {
     async updateTrailingStopIfNeeded(position) {
         const { symbol, dealId, direction, entryPrice, takeProfit, currentPrice, trailingStop } = position;
 
-        if (trailingStop) return;
-
         const profile = PROFILES[symbol];
         const entry = Number(entryPrice);
         const target = Number(takeProfit);
@@ -485,11 +484,45 @@ class TradingService {
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;
 
+        const now = Date.now();
+
+        const state = this.trailingStates.get(dealId) ?? {
+            bestPrice: price,
+            lastBestAt: now,
+            tightened: false,
+        };
+
+        const priceImproved = isBuy ? price > state.bestPrice : price < state.bestPrice;
+
+        if (priceImproved) {
+            state.bestPrice = price;
+            state.lastBestAt = now;
+        }
+
+        this.trailingStates.set(dealId, state);
+
+        if (trailingStop) {
+            const stalled = now - state.lastBestAt >= RISK.DYNAMIC_TRAIL_STALL_MINUTES * 60_000;
+
+            const canTighten = !state.tightened && favorableMove >= riskDistance * RISK.DYNAMIC_TRAIL_MIN_R && stalled;
+
+            if (canTighten) {
+                const stopDistance = this.roundPrice(riskDistance * RISK.DYNAMIC_TRAIL_DISTANCE_R, symbol);
+
+                await enableTrailingStop(dealId, stopDistance, target);
+
+                state.tightened = true;
+
+                logger.info(`[Trail] ${symbol}: distance tightened to ${stopDistance}`);
+            }
+
+            return;
+        }
+
         if (favorableMove < riskDistance * activationR) {
             return;
         }
 
-        // Не позволяет брокерскому trailing начать ниже безубытка.
         const distanceR = Math.min(configuredDistanceR, activationR);
         const stopDistance = this.roundPrice(riskDistance * distanceR, symbol);
 
@@ -497,6 +530,7 @@ class TradingService {
 
         logger.info(`[Trail] ${symbol}: broker trailing enabled, distance=${stopDistance}`);
     }
+
     // ============================================================
     //                     Close Position
     // ============================================================
