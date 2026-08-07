@@ -1,14 +1,11 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, ANALYSIS, SESSIONS, PROFILES } from "./config.js";
+import { DEV, TIMEFRAMES, SESSIONS, PROFILES } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
-// import Strategy from "./strategies/strategies.js";
-import Strategy from "./strategies/strategy_2.js";
-
-const { TIMEFRAMES } = ANALYSIS;
+import Strategy from "./strategies/strategies.js";
 
 const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
 const ANALYSIS_DELAY_MS = 1 * 1000;
@@ -153,29 +150,34 @@ class TradingBot {
         }
     }
 
-    isProfileSessionActive(profile, currentMinutes) {
-        const sessionName = profile.signal?.session;
-        const session = SESSIONS[sessionName];
-
-        if (!session) {
-            logger.warn(`[Bot] Unknown session: ${sessionName}`);
-            return false;
-        }
-
-        return this.inSession(currentMinutes, session.START, session.END);
-    }
-
     getActiveSymbols() {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        const symbols = Object.entries(PROFILES)
-            .filter(([, profile]) => {
-                return profile.enabled && this.isProfileSessionActive(profile, currentMinutes);
-            })
-            .map(([symbol]) => symbol);
+        const symbols = [];
 
-        logger.info(`[Bot] Tradable symbols: ${symbols.length ? symbols.join(", ") : "none"}`);
+        for (const [symbol, profile] of Object.entries(PROFILES)) {
+            const session = SESSIONS[profile.signal?.session];
+
+            if (!session) {
+                logger.warn(`[Bot] Unknown session: ${profile.signal?.session}`);
+                continue;
+            }
+
+            let isActive;
+
+            if (session.START < session.END) {
+                isActive = currentMinutes >= session.START && currentMinutes < session.END;
+            } else {
+                isActive = currentMinutes >= session.START || currentMinutes < session.END;
+            }
+
+            if (isActive) {
+                symbols.push(symbol);
+            }
+        }
+
+        logger.info(`[Bot] Tradable symbols: ${symbols.join(", ") || "none"}`);
 
         return symbols;
     }
@@ -387,14 +389,6 @@ class TradingBot {
             bid: marketDetails?.snapshot?.bid,
             ask: marketDetails?.snapshot?.offer,
         };
-    }
-
-    inSession(currentMinutes, startMinutes, endMinutes, { inclusiveEnd = false } = {}) {
-        if (!Number.isFinite(startMinutes) || !Number.isFinite(endMinutes)) return false;
-        if (startMinutes < endMinutes) {
-            return currentMinutes >= startMinutes && (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes);
-        }
-        return currentMinutes >= startMinutes || (inclusiveEnd ? currentMinutes <= endMinutes : currentMinutes < endMinutes); // Overnight session
     }
 
     delay(ms) {

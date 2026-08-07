@@ -1,5 +1,4 @@
 import "dotenv/config";
-import { STRATEGY_2_PROFILES } from "./strategies/strategy_2.js";
 
 const ENV = process.env;
 
@@ -36,7 +35,7 @@ export const PORTFOLIO = {
     MARGIN_USAGE: 0.9,
 };
 
-const TIMEFRAMES = {
+export const TIMEFRAMES = {
     D1: "DAY", // Daily trend direction
     H4: "HOUR_4", // 4-hour trend direction
     H1: "HOUR", // 1-hour entry timeframe
@@ -45,26 +44,10 @@ const TIMEFRAMES = {
     M1: "MINUTE", // 1-minute entry timeframe
 };
 
-const EMA = {
-    TREND: {
-        FAST: 50,
-        SLOW: 200,
-    },
-    ENTRY: {
-        FAST: 9,
-        SLOW: 21,
-    },
-};
-// Technical Analysis Configuration
-export const ANALYSIS = {
-    TIMEFRAMES,
-    EMA,
-};
-
 // Development overrides for faster testing
 export const DEV = {
     INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
-    MODE: false,
+    MODE: true,
 };
 
 export const SESSIONS = {
@@ -90,4 +73,133 @@ export const SESSIONS = {
     },
 };
 
-export const PROFILES = STRATEGY_2_PROFILES;
+const profile = (signal, entry, stop, exit) => ({
+    signal: {
+        context: signal.timeframe.toLowerCase(),
+        ...signal,
+    },
+
+    entry: {
+        type: "stop",
+        ...entry,
+    },
+
+    stop,
+    exit,
+});
+
+
+export const PROFILES = {
+    AUDCAD: profile(
+        { timeframe: "M15", trendLookback: 12, minTrendAtr: 0.5, structure: "both", consolidationBars: 2, maxPauseAtr: 1, minBody: 0.2, breakout: "close", pressure: "rsi", pressureLevel: 52, flowLevel: 0.1, location: "localLevel", locationAtr: 0.1, session: "overlap" },
+        { bufferAtr: 0.05, expiryBars: 1 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
+    ),
+
+    AUDJPY: profile(
+        { timeframe: "H1", trendLookback: 24, minTrendAtr: 1.5, structure: "move", consolidationBars: 2, maxPauseAtr: 1.5, minBody: 0.2, breakout: "none", pressure: "flow", pressureLevel: 52, flowLevel: 0.1, location: "bollingerRetest", locationAtr: 0, session: "asia" },
+        { bufferAtr: 0.1, expiryBars: 4 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 2, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
+    ),
+
+    AUDUSD: profile(
+        { timeframe: "M15", trendLookback: 24, minTrendAtr: 2, structure: "move", consolidationBars: 3, maxPauseAtr: 1.5, minBody: 0.2, breakout: "none", pressure: "rsi", pressureLevel: 58, flowLevel: 0.05, location: "localLevel", locationAtr: 0.5, session: "asia" },
+        { bufferAtr: 0.1, expiryBars: 1 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 4, trailActivationR: 2, trailDistanceR: 0.75, maxHoldMinutes: 480 },  
+    ),
+
+    EURCHF: profile(
+        { timeframe: "M15", trendLookback: 12, minTrendAtr: 2, structure: "halves", consolidationBars: 2, maxPauseAtr: 1, minBody: 0.5, breakout: "none", pressure: "flow", pressureLevel: 55, flowLevel: 0.05, location: "bollingerRoom", locationAtr: 0.25, session: "overlap" },
+        { bufferAtr: 0, expiryBars: 4 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 5, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 480 },
+    ),
+
+    EURGBP: profile(
+        { timeframe: "H1", trendLookback: 8, minTrendAtr: 1, structure: "both", consolidationBars: 3, maxPauseAtr: 2.25, minBody: 0.2, breakout: "wick", pressure: "rsi", pressureLevel: 58, flowLevel: 0.1, location: "bollingerRoom", locationAtr: 0.5, session: "asia" },
+        { bufferAtr: 0, expiryBars: 1 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 4, trailActivationR: 2, trailDistanceR: 0.5, maxHoldMinutes: 720 },
+    ),
+
+    EURJPY: profile(
+        { timeframe: "M15", trendLookback: 24, minTrendAtr: 0.5, structure: "move", consolidationBars: 2, maxPauseAtr: 2.25, minBody: 0.2, breakout: "none", pressure: "flow", pressureLevel: 50, flowLevel: 0.2, location: "bollingerRetest", locationAtr: 0.25, session: "asia" },
+        { bufferAtr: 0.05, expiryBars: 3 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 0.75, maxHoldMinutes: 480 },
+    ),
+
+    EURUSD: profile(
+        { timeframe: "H1", trendLookback: 16, minTrendAtr: 1.5, structure: "both", consolidationBars: 4, maxPauseAtr: 2.25, minBody: 0.5, breakout: "none", pressure: "rsi", pressureLevel: 52, flowLevel: 0.3, location: "bollingerRoom", locationAtr: 0, session: "asia" },
+        { bufferAtr: 0, expiryBars: 4 },
+        { type: "signal", bufferAtr: 0.2 },
+        { targetR: 5, trailActivationR: 1.5, trailDistanceR: 0.75, maxHoldMinutes: 480 },  
+    ),
+
+    GBPAUD: profile(
+        { timeframe: "M15", trendLookback: 24, minTrendAtr: 1, structure: "both", consolidationBars: 4, maxPauseAtr: 2.25, minBody: 0.5, breakout: "close", pressure: "rsi", pressureLevel: 50, flowLevel: 0.05, location: "bollingerRetest", locationAtr: 0.25, session: "overlap" },
+        { bufferAtr: 0, expiryBars: 2 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 2, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 240 },  
+    ),
+
+    GBPCHF: profile(
+        { timeframe: "H1", trendLookback: 16, minTrendAtr: 1.5, structure: "both", consolidationBars: 2, maxPauseAtr: 2.25, minBody: 0.5, breakout: "wick", pressure: "rsi", pressureLevel: 50, flowLevel: 0.05, location: "bollingerRoom", locationAtr: 0, session: "london" },
+        { bufferAtr: 0, expiryBars: 2 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 5, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 240 },
+    ),
+
+    GBPJPY: profile(
+        { timeframe: "M15", trendLookback: 8, minTrendAtr: 0.5, structure: "both", consolidationBars: 2, maxPauseAtr: 1, minBody: 0.5, breakout: "wick", pressure: "rsi", pressureLevel: 55, flowLevel: 0.05, location: "bollingerRoom", locationAtr: 0.25, session: "asia" },
+        { bufferAtr: 0.1, expiryBars: 4 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 5, trailActivationR: 2, trailDistanceR: 0.75, maxHoldMinutes: 480 },
+    ),
+
+    GBPUSD: profile(
+        { timeframe: "H1", trendLookback: 24, minTrendAtr: 0.5, structure: "move", consolidationBars: 2, maxPauseAtr: 2.25, minBody: 0.2, breakout: "none", pressure: "rsi", pressureLevel: 55, flowLevel: 0.1, location: "localLevel", locationAtr: 0.5, session: "asia" },
+        { bufferAtr: 0, expiryBars: 4 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1.5, maxHoldMinutes: 480 },
+    ),
+
+    NZDJPY: profile(
+        { timeframe: "H1", trendLookback: 12, minTrendAtr: 1, structure: "both", consolidationBars: 4, maxPauseAtr: 1.5, minBody: 0.2, breakout: "none", pressure: "rsi", pressureLevel: 52, flowLevel: 0.1, location: "bollingerRoom", locationAtr: 0.1, session: "london" },
+        { bufferAtr: 0, expiryBars: 2 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 5, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+    ),
+
+    NZDUSD: profile(
+        { timeframe: "M15", trendLookback: 16, minTrendAtr: 1.5, structure: "both", consolidationBars: 3, maxPauseAtr: 1.5, minBody: 0.2, breakout: "none", pressure: "rsi", pressureLevel: 55, flowLevel: 0.05, location: "bollingerRetest", locationAtr: 0.5, session: "london" },
+        { bufferAtr: 0, expiryBars: 2 },
+        { type: "signal", bufferAtr: 0.2 },
+        { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+    ),
+
+    USDCAD: profile(
+        { timeframe: "M15", trendLookback: 24, minTrendAtr: 0.5, structure: "move", consolidationBars: 2, maxPauseAtr: 1, minBody: 0.2, breakout: "close", pressure: "rsi", pressureLevel: 52, flowLevel: 0.05, location: "localLevel", locationAtr: 0.5, session: "overlap" },
+        { bufferAtr: 0, expiryBars: 3 },
+        { type: "signal", bufferAtr: 0.1 },
+        { targetR: 3, trailActivationR: 1.5, trailDistanceR: 0.5, maxHoldMinutes: 240 },
+    ),
+
+    USDCHF: profile(
+        { timeframe: "M15", trendLookback: 12, minTrendAtr: 0.5, structure: "move", consolidationBars: 6, maxPauseAtr: 1.5, minBody: 0.35, breakout: "wick", pressure: "flow", pressureLevel: 55, flowLevel: 0.2, location: "bollingerRetest", locationAtr: 0.1, session: "asia" },
+        { bufferAtr: 0, expiryBars: 2 },
+        { type: "signal", bufferAtr: 0.2 },
+        { targetR: 3, trailActivationR: 1, trailDistanceR: 0.5, maxHoldMinutes: 240 },
+    ),
+
+    USDJPY: profile(
+        { timeframe: "H1", trendLookback: 12, minTrendAtr: 0.5, structure: "halves", consolidationBars: 3, maxPauseAtr: 2.25, minBody: 0.2, breakout: "none", pressure: "flow", pressureLevel: 50, flowLevel: 0.2, location: "localLevel", locationAtr: 0, session: "overlap" },
+        { bufferAtr: 0.1, expiryBars: 1 },
+        { type: "signal", bufferAtr: 0 },
+        { targetR: 3, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 1440 },
+    ),
+};
+
