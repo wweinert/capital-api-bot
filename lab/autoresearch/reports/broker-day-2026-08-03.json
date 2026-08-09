@@ -1,0 +1,366 @@
+{
+  "generatedAt": "2026-08-03T18:47:49.783Z",
+  "from": "2026-08-02T22:00:00",
+  "to": "2026-08-03T18:47:30",
+  "activity": [
+    {
+      "date": "2026-08-03T16:40:23.165",
+      "dateUTC": "2026-08-03T14:40:23.165",
+      "epic": "EURUSD",
+      "dealId": "00005552-0055-311e-0000-0000821a5a57",
+      "source": "SL",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00005552-0055-311e-0000-0000821a5a57",
+        "workingOrderId": "00005552-0055-311e-0000-0000821a614d",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 8000,
+        "direction": "SELL",
+        "level": 1.15137,
+        "stopLevel": 1.15137,
+        "guaranteedStop": false,
+        "profitLevel": 1.15839,
+        "openPrice": 1.15278
+      }
+    },
+    {
+      "date": "2026-08-03T16:40:23.165",
+      "dateUTC": "2026-08-03T14:40:23.165",
+      "epic": "EURUSD",
+      "dealId": "00005552-0055-311e-0000-0000821a614d",
+      "source": "SL",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_00005552-0055-311e-0000-0000821a5a57",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 8000,
+        "direction": "SELL",
+        "level": 0,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-08-03T16:00:00.393",
+      "dateUTC": "2026-08-03T14:00:00.393",
+      "epic": "AUDUSD",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff4",
+      "source": "SL",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00001544-0055-311e-0000-0000810b0ff4",
+        "workingOrderId": "00001544-0055-311e-0000-0000810b0ff5",
+        "marketName": "AUD/USD",
+        "currency": "USD",
+        "size": 1800,
+        "direction": "SELL",
+        "level": 0.69842,
+        "stopLevel": 0.6985,
+        "guaranteedStop": false,
+        "profitLevel": 0.70164,
+        "openPrice": 0.699
+      }
+    },
+    {
+      "date": "2026-08-03T16:00:00.393",
+      "dateUTC": "2026-08-03T14:00:00.393",
+      "epic": "AUDUSD",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff5",
+      "source": "SL",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_00001544-0055-311e-0000-0000810b0ff4",
+        "marketName": "AUD/USD",
+        "currency": "USD",
+        "size": 1800,
+        "direction": "SELL",
+        "level": 0,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-08-03T15:57:46.189",
+      "dateUTC": "2026-08-03T13:57:46.189",
+      "epic": "AUDUSD",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff4",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00001544-0055-311e-0000-0000810b0ff4",
+        "workingOrderId": "00001544-0055-311e-0000-0000810b0ff3",
+        "marketName": "AUD/USD",
+        "currency": "USD",
+        "size": 1800,
+        "direction": "BUY",
+        "level": 0.699,
+        "stopLevel": 0.6985,
+        "guaranteedStop": false,
+        "profitLevel": 0.70164
+      }
+    },
+    {
+      "date": "2026-08-03T15:57:46.189",
+      "dateUTC": "2026-08-03T13:57:46.189",
+      "epic": "AUDUSD",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff3",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_86b0d237-6c67-4bec-9be8-dc544b1971a9",
+        "marketName": "AUD/USD",
+        "goodTillDate": "2026-08-03T16:10:02.000",
+        "currency": "USD",
+        "size": 1800,
+        "direction": "BUY",
+        "level": 0.699,
+        "stopLevel": 0.6985,
+        "guaranteedStop": false,
+        "profitLevel": 0.70164
+      }
+    },
+    {
+      "date": "2026-08-03T15:55:02.729",
+      "dateUTC": "2026-08-03T13:55:02.729",
+      "epic": "AUDUSD",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff3",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_86b0d237-6c67-4bec-9be8-dc544b1971a9",
+        "marketName": "AUD/USD",
+        "goodTillDate": "2026-08-03T16:10:02.000",
+        "currency": "USD",
+        "size": 1800,
+        "direction": "BUY",
+        "level": 0.699,
+        "stopLevel": 0.6985,
+        "guaranteedStop": false,
+        "profitLevel": 0.70164
+      }
+    },
+    {
+      "date": "2026-08-03T15:40:30.915",
+      "dateUTC": "2026-08-03T13:40:30.915",
+      "epic": "GBPUSD",
+      "dealId": "00007090-0055-311e-0000-00008149280b",
+      "source": "SL",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00007090-0055-311e-0000-00008149280b",
+        "workingOrderId": "00007090-0055-311e-0000-00008149283f",
+        "marketName": "GBP/USD",
+        "currency": "USD",
+        "size": 1400,
+        "direction": "SELL",
+        "level": 1.34537,
+        "stopLevel": 1.34537,
+        "guaranteedStop": false,
+        "profitLevel": 1.35114,
+        "openPrice": 1.34652
+      }
+    },
+    {
+      "date": "2026-08-03T15:40:30.915",
+      "dateUTC": "2026-08-03T13:40:30.915",
+      "epic": "GBPUSD",
+      "dealId": "00007090-0055-311e-0000-00008149283f",
+      "source": "SL",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_00007090-0055-311e-0000-00008149280b",
+        "marketName": "GBP/USD",
+        "currency": "USD",
+        "size": 1400,
+        "direction": "SELL",
+        "level": 0,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-08-03T14:58:44.412",
+      "dateUTC": "2026-08-03T12:58:44.412",
+      "epic": "GBPUSD",
+      "dealId": "00007090-0055-311e-0000-00008149280b",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00007090-0055-311e-0000-00008149280b",
+        "workingOrderId": "00007090-0055-311e-0000-000081492809",
+        "marketName": "GBP/USD",
+        "currency": "USD",
+        "size": 1400,
+        "direction": "BUY",
+        "level": 1.34652,
+        "stopLevel": 1.34537,
+        "guaranteedStop": false,
+        "profitLevel": 1.35114
+      }
+    },
+    {
+      "date": "2026-08-03T14:58:44.412",
+      "dateUTC": "2026-08-03T12:58:44.412",
+      "epic": "GBPUSD",
+      "dealId": "00007090-0055-311e-0000-000081492809",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_7d0126a3-6256-41c4-810a-a3c2df66c3e1",
+        "marketName": "GBP/USD",
+        "goodTillDate": "2026-08-03T15:10:03.000",
+        "currency": "USD",
+        "size": 1400,
+        "direction": "BUY",
+        "level": 1.34652,
+        "stopLevel": 1.34537,
+        "guaranteedStop": false,
+        "profitLevel": 1.35114
+      }
+    },
+    {
+      "date": "2026-08-03T14:55:03.756",
+      "dateUTC": "2026-08-03T12:55:03.756",
+      "epic": "GBPUSD",
+      "dealId": "00007090-0055-311e-0000-000081492809",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_7d0126a3-6256-41c4-810a-a3c2df66c3e1",
+        "marketName": "GBP/USD",
+        "goodTillDate": "2026-08-03T15:10:03.000",
+        "currency": "USD",
+        "size": 1400,
+        "direction": "BUY",
+        "level": 1.34652,
+        "stopLevel": 1.34537,
+        "guaranteedStop": false,
+        "profitLevel": 1.35114
+      }
+    },
+    {
+      "date": "2026-08-03T10:36:03.357",
+      "dateUTC": "2026-08-03T08:36:03.357",
+      "epic": "EURUSD",
+      "dealId": "00005552-0055-311e-0000-0000821a5a57",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00005552-0055-311e-0000-0000821a5a57",
+        "workingOrderId": "00005552-0055-311e-0000-0000821a5a28",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 8000,
+        "direction": "BUY",
+        "level": 1.15278,
+        "stopLevel": 1.15137,
+        "guaranteedStop": false,
+        "profitLevel": 1.15839
+      }
+    },
+    {
+      "date": "2026-08-03T10:36:03.357",
+      "dateUTC": "2026-08-03T08:36:03.357",
+      "epic": "EURUSD",
+      "dealId": "00005552-0055-311e-0000-0000821a5a28",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_7740c3e4-47bf-4bcf-833d-ba5821a918b5",
+        "marketName": "EUR/USD",
+        "goodTillDate": "2026-08-03T11:05:03.000",
+        "currency": "USD",
+        "size": 8000,
+        "direction": "BUY",
+        "level": 1.15278,
+        "stopLevel": 1.15137,
+        "guaranteedStop": false,
+        "profitLevel": 1.15839
+      }
+    },
+    {
+      "date": "2026-08-03T10:20:03.485",
+      "dateUTC": "2026-08-03T08:20:03.485",
+      "epic": "EURUSD",
+      "dealId": "00005552-0055-311e-0000-0000821a5a28",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_7740c3e4-47bf-4bcf-833d-ba5821a918b5",
+        "marketName": "EUR/USD",
+        "goodTillDate": "2026-08-03T11:05:03.000",
+        "currency": "USD",
+        "size": 8000,
+        "direction": "BUY",
+        "level": 1.15278,
+        "stopLevel": 1.15137,
+        "guaranteedStop": false,
+        "profitLevel": 1.15839
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "date": "2026-08-03T16:40:23.206",
+      "dateUtc": "2026-08-03T14:40:23.206",
+      "instrumentName": "EURUSD",
+      "transactionType": "TRADE",
+      "note": "Trade closed",
+      "reference": "135081768415608",
+      "size": "-9.8",
+      "currency": "EURd",
+      "status": "PROCESSED",
+      "dealId": "00005552-0055-311e-0000-0000821a5a57"
+    },
+    {
+      "date": "2026-08-03T16:00:00.507",
+      "dateUtc": "2026-08-03T14:00:00.507",
+      "instrumentName": "AUDUSD",
+      "transactionType": "TRADE",
+      "note": "Trade closed",
+      "reference": "135079227788506",
+      "size": "-0.91",
+      "currency": "EURd",
+      "status": "PROCESSED",
+      "dealId": "00001544-0055-311e-0000-0000810b0ff4"
+    },
+    {
+      "date": "2026-08-03T15:40:30.958",
+      "dateUtc": "2026-08-03T13:40:30.958",
+      "instrumentName": "GBPUSD",
+      "transactionType": "TRADE",
+      "note": "Trade closed",
+      "reference": "135078000918369",
+      "size": "-1.4",
+      "currency": "EURd",
+      "status": "PROCESSED",
+      "dealId": "00007090-0055-311e-0000-00008149280b"
+    }
+  ],
+  "openPositions": {
+    "positions": []
+  },
+  "workingOrders": {
+    "workingOrders": []
+  },
+  "account": {
+    "balance": 313.09,
+    "deposit": 313.03,
+    "profitLoss": 0.06,
+    "available": 313.09
+  }
+}

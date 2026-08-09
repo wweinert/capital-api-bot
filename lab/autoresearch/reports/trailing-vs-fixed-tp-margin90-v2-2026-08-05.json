@@ -1,0 +1,2182 @@
+{
+  "generatedAt": "2026-08-05T10:11:38.673Z",
+  "protocol": "Exit comparison for current continuation profiles: pair-specific broker-native trailing without TP, broker-native trailing with TP, and fixed TP only; one position and 90% margin utilization.",
+  "period": {
+    "start": "2026-02-01T00:00:00.000Z",
+    "holdoutStart": "2026-05-29T00:00:00.000Z",
+    "endExclusive": "2026-08-04T17:53:00.000Z",
+    "marketDays": 106
+  },
+  "portfolio": {
+    "maxPositions": 1,
+    "marginUtilization": 0.9
+  },
+  "results": {
+    "brokerNativeTrailingOnly": {
+      "development": {
+        "trades": 225,
+        "pnl": 4816.51,
+        "finalBalance": 5316.51,
+        "returnPct": 963.3,
+        "winRatePct": 63.1,
+        "profitFactor": 2.659,
+        "averageR": 0.464,
+        "maxDrawdownPct": 8.37,
+        "marketDays": 84,
+        "activeDays": 83,
+        "dailyCoveragePct": 98.8,
+        "profitableDays": 59,
+        "profitableDayPct": 70.2,
+        "averageDailyReturnPct": 2.969,
+        "activeAverageDailyReturnPct": 3.005,
+        "medianDailyReturnPct": 2.045,
+        "worstDayReturnPct": -4.239,
+        "bestDayReturnPct": 23.805,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 7,
+            "pnl": -52.06,
+            "wins": 3
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 117.27,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 28,
+            "pnl": 663.46,
+            "wins": 12
+          },
+          "EURCHF": {
+            "trades": 4,
+            "pnl": 142.99,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 9,
+            "pnl": 367.59,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 33,
+            "pnl": 142.98,
+            "wins": 25
+          },
+          "EURUSD": {
+            "trades": 17,
+            "pnl": 614.19,
+            "wins": 10
+          },
+          "GBPAUD": {
+            "trades": 19,
+            "pnl": 606.79,
+            "wins": 16
+          },
+          "GBPCHF": {
+            "trades": 3,
+            "pnl": 76.97,
+            "wins": 2
+          },
+          "GBPJPY": {
+            "trades": 17,
+            "pnl": 242.08,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 33,
+            "pnl": 234.28,
+            "wins": 19
+          },
+          "NZDJPY": {
+            "trades": 4,
+            "pnl": 214.51,
+            "wins": 4
+          },
+          "NZDUSD": {
+            "trades": 27,
+            "pnl": 791.8,
+            "wins": 15
+          },
+          "USDCAD": {
+            "trades": 10,
+            "pnl": 525.91,
+            "wins": 8
+          },
+          "USDCHF": {
+            "trades": 7,
+            "pnl": 32.75,
+            "wins": 4
+          },
+          "USDJPY": {
+            "trades": 3,
+            "pnl": 95,
+            "wins": 3
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 79,
+          "time": 24,
+          "trailing": 119
+        }
+      },
+      "developmentFolds": [
+        {
+          "trades": 79,
+          "pnl": 866.72,
+          "finalBalance": 1366.72,
+          "returnPct": 173.34,
+          "winRatePct": 68.4,
+          "profitFactor": 3.512,
+          "averageR": 0.557,
+          "maxDrawdownPct": 6.33,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 24,
+          "profitableDayPct": 85.7,
+          "averageDailyReturnPct": 3.792,
+          "activeAverageDailyReturnPct": 3.792,
+          "medianDailyReturnPct": 2.842,
+          "worstDayReturnPct": -3.515,
+          "bestDayReturnPct": 23.805,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 2,
+              "pnl": -1.79,
+              "wins": 1
+            },
+            "AUDJPY": {
+              "trades": 2,
+              "pnl": 24.76,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 10,
+              "pnl": 235.17,
+              "wins": 5
+            },
+            "EURCHF": {
+              "trades": 2,
+              "pnl": 9.73,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 5,
+              "pnl": 33,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 13,
+              "pnl": 87.5,
+              "wins": 12
+            },
+            "EURUSD": {
+              "trades": 3,
+              "pnl": -10.2,
+              "wins": 1
+            },
+            "GBPAUD": {
+              "trades": 7,
+              "pnl": 175.72,
+              "wins": 6
+            },
+            "GBPCHF": {
+              "trades": 3,
+              "pnl": 76.97,
+              "wins": 2
+            },
+            "GBPJPY": {
+              "trades": 4,
+              "pnl": 56.44,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 14,
+              "pnl": 107.23,
+              "wins": 10
+            },
+            "NZDUSD": {
+              "trades": 7,
+              "pnl": -20.24,
+              "wins": 3
+            },
+            "USDCAD": {
+              "trades": 3,
+              "pnl": 39.76,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": -3.97,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 2,
+              "pnl": 56.65,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "daily_flat": 2,
+            "sl": 24,
+            "time": 6,
+            "trailing": 47
+          }
+        },
+        {
+          "trades": 66,
+          "pnl": 406.73,
+          "finalBalance": 906.73,
+          "returnPct": 81.35,
+          "winRatePct": 63.6,
+          "profitFactor": 2.202,
+          "averageR": 0.405,
+          "maxDrawdownPct": 6.34,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 18,
+          "profitableDayPct": 64.3,
+          "averageDailyReturnPct": 2.236,
+          "activeAverageDailyReturnPct": 2.236,
+          "medianDailyReturnPct": 1.721,
+          "worstDayReturnPct": -3.434,
+          "bestDayReturnPct": 14.634,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 2,
+              "pnl": -23.85,
+              "wins": 0
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": 19.41,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 9,
+              "pnl": 14.43,
+              "wins": 4
+            },
+            "EURCHF": {
+              "trades": 1,
+              "pnl": 10.55,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 1,
+              "pnl": -12.17,
+              "wins": 0
+            },
+            "EURJPY": {
+              "trades": 9,
+              "pnl": 48.71,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": 47.23,
+              "wins": 5
+            },
+            "GBPAUD": {
+              "trades": 6,
+              "pnl": 64.8,
+              "wins": 6
+            },
+            "GBPJPY": {
+              "trades": 5,
+              "pnl": 5.18,
+              "wins": 2
+            },
+            "GBPUSD": {
+              "trades": 9,
+              "pnl": 51.22,
+              "wins": 5
+            },
+            "NZDJPY": {
+              "trades": 3,
+              "pnl": 69.62,
+              "wins": 3
+            },
+            "NZDUSD": {
+              "trades": 5,
+              "pnl": 38.29,
+              "wins": 4
+            },
+            "USDCAD": {
+              "trades": 3,
+              "pnl": 58.12,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 1.16,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 1,
+              "pnl": 14.03,
+              "wins": 1
+            }
+          },
+          "exits": {
+            "daily_flat": 1,
+            "sl": 22,
+            "time": 10,
+            "trailing": 33
+          }
+        },
+        {
+          "trades": 80,
+          "pnl": 572.53,
+          "finalBalance": 1072.53,
+          "returnPct": 114.51,
+          "winRatePct": 57.5,
+          "profitFactor": 2.737,
+          "averageR": 0.421,
+          "maxDrawdownPct": 8.25,
+          "marketDays": 28,
+          "activeDays": 27,
+          "dailyCoveragePct": 96.4,
+          "profitableDays": 17,
+          "profitableDayPct": 60.7,
+          "averageDailyReturnPct": 2.88,
+          "activeAverageDailyReturnPct": 2.987,
+          "medianDailyReturnPct": 1.874,
+          "worstDayReturnPct": -4.239,
+          "bestDayReturnPct": 18.156,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 3,
+              "pnl": 3.01,
+              "wins": 2
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": 7.96,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 9,
+              "pnl": 78.44,
+              "wins": 3
+            },
+            "EURCHF": {
+              "trades": 1,
+              "pnl": 21.06,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 3,
+              "pnl": 74.21,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 11,
+              "pnl": -15.67,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 5,
+              "pnl": 99.92,
+              "wins": 4
+            },
+            "GBPAUD": {
+              "trades": 6,
+              "pnl": 51.23,
+              "wins": 4
+            },
+            "GBPJPY": {
+              "trades": 8,
+              "pnl": 34.59,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -2.62,
+              "wins": 4
+            },
+            "NZDJPY": {
+              "trades": 1,
+              "pnl": 4.89,
+              "wins": 1
+            },
+            "NZDUSD": {
+              "trades": 15,
+              "pnl": 142.7,
+              "wins": 8
+            },
+            "USDCAD": {
+              "trades": 4,
+              "pnl": 66.03,
+              "wins": 4
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": 6.77,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "sl": 33,
+            "time": 8,
+            "trailing": 39
+          }
+        }
+      ],
+      "holdout": {
+        "trades": 49,
+        "pnl": 219.29,
+        "finalBalance": 719.29,
+        "returnPct": 43.86,
+        "winRatePct": 53.1,
+        "profitFactor": 2.015,
+        "averageR": 0.313,
+        "maxDrawdownPct": 12.91,
+        "marketDays": 22,
+        "activeDays": 19,
+        "dailyCoveragePct": 86.4,
+        "profitableDays": 10,
+        "profitableDayPct": 45.5,
+        "averageDailyReturnPct": 1.762,
+        "activeAverageDailyReturnPct": 2.04,
+        "medianDailyReturnPct": 0,
+        "worstDayReturnPct": -4.828,
+        "bestDayReturnPct": 12.173,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 1,
+            "pnl": -15.25,
+            "wins": 0
+          },
+          "AUDUSD": {
+            "trades": 2,
+            "pnl": 73.6,
+            "wins": 2
+          },
+          "EURCHF": {
+            "trades": 1,
+            "pnl": -10.66,
+            "wins": 0
+          },
+          "EURJPY": {
+            "trades": 10,
+            "pnl": -1.57,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 7,
+            "pnl": 72.87,
+            "wins": 4
+          },
+          "GBPAUD": {
+            "trades": 5,
+            "pnl": 25.58,
+            "wins": 3
+          },
+          "GBPCHF": {
+            "trades": 1,
+            "pnl": 20.43,
+            "wins": 1
+          },
+          "GBPJPY": {
+            "trades": 4,
+            "pnl": -29.29,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 6,
+            "pnl": -49.26,
+            "wins": 2
+          },
+          "NZDJPY": {
+            "trades": 3,
+            "pnl": -7.62,
+            "wins": 2
+          },
+          "NZDUSD": {
+            "trades": 6,
+            "pnl": 94.12,
+            "wins": 5
+          },
+          "USDCAD": {
+            "trades": 1,
+            "pnl": 17.23,
+            "wins": 1
+          },
+          "USDCHF": {
+            "trades": 1,
+            "pnl": 19.22,
+            "wins": 1
+          },
+          "USDJPY": {
+            "trades": 1,
+            "pnl": 9.88,
+            "wins": 1
+          }
+        },
+        "exits": {
+          "sl": 21,
+          "time": 7,
+          "trailing": 21
+        }
+      },
+      "full": {
+        "trades": 274,
+        "pnl": 7148.23,
+        "finalBalance": 7648.23,
+        "returnPct": 1429.65,
+        "winRatePct": 61.3,
+        "profitFactor": 2.374,
+        "averageR": 0.437,
+        "maxDrawdownPct": 12.91,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 69,
+        "profitableDayPct": 65.1,
+        "averageDailyReturnPct": 2.719,
+        "activeAverageDailyReturnPct": 2.825,
+        "medianDailyReturnPct": 1.622,
+        "worstDayReturnPct": -4.828,
+        "bestDayReturnPct": 23.805,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 8,
+            "pnl": -214.21,
+            "wins": 3
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 117.27,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 30,
+            "pnl": 1446.08,
+            "wins": 14
+          },
+          "EURCHF": {
+            "trades": 5,
+            "pnl": 29.69,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 9,
+            "pnl": 367.59,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 43,
+            "pnl": 126.24,
+            "wins": 29
+          },
+          "EURUSD": {
+            "trades": 24,
+            "pnl": 1389.02,
+            "wins": 14
+          },
+          "GBPAUD": {
+            "trades": 24,
+            "pnl": 878.81,
+            "wins": 19
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": 294.24,
+            "wins": 3
+          },
+          "GBPJPY": {
+            "trades": 21,
+            "pnl": -69.34,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 39,
+            "pnl": -289.53,
+            "wins": 21
+          },
+          "NZDJPY": {
+            "trades": 7,
+            "pnl": 133.46,
+            "wins": 6
+          },
+          "NZDUSD": {
+            "trades": 33,
+            "pnl": 1792.57,
+            "wins": 20
+          },
+          "USDCAD": {
+            "trades": 11,
+            "pnl": 709.17,
+            "wins": 9
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": 237.16,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": 200,
+            "wins": 4
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 100,
+          "time": 31,
+          "trailing": 140
+        }
+      },
+      "stressSpread125Delay1m": {
+        "trades": 268,
+        "pnl": 2514.56,
+        "finalBalance": 3014.56,
+        "returnPct": 502.91,
+        "winRatePct": 56.3,
+        "profitFactor": 1.815,
+        "averageR": 0.287,
+        "maxDrawdownPct": 23.93,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 57,
+        "profitableDayPct": 53.8,
+        "averageDailyReturnPct": 1.832,
+        "activeAverageDailyReturnPct": 1.904,
+        "medianDailyReturnPct": 0.492,
+        "worstDayReturnPct": -9.398,
+        "bestDayReturnPct": 23.748,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 9,
+            "pnl": -57.73,
+            "wins": 4
+          },
+          "AUDJPY": {
+            "trades": 5,
+            "pnl": 112.99,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 30,
+            "pnl": 619.07,
+            "wins": 14
+          },
+          "EURCHF": {
+            "trades": 5,
+            "pnl": 16.36,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 8,
+            "pnl": 174.05,
+            "wins": 5
+          },
+          "EURJPY": {
+            "trades": 43,
+            "pnl": 27.21,
+            "wins": 26
+          },
+          "EURUSD": {
+            "trades": 23,
+            "pnl": 400.16,
+            "wins": 12
+          },
+          "GBPAUD": {
+            "trades": 26,
+            "pnl": 469.41,
+            "wins": 18
+          },
+          "GBPCHF": {
+            "trades": 5,
+            "pnl": 170.52,
+            "wins": 4
+          },
+          "GBPJPY": {
+            "trades": 18,
+            "pnl": 43.99,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 36,
+            "pnl": 122.73,
+            "wins": 18
+          },
+          "NZDJPY": {
+            "trades": 7,
+            "pnl": 32.74,
+            "wins": 5
+          },
+          "NZDUSD": {
+            "trades": 30,
+            "pnl": -109.33,
+            "wins": 13
+          },
+          "USDCAD": {
+            "trades": 11,
+            "pnl": 325.95,
+            "wins": 7
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": 75.98,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": 90.46,
+            "wins": 4
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 107,
+          "time": 35,
+          "trailing": 123
+        }
+      }
+    },
+    "brokerNativeTrailingWithTakeProfit": {
+      "development": {
+        "trades": 226,
+        "pnl": 5891.32,
+        "finalBalance": 6391.32,
+        "returnPct": 1178.26,
+        "winRatePct": 63.3,
+        "profitFactor": 2.771,
+        "averageR": 0.504,
+        "maxDrawdownPct": 8.65,
+        "marketDays": 84,
+        "activeDays": 83,
+        "dailyCoveragePct": 98.8,
+        "profitableDays": 60,
+        "profitableDayPct": 71.4,
+        "averageDailyReturnPct": 3.199,
+        "activeAverageDailyReturnPct": 3.238,
+        "medianDailyReturnPct": 2.165,
+        "worstDayReturnPct": -4.239,
+        "bestDayReturnPct": 21.375,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 7,
+            "pnl": -57.09,
+            "wins": 3
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 140.33,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 28,
+            "pnl": 811.49,
+            "wins": 12
+          },
+          "EURCHF": {
+            "trades": 4,
+            "pnl": 164.12,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 9,
+            "pnl": 437.04,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 33,
+            "pnl": 155.63,
+            "wins": 25
+          },
+          "EURUSD": {
+            "trades": 17,
+            "pnl": 721.97,
+            "wins": 10
+          },
+          "GBPAUD": {
+            "trades": 20,
+            "pnl": 642.62,
+            "wins": 17
+          },
+          "GBPCHF": {
+            "trades": 3,
+            "pnl": 94.35,
+            "wins": 2
+          },
+          "GBPJPY": {
+            "trades": 17,
+            "pnl": 348.63,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 33,
+            "pnl": 273.87,
+            "wins": 19
+          },
+          "NZDJPY": {
+            "trades": 4,
+            "pnl": 242.4,
+            "wins": 4
+          },
+          "NZDUSD": {
+            "trades": 27,
+            "pnl": 1152.63,
+            "wins": 15
+          },
+          "USDCAD": {
+            "trades": 10,
+            "pnl": 624.48,
+            "wins": 8
+          },
+          "USDCHF": {
+            "trades": 7,
+            "pnl": 33.98,
+            "wins": 4
+          },
+          "USDJPY": {
+            "trades": 3,
+            "pnl": 104.86,
+            "wins": 3
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 79,
+          "target": 18,
+          "time": 23,
+          "trailing": 103
+        }
+      },
+      "developmentFolds": [
+        {
+          "trades": 80,
+          "pnl": 1009.95,
+          "finalBalance": 1509.95,
+          "returnPct": 201.99,
+          "winRatePct": 68.8,
+          "profitFactor": 3.706,
+          "averageR": 0.611,
+          "maxDrawdownPct": 6.33,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 24,
+          "profitableDayPct": 85.7,
+          "averageDailyReturnPct": 4.157,
+          "activeAverageDailyReturnPct": 4.157,
+          "medianDailyReturnPct": 3.474,
+          "worstDayReturnPct": -3.515,
+          "bestDayReturnPct": 21.375,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 2,
+              "pnl": -1.81,
+              "wins": 1
+            },
+            "AUDJPY": {
+              "trades": 2,
+              "pnl": 33.8,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 10,
+              "pnl": 260.11,
+              "wins": 5
+            },
+            "EURCHF": {
+              "trades": 2,
+              "pnl": 10.96,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 5,
+              "pnl": 36.82,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 13,
+              "pnl": 95.02,
+              "wins": 12
+            },
+            "EURUSD": {
+              "trades": 3,
+              "pnl": -10.5,
+              "wins": 1
+            },
+            "GBPAUD": {
+              "trades": 8,
+              "pnl": 225.6,
+              "wins": 7
+            },
+            "GBPCHF": {
+              "trades": 3,
+              "pnl": 94.35,
+              "wins": 2
+            },
+            "GBPJPY": {
+              "trades": 4,
+              "pnl": 61.18,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 14,
+              "pnl": 119.1,
+              "wins": 10
+            },
+            "NZDUSD": {
+              "trades": 7,
+              "pnl": -14.73,
+              "wins": 3
+            },
+            "USDCAD": {
+              "trades": 3,
+              "pnl": 42.63,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": -4.02,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 2,
+              "pnl": 61.45,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "daily_flat": 2,
+            "sl": 24,
+            "target": 9,
+            "time": 6,
+            "trailing": 39
+          }
+        },
+        {
+          "trades": 66,
+          "pnl": 426.19,
+          "finalBalance": 926.19,
+          "returnPct": 85.24,
+          "winRatePct": 63.6,
+          "profitFactor": 2.238,
+          "averageR": 0.43,
+          "maxDrawdownPct": 6.34,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 18,
+          "profitableDayPct": 64.3,
+          "averageDailyReturnPct": 2.315,
+          "activeAverageDailyReturnPct": 2.315,
+          "medianDailyReturnPct": 1.566,
+          "worstDayReturnPct": -3.434,
+          "bestDayReturnPct": 15.507,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 2,
+              "pnl": -24.21,
+              "wins": 0
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": 19.88,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 9,
+              "pnl": 14.89,
+              "wins": 4
+            },
+            "EURCHF": {
+              "trades": 1,
+              "pnl": 10.81,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 1,
+              "pnl": -12.44,
+              "wins": 0
+            },
+            "EURJPY": {
+              "trades": 9,
+              "pnl": 49.9,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": 47.76,
+              "wins": 5
+            },
+            "GBPAUD": {
+              "trades": 6,
+              "pnl": 75.27,
+              "wins": 6
+            },
+            "GBPJPY": {
+              "trades": 5,
+              "pnl": 5.19,
+              "wins": 2
+            },
+            "GBPUSD": {
+              "trades": 9,
+              "pnl": 51.59,
+              "wins": 5
+            },
+            "NZDJPY": {
+              "trades": 3,
+              "pnl": 71.22,
+              "wins": 3
+            },
+            "NZDUSD": {
+              "trades": 5,
+              "pnl": 38.41,
+              "wins": 4
+            },
+            "USDCAD": {
+              "trades": 3,
+              "pnl": 62.56,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 0.97,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 1,
+              "pnl": 14.38,
+              "wins": 1
+            }
+          },
+          "exits": {
+            "daily_flat": 1,
+            "sl": 22,
+            "target": 3,
+            "time": 9,
+            "trailing": 31
+          }
+        },
+        {
+          "trades": 80,
+          "pnl": 642.54,
+          "finalBalance": 1142.54,
+          "returnPct": 128.51,
+          "winRatePct": 57.5,
+          "profitFactor": 2.877,
+          "averageR": 0.458,
+          "maxDrawdownPct": 8.25,
+          "marketDays": 28,
+          "activeDays": 27,
+          "dailyCoveragePct": 96.4,
+          "profitableDays": 18,
+          "profitableDayPct": 64.3,
+          "averageDailyReturnPct": 3.126,
+          "activeAverageDailyReturnPct": 3.242,
+          "medianDailyReturnPct": 1.874,
+          "worstDayReturnPct": -4.239,
+          "bestDayReturnPct": 19.009,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 3,
+              "pnl": 3.19,
+              "wins": 2
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": 8.31,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 9,
+              "pnl": 90.53,
+              "wins": 3
+            },
+            "EURCHF": {
+              "trades": 1,
+              "pnl": 21.54,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 3,
+              "pnl": 78.26,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 11,
+              "pnl": -16.11,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 5,
+              "pnl": 105.16,
+              "wins": 4
+            },
+            "GBPAUD": {
+              "trades": 6,
+              "pnl": 33.92,
+              "wins": 4
+            },
+            "GBPJPY": {
+              "trades": 8,
+              "pnl": 48.59,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -0.19,
+              "wins": 4
+            },
+            "NZDJPY": {
+              "trades": 1,
+              "pnl": 4.89,
+              "wins": 1
+            },
+            "NZDUSD": {
+              "trades": 15,
+              "pnl": 187.95,
+              "wins": 8
+            },
+            "USDCAD": {
+              "trades": 4,
+              "pnl": 70.24,
+              "wins": 4
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": 6.27,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "sl": 33,
+            "target": 6,
+            "time": 8,
+            "trailing": 33
+          }
+        }
+      ],
+      "holdout": {
+        "trades": 50,
+        "pnl": 255.9,
+        "finalBalance": 755.9,
+        "returnPct": 51.18,
+        "winRatePct": 52,
+        "profitFactor": 2.103,
+        "averageR": 0.359,
+        "maxDrawdownPct": 12.91,
+        "marketDays": 22,
+        "activeDays": 19,
+        "dailyCoveragePct": 86.4,
+        "profitableDays": 12,
+        "profitableDayPct": 54.5,
+        "averageDailyReturnPct": 2.001,
+        "activeAverageDailyReturnPct": 2.317,
+        "medianDailyReturnPct": 0.191,
+        "worstDayReturnPct": -4.828,
+        "bestDayReturnPct": 12.682,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 1,
+            "pnl": -16.03,
+            "wins": 0
+          },
+          "AUDUSD": {
+            "trades": 2,
+            "pnl": 74.56,
+            "wins": 2
+          },
+          "EURCHF": {
+            "trades": 1,
+            "pnl": -11.2,
+            "wins": 0
+          },
+          "EURJPY": {
+            "trades": 10,
+            "pnl": -1.67,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 7,
+            "pnl": 76.98,
+            "wins": 4
+          },
+          "GBPAUD": {
+            "trades": 5,
+            "pnl": 34.76,
+            "wins": 3
+          },
+          "GBPCHF": {
+            "trades": 1,
+            "pnl": 20.43,
+            "wins": 1
+          },
+          "GBPJPY": {
+            "trades": 5,
+            "pnl": -36.47,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 6,
+            "pnl": -51.77,
+            "wins": 2
+          },
+          "NZDJPY": {
+            "trades": 3,
+            "pnl": -8.01,
+            "wins": 2
+          },
+          "NZDUSD": {
+            "trades": 6,
+            "pnl": 120.03,
+            "wins": 5
+          },
+          "USDCAD": {
+            "trades": 1,
+            "pnl": 18.08,
+            "wins": 1
+          },
+          "USDCHF": {
+            "trades": 1,
+            "pnl": 20.2,
+            "wins": 1
+          },
+          "USDJPY": {
+            "trades": 1,
+            "pnl": 15.98,
+            "wins": 1
+          }
+        },
+        "exits": {
+          "sl": 22,
+          "target": 6,
+          "time": 7,
+          "trailing": 15
+        }
+      },
+      "full": {
+        "trades": 276,
+        "pnl": 9162.4,
+        "finalBalance": 9662.4,
+        "returnPct": 1832.48,
+        "winRatePct": 61.2,
+        "profitFactor": 2.456,
+        "averageR": 0.478,
+        "maxDrawdownPct": 12.91,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 72,
+        "profitableDayPct": 67.9,
+        "averageDailyReturnPct": 2.951,
+        "activeAverageDailyReturnPct": 3.067,
+        "medianDailyReturnPct": 1.643,
+        "worstDayReturnPct": -4.828,
+        "bestDayReturnPct": 21.375,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 8,
+            "pnl": -261.94,
+            "wins": 3
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 140.33,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 30,
+            "pnl": 1764.6,
+            "wins": 14
+          },
+          "EURCHF": {
+            "trades": 5,
+            "pnl": 20.99,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 9,
+            "pnl": 437.04,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 43,
+            "pnl": 134.34,
+            "wins": 29
+          },
+          "EURUSD": {
+            "trades": 24,
+            "pnl": 1705.99,
+            "wins": 14
+          },
+          "GBPAUD": {
+            "trades": 25,
+            "pnl": 1086.98,
+            "wins": 20
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": 355.55,
+            "wins": 3
+          },
+          "GBPJPY": {
+            "trades": 22,
+            "pnl": -117.51,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 39,
+            "pnl": -387.88,
+            "wins": 21
+          },
+          "NZDJPY": {
+            "trades": 7,
+            "pnl": 140.01,
+            "wins": 6
+          },
+          "NZDUSD": {
+            "trades": 33,
+            "pnl": 2686.97,
+            "wins": 20
+          },
+          "USDCAD": {
+            "trades": 11,
+            "pnl": 855.61,
+            "wins": 9
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": 292.23,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": 309.11,
+            "wins": 4
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 101,
+          "target": 24,
+          "time": 30,
+          "trailing": 118
+        }
+      },
+      "stressSpread125Delay1m": {
+        "trades": 270,
+        "pnl": 2847.1,
+        "finalBalance": 3347.1,
+        "returnPct": 569.42,
+        "winRatePct": 55.9,
+        "profitFactor": 1.831,
+        "averageR": 0.305,
+        "maxDrawdownPct": 24.13,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 59,
+        "profitableDayPct": 55.7,
+        "averageDailyReturnPct": 1.932,
+        "activeAverageDailyReturnPct": 2.007,
+        "medianDailyReturnPct": 0.668,
+        "worstDayReturnPct": -9.398,
+        "bestDayReturnPct": 21.319,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 9,
+            "pnl": -62.92,
+            "wins": 4
+          },
+          "AUDJPY": {
+            "trades": 5,
+            "pnl": 129.37,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 30,
+            "pnl": 694.8,
+            "wins": 14
+          },
+          "EURCHF": {
+            "trades": 5,
+            "pnl": 17.01,
+            "wins": 3
+          },
+          "EURGBP": {
+            "trades": 8,
+            "pnl": 195.87,
+            "wins": 5
+          },
+          "EURJPY": {
+            "trades": 44,
+            "pnl": 8.88,
+            "wins": 26
+          },
+          "EURUSD": {
+            "trades": 23,
+            "pnl": 448.01,
+            "wins": 12
+          },
+          "GBPAUD": {
+            "trades": 26,
+            "pnl": 536.86,
+            "wins": 18
+          },
+          "GBPCHF": {
+            "trades": 5,
+            "pnl": 192.65,
+            "wins": 4
+          },
+          "GBPJPY": {
+            "trades": 19,
+            "pnl": 61.03,
+            "wins": 8
+          },
+          "GBPUSD": {
+            "trades": 36,
+            "pnl": 131.89,
+            "wins": 18
+          },
+          "NZDJPY": {
+            "trades": 7,
+            "pnl": 34.98,
+            "wins": 5
+          },
+          "NZDUSD": {
+            "trades": 30,
+            "pnl": -88.37,
+            "wins": 13
+          },
+          "USDCAD": {
+            "trades": 11,
+            "pnl": 365.5,
+            "wins": 7
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": 83.59,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": 97.96,
+            "wins": 4
+          }
+        },
+        "exits": {
+          "daily_flat": 3,
+          "sl": 109,
+          "target": 18,
+          "time": 32,
+          "trailing": 108
+        }
+      }
+    },
+    "fixedTakeProfitOnly": {
+      "development": {
+        "trades": 193,
+        "pnl": 2509.13,
+        "finalBalance": 3009.13,
+        "returnPct": 501.83,
+        "winRatePct": 42.5,
+        "profitFactor": 1.801,
+        "averageR": 0.404,
+        "maxDrawdownPct": 17.65,
+        "marketDays": 84,
+        "activeDays": 83,
+        "dailyCoveragePct": 98.8,
+        "profitableDays": 51,
+        "profitableDayPct": 60.7,
+        "averageDailyReturnPct": 2.281,
+        "activeAverageDailyReturnPct": 2.308,
+        "medianDailyReturnPct": 1.339,
+        "worstDayReturnPct": -6.185,
+        "bestDayReturnPct": 20.953,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 6,
+            "pnl": 112.96,
+            "wins": 2
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 52.07,
+            "wins": 3
+          },
+          "AUDUSD": {
+            "trades": 25,
+            "pnl": 134.37,
+            "wins": 5
+          },
+          "EURCHF": {
+            "trades": 2,
+            "pnl": 50.2,
+            "wins": 1
+          },
+          "EURGBP": {
+            "trades": 7,
+            "pnl": 193.77,
+            "wins": 5
+          },
+          "EURJPY": {
+            "trades": 30,
+            "pnl": -12.08,
+            "wins": 9
+          },
+          "EURUSD": {
+            "trades": 13,
+            "pnl": 322.01,
+            "wins": 6
+          },
+          "GBPAUD": {
+            "trades": 19,
+            "pnl": 413.28,
+            "wins": 16
+          },
+          "GBPCHF": {
+            "trades": 3,
+            "pnl": 86.74,
+            "wins": 2
+          },
+          "GBPJPY": {
+            "trades": 13,
+            "pnl": 156.74,
+            "wins": 5
+          },
+          "GBPUSD": {
+            "trades": 27,
+            "pnl": 283.6,
+            "wins": 8
+          },
+          "NZDJPY": {
+            "trades": 3,
+            "pnl": 95.87,
+            "wins": 1
+          },
+          "NZDUSD": {
+            "trades": 22,
+            "pnl": 305.72,
+            "wins": 7
+          },
+          "USDCAD": {
+            "trades": 9,
+            "pnl": 205.14,
+            "wins": 6
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -74.03,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": 182.79,
+            "wins": 4
+          }
+        },
+        "exits": {
+          "daily_flat": 4,
+          "sl": 104,
+          "target": 32,
+          "time": 53
+        }
+      },
+      "developmentFolds": [
+        {
+          "trades": 61,
+          "pnl": 677.76,
+          "finalBalance": 1177.76,
+          "returnPct": 135.55,
+          "winRatePct": 50.8,
+          "profitFactor": 2.585,
+          "averageR": 0.683,
+          "maxDrawdownPct": 9.53,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 20,
+          "profitableDayPct": 71.4,
+          "averageDailyReturnPct": 3.235,
+          "activeAverageDailyReturnPct": 3.235,
+          "medianDailyReturnPct": 2.853,
+          "worstDayReturnPct": -4.154,
+          "bestDayReturnPct": 18.271,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 1,
+              "pnl": -12.96,
+              "wins": 0
+            },
+            "AUDJPY": {
+              "trades": 2,
+              "pnl": 33.41,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": -31.93,
+              "wins": 1
+            },
+            "EURCHF": {
+              "trades": 2,
+              "pnl": 50.2,
+              "wins": 1
+            },
+            "EURGBP": {
+              "trades": 4,
+              "pnl": 22.49,
+              "wins": 2
+            },
+            "EURJPY": {
+              "trades": 10,
+              "pnl": 110.87,
+              "wins": 5
+            },
+            "EURUSD": {
+              "trades": 1,
+              "pnl": 19.55,
+              "wins": 1
+            },
+            "GBPAUD": {
+              "trades": 8,
+              "pnl": 206.88,
+              "wins": 7
+            },
+            "GBPCHF": {
+              "trades": 3,
+              "pnl": 86.74,
+              "wins": 2
+            },
+            "GBPJPY": {
+              "trades": 2,
+              "pnl": -5.5,
+              "wins": 1
+            },
+            "GBPUSD": {
+              "trades": 9,
+              "pnl": 138.77,
+              "wins": 4
+            },
+            "NZDUSD": {
+              "trades": 6,
+              "pnl": -49.38,
+              "wins": 1
+            },
+            "USDCAD": {
+              "trades": 2,
+              "pnl": 57.7,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 1,
+              "pnl": -11.64,
+              "wins": 0
+            },
+            "USDJPY": {
+              "trades": 2,
+              "pnl": 62.58,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "daily_flat": 2,
+            "sl": 28,
+            "target": 16,
+            "time": 15
+          }
+        },
+        {
+          "trades": 60,
+          "pnl": 356.2,
+          "finalBalance": 856.2,
+          "returnPct": 71.24,
+          "winRatePct": 41.7,
+          "profitFactor": 1.736,
+          "averageR": 0.372,
+          "maxDrawdownPct": 10.63,
+          "marketDays": 28,
+          "activeDays": 28,
+          "dailyCoveragePct": 100,
+          "profitableDays": 15,
+          "profitableDayPct": 53.6,
+          "averageDailyReturnPct": 2.081,
+          "activeAverageDailyReturnPct": 2.081,
+          "medianDailyReturnPct": 0.554,
+          "worstDayReturnPct": -6.185,
+          "bestDayReturnPct": 20.953,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 2,
+              "pnl": -24.43,
+              "wins": 0
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": 24.56,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 9,
+              "pnl": -36.41,
+              "wins": 2
+            },
+            "EURJPY": {
+              "trades": 9,
+              "pnl": 5.68,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": 33.56,
+              "wins": 2
+            },
+            "GBPAUD": {
+              "trades": 6,
+              "pnl": 72.66,
+              "wins": 6
+            },
+            "GBPJPY": {
+              "trades": 3,
+              "pnl": -8.68,
+              "wins": 1
+            },
+            "GBPUSD": {
+              "trades": 9,
+              "pnl": 178.07,
+              "wins": 3
+            },
+            "NZDJPY": {
+              "trades": 2,
+              "pnl": 58.78,
+              "wins": 1
+            },
+            "NZDUSD": {
+              "trades": 5,
+              "pnl": -6.21,
+              "wins": 2
+            },
+            "USDCAD": {
+              "trades": 3,
+              "pnl": 5.38,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 2.2,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 2,
+              "pnl": 51.04,
+              "wins": 2
+            }
+          },
+          "exits": {
+            "daily_flat": 2,
+            "sl": 31,
+            "target": 8,
+            "time": 19
+          }
+        },
+        {
+          "trades": 72,
+          "pnl": 246.02,
+          "finalBalance": 746.02,
+          "returnPct": 49.2,
+          "winRatePct": 36.1,
+          "profitFactor": 1.634,
+          "averageR": 0.196,
+          "maxDrawdownPct": 11.63,
+          "marketDays": 28,
+          "activeDays": 27,
+          "dailyCoveragePct": 96.4,
+          "profitableDays": 16,
+          "profitableDayPct": 57.1,
+          "averageDailyReturnPct": 1.526,
+          "activeAverageDailyReturnPct": 1.583,
+          "medianDailyReturnPct": 0.659,
+          "worstDayReturnPct": -5.917,
+          "bestDayReturnPct": 10.824,
+          "bySymbol": {
+            "AUDCAD": {
+              "trades": 3,
+              "pnl": 45.49,
+              "wins": 2
+            },
+            "AUDJPY": {
+              "trades": 1,
+              "pnl": -9.72,
+              "wins": 0
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 62.49,
+              "wins": 2
+            },
+            "EURGBP": {
+              "trades": 3,
+              "pnl": 42.46,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 11,
+              "pnl": -33.8,
+              "wins": 1
+            },
+            "EURUSD": {
+              "trades": 5,
+              "pnl": 55.38,
+              "wins": 3
+            },
+            "GBPAUD": {
+              "trades": 5,
+              "pnl": 8.74,
+              "wins": 3
+            },
+            "GBPJPY": {
+              "trades": 8,
+              "pnl": 45.29,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 9,
+              "pnl": -68.08,
+              "wins": 1
+            },
+            "NZDJPY": {
+              "trades": 1,
+              "pnl": -10.56,
+              "wins": 0
+            },
+            "NZDUSD": {
+              "trades": 11,
+              "pnl": 91.66,
+              "wins": 4
+            },
+            "USDCAD": {
+              "trades": 4,
+              "pnl": 33.41,
+              "wins": 3
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": -16.75,
+              "wins": 1
+            }
+          },
+          "exits": {
+            "sl": 45,
+            "target": 8,
+            "time": 19
+          }
+        }
+      ],
+      "holdout": {
+        "trades": 44,
+        "pnl": 129.23,
+        "finalBalance": 629.23,
+        "returnPct": 25.85,
+        "winRatePct": 34.1,
+        "profitFactor": 1.5,
+        "averageR": 0.231,
+        "maxDrawdownPct": 18.53,
+        "marketDays": 22,
+        "activeDays": 19,
+        "dailyCoveragePct": 86.4,
+        "profitableDays": 9,
+        "profitableDayPct": 40.9,
+        "averageDailyReturnPct": 1.149,
+        "activeAverageDailyReturnPct": 1.331,
+        "medianDailyReturnPct": 0,
+        "worstDayReturnPct": -4.828,
+        "bestDayReturnPct": 12.434,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 2,
+            "pnl": -23.11,
+            "wins": 0
+          },
+          "AUDUSD": {
+            "trades": 2,
+            "pnl": 84.51,
+            "wins": 2
+          },
+          "EURJPY": {
+            "trades": 10,
+            "pnl": -39.54,
+            "wins": 1
+          },
+          "EURUSD": {
+            "trades": 7,
+            "pnl": 105.03,
+            "wins": 4
+          },
+          "GBPAUD": {
+            "trades": 4,
+            "pnl": 16.69,
+            "wins": 2
+          },
+          "GBPCHF": {
+            "trades": 1,
+            "pnl": 20.43,
+            "wins": 1
+          },
+          "GBPJPY": {
+            "trades": 4,
+            "pnl": -26.93,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 5,
+            "pnl": -65.88,
+            "wins": 0
+          },
+          "NZDJPY": {
+            "trades": 3,
+            "pnl": -19.67,
+            "wins": 1
+          },
+          "NZDUSD": {
+            "trades": 4,
+            "pnl": 31.64,
+            "wins": 2
+          },
+          "USDCAD": {
+            "trades": 1,
+            "pnl": 30.08,
+            "wins": 1
+          },
+          "USDJPY": {
+            "trades": 1,
+            "pnl": 15.98,
+            "wins": 1
+          }
+        },
+        "exits": {
+          "sl": 27,
+          "target": 6,
+          "time": 11
+        }
+      },
+      "full": {
+        "trades": 237,
+        "pnl": 3286.85,
+        "finalBalance": 3786.85,
+        "returnPct": 657.37,
+        "winRatePct": 40.9,
+        "profitFactor": 1.701,
+        "averageR": 0.372,
+        "maxDrawdownPct": 18.53,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 60,
+        "profitableDayPct": 56.6,
+        "averageDailyReturnPct": 2.046,
+        "activeAverageDailyReturnPct": 2.126,
+        "medianDailyReturnPct": 0.725,
+        "worstDayReturnPct": -6.185,
+        "bestDayReturnPct": 20.953,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 8,
+            "pnl": -26.15,
+            "wins": 2
+          },
+          "AUDJPY": {
+            "trades": 4,
+            "pnl": 52.07,
+            "wins": 3
+          },
+          "AUDUSD": {
+            "trades": 27,
+            "pnl": 642.99,
+            "wins": 7
+          },
+          "EURCHF": {
+            "trades": 2,
+            "pnl": 50.2,
+            "wins": 1
+          },
+          "EURGBP": {
+            "trades": 7,
+            "pnl": 193.77,
+            "wins": 5
+          },
+          "EURJPY": {
+            "trades": 40,
+            "pnl": -250.04,
+            "wins": 10
+          },
+          "EURUSD": {
+            "trades": 20,
+            "pnl": 954.08,
+            "wins": 10
+          },
+          "GBPAUD": {
+            "trades": 23,
+            "pnl": 513.73,
+            "wins": 18
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": 209.72,
+            "wins": 3
+          },
+          "GBPJPY": {
+            "trades": 17,
+            "pnl": -5.35,
+            "wins": 5
+          },
+          "GBPUSD": {
+            "trades": 32,
+            "pnl": -112.87,
+            "wins": 8
+          },
+          "NZDJPY": {
+            "trades": 6,
+            "pnl": -22.53,
+            "wins": 2
+          },
+          "NZDUSD": {
+            "trades": 26,
+            "pnl": 496.16,
+            "wins": 9
+          },
+          "USDCAD": {
+            "trades": 10,
+            "pnl": 386.15,
+            "wins": 7
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -74.03,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 5,
+            "pnl": 278.95,
+            "wins": 5
+          }
+        },
+        "exits": {
+          "daily_flat": 4,
+          "sl": 131,
+          "target": 38,
+          "time": 64
+        }
+      },
+      "stressSpread125Delay1m": {
+        "trades": 232,
+        "pnl": 2674.71,
+        "finalBalance": 3174.71,
+        "returnPct": 534.94,
+        "winRatePct": 39.7,
+        "profitFactor": 1.671,
+        "averageR": 0.347,
+        "maxDrawdownPct": 23.83,
+        "marketDays": 106,
+        "activeDays": 102,
+        "dailyCoveragePct": 96.2,
+        "profitableDays": 58,
+        "profitableDayPct": 54.7,
+        "averageDailyReturnPct": 1.894,
+        "activeAverageDailyReturnPct": 1.968,
+        "medianDailyReturnPct": 0.833,
+        "worstDayReturnPct": -9.398,
+        "bestDayReturnPct": 20.953,
+        "bySymbol": {
+          "AUDCAD": {
+            "trades": 7,
+            "pnl": -23.42,
+            "wins": 2
+          },
+          "AUDJPY": {
+            "trades": 5,
+            "pnl": 120.25,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 27,
+            "pnl": 463.8,
+            "wins": 7
+          },
+          "EURCHF": {
+            "trades": 3,
+            "pnl": 28.04,
+            "wins": 1
+          },
+          "EURGBP": {
+            "trades": 7,
+            "pnl": 153.05,
+            "wins": 5
+          },
+          "EURJPY": {
+            "trades": 40,
+            "pnl": -228.59,
+            "wins": 10
+          },
+          "EURUSD": {
+            "trades": 19,
+            "pnl": 608.15,
+            "wins": 9
+          },
+          "GBPAUD": {
+            "trades": 24,
+            "pnl": 386.64,
+            "wins": 16
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": 165.29,
+            "wins": 3
+          },
+          "GBPJPY": {
+            "trades": 15,
+            "pnl": 5.29,
+            "wins": 5
+          },
+          "GBPUSD": {
+            "trades": 29,
+            "pnl": 427.14,
+            "wins": 8
+          },
+          "NZDJPY": {
+            "trades": 6,
+            "pnl": -35.7,
+            "wins": 2
+          },
+          "NZDUSD": {
+            "trades": 25,
+            "pnl": 228.87,
+            "wins": 7
+          },
+          "USDCAD": {
+            "trades": 10,
+            "pnl": 275.96,
+            "wins": 6
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -86.11,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 5,
+            "pnl": 186.04,
+            "wins": 5
+          }
+        },
+        "exits": {
+          "daily_flat": 5,
+          "sl": 127,
+          "target": 34,
+          "time": 66
+        }
+      }
+    }
+  }
+}

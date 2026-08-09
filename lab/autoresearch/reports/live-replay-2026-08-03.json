@@ -1,0 +1,1493 @@
+{
+  "generatedAt": "2026-08-03T18:54:20.958Z",
+  "period": {
+    "from": "2026-08-02T22:00:00.000Z",
+    "to": "2026-08-03T18:47:30.000Z"
+  },
+  "commit": "1cf873e005467de1938116641cd9d33e88b7e0bc",
+  "assumptions": [
+    "Only fully closed signal/context candles are used.",
+    "Historical bid/ask M1 opens approximate the live quote at the analysis second.",
+    "Stop is assumed first when stop and target are both touched inside one M1 candle."
+  ],
+  "actual": {
+    "startBalance": 325.2,
+    "realizedPnl": -12.11,
+    "endBalance": 313.09,
+    "trades": 3
+  },
+  "candidates": [
+    {
+      "time": "2026-08-02T22:05:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70466,
+      "stopLoss": 0.70391,
+      "atr": 0.0005,
+      "quality": 2.996,
+      "bodyRatio": 0.5568181818181761,
+      "spreadAtr": 0.11988060895251874,
+      "reason": "flip_M5",
+      "decisionTime": 1785708300000
+    },
+    {
+      "time": "2026-08-02T22:15:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70503,
+      "stopLoss": 0.7043,
+      "atr": 0.00048,
+      "quality": 3.254,
+      "bodyRatio": 0.8035714285714923,
+      "spreadAtr": 0.12392754523882231,
+      "reason": "flip_M5",
+      "decisionTime": 1785708900000
+    },
+    {
+      "time": "2026-08-02T22:25:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70484,
+      "stopLoss": 0.70412,
+      "atr": 0.00048,
+      "quality": 2.132,
+      "bodyRatio": 0.7187499999998808,
+      "spreadAtr": 0.125490858002351,
+      "reason": "flip_M5",
+      "decisionTime": 1785709500000
+    },
+    {
+      "time": "2026-08-02T22:50:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70485,
+      "stopLoss": 0.70426,
+      "atr": 0.0004,
+      "quality": 1.931,
+      "bodyRatio": 0.7272727272730943,
+      "spreadAtr": 0.15175610172867543,
+      "reason": "flip_M5",
+      "decisionTime": 1785711000000
+    },
+    {
+      "time": "2026-08-02T23:25:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70433,
+      "stopLoss": 0.70386,
+      "atr": 0.00031,
+      "quality": 1.454,
+      "bodyRatio": 0.3333333333333333,
+      "spreadAtr": 0.19143513705311743,
+      "reason": "flip_M5",
+      "decisionTime": 1785713100000
+    },
+    {
+      "time": "2026-08-03T00:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15487,
+      "stopLoss": 1.15291,
+      "atr": 0.00078,
+      "quality": 3.542,
+      "bodyRatio": 0.8629032258064386,
+      "spreadAtr": 0.08926854615183659,
+      "reason": "flip_M15",
+      "decisionTime": 1785717000000
+    },
+    {
+      "time": "2026-08-03T00:30:00.000Z",
+      "symbol": "NZDJPY",
+      "signal": "SELL",
+      "entryType": "stop",
+      "entryPrice": 92.35311,
+      "stopLoss": 93.10789,
+      "atr": 0.22885,
+      "quality": 3.024,
+      "bodyRatio": 0.8589562764457039,
+      "spreadAtr": 0.3146118089413095,
+      "reason": "engulfing_M15",
+      "decisionTime": 1785717000000
+    },
+    {
+      "time": "2026-08-03T01:25:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70355,
+      "stopLoss": 0.70305,
+      "atr": 0.00033,
+      "quality": 1.333,
+      "bodyRatio": 0.5625000000000434,
+      "spreadAtr": 0.1820192493292762,
+      "reason": "flip_M5",
+      "decisionTime": 1785720300000
+    },
+    {
+      "time": "2026-08-03T01:40:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70346,
+      "stopLoss": 0.703,
+      "atr": 0.00031,
+      "quality": 1.166,
+      "bodyRatio": 0.315789473683903,
+      "spreadAtr": 0.19266755076319428,
+      "reason": "flip_M5",
+      "decisionTime": 1785721200000
+    },
+    {
+      "time": "2026-08-03T01:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15344,
+      "stopLoss": 1.15143,
+      "atr": 0.0008,
+      "quality": 0.397,
+      "bodyRatio": 0.02631578947385336,
+      "spreadAtr": 0.08696163026797166,
+      "reason": "flip_M15",
+      "decisionTime": 1785721500000
+    },
+    {
+      "time": "2026-08-03T02:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15337,
+      "stopLoss": 1.15155,
+      "atr": 0.00073,
+      "quality": 0.831,
+      "bodyRatio": 0.5714285714285714,
+      "spreadAtr": 0.09584777837000429,
+      "reason": "flip_M15",
+      "decisionTime": 1785724200000
+    },
+    {
+      "time": "2026-08-03T02:45:00.000Z",
+      "symbol": "AUDCAD",
+      "signal": "BUY",
+      "entryType": "market",
+      "entryPrice": 0.98677,
+      "stopLoss": 0.98592,
+      "atr": 0.0007,
+      "quality": 1.323,
+      "bodyRatio": 0.6296296296296601,
+      "spreadAtr": 0.3421914248049931,
+      "reason": "engulfing_M15",
+      "decisionTime": 1785725100000
+    },
+    {
+      "time": "2026-08-03T03:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15299,
+      "stopLoss": 1.15143,
+      "atr": 0.00062,
+      "quality": 1.004,
+      "bodyRatio": 0.47999999999943155,
+      "spreadAtr": 0.11206738675341917,
+      "reason": "flip_M15",
+      "decisionTime": 1785727800000
+    },
+    {
+      "time": "2026-08-03T04:00:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15307,
+      "stopLoss": 1.15162,
+      "atr": 0.00058,
+      "quality": 2.077,
+      "bodyRatio": 0.7058823529412149,
+      "spreadAtr": 0.12080497434525904,
+      "reason": "flip_M15",
+      "decisionTime": 1785729600000
+    },
+    {
+      "time": "2026-08-03T04:15:00.000Z",
+      "symbol": "AUDCAD",
+      "signal": "BUY",
+      "entryType": "market",
+      "entryPrice": 0.98676,
+      "stopLoss": 0.98603,
+      "atr": 0.00058,
+      "quality": 1.239,
+      "bodyRatio": 0.5555555555554528,
+      "spreadAtr": 0.4339396005210242,
+      "reason": "engulfing_M15",
+      "decisionTime": 1785730500000
+    },
+    {
+      "time": "2026-08-03T05:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15345,
+      "stopLoss": 1.15224,
+      "atr": 0.00048,
+      "quality": 0.056,
+      "bodyRatio": 0.1428571428569918,
+      "spreadAtr": 0.14455929104030352,
+      "reason": "flip_M15",
+      "decisionTime": 1785735000000
+    },
+    {
+      "time": "2026-08-03T06:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15361,
+      "stopLoss": 1.15244,
+      "atr": 0.00047,
+      "quality": 0.094,
+      "bodyRatio": 0.19565217391291756,
+      "spreadAtr": 0.15022507838013902,
+      "reason": "flip_M15",
+      "decisionTime": 1785738600000
+    },
+    {
+      "time": "2026-08-03T07:00:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15287,
+      "stopLoss": 1.1516,
+      "atr": 0.00051,
+      "quality": 0.992,
+      "bodyRatio": 0.3125000000001735,
+      "spreadAtr": 0.13805801973712073,
+      "reason": "flip_M15",
+      "decisionTime": 1785740400000
+    },
+    {
+      "time": "2026-08-03T08:15:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15278,
+      "stopLoss": 1.15137,
+      "atr": 0.00056,
+      "quality": 0.784,
+      "bodyRatio": 0.20930232558176762,
+      "spreadAtr": 0.12459521111301894,
+      "reason": "flip_M15",
+      "decisionTime": 1785744900000
+    },
+    {
+      "time": "2026-08-03T08:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.1528,
+      "stopLoss": 1.15141,
+      "atr": 0.00055,
+      "quality": 0.888,
+      "bodyRatio": 0.09090909090918266,
+      "spreadAtr": 0.1265828904701847,
+      "reason": "flip_M15",
+      "decisionTime": 1785746700000
+    },
+    {
+      "time": "2026-08-03T09:15:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15268,
+      "stopLoss": 1.15129,
+      "atr": 0.00056,
+      "quality": 0.99,
+      "bodyRatio": 0.2537313432836068,
+      "spreadAtr": 0.12608376515835823,
+      "reason": "flip_M15",
+      "decisionTime": 1785748500000
+    },
+    {
+      "time": "2026-08-03T09:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15292,
+      "stopLoss": 1.15157,
+      "atr": 0.00054,
+      "quality": 1.77,
+      "bodyRatio": 0.7894736842103008,
+      "spreadAtr": 0.12884258942411436,
+      "reason": "flip_M15",
+      "decisionTime": 1785750300000
+    },
+    {
+      "time": "2026-08-03T10:15:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15248,
+      "stopLoss": 1.15111,
+      "atr": 0.00055,
+      "quality": 0.888,
+      "bodyRatio": 0.19444444444441017,
+      "spreadAtr": 0.12729934298132328,
+      "reason": "flip_M15",
+      "decisionTime": 1785752100000
+    },
+    {
+      "time": "2026-08-03T11:00:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15248,
+      "stopLoss": 1.15113,
+      "atr": 0.00054,
+      "quality": 0.989,
+      "bodyRatio": 0.29787234042561234,
+      "spreadAtr": 0.12887752269020808,
+      "reason": "flip_M15",
+      "decisionTime": 1785754800000
+    },
+    {
+      "time": "2026-08-03T11:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15263,
+      "stopLoss": 1.1513,
+      "atr": 0.00053,
+      "quality": 0.711,
+      "bodyRatio": 0.7291666666663005,
+      "spreadAtr": 0.13145416954403322,
+      "reason": "flip_M15",
+      "decisionTime": 1785757500000
+    },
+    {
+      "time": "2026-08-03T13:00:00.000Z",
+      "symbol": "GBPCHF",
+      "signal": "BUY",
+      "entryType": "limit",
+      "entryPrice": 1.08893,
+      "stopLoss": 1.08673,
+      "atr": 0.00143,
+      "quality": 1.589,
+      "bodyRatio": 0.7569444444444123,
+      "spreadAtr": 0.16810920450660055,
+      "reason": "closeBreak_H1",
+      "decisionTime": 1785762000000
+    },
+    {
+      "time": "2026-08-03T13:00:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15293,
+      "stopLoss": 1.15152,
+      "atr": 0.00056,
+      "quality": 0.557,
+      "bodyRatio": 0.5624999999998915,
+      "spreadAtr": 0.1245585357565717,
+      "reason": "flip_M15",
+      "decisionTime": 1785762000000
+    },
+    {
+      "time": "2026-08-03T13:55:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.699,
+      "stopLoss": 0.6985,
+      "atr": 0.00033,
+      "quality": 2.285,
+      "bodyRatio": 0.7499999999999505,
+      "spreadAtr": 0.18158886484614753,
+      "reason": "flip_M5",
+      "decisionTime": 1785765300000
+    },
+    {
+      "time": "2026-08-03T14:35:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.69966,
+      "stopLoss": 0.69913,
+      "atr": 0.00035,
+      "quality": 3.316,
+      "bodyRatio": 0.6486486486485351,
+      "spreadAtr": 0.17064187263764258,
+      "reason": "flip_M5",
+      "decisionTime": 1785767700000
+    },
+    {
+      "time": "2026-08-03T14:45:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.69946,
+      "stopLoss": 0.69895,
+      "atr": 0.00033,
+      "quality": 1.942,
+      "bodyRatio": 0.3809523809523558,
+      "spreadAtr": 0.1792336247352653,
+      "reason": "flip_M5",
+      "decisionTime": 1785768300000
+    },
+    {
+      "time": "2026-08-03T15:00:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.70002,
+      "stopLoss": 0.69949,
+      "atr": 0.00035,
+      "quality": 2.92,
+      "bodyRatio": 0.6470588235295014,
+      "spreadAtr": 0.16996420824514566,
+      "reason": "flip_M5",
+      "decisionTime": 1785769200000
+    },
+    {
+      "time": "2026-08-03T15:20:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.69986,
+      "stopLoss": 0.69938,
+      "atr": 0.00032,
+      "quality": 2.609,
+      "bodyRatio": 0.684210526316097,
+      "spreadAtr": 0.18662653466589155,
+      "reason": "flip_M5",
+      "decisionTime": 1785770400000
+    },
+    {
+      "time": "2026-08-03T15:30:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15076,
+      "stopLoss": 1.14905,
+      "atr": 0.00068,
+      "quality": 2.246,
+      "bodyRatio": 0.1818181818178607,
+      "spreadAtr": 0.1024964407264275,
+      "reason": "flip_M15",
+      "decisionTime": 1785771000000
+    },
+    {
+      "time": "2026-08-03T15:35:00.000Z",
+      "symbol": "AUDUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 0.6999,
+      "stopLoss": 0.69943,
+      "atr": 0.00031,
+      "quality": 1.397,
+      "bodyRatio": 0.6486486486487297,
+      "spreadAtr": 0.19130384290464575,
+      "reason": "flip_M5",
+      "decisionTime": 1785771300000
+    },
+    {
+      "time": "2026-08-03T16:00:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15101,
+      "stopLoss": 1.14933,
+      "atr": 0.00067,
+      "quality": 4.068,
+      "bodyRatio": 0.968749999999794,
+      "spreadAtr": 0.10431191016062877,
+      "reason": "flip_M15",
+      "decisionTime": 1785772800000
+    },
+    {
+      "time": "2026-08-03T16:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15085,
+      "stopLoss": 1.1493,
+      "atr": 0.00062,
+      "quality": 1.615,
+      "bodyRatio": 0.4210526315787321,
+      "spreadAtr": 0.1129020310432481,
+      "reason": "flip_M15",
+      "decisionTime": 1785775500000
+    },
+    {
+      "time": "2026-08-03T17:45:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.1505,
+      "stopLoss": 1.14917,
+      "atr": 0.00053,
+      "quality": 2.654,
+      "bodyRatio": 0.20000000000022206,
+      "spreadAtr": 0.13159746361968086,
+      "reason": "flip_M15",
+      "decisionTime": 1785779100000
+    },
+    {
+      "time": "2026-08-03T18:15:00.000Z",
+      "symbol": "EURUSD",
+      "signal": "BUY",
+      "entryType": "stop",
+      "entryPrice": 1.15067,
+      "stopLoss": 1.14936,
+      "atr": 0.00053,
+      "quality": 1.611,
+      "bodyRatio": 0.5882352941175703,
+      "spreadAtr": 0.13301617767716806,
+      "reason": "flip_M15",
+      "decisionTime": 1785780900000
+    }
+  ],
+  "rejectionCounts": {
+    "AUDUSD:pattern_failed": 125,
+    "EURUSD:pattern_failed": 43,
+    "AUDUSD:trend_failed": 52,
+    "EURUSD:trend_failed": 20,
+    "AUDUSD:body_too_small": 22,
+    "AUDUSD:spread_too_large": 30,
+    "AUDCAD:confirmation_failed": 3,
+    "NZDJPY:confirmation_failed": 2,
+    "AUDCAD:trend_failed": 5,
+    "NZDJPY:pattern_failed": 27,
+    "AUDCAD:pattern_failed": 22,
+    "AUDUSD:confirmation_failed": 8,
+    "NZDJPY:trend_failed": 2,
+    "EURGBP:pattern_failed": 13,
+    "GBPUSD:pattern_failed": 61,
+    "EURGBP:trend_failed": 4,
+    "GBPUSD:spread_too_large": 7,
+    "GBPUSD:trend_failed": 4,
+    "EURGBP:spread_too_large": 5,
+    "EURGBP:body_too_small": 2,
+    "EURAUD:trend_failed": 2,
+    "EURAUD:stop_distance_failed": 1,
+    "EURAUD:pattern_failed": 1,
+    "GBPCHF:trend_failed": 1,
+    "GBPCHF:pattern_failed": 4
+  },
+  "finalDeployRejections": [
+    {
+      "time": "2026-08-03T12:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T12:50:00.000Z",
+      "symbol": "GBPUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T12:55:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T12:55:00.000Z",
+      "symbol": "GBPUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:00:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T13:00:00.000Z",
+      "symbol": "EURAUD",
+      "reason": "stop_distance_failed"
+    },
+    {
+      "time": "2026-08-03T13:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T13:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T13:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:15:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:20:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T13:30:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:35:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T13:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T13:45:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T13:45:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T13:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T14:00:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:00:00.000Z",
+      "symbol": "EURAUD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:00:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:00:00.000Z",
+      "symbol": "GBPCHF",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T14:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T14:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:15:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:20:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T14:30:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T14:45:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T14:55:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T15:00:00.000Z",
+      "symbol": "EURAUD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T15:00:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:00:00.000Z",
+      "symbol": "GBPCHF",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T15:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:15:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T15:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T15:45:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T15:45:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T15:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "confirmation_failed"
+    },
+    {
+      "time": "2026-08-03T15:55:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:00:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:00:00.000Z",
+      "symbol": "GBPCHF",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T16:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T16:15:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T16:20:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T16:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "confirmation_failed"
+    },
+    {
+      "time": "2026-08-03T16:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T16:30:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:35:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "confirmation_failed"
+    },
+    {
+      "time": "2026-08-03T16:45:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T16:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T16:55:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:00:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T17:00:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T17:00:00.000Z",
+      "symbol": "GBPCHF",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "confirmation_failed"
+    },
+    {
+      "time": "2026-08-03T17:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T17:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T17:15:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:20:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T17:30:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:35:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T17:45:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T17:50:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T17:55:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T18:00:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T18:00:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T18:00:00.000Z",
+      "symbol": "GBPCHF",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T18:05:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T18:10:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T18:15:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T18:20:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T18:25:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "spread_too_large"
+    },
+    {
+      "time": "2026-08-03T18:30:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T18:30:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T18:35:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "body_too_small"
+    },
+    {
+      "time": "2026-08-03T18:40:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "pattern_failed"
+    },
+    {
+      "time": "2026-08-03T18:45:00.000Z",
+      "symbol": "AUDUSD",
+      "reason": "trend_failed"
+    },
+    {
+      "time": "2026-08-03T18:45:00.000Z",
+      "symbol": "EURUSD",
+      "reason": "pattern_failed"
+    }
+  ],
+  "currentCodeFullDay": {
+    "from": "2026-08-02T22:00:00.000Z",
+    "startBalance": 325.2,
+    "realizedPnl": -15.58,
+    "endBalance": 309.62,
+    "orders": [
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T00:30:00.000Z",
+        "entry": 1.15487,
+        "stop": 1.15291,
+        "target": 1.16271,
+        "size": 4800
+      },
+      {
+        "symbol": "NZDJPY",
+        "side": "SELL",
+        "type": "stop",
+        "createdAt": "2026-08-03T00:30:00.000Z",
+        "entry": 92.35311,
+        "stop": 93.10789,
+        "target": 90.06458,
+        "size": 2300
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T01:25:00.000Z",
+        "entry": 0.70355,
+        "stop": 0.70305,
+        "target": 0.70618,
+        "size": 8100
+      },
+      {
+        "symbol": "AUDCAD",
+        "side": "BUY",
+        "type": "market",
+        "createdAt": "2026-08-03T02:45:00.000Z",
+        "entry": 0.98677,
+        "stop": 0.98592,
+        "target": 0.99238,
+        "size": 5200
+      },
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "type": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.08893,
+        "stop": 1.08673,
+        "target": 1.09607,
+        "size": 2700
+      }
+    ],
+    "trades": [
+      {
+        "symbol": "NZDJPY",
+        "side": "SELL",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T00:30:00.000Z",
+        "entry": 92.35311465432837,
+        "stop": 91.95185345671635,
+        "initialStop": 93.10788534567163,
+        "target": 90.06458008716486,
+        "atr": 0.22885345671635055,
+        "quality": 3.0238931275890124,
+        "size": 2300,
+        "margin": 58.71875594823847,
+        "quoteRate": 180.8725,
+        "state": "open",
+        "openedAtMs": 1785717120000,
+        "openedAt": "2026-08-03T00:32:00.000Z",
+        "expiresAt": 1785718800000,
+        "closedAt": "2026-08-03T00:47:00.000Z",
+        "exit": 91.95185345671635,
+        "reason": "trailing_stop",
+        "pnl": 5.13,
+        "balanceAfter": 330.33
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T01:25:00.000Z",
+        "entry": 0.703545927093119,
+        "stop": 0.7030514738947262,
+        "initialStop": 0.7030514738947262,
+        "target": 0.7061830108178808,
+        "atr": 0.0003296354655952232,
+        "quality": 1.3326680544896576,
+        "size": 8100,
+        "margin": 164.68557534983347,
+        "quoteRate": 1.153455,
+        "state": "open",
+        "openedAtMs": 1785720300000,
+        "openedAt": "2026-08-03T01:25:00.000Z",
+        "expiresAt": 1785721200000,
+        "closedAt": "2026-08-03T02:09:00.000Z",
+        "exit": 0.7030514738947262,
+        "reason": "sl",
+        "pnl": -3.47,
+        "balanceAfter": 326.86
+      },
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T00:30:00.000Z",
+        "entry": 1.1548684150778943,
+        "stop": 1.1529080381305383,
+        "initialStop": 1.1529080381305383,
+        "target": 1.162709922867318,
+        "atr": 0.0007841507789423579,
+        "quality": 3.5416346796546017,
+        "size": 4800,
+        "margin": 160.00047313968565,
+        "quoteRate": 1.154865,
+        "state": "open",
+        "openedAtMs": 1785717000000,
+        "openedAt": "2026-08-03T00:30:00.000Z",
+        "expiresAt": 1785719700000,
+        "closedAt": "2026-08-03T02:15:00.000Z",
+        "exit": 1.1529080381305383,
+        "reason": "sl",
+        "pnl": -8.16,
+        "balanceAfter": 318.7
+      },
+      {
+        "symbol": "AUDCAD",
+        "side": "BUY",
+        "entryType": "market",
+        "createdAt": "2026-08-03T02:45:00.000Z",
+        "entry": 0.98677,
+        "stop": 0.9859195914544292,
+        "initialStop": 0.9859195914544292,
+        "target": 0.9923808945485537,
+        "atr": 0.000701361818569207,
+        "quality": 1.323438204824667,
+        "size": 5200,
+        "margin": 158.550575962822,
+        "quoteRate": 1.61816,
+        "state": "open",
+        "openedAtMs": 1785725100000,
+        "openedAt": "2026-08-03T02:45:00.000Z",
+        "expiresAt": null,
+        "closedAt": "2026-08-03T07:16:00.000Z",
+        "exit": 0.9859195914544292,
+        "reason": "sl",
+        "pnl": -2.73,
+        "balanceAfter": 315.97
+      },
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "entryType": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.0889275,
+        "stop": 1.08673447131559,
+        "initialStop": 1.08673447131559,
+        "target": 1.0960657171102535,
+        "atr": 0.0014276434220506632,
+        "quality": 1.5888352399378116,
+        "size": 2700,
+        "margin": 157.6294365215527,
+        "quoteRate": 0.9326,
+        "state": "open",
+        "openedAtMs": 1785764100000,
+        "openedAt": "2026-08-03T13:35:00.000Z",
+        "expiresAt": 1785769200000,
+        "closedAt": "2026-08-03T13:59:00.000Z",
+        "exit": 1.08673447131559,
+        "reason": "sl",
+        "pnl": -6.35,
+        "balanceAfter": 309.62
+      }
+    ],
+    "open": [],
+    "skips": [
+      {
+        "time": "2026-08-03T01:40:00.000Z",
+        "symbols": [
+          "AUDUSD"
+        ],
+        "reason": "no_free_positions"
+      },
+      {
+        "time": "2026-08-03T01:45:00.000Z",
+        "symbols": [
+          "EURUSD"
+        ],
+        "reason": "no_free_positions"
+      }
+    ]
+  },
+  "currentCodeFromBotStart": {
+    "from": "2026-08-03T07:30:00.000Z",
+    "startBalance": 325.2,
+    "realizedPnl": -15.73,
+    "endBalance": 309.47,
+    "orders": [
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T08:15:00.000Z",
+        "entry": 1.15278,
+        "stop": 1.15137,
+        "target": 1.15839,
+        "size": 4800
+      },
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "type": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.08893,
+        "stop": 1.08673,
+        "target": 1.09607,
+        "size": 2700
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T14:35:00.000Z",
+        "entry": 0.69966,
+        "stop": 0.69913,
+        "target": 0.70247,
+        "size": 7800
+      }
+    ],
+    "trades": [
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "entryType": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.0889275,
+        "stop": 1.08673447131559,
+        "initialStop": 1.08673447131559,
+        "target": 1.0960657171102535,
+        "atr": 0.0014276434220506632,
+        "quality": 1.5888352399378116,
+        "size": 2700,
+        "margin": 157.6294365215527,
+        "quoteRate": 0.9326,
+        "state": "open",
+        "openedAtMs": 1785764100000,
+        "openedAt": "2026-08-03T13:35:00.000Z",
+        "expiresAt": 1785769200000,
+        "closedAt": "2026-08-03T13:59:00.000Z",
+        "exit": 1.08673447131559,
+        "reason": "sl",
+        "pnl": -6.35,
+        "balanceAfter": 318.85
+      },
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T08:15:00.000Z",
+        "entry": 1.152776181934582,
+        "stop": 1.1513716335700281,
+        "initialStop": 1.1513716335700281,
+        "target": 1.1583943753927977,
+        "atr": 0.0005618193458215522,
+        "quality": 0.7837071144687489,
+        "size": 4800,
+        "margin": 160.02237443511765,
+        "quoteRate": 1.152615,
+        "state": "open",
+        "openedAtMs": 1785744900000,
+        "openedAt": "2026-08-03T08:15:00.000Z",
+        "expiresAt": 1785747600000,
+        "closedAt": "2026-08-03T14:40:00.000Z",
+        "exit": 1.1513716335700281,
+        "reason": "sl",
+        "pnl": -5.86,
+        "balanceAfter": 313
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T14:35:00.000Z",
+        "entry": 0.6996603227163094,
+        "stop": 0.6991409660461333,
+        "initialStop": 0.6991329023439894,
+        "target": 0.7024732313686826,
+        "atr": 0.0003516135815466511,
+        "quality": 3.316048352316703,
+        "size": 7800,
+        "margin": 157.9485236419083,
+        "quoteRate": 1.151715,
+        "state": "open",
+        "openedAtMs": 1785768540000,
+        "openedAt": "2026-08-03T14:49:00.000Z",
+        "expiresAt": 1785768600000,
+        "closedAt": "2026-08-03T18:01:00.000Z",
+        "exit": 0.6991409660461333,
+        "reason": "trailing_stop",
+        "pnl": -3.52,
+        "balanceAfter": 309.47
+      }
+    ],
+    "open": [],
+    "skips": [
+      {
+        "time": "2026-08-03T13:55:00.000Z",
+        "symbols": [
+          "AUDUSD"
+        ],
+        "reason": "no_free_positions"
+      }
+    ]
+  },
+  "currentCodeFromFinalDeploy": {
+    "from": "2026-08-03T12:55:00.000Z",
+    "startBalance": 325.2,
+    "realizedPnl": -15.68,
+    "endBalance": 309.52,
+    "orders": [
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "type": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.08893,
+        "stop": 1.08673,
+        "target": 1.09607,
+        "size": 2700
+      },
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.15293,
+        "stop": 1.15152,
+        "target": 1.15855,
+        "size": 4800
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "type": "stop",
+        "createdAt": "2026-08-03T14:35:00.000Z",
+        "entry": 0.69966,
+        "stop": 0.69913,
+        "target": 0.70247,
+        "size": 7700
+      }
+    ],
+    "trades": [
+      {
+        "symbol": "GBPCHF",
+        "side": "BUY",
+        "entryType": "limit",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.0889275,
+        "stop": 1.08673447131559,
+        "initialStop": 1.08673447131559,
+        "target": 1.0960657171102535,
+        "atr": 0.0014276434220506632,
+        "quality": 1.5888352399378116,
+        "size": 2700,
+        "margin": 157.6294365215527,
+        "quoteRate": 0.9326,
+        "state": "open",
+        "openedAtMs": 1785764100000,
+        "openedAt": "2026-08-03T13:35:00.000Z",
+        "expiresAt": 1785769200000,
+        "closedAt": "2026-08-03T13:59:00.000Z",
+        "exit": 1.08673447131559,
+        "reason": "sl",
+        "pnl": -6.35,
+        "balanceAfter": 318.85
+      },
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T13:00:00.000Z",
+        "entry": 1.152926198476945,
+        "stop": 1.1515212365533234,
+        "initialStop": 1.1515212365533234,
+        "target": 1.1585460461714312,
+        "atr": 0.0005619847694486188,
+        "quality": 0.5569414642433196,
+        "size": 4800,
+        "margin": 160.0029419217639,
+        "quoteRate": 1.152905,
+        "state": "open",
+        "openedAtMs": 1785762000000,
+        "openedAt": "2026-08-03T13:00:00.000Z",
+        "expiresAt": 1785764700000,
+        "closedAt": "2026-08-03T14:29:00.000Z",
+        "exit": 1.1515212365533234,
+        "reason": "sl",
+        "pnl": -5.86,
+        "balanceAfter": 312.99
+      },
+      {
+        "symbol": "AUDUSD",
+        "side": "BUY",
+        "entryType": "stop",
+        "createdAt": "2026-08-03T14:35:00.000Z",
+        "entry": 0.6996603227163094,
+        "stop": 0.6991409660461333,
+        "initialStop": 0.6991329023439894,
+        "target": 0.7024732313686826,
+        "atr": 0.0003516135815466511,
+        "quality": 3.316048352316703,
+        "size": 7700,
+        "margin": 155.92354256957614,
+        "quoteRate": 1.151715,
+        "state": "open",
+        "openedAtMs": 1785768540000,
+        "openedAt": "2026-08-03T14:49:00.000Z",
+        "expiresAt": 1785768600000,
+        "closedAt": "2026-08-03T18:01:00.000Z",
+        "exit": 0.6991409660461333,
+        "reason": "trailing_stop",
+        "pnl": -3.48,
+        "balanceAfter": 309.52
+      }
+    ],
+    "open": [],
+    "skips": [
+      {
+        "time": "2026-08-03T13:55:00.000Z",
+        "symbols": [
+          "AUDUSD"
+        ],
+        "reason": "no_free_positions"
+      }
+    ]
+  }
+}

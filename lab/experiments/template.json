@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "EXP-0000",
+  "title": "Replace with a short experiment title",
+  "status": "draft",
+  "hypothesis": {
+    "statement": "State the falsifiable expected outcome.",
+    "change": "Declare exactly one variable or one tightly coupled change.",
+    "rationale": "Explain why the change should affect the outcome."
+  },
+  "baseline": {
+    "name": "UNSET",
+    "files": []
+  },
+  "candidate": {
+    "files": [],
+    "allowedChanges": []
+  },
+  "dataset": {
+    "manifest": "lab/datasets/manifests/UNSET.json",
+    "splits": {
+      "development": { "from": "YYYY-MM-DD", "to": "YYYY-MM-DD" },
+      "validation": { "from": "YYYY-MM-DD", "to": "YYYY-MM-DD" },
+      "lockedTest": { "from": "YYYY-MM-DD", "to": "YYYY-MM-DD" }
+    }
+  },
+  "evaluation": {
+    "evaluator": "lab/evaluators/UNSET.js",
+    "seed": 15072026,
+    "maxRuns": 1,
+    "maxMinutes": 10,
+    "metrics": [
+      "netReturn",
+      "maxDrawdown",
+      "profitFactor",
+      "tradeCount",
+      "positivePeriodRate"
+    ],
+    "acceptanceGates": []
+  },
+  "safety": {
+    "brokerAccess": "none",
+    "networkAccess": "none",
+    "lockedTestAccess": "human-only",
+    "humanApprovalRequired": true
+  }
+}

@@ -1,6 +1,6 @@
 # Capital API Trading Bot
 
-Backend-oriented Node.js project for API integration, strategy logic, market data processing, structured logging and backtesting.
+Backend-oriented Node.js project for API integration, strategy logic, market data processing, structured logging and labing.
 
 The project focuses on backend architecture, data handling and modular strategy execution. It is part of my technical portfolio and demonstrates how I work with external APIs, asynchronous data flows and structured application logic.
 
@@ -35,9 +35,8 @@ bot.js          Main runtime entry point
 services/       API communication and external integrations
 strategies/     Trading and signal logic
 indicators/     Technical indicator calculations
-backtest/       Backtesting / replay logic
+lab/            Backtesting / replay logic
 utils/          Shared helper functions
-logs/           Local runtime logs
 ```
 
 ## Setup
@@ -50,7 +49,7 @@ npm run start
 Backtesting:
 
 ```bash
-npm run backtest
+npm run lab
 ```
 
 Environment variables and API credentials are intentionally not included in the repository.
