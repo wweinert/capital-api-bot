@@ -150,7 +150,7 @@ class TradingBot {
         }
     }
 
-    getActiveSymbols() {
+    getActiveSymbfols() {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
@@ -181,9 +181,36 @@ class TradingBot {
 
         return symbols;
     }
+    async getActiveSymbols() {
+        const now = new Date();
+        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+        const sessionSymbols = Array.isArray(SESSIONS.SYMBOLS) ? SESSIONS.SYMBOLS : [];
+        const tradableSymbols = [];
+
+        for (const [sessionName, session] of Object.entries(SESSIONS)) {
+            if (session.SYMBOLS.length < 0) return console.warn("[Bot] No symbols defined in session:", session);
+
+            let isActive;
+            if (session.START < session.END) {
+                isActive = currentMinutes >= session.START && currentMinutes < session.END;
+            } else {
+                isActive = currentMinutes >= session.START || currentMinutes < session.END;
+            }
+
+            if (isActive) {
+                tradableSymbols.push(...session.SYMBOLS);
+            }
+        }
+
+        logger.info(`[Bot] Tradable symbols: ${tradableSymbols.length ? tradableSymbols.join(", ") : "none"}`);
+        return tradableSymbols;
+    }
 
     async analyzeAllSymbols() {
         this.activeSymbols = await this.getActiveSymbols();
+
+        console.log(this.activeSymbols);
 
         const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol)));
 
@@ -269,9 +296,9 @@ class TradingBot {
             });
         }
 
-        if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
-            return null;
-        }
+        // if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
+        //     return null;
+        // }
 
         const indicators = {};
 

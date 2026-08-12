@@ -5,7 +5,7 @@ strategy idea into reproducible evidence.
 
 ## Required workflow
 
-- Read `README.md`, `harness/policy.json`, and `knowledge/DECISIONS.md`.
+- Read `README.md` and `knowledge/DECISIONS.md`.
 
 ## Hard guardrails
 
@@ -16,9 +16,3 @@ strategy idea into reproducible evidence.
   or change acceptance gates after seeing results.
 - Do not silently repair a legacy experiment while reproducing it. Record the
   defect, then create a new experiment if a corrected study is warranted.
-
-## Evidence language
-
-- `candidate`: passed development and validation gates only.
-- `probation`: passed the locked evaluator and awaits human review trade.
-- `approved`: human decision only; never assigned by an agent.

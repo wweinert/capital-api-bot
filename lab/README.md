@@ -10,9 +10,7 @@ must never mutate live code, broker state, or server processes.
 lab/
   AGENTS.md              permanent agent rules
   autoresearch/          legacy research, retained at original paths
-  harness/               policy, validation, manifests, CLI
-  experiments/           one isolated directory per hypothesis
-  knowledge/             durable decisions and known invalid assumptions
+  harness/knowledge/     durable decisions and known invalid assumptions
 ```
 
 ## The experiment loop

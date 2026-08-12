@@ -1,0 +1,3945 @@
+{
+  "generatedAt": "2026-08-12T15:54:33.002Z",
+  "source": "/Users/waldemarweinert/DEV/trading/capital-api-bot/lab/autoresearch/reports/m15-only-price-action-session-portfolio-final-2026-08-12.json",
+  "evidenceStatus": "post-search diagnostic selected after inspecting both train and validation; not an independent walk-forward result",
+  "protocol": {
+    "schemaVersion": 14,
+    "train": {
+      "fromWeek": "2026-W07",
+      "toWeek": "2026-W19"
+    },
+    "validation": {
+      "fromWeek": "2026-W20",
+      "toWeek": "2026-W33"
+    },
+    "evaluationEndExclusive": "2026-08-11T10:00:00.000Z",
+    "minimumCoverageEnd": "2026-08-10T00:00:00.000Z",
+    "lockedTest": "none-available-entire-period-is-inspected-development-evidence",
+    "primaryMetric": "dailyObjective",
+    "startCapital": 500,
+    "leverage": {
+      "usdPairs": 30,
+      "crosses": 20
+    },
+    "risk": {
+      "maxPerPositionPct": 0.03,
+      "maxPortfolioPct": 0.15,
+      "marginUtilization": 0.9
+    },
+    "sizing": "EUR 500 fixed upside and balance-sensitive downside; <=3% position risk, <=15% open risk; 90% margin divided into five equal per-position budgets",
+    "execution": "closed-candle signals, next-M1 entry, bid/ask prices, conservative SL-first OHLC ambiguity; M15-only structural price action, no H1 entry filter or rank input, spread veto, pending invalidation, 24-hour maximum hold"
+  },
+  "evaluatorSha256": "41b54a7622a848f7e7a637352d2977e985307e1cbffefa406fb513ab0f9a87b7",
+  "datasetFingerprint": "491220dd44a65b0e6f4e7ff928f83bcb9eaf0a03778da11007bd6563f856a8c5",
+  "selectedProfiles": [
+    {
+      "candidate": {
+        "name": "pair-london-EURUSD-balanced-m15-only-fixed-2r",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 1,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.01,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD"
+        ],
+        "allowedSessions": [
+          "london"
+        ]
+      },
+      "sourceSummary": {
+        "name": "pair-london-EURUSD-balanced-m15-only-fixed-2r",
+        "candidateSha256": "ddc6dec7c5a25bcdc36a62bcb46cc40c79e6cae598e60b376457f715a9a9258a",
+        "objective": -19.8099,
+        "qualified": false,
+        "finalBalance": 524.75,
+        "returnPct": 4.95,
+        "profitFactor": 1.102,
+        "entries": 220,
+        "partialExits": 0,
+        "maxDrawdownR": 8.58,
+        "maxDrawdownPct": 4.6,
+        "risk": {
+          "maxPositionPct": 0.993,
+          "maxPortfolioPct": 0.993,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 18
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 69.2,
+          "medianR": 1.006,
+          "worstR": -5.988,
+          "totalR": 5.003,
+          "maxDrawdownR": 5.988,
+          "entries": 109,
+          "trades": 109,
+          "pnl": -9.63
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 50,
+          "medianR": 1.006,
+          "worstR": -6.002,
+          "totalR": 9.453,
+          "maxDrawdownR": 8.58,
+          "entries": 111,
+          "trades": 111,
+          "pnl": 34.38
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 64,
+            "activeMarketDayPct": 98.5,
+            "profitableDays": 31,
+            "positiveActiveDayPct": 48.4,
+            "positiveMarketDayPct": 47.7,
+            "medianDayR": 0.002,
+            "worstDayR": -2.004,
+            "averageDayPnl": -0.15
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 65,
+            "activeMarketDayPct": 97,
+            "profitableDays": 28,
+            "positiveActiveDayPct": 43.1,
+            "positiveMarketDayPct": 41.8,
+            "medianDayR": -0.999,
+            "worstDayR": -2.001,
+            "averageDayPnl": 0.53
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": true,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": true,
+          "profitFactor": true,
+          "sampleSize": true,
+          "drawdown": true,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": -2.68,
+          "profitFactor": 0.88,
+          "trades": 21,
+          "positiveTrades": 5,
+          "winRate": 23.8,
+          "takeProfits": 5,
+          "tpRate": 23.8,
+          "stopLosses": 15,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.42,
+          "averagePnl": -0.128
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 220,
+            "pnl": 24.75,
+            "r": 14.455
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "pair-london-USDJPY-loose-m15-only-fast30-be1-trail-3atr",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 1,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.01,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 1,
+        "trailATR": 3,
+        "trailR": 0,
+        "runnerMode": "fast-1r",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fast30-be1-trail-3atr",
+        "maxPullbackBars": 6,
+        "minImpulseAtr": 0.5,
+        "minSwingGapAtr": 0,
+        "minRetrace": 0.1,
+        "maxRetrace": 0.95,
+        "minSignalBodyAtr": 0,
+        "maxSpreadAtr": 1.75,
+        "trendMode": "none",
+        "runnerFastMinutes": 30,
+        "patternKey": "loose",
+        "trendKey": "m15-only",
+        "exitKey": "fast30-be1-trail-3atr",
+        "symbols": [
+          "USDJPY"
+        ],
+        "allowedSessions": [
+          "london"
+        ]
+      },
+      "sourceSummary": {
+        "name": "pair-london-USDJPY-loose-m15-only-fast30-be1-trail-3atr",
+        "candidateSha256": "ad5ff606edda8f508f9351369150497baa11a1db1e6df818d5041c92e2345719",
+        "objective": -34.595,
+        "qualified": false,
+        "finalBalance": 512.39,
+        "returnPct": 2.48,
+        "profitFactor": 1.12,
+        "entries": 227,
+        "partialExits": 0,
+        "maxDrawdownR": 31.266,
+        "maxDrawdownPct": 9.9,
+        "risk": {
+          "maxPositionPct": 1,
+          "maxPortfolioPct": 1,
+          "maxPositionMarginPct": 17.999,
+          "maxMarginUsagePct": 17.999
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 53.8,
+          "medianR": 0.998,
+          "worstR": -6.021,
+          "totalR": 1.009,
+          "maxDrawdownR": 8.006,
+          "entries": 106,
+          "trades": 106,
+          "pnl": 4.18
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 7,
+          "positiveWeekPct": 50,
+          "medianR": 0.615,
+          "worstR": -8.003,
+          "totalR": 15.768,
+          "maxDrawdownR": 24.297,
+          "entries": 121,
+          "trades": 121,
+          "pnl": 8.21
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 64,
+            "activeMarketDayPct": 98.5,
+            "profitableDays": 29,
+            "positiveActiveDayPct": 45.3,
+            "positiveMarketDayPct": 44.6,
+            "medianDayR": 0,
+            "worstDayR": -2.001,
+            "averageDayPnl": 0.07
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 30,
+            "positiveActiveDayPct": 44.8,
+            "positiveMarketDayPct": 44.8,
+            "medianDayR": -0.537,
+            "worstDayR": -2.002,
+            "averageDayPnl": 0.12
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": true,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": true,
+          "profitFactor": true,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 25.31,
+          "profitFactor": 2.221,
+          "trades": 20,
+          "positiveTrades": 7,
+          "winRate": 35,
+          "takeProfits": 4,
+          "tpRate": 20,
+          "stopLosses": 11,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.4,
+          "averagePnl": 1.265
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 227,
+            "pnl": 12.39,
+            "r": 16.776
+          }
+        }
+      }
+    }
+  ],
+  "results": [
+    {
+      "candidate": {
+        "name": "post-search-stable-tuned-risk-1",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.01,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 1,
+              "trailATR": 3,
+              "trailR": 0,
+              "runnerMode": "fast-1r",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fast30-be1-trail-3atr"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 537.45,
+        "returnPct": 7.49,
+        "profitFactor": 1.111,
+        "entries": 447,
+        "partialExits": 0,
+        "maxDrawdownR": 29.25,
+        "maxDrawdownPct": 9,
+        "risk": {
+          "maxPositionPct": 1,
+          "maxPortfolioPct": 1.961,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.988
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 61.5,
+          "medianR": 0.002,
+          "worstR": -5.997,
+          "totalR": 6.01,
+          "maxDrawdownR": 6.982,
+          "entries": 215,
+          "trades": 215,
+          "pnl": -5.99
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 42.9,
+          "medianR": -0.011,
+          "worstR": -8.412,
+          "totalR": 25.22,
+          "maxDrawdownR": 22.285,
+          "entries": 232,
+          "trades": 232,
+          "pnl": 43.4
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 28,
+            "positiveActiveDayPct": 43.1,
+            "positiveMarketDayPct": 43.1,
+            "medianDayR": -0.003,
+            "worstDayR": -4,
+            "averageDayPnl": -0.09
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 32,
+            "positiveActiveDayPct": 47.8,
+            "positiveMarketDayPct": 47.8,
+            "medianDayR": 0,
+            "worstDayR": -4.001,
+            "averageDayPnl": 0.65
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": true,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": true,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 23.3,
+          "profitFactor": 1.536,
+          "trades": 41,
+          "positiveTrades": 12,
+          "winRate": 29.3,
+          "takeProfits": 9,
+          "tpRate": 22,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.82,
+          "averagePnl": 0.568
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.11
+            },
+            "r": 14.455,
+            "pnl": 24.26
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 227,
+              "positiveTrades": 69,
+              "winRate": 30.4,
+              "takeProfits": 59,
+              "tpRate": 26,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.68,
+              "averagePnl": 0.058
+            },
+            "r": 16.776,
+            "pnl": 13.19
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 447,
+            "pnl": 37.45,
+            "r": 31.231
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -19.2,
+            "r": -5.986,
+            "trades": 45,
+            "wins": 12,
+            "winRate": 26.7
+          },
+          "2026-03": {
+            "pnl": 23.97,
+            "r": 14.006,
+            "trades": 69,
+            "wins": 26,
+            "winRate": 37.7
+          },
+          "2026-04": {
+            "pnl": 1.64,
+            "r": 3.017,
+            "trades": 76,
+            "wins": 26,
+            "winRate": 34.2
+          },
+          "2026-05": {
+            "pnl": -15.62,
+            "r": -13.421,
+            "trades": 78,
+            "wins": 21,
+            "winRate": 26.9
+          },
+          "2026-06": {
+            "pnl": -8.04,
+            "r": -7.667,
+            "trades": 70,
+            "wins": 20,
+            "winRate": 28.6
+          },
+          "2026-07": {
+            "pnl": 44.82,
+            "r": 24.285,
+            "trades": 84,
+            "wins": 37,
+            "winRate": 44
+          },
+          "2026-08": {
+            "pnl": 9.89,
+            "r": 16.997,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "post-search-stable-fixed2r-risk-1",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.01,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 553.8,
+        "returnPct": 10.76,
+        "profitFactor": 1.092,
+        "entries": 437,
+        "partialExits": 0,
+        "maxDrawdownR": 24.76,
+        "maxDrawdownPct": 8.9,
+        "risk": {
+          "maxPositionPct": 1,
+          "maxPortfolioPct": 1.961,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.992
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 69.2,
+          "medianR": 1.07,
+          "worstR": -5.998,
+          "totalR": 26.63,
+          "maxDrawdownR": 5.998,
+          "entries": 212,
+          "trades": 212,
+          "pnl": 36.21
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 35.7,
+          "medianR": -1.964,
+          "worstR": -8.412,
+          "totalR": -0.873,
+          "maxDrawdownR": 24.391,
+          "entries": 225,
+          "trades": 225,
+          "pnl": 17.6
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 30,
+            "positiveActiveDayPct": 46.2,
+            "positiveMarketDayPct": 46.2,
+            "medianDayR": -0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.56
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 33,
+            "positiveActiveDayPct": 49.3,
+            "positiveMarketDayPct": 49.3,
+            "medianDayR": 0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.26
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": false,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": false,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 0.04,
+          "profitFactor": 1.001,
+          "trades": 40,
+          "positiveTrades": 12,
+          "winRate": 30,
+          "takeProfits": 12,
+          "tpRate": 30,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.8,
+          "averagePnl": 0.001
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.115
+            },
+            "r": 14.455,
+            "pnl": 25.25
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 217,
+              "positiveTrades": 77,
+              "winRate": 35.5,
+              "takeProfits": 73,
+              "tpRate": 33.6,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.61,
+              "averagePnl": 0.132
+            },
+            "r": 11.303,
+            "pnl": 28.54
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 437,
+            "pnl": 53.8,
+            "r": 25.758
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -8.94,
+            "r": 0.018,
+            "trades": 45,
+            "wins": 15,
+            "winRate": 33.3
+          },
+          "2026-03": {
+            "pnl": 38.77,
+            "r": 22.009,
+            "trades": 68,
+            "wins": 30,
+            "winRate": 44.1
+          },
+          "2026-04": {
+            "pnl": 4.68,
+            "r": 4.534,
+            "trades": 76,
+            "wins": 27,
+            "winRate": 35.5
+          },
+          "2026-05": {
+            "pnl": -3.3,
+            "r": -9.319,
+            "trades": 74,
+            "wins": 22,
+            "winRate": 29.7
+          },
+          "2026-06": {
+            "pnl": -11.61,
+            "r": -10.003,
+            "trades": 67,
+            "wins": 19,
+            "winRate": 28.4
+          },
+          "2026-07": {
+            "pnl": 48.66,
+            "r": 27.484,
+            "trades": 82,
+            "wins": 37,
+            "winRate": 45.1
+          },
+          "2026-08": {
+            "pnl": -14.46,
+            "r": -8.964,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "post-search-stable-tuned-risk-2",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.02,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 1,
+              "trailATR": 3,
+              "trailR": 0,
+              "runnerMode": "fast-1r",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fast30-be1-trail-3atr"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 533.91,
+        "returnPct": 6.78,
+        "profitFactor": 1.111,
+        "entries": 447,
+        "partialExits": 0,
+        "maxDrawdownR": 29.25,
+        "maxDrawdownPct": 10.2,
+        "risk": {
+          "maxPositionPct": 1.944,
+          "maxPortfolioPct": 2.931,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.988
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 61.5,
+          "medianR": 0.002,
+          "worstR": -5.997,
+          "totalR": 6.01,
+          "maxDrawdownR": 6.982,
+          "entries": 215,
+          "trades": 215,
+          "pnl": -14.14
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 42.9,
+          "medianR": -0.011,
+          "worstR": -8.412,
+          "totalR": 25.22,
+          "maxDrawdownR": 22.285,
+          "entries": 232,
+          "trades": 232,
+          "pnl": 48.07
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 27,
+            "positiveActiveDayPct": 41.5,
+            "positiveMarketDayPct": 41.5,
+            "medianDayR": -0.003,
+            "worstDayR": -4,
+            "averageDayPnl": -0.22
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 32,
+            "positiveActiveDayPct": 47.8,
+            "positiveMarketDayPct": 47.8,
+            "medianDayR": 0,
+            "worstDayR": -4.001,
+            "averageDayPnl": 0.72
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": true,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": true,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 27.9,
+          "profitFactor": 1.642,
+          "trades": 41,
+          "positiveTrades": 12,
+          "winRate": 29.3,
+          "takeProfits": 9,
+          "tpRate": 22,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.82,
+          "averagePnl": 0.68
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.063
+            },
+            "r": 14.455,
+            "pnl": 13.89
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 227,
+              "positiveTrades": 69,
+              "winRate": 30.4,
+              "takeProfits": 59,
+              "tpRate": 26,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.68,
+              "averagePnl": 0.088
+            },
+            "r": 16.776,
+            "pnl": 20.02
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 447,
+            "pnl": 33.91,
+            "r": 31.231
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -19.2,
+            "r": -5.986,
+            "trades": 45,
+            "wins": 12,
+            "winRate": 26.7
+          },
+          "2026-03": {
+            "pnl": 12.02,
+            "r": 14.006,
+            "trades": 69,
+            "wins": 26,
+            "winRate": 37.7
+          },
+          "2026-04": {
+            "pnl": 6.98,
+            "r": 3.017,
+            "trades": 76,
+            "wins": 26,
+            "winRate": 34.2
+          },
+          "2026-05": {
+            "pnl": -17.38,
+            "r": -13.421,
+            "trades": 78,
+            "wins": 21,
+            "winRate": 26.9
+          },
+          "2026-06": {
+            "pnl": -8.09,
+            "r": -7.667,
+            "trades": 70,
+            "wins": 20,
+            "winRate": 28.6
+          },
+          "2026-07": {
+            "pnl": 49.68,
+            "r": 24.285,
+            "trades": 84,
+            "wins": 37,
+            "winRate": 44
+          },
+          "2026-08": {
+            "pnl": 9.89,
+            "r": 16.997,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "post-search-stable-fixed2r-risk-2",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.02,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 552.78,
+        "returnPct": 10.56,
+        "profitFactor": 1.092,
+        "entries": 437,
+        "partialExits": 0,
+        "maxDrawdownR": 24.76,
+        "maxDrawdownPct": 10.2,
+        "risk": {
+          "maxPositionPct": 1.961,
+          "maxPortfolioPct": 2.98,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.992
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 69.2,
+          "medianR": 1.07,
+          "worstR": -5.998,
+          "totalR": 26.63,
+          "maxDrawdownR": 5.998,
+          "entries": 212,
+          "trades": 212,
+          "pnl": 29.51
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 35.7,
+          "medianR": -1.964,
+          "worstR": -8.412,
+          "totalR": -0.873,
+          "maxDrawdownR": 24.391,
+          "entries": 225,
+          "trades": 225,
+          "pnl": 23.28
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 29,
+            "positiveActiveDayPct": 44.6,
+            "positiveMarketDayPct": 44.6,
+            "medianDayR": -0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.45
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 33,
+            "positiveActiveDayPct": 49.3,
+            "positiveMarketDayPct": 49.3,
+            "medianDayR": 0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.35
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": false,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": false,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 4.64,
+          "profitFactor": 1.107,
+          "trades": 40,
+          "positiveTrades": 12,
+          "winRate": 30,
+          "takeProfits": 12,
+          "tpRate": 30,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.8,
+          "averagePnl": 0.116
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.072
+            },
+            "r": 14.455,
+            "pnl": 15.9
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 217,
+              "positiveTrades": 77,
+              "winRate": 35.5,
+              "takeProfits": 73,
+              "tpRate": 33.6,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.61,
+              "averagePnl": 0.17
+            },
+            "r": 11.303,
+            "pnl": 36.87
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 437,
+            "pnl": 52.78,
+            "r": 25.758
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -8.94,
+            "r": 0.018,
+            "trades": 45,
+            "wins": 15,
+            "winRate": 33.3
+          },
+          "2026-03": {
+            "pnl": 27.37,
+            "r": 22.009,
+            "trades": 68,
+            "wins": 30,
+            "winRate": 44.1
+          },
+          "2026-04": {
+            "pnl": 10.8,
+            "r": 4.534,
+            "trades": 76,
+            "wins": 27,
+            "winRate": 35.5
+          },
+          "2026-05": {
+            "pnl": -4.71,
+            "r": -9.319,
+            "trades": 74,
+            "wins": 22,
+            "winRate": 29.7
+          },
+          "2026-06": {
+            "pnl": -11.61,
+            "r": -10.003,
+            "trades": 67,
+            "wins": 19,
+            "winRate": 28.4
+          },
+          "2026-07": {
+            "pnl": 54.33,
+            "r": 27.484,
+            "trades": 82,
+            "wins": 37,
+            "winRate": 45.1
+          },
+          "2026-08": {
+            "pnl": -14.46,
+            "r": -8.964,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "post-search-stable-tuned-risk-3",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.03,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 1,
+              "trailATR": 3,
+              "trailR": 0,
+              "runnerMode": "fast-1r",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fast30-be1-trail-3atr"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 542.8,
+        "returnPct": 8.56,
+        "profitFactor": 1.111,
+        "entries": 447,
+        "partialExits": 0,
+        "maxDrawdownR": 29.25,
+        "maxDrawdownPct": 10.2,
+        "risk": {
+          "maxPositionPct": 2.777,
+          "maxPortfolioPct": 3.245,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.988
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 8,
+          "positiveWeekPct": 61.5,
+          "medianR": 0.002,
+          "worstR": -5.997,
+          "totalR": 6.01,
+          "maxDrawdownR": 6.982,
+          "entries": 215,
+          "trades": 215,
+          "pnl": -5.91
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 6,
+          "positiveWeekPct": 42.9,
+          "medianR": -0.011,
+          "worstR": -8.412,
+          "totalR": 25.22,
+          "maxDrawdownR": 22.285,
+          "entries": 232,
+          "trades": 232,
+          "pnl": 48.69
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 27,
+            "positiveActiveDayPct": 41.5,
+            "positiveMarketDayPct": 41.5,
+            "medianDayR": -0.003,
+            "worstDayR": -4,
+            "averageDayPnl": -0.09
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 32,
+            "positiveActiveDayPct": 47.8,
+            "positiveMarketDayPct": 47.8,
+            "medianDayR": 0,
+            "worstDayR": -4.001,
+            "averageDayPnl": 0.73
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": true,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": true,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 27.9,
+          "profitFactor": 1.642,
+          "trades": 41,
+          "positiveTrades": 12,
+          "winRate": 29.3,
+          "takeProfits": 9,
+          "tpRate": 22,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.82,
+          "averagePnl": 0.68
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.068
+            },
+            "r": 14.455,
+            "pnl": 14.86
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 227,
+              "positiveTrades": 69,
+              "winRate": 30.4,
+              "takeProfits": 59,
+              "tpRate": 26,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.68,
+              "averagePnl": 0.123
+            },
+            "r": 16.776,
+            "pnl": 27.94
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 447,
+            "pnl": 42.8,
+            "r": 31.231
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -19.2,
+            "r": -5.986,
+            "trades": 45,
+            "wins": 12,
+            "winRate": 26.7
+          },
+          "2026-03": {
+            "pnl": 12.02,
+            "r": 14.006,
+            "trades": 69,
+            "wins": 26,
+            "winRate": 37.7
+          },
+          "2026-04": {
+            "pnl": 15.07,
+            "r": 3.017,
+            "trades": 76,
+            "wins": 26,
+            "winRate": 34.2
+          },
+          "2026-05": {
+            "pnl": -17.03,
+            "r": -13.421,
+            "trades": 78,
+            "wins": 21,
+            "winRate": 26.9
+          },
+          "2026-06": {
+            "pnl": -8.04,
+            "r": -7.667,
+            "trades": 70,
+            "wins": 20,
+            "winRate": 28.6
+          },
+          "2026-07": {
+            "pnl": 50.1,
+            "r": 24.285,
+            "trades": 84,
+            "wins": 37,
+            "winRate": 44
+          },
+          "2026-08": {
+            "pnl": 9.89,
+            "r": 16.997,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    },
+    {
+      "candidate": {
+        "name": "post-search-stable-fixed2r-risk-3",
+        "signalFamily": "m15-impulse-pullback-resumption",
+        "method": "custom",
+        "rankByScore": true,
+        "rankAtTimestampLimit": 5,
+        "signalTimeframe": "M15",
+        "sessionWindows": [
+          [
+            0,
+            0
+          ]
+        ],
+        "minAtrPct": null,
+        "minBbWidthPct": null,
+        "minEmaDistPct": null,
+        "entryMode": "signal-breakout",
+        "riskPct": 0.03,
+        "marginUtilization": 0.9,
+        "stopATR": 1.5,
+        "stopMode": "signal-candle",
+        "stopBufferAtr": 0.05,
+        "rewardRisk": 2,
+        "hold": 1440,
+        "breakEvenR": 0,
+        "trailATR": 0,
+        "trailR": 0,
+        "runnerMode": "none",
+        "partialRunner": false,
+        "partialR": 0,
+        "partialFraction": 0,
+        "moveStopOnPartial": false,
+        "cooldown": 30,
+        "maxDaily": 3,
+        "maxPositions": 5,
+        "maxLossesPerSymbolDay": 3,
+        "maxLossesPerSymbolSession": 2,
+        "pendingOffsetAtr": 0,
+        "pendingExpiryMinutes": 60,
+        "weekdaysOnly": true,
+        "dailyFlat": false,
+        "dailyCloseMinuteUtc": 1440,
+        "key": "fixed-2r",
+        "maxPullbackBars": 4,
+        "minImpulseAtr": 0.75,
+        "minSwingGapAtr": 0.1,
+        "minRetrace": 0.2,
+        "maxRetrace": 0.85,
+        "minSignalBodyAtr": 0.1,
+        "maxSpreadAtr": 1.5,
+        "trendMode": "none",
+        "patternKey": "balanced",
+        "trendKey": "m15-only",
+        "exitKey": "fixed-2r",
+        "symbols": [
+          "EURUSD",
+          "USDJPY"
+        ],
+        "portfolioMode": true,
+        "pairSessionProfiles": {
+          "EURUSD": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fixed-2r",
+              "maxPullbackBars": 4,
+              "minImpulseAtr": 0.75,
+              "minSwingGapAtr": 0.1,
+              "minRetrace": 0.2,
+              "maxRetrace": 0.85,
+              "minSignalBodyAtr": 0.1,
+              "maxSpreadAtr": 1.5,
+              "trendMode": "none",
+              "patternKey": "balanced",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          },
+          "USDJPY": {
+            "london": {
+              "signalFamily": "m15-impulse-pullback-resumption",
+              "method": "custom",
+              "rankByScore": true,
+              "signalTimeframe": "M15",
+              "sessionWindows": [
+                [
+                  0,
+                  0
+                ]
+              ],
+              "minAtrPct": null,
+              "minBbWidthPct": null,
+              "minEmaDistPct": null,
+              "entryMode": "signal-breakout",
+              "stopATR": 1.5,
+              "stopMode": "signal-candle",
+              "stopBufferAtr": 0.05,
+              "rewardRisk": 2,
+              "hold": 1440,
+              "breakEvenR": 0,
+              "trailATR": 0,
+              "trailR": 0,
+              "runnerMode": "none",
+              "partialRunner": false,
+              "partialR": 0,
+              "partialFraction": 0,
+              "moveStopOnPartial": false,
+              "cooldown": 30,
+              "maxDaily": 3,
+              "maxLossesPerSymbolDay": 3,
+              "maxLossesPerSymbolSession": 2,
+              "pendingOffsetAtr": 0,
+              "pendingExpiryMinutes": 60,
+              "weekdaysOnly": true,
+              "dailyFlat": false,
+              "dailyCloseMinuteUtc": 1440,
+              "key": "fast30-be1-trail-3atr",
+              "maxPullbackBars": 6,
+              "minImpulseAtr": 0.5,
+              "minSwingGapAtr": 0,
+              "minRetrace": 0.1,
+              "maxRetrace": 0.95,
+              "minSignalBodyAtr": 0,
+              "maxSpreadAtr": 1.75,
+              "trendMode": "none",
+              "runnerFastMinutes": 30,
+              "patternKey": "loose",
+              "trendKey": "m15-only",
+              "exitKey": "fixed-2r-control"
+            }
+          }
+        }
+      },
+      "result": {
+        "finalBalance": 560.86,
+        "returnPct": 12.17,
+        "profitFactor": 1.092,
+        "entries": 437,
+        "partialExits": 0,
+        "maxDrawdownR": 24.76,
+        "maxDrawdownPct": 10.2,
+        "risk": {
+          "maxPositionPct": 2.764,
+          "maxPortfolioPct": 3.236,
+          "maxPositionMarginPct": 18,
+          "maxMarginUsagePct": 35.992
+        },
+        "train": {
+          "weeks": 13,
+          "positiveWeeks": 9,
+          "positiveWeekPct": 69.2,
+          "medianR": 1.07,
+          "worstR": -5.998,
+          "totalR": 26.63,
+          "maxDrawdownR": 5.998,
+          "entries": 212,
+          "trades": 212,
+          "pnl": 37.59
+        },
+        "validation": {
+          "weeks": 14,
+          "positiveWeeks": 5,
+          "positiveWeekPct": 35.7,
+          "medianR": -1.964,
+          "worstR": -8.412,
+          "totalR": -0.873,
+          "maxDrawdownR": 24.391,
+          "entries": 225,
+          "trades": 225,
+          "pnl": 23.28
+        },
+        "dailyFolds": {
+          "train": {
+            "marketDays": 65,
+            "activeDays": 65,
+            "activeMarketDayPct": 100,
+            "profitableDays": 29,
+            "positiveActiveDayPct": 44.6,
+            "positiveMarketDayPct": 44.6,
+            "medianDayR": -0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.58
+          },
+          "validation": {
+            "marketDays": 67,
+            "activeDays": 67,
+            "activeMarketDayPct": 100,
+            "profitableDays": 33,
+            "positiveActiveDayPct": 49.3,
+            "positiveMarketDayPct": 49.3,
+            "medianDayR": 0.001,
+            "worstDayR": -4,
+            "averageDayPnl": 0.35
+          }
+        },
+        "gates": {
+          "trainProfitable": true,
+          "validationProfitable": false,
+          "trainPositiveWeekPct": true,
+          "validationPositiveWeekPct": false,
+          "profitFactor": false,
+          "sampleSize": true,
+          "drawdown": false,
+          "perPositionRisk": true,
+          "portfolioRisk": true,
+          "fourSessionCoverage": false,
+          "trainPositiveDayPct": false,
+          "validationPositiveDayPct": false,
+          "dailyActivity": true
+        },
+        "recent": {
+          "start": "2026-07-28T09:59:00.000Z",
+          "end": "2026-08-11T09:59:00.000Z",
+          "pnl": 4.64,
+          "profitFactor": 1.107,
+          "trades": 40,
+          "positiveTrades": 12,
+          "winRate": 30,
+          "takeProfits": 12,
+          "tpRate": 30,
+          "stopLosses": 26,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0.8,
+          "averagePnl": 0.116
+        },
+        "symbolStats": {
+          "AUDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "AUDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURGBP": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "EURUSD": {
+            "development": {
+              "trades": 220,
+              "positiveTrades": 78,
+              "winRate": 35.5,
+              "takeProfits": 78,
+              "tpRate": 35.5,
+              "stopLosses": 141,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 1.63,
+              "averagePnl": 0.072
+            },
+            "r": 14.455,
+            "pnl": 15.9
+          },
+          "GBPAUD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "GBPUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDJPY": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "NZDUSD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCAD": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDCHF": {
+            "development": {
+              "trades": 0,
+              "positiveTrades": 0,
+              "winRate": 0,
+              "takeProfits": 0,
+              "tpRate": 0,
+              "stopLosses": 0,
+              "timeExits": 0,
+              "dailyExits": 0,
+              "tradesPerDay": 0,
+              "averagePnl": 0
+            },
+            "r": 0,
+            "pnl": 0
+          },
+          "USDJPY": {
+            "development": {
+              "trades": 217,
+              "positiveTrades": 77,
+              "winRate": 35.5,
+              "takeProfits": 73,
+              "tpRate": 33.6,
+              "stopLosses": 139,
+              "timeExits": 4,
+              "dailyExits": 0,
+              "tradesPerDay": 1.61,
+              "averagePnl": 0.207
+            },
+            "r": 11.303,
+            "pnl": 44.96
+          }
+        },
+        "sessionStats": {
+          "london": {
+            "trades": 437,
+            "pnl": 60.86,
+            "r": 25.758
+          }
+        },
+        "monthly": {
+          "2026-02": {
+            "pnl": -8.94,
+            "r": 0.018,
+            "trades": 45,
+            "wins": 15,
+            "winRate": 33.3
+          },
+          "2026-03": {
+            "pnl": 27.37,
+            "r": 22.009,
+            "trades": 68,
+            "wins": 30,
+            "winRate": 44.1
+          },
+          "2026-04": {
+            "pnl": 18.88,
+            "r": 4.534,
+            "trades": 76,
+            "wins": 27,
+            "winRate": 35.5
+          },
+          "2026-05": {
+            "pnl": -4.71,
+            "r": -9.319,
+            "trades": 74,
+            "wins": 22,
+            "winRate": 29.7
+          },
+          "2026-06": {
+            "pnl": -11.61,
+            "r": -10.003,
+            "trades": 67,
+            "wins": 19,
+            "winRate": 28.4
+          },
+          "2026-07": {
+            "pnl": 54.33,
+            "r": 27.484,
+            "trades": 82,
+            "wins": 37,
+            "winRate": 45.1
+          },
+          "2026-08": {
+            "pnl": -14.46,
+            "r": -8.964,
+            "trades": 25,
+            "wins": 5,
+            "winRate": 20
+          }
+        }
+      }
+    }
+  ]
+}

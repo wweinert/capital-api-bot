@@ -1,0 +1,4493 @@
+{
+  "generatedAt": "2026-08-11T20:54:10.758Z",
+  "status": "post-search-development-diagnostic-not-fresh-holdout",
+  "sourceReport": "lab/autoresearch/reports/greenred-15m-mtf-pending-17fx-autoresearch-20min-v2-2026-08-11.json",
+  "selectionRule": "per session, best objective per symbol among trainR>0, validationR>0, PF>=1.1, entries>=40, maxDD<=12R; keep up to five symbols without backfilling",
+  "selected": {
+    "asia": [
+      {
+        "candidate": "pairmatrix-asia-EURUSD-global-H1-lower-rsi-any",
+        "summary": {
+          "candidate": "pairmatrix-asia-EURUSD-global-H1-lower-rsi-any",
+          "candidateSha256": "bd813312d6d9dac3b58f9d882ef85e8b87c457f43c4cfac111a0b5f4389a4987",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -7.9872,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.402,
+          "maxDrawdownR": 9.007,
+          "maxDrawdownPct": 10,
+          "entries": 128,
+          "returnPct": 29.13,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 79.2,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.003,
+            "worstR": -3.395,
+            "totalR": 10.394,
+            "maxDrawdownR": 4.392,
+            "entries": 59,
+            "trades": 59,
+            "pnl": 50.07
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.995,
+            "worstR": -6.002,
+            "totalR": 18.936,
+            "maxDrawdownR": 9.007,
+            "entries": 69,
+            "trades": 69,
+            "pnl": 95.6
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 49,
+              "activeMarketDayPct": 75.4,
+              "profitableDays": 22,
+              "positiveActiveDayPct": 44.9,
+              "positiveMarketDayPct": 33.8,
+              "medianDayR": -0.999,
+              "worstDayR": -2.001,
+              "averageDayPnl": 1.02
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 54,
+              "activeMarketDayPct": 83.1,
+              "profitableDays": 29,
+              "positiveActiveDayPct": 53.7,
+              "positiveMarketDayPct": 44.6,
+              "medianDayR": 0.994,
+              "worstDayR": -2.002,
+              "averageDayPnl": 1.77
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.11640683299989905
+        }
+      },
+      {
+        "candidate": "pairmatrix-asia-AUDJPY-global-M15-lower-price-one",
+        "summary": {
+          "candidate": "pairmatrix-asia-AUDJPY-global-M15-lower-price-one",
+          "candidateSha256": "00b4dc97bdb2364378839319c63c0538cdf0a2c0fe8de999e25a0b4e3d962b4f",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -8.341,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.261,
+          "maxDrawdownR": 11.586,
+          "maxDrawdownPct": 10.3,
+          "entries": 255,
+          "returnPct": 36.58,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 98.5,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 3.993,
+            "worstR": -5.002,
+            "totalR": 27.894,
+            "maxDrawdownR": 11.586,
+            "entries": 131,
+            "trades": 131,
+            "pnl": 131.16
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 2.002,
+            "worstR": -5.052,
+            "totalR": 12.022,
+            "maxDrawdownR": 8.111,
+            "entries": 124,
+            "trades": 124,
+            "pnl": 51.72
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 64,
+              "activeMarketDayPct": 98.5,
+              "profitableDays": 34,
+              "positiveActiveDayPct": 53.1,
+              "positiveMarketDayPct": 52.3,
+              "medianDayR": 0.139,
+              "worstDayR": -2.006,
+              "averageDayPnl": 2.05
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 64,
+              "activeMarketDayPct": 98.5,
+              "profitableDays": 31,
+              "positiveActiveDayPct": 48.4,
+              "positiveMarketDayPct": 47.7,
+              "medianDayR": 0,
+              "worstDayR": -2.002,
+              "averageDayPnl": 0.81
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.1330832090000622
+        }
+      },
+      {
+        "candidate": "pairmatrix-asia-GBPUSD-global-H1-both-macd-any",
+        "summary": {
+          "candidate": "pairmatrix-asia-GBPUSD-global-H1-both-macd-any",
+          "candidateSha256": "78687bb14e52535ad2d79cf6fc63f13ff58a561e0921a6a9d25ab50473e427f9",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -9.5879,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.324,
+          "maxDrawdownR": 8.29,
+          "maxDrawdownPct": 9.4,
+          "entries": 137,
+          "returnPct": 24.57,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 80,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 1.987,
+            "worstR": -6.003,
+            "totalR": 12.811,
+            "maxDrawdownR": 8.29,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 60.71
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": -0.006,
+            "worstR": -2.764,
+            "totalR": 12.566,
+            "maxDrawdownR": 6.424,
+            "entries": 70,
+            "trades": 70,
+            "pnl": 62.14
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 54,
+              "activeMarketDayPct": 83.1,
+              "profitableDays": 25,
+              "positiveActiveDayPct": 46.3,
+              "positiveMarketDayPct": 38.5,
+              "medianDayR": -0.998,
+              "worstDayR": -2.002,
+              "averageDayPnl": 1.12
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 50,
+              "activeMarketDayPct": 76.9,
+              "profitableDays": 25,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 38.5,
+              "medianDayR": 0.048,
+              "worstDayR": -2.002,
+              "averageDayPnl": 1.24
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.13946008299989626
+        }
+      },
+      {
+        "candidate": "pairmatrix-asia-USDCAD-global-H1-higher-ema-macd-any",
+        "summary": {
+          "candidate": "pairmatrix-asia-USDCAD-global-H1-higher-ema-macd-any",
+          "candidateSha256": "1257ff9dfc80fa52422420bff1176812f542606c75f6d8fdcda4167120c17f9a",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -17.174,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.215,
+          "maxDrawdownR": 8.119,
+          "maxDrawdownPct": 8.9,
+          "entries": 94,
+          "returnPct": 11.78,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 62.3,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 5,
+            "positiveWeekPct": 38.5,
+            "medianR": -0.689,
+            "worstR": -3.004,
+            "totalR": 2.975,
+            "maxDrawdownR": 8.119,
+            "entries": 49,
+            "trades": 49,
+            "pnl": 13.94
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 1.004,
+            "worstR": -3,
+            "totalR": 9.007,
+            "maxDrawdownR": 6.999,
+            "entries": 45,
+            "trades": 45,
+            "pnl": 44.98
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 20,
+              "positiveActiveDayPct": 46.5,
+              "positiveMarketDayPct": 30.8,
+              "medianDayR": -0.996,
+              "worstDayR": -2.002,
+              "averageDayPnl": 0.32
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 38,
+              "activeMarketDayPct": 58.5,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 47.4,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": -0.999,
+              "worstDayR": -2,
+              "averageDayPnl": 1.18
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": false,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.12087658300000476
+        }
+      },
+      {
+        "candidate": "pairmatrix-asia-AUDUSD-global-H4-lower-price-one",
+        "summary": {
+          "candidate": "pairmatrix-asia-AUDUSD-global-H4-lower-price-one",
+          "candidateSha256": "5d029646b3abe414c12b543271c7a7128a4bc3c6a7e50bb3c379333821482e93",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -27.8449,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.472,
+          "maxDrawdownR": 3.169,
+          "maxDrawdownPct": 3.2,
+          "entries": 47,
+          "returnPct": 10.06,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 33.8,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -2.022,
+            "totalR": 9.11,
+            "maxDrawdownR": 3.021,
+            "entries": 27,
+            "trades": 27,
+            "pnl": 44.41
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": -0.094,
+            "worstR": -2.005,
+            "totalR": 1.161,
+            "maxDrawdownR": 3.168,
+            "entries": 20,
+            "trades": 20,
+            "pnl": 5.88
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 25,
+              "activeMarketDayPct": 38.5,
+              "profitableDays": 13,
+              "positiveActiveDayPct": 52,
+              "positiveMarketDayPct": 20,
+              "medianDayR": 0.113,
+              "worstDayR": -2.001,
+              "averageDayPnl": 1.78
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 20,
+              "activeMarketDayPct": 30.8,
+              "profitableDays": 9,
+              "positiveActiveDayPct": 45,
+              "positiveMarketDayPct": 13.8,
+              "medianDayR": -0.094,
+              "worstDayR": -1.004,
+              "averageDayPnl": 0.29
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": false,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": false,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.10830075000005308
+        }
+      }
+    ],
+    "london": [
+      {
+        "candidate": "pairmatrix-london-EURUSD-global-H4-higher-ema-any",
+        "summary": {
+          "candidate": "pairmatrix-london-EURUSD-global-H4-higher-ema-any",
+          "candidateSha256": "5e702c28760e4e6dd92c9d8cfeb59759914b7ceaa00f774e01158de4f3746c72",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -12.7532,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 2.045,
+          "maxDrawdownR": 1.995,
+          "maxDrawdownPct": 2.7,
+          "entries": 41,
+          "returnPct": 13.61,
+          "risk": {
+            "maxPositionPct": 0.999,
+            "maxPortfolioPct": 0.999
+          },
+          "activeDayPct": 31.5,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.722,
+            "worstR": -1.263,
+            "totalR": 6.481,
+            "maxDrawdownR": 1.263,
+            "entries": 19,
+            "trades": 19,
+            "pnl": 31.06
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.41,
+            "worstR": -1.995,
+            "totalR": 7.424,
+            "maxDrawdownR": 1.995,
+            "entries": 22,
+            "trades": 22,
+            "pnl": 37.01
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 18,
+              "activeMarketDayPct": 27.7,
+              "profitableDays": 10,
+              "positiveActiveDayPct": 55.6,
+              "positiveMarketDayPct": 15.4,
+              "medianDayR": 0.414,
+              "worstDayR": -1.149,
+              "averageDayPnl": 1.73
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 21,
+              "activeMarketDayPct": 32.3,
+              "profitableDays": 12,
+              "positiveActiveDayPct": 57.1,
+              "positiveMarketDayPct": 18.5,
+              "medianDayR": 0.138,
+              "worstDayR": -1.163,
+              "averageDayPnl": 1.76
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": true,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.0981480000000447
+        }
+      },
+      {
+        "candidate": "pairmatrix-london-USDCAD-global-H4-both-rsi-any",
+        "summary": {
+          "candidate": "pairmatrix-london-USDCAD-global-H4-both-rsi-any",
+          "candidateSha256": "9fe4e0e9814767f531fcaffdd7db88cd876b68c1364bab6c31b43b656bbadef4",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -18.1153,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.127,
+          "maxDrawdownR": 6.082,
+          "maxDrawdownPct": 6.3,
+          "entries": 65,
+          "returnPct": 3.4,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 47.7,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.044,
+            "worstR": -2.998,
+            "totalR": 0.685,
+            "maxDrawdownR": 4.22,
+            "entries": 35,
+            "trades": 35,
+            "pnl": 2.7
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 5,
+            "positiveWeekPct": 38.5,
+            "medianR": -0.374,
+            "worstR": -2.135,
+            "totalR": 2.928,
+            "maxDrawdownR": 5.838,
+            "entries": 30,
+            "trades": 30,
+            "pnl": 14.27
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 32,
+              "activeMarketDayPct": 49.2,
+              "profitableDays": 15,
+              "positiveActiveDayPct": 46.9,
+              "positiveMarketDayPct": 23.1,
+              "medianDayR": -0.826,
+              "worstDayR": -1.002,
+              "averageDayPnl": 0.08
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 27,
+              "activeMarketDayPct": 41.5,
+              "profitableDays": 14,
+              "positiveActiveDayPct": 51.9,
+              "positiveMarketDayPct": 21.5,
+              "medianDayR": 0.041,
+              "worstDayR": -1.512,
+              "averageDayPnl": 0.53
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.09407266699988395
+        }
+      },
+      {
+        "candidate": "pairmatrix-london-USDJPY-global-H1-higher-ema-rsi-any",
+        "summary": {
+          "candidate": "pairmatrix-london-USDJPY-global-H1-higher-ema-rsi-any",
+          "candidateSha256": "1c72b34490af959d0c9ee43679ad8701d7b264a9cd94f8819b65f2e84b64d56e",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -20.5612,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.245,
+          "maxDrawdownR": 10.43,
+          "maxDrawdownPct": 11.4,
+          "entries": 80,
+          "returnPct": 10.17,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 58.5,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -3.999,
+            "totalR": 0.198,
+            "maxDrawdownR": 6.3,
+            "entries": 41,
+            "trades": 41,
+            "pnl": 0.5
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 1,
+            "worstR": -4.001,
+            "totalR": 10.285,
+            "maxDrawdownR": 7.703,
+            "entries": 39,
+            "trades": 39,
+            "pnl": 50.33
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 37,
+              "activeMarketDayPct": 56.9,
+              "profitableDays": 14,
+              "positiveActiveDayPct": 37.8,
+              "positiveMarketDayPct": 21.5,
+              "medianDayR": -0.999,
+              "worstDayR": -1.998,
+              "averageDayPnl": 0.01
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 37,
+              "activeMarketDayPct": 56.9,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 48.6,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": -0.038,
+              "worstDayR": -1.003,
+              "averageDayPnl": 1.36
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": false,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.0989328749999986
+        }
+      },
+      {
+        "candidate": "pairmatrix-london-EURAUD-global-H4-lower-price-any",
+        "summary": {
+          "candidate": "pairmatrix-london-EURAUD-global-H4-lower-price-any",
+          "candidateSha256": "9eae82b4571503bbfecd2bdedb58c616d1872201d9419202615d0707bb6b5144",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -21.6867,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.523,
+          "maxDrawdownR": 4.377,
+          "maxDrawdownPct": 4,
+          "entries": 45,
+          "returnPct": 7.57,
+          "risk": {
+            "maxPositionPct": 0.999,
+            "maxPortfolioPct": 0.999
+          },
+          "activeDayPct": 34.6,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 1.005,
+            "worstR": -2.006,
+            "totalR": 7.177,
+            "maxDrawdownR": 2.243,
+            "entries": 27,
+            "trades": 27,
+            "pnl": 34.91
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -1.879,
+            "totalR": 0.595,
+            "maxDrawdownR": 4.378,
+            "entries": 18,
+            "trades": 18,
+            "pnl": 2.93
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 27,
+              "activeMarketDayPct": 41.5,
+              "profitableDays": 13,
+              "positiveActiveDayPct": 48.1,
+              "positiveMarketDayPct": 20,
+              "medianDayR": -0.006,
+              "worstDayR": -1.003,
+              "averageDayPnl": 1.29
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 17,
+              "activeMarketDayPct": 26.2,
+              "profitableDays": 9,
+              "positiveActiveDayPct": 52.9,
+              "positiveMarketDayPct": 13.8,
+              "medianDayR": 0.029,
+              "worstDayR": -1.003,
+              "averageDayPnl": 0.17
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.11081104199995752
+        }
+      },
+      {
+        "candidate": "pairmatrix-london-AUDJPY-global-H1-both-rsi-any",
+        "summary": {
+          "candidate": "pairmatrix-london-AUDJPY-global-H1-both-rsi-any",
+          "candidateSha256": "efe18abfdb36386c824a30d2b33bf625d654c2d5febe26ffe594b06450ec1cab",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -22.7713,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.151,
+          "maxDrawdownR": 6.501,
+          "maxDrawdownPct": 8.2,
+          "entries": 91,
+          "returnPct": 7.89,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 63.1,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.025,
+            "worstR": -4.001,
+            "totalR": 2.539,
+            "maxDrawdownR": 6.076,
+            "entries": 48,
+            "trades": 48,
+            "pnl": 12.28
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.002,
+            "worstR": -2.001,
+            "totalR": 5.408,
+            "maxDrawdownR": 6.501,
+            "entries": 43,
+            "trades": 43,
+            "pnl": 27.14
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 41,
+              "activeMarketDayPct": 63.1,
+              "profitableDays": 20,
+              "positiveActiveDayPct": 48.8,
+              "positiveMarketDayPct": 30.8,
+              "medianDayR": -0.409,
+              "worstDayR": -3.064,
+              "averageDayPnl": 0.3
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 40,
+              "activeMarketDayPct": 61.5,
+              "profitableDays": 17,
+              "positiveActiveDayPct": 42.5,
+              "positiveMarketDayPct": 26.2,
+              "medianDayR": -0.998,
+              "worstDayR": -1.998,
+              "averageDayPnl": 0.68
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.10409812500001862
+        }
+      }
+    ],
+    "overlap": [
+      {
+        "candidate": "pairmatrix-overlap-AUDJPY-global-M15-higher-ema-macd-any",
+        "summary": {
+          "candidate": "pairmatrix-overlap-AUDJPY-global-M15-higher-ema-macd-any",
+          "candidateSha256": "d30da61d5c5f2992b832ffa9834023f4065185ff2404f4041deb10221114167b",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -7.6836,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.306,
+          "maxDrawdownR": 4.998,
+          "maxDrawdownPct": 6.1,
+          "entries": 95,
+          "returnPct": 17.51,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 50,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.997,
+            "worstR": -3.373,
+            "totalR": 6.755,
+            "maxDrawdownR": 3.373,
+            "entries": 54,
+            "trades": 54,
+            "pnl": 34.43
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 0.998,
+            "worstR": -3,
+            "totalR": 10.492,
+            "maxDrawdownR": 4.997,
+            "entries": 41,
+            "trades": 41,
+            "pnl": 53.13
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 35,
+              "activeMarketDayPct": 53.8,
+              "profitableDays": 16,
+              "positiveActiveDayPct": 45.7,
+              "positiveMarketDayPct": 24.6,
+              "medianDayR": -0.999,
+              "worstDayR": -3.374,
+              "averageDayPnl": 0.98
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 30,
+              "activeMarketDayPct": 46.2,
+              "profitableDays": 17,
+              "positiveActiveDayPct": 56.7,
+              "positiveMarketDayPct": 26.2,
+              "medianDayR": 0.396,
+              "worstDayR": -2.001,
+              "averageDayPnl": 1.77
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.10801479099999414
+        }
+      },
+      {
+        "candidate": "pairmatrix-overlap-EURUSD-global-M5-lower-price-two",
+        "summary": {
+          "candidate": "pairmatrix-overlap-EURUSD-global-M5-lower-price-two",
+          "candidateSha256": "57d1b78c77d4fe039d4d5006ee345959df8db6cebd639f5c7c8e8faedab731a2",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -26.3861,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.182,
+          "maxDrawdownR": 6.99,
+          "maxDrawdownPct": 7.2,
+          "entries": 112,
+          "returnPct": 14.47,
+          "risk": {
+            "maxPositionPct": 1,
+            "maxPortfolioPct": 1
+          },
+          "activeDayPct": 69.2,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 0.999,
+            "worstR": -3.005,
+            "totalR": 12.688,
+            "maxDrawdownR": 3.007,
+            "entries": 55,
+            "trades": 55,
+            "pnl": 69.53
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": -0.998,
+            "worstR": -3,
+            "totalR": 0.012,
+            "maxDrawdownR": 6.99,
+            "entries": 57,
+            "trades": 57,
+            "pnl": 2.79
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 20,
+              "positiveActiveDayPct": 46.5,
+              "positiveMarketDayPct": 30.8,
+              "medianDayR": -0.998,
+              "worstDayR": -2.001,
+              "averageDayPnl": 1.62
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 47,
+              "activeMarketDayPct": 72.3,
+              "profitableDays": 19,
+              "positiveActiveDayPct": 40.4,
+              "positiveMarketDayPct": 29.2,
+              "medianDayR": -1,
+              "worstDayR": -2.001,
+              "averageDayPnl": 0.06
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "evaluationSeconds": 0.09717812499997672
+        }
+      },
+      {
+        "candidate": "pairmatrix-overlap-EURAUD-global-H1-both-price-two",
+        "summary": {
+          "candidate": "pairmatrix-overlap-EURAUD-global-H1-both-price-two",
+          "candidateSha256": "6c2ac7ab2f7aa7b9bc24ac2e64167b100f9aa5059a084062c1413c0b68c1d311",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -37.6735,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.428,
+          "maxDrawdownR": 5.722,
+          "maxDrawdownPct": 5,
+          "entries": 46,
+          "returnPct": 7.66,
+          "risk": {
+            "maxPositionPct": 0.999,
+            "maxPortfolioPct": 0.999
+          },
+          "activeDayPct": 34.6,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -1.743,
+            "totalR": 7.771,
+            "maxDrawdownR": 2.741,
+            "entries": 20,
+            "trades": 20,
+            "pnl": 37.74
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 5,
+            "positiveWeekPct": 38.5,
+            "medianR": -0.015,
+            "worstR": -1.998,
+            "totalR": 0.114,
+            "maxDrawdownR": 5.722,
+            "entries": 26,
+            "trades": 26,
+            "pnl": 0.57
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 18,
+              "activeMarketDayPct": 27.7,
+              "profitableDays": 8,
+              "positiveActiveDayPct": 44.4,
+              "positiveMarketDayPct": 12.3,
+              "medianDayR": -0.113,
+              "worstDayR": -1.002,
+              "averageDayPnl": 2.1
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 24,
+              "activeMarketDayPct": 36.9,
+              "profitableDays": 10,
+              "positiveActiveDayPct": 41.7,
+              "positiveMarketDayPct": 15.4,
+              "medianDayR": -0.076,
+              "worstDayR": -1.001,
+              "averageDayPnl": 0.02
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": false,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.08679279200010934
+        }
+      }
+    ],
+    "newYork": [
+      {
+        "candidate": "pairmatrix-newYork-EURUSD-global-H1-both-price-two",
+        "summary": {
+          "candidate": "pairmatrix-newYork-EURUSD-global-H1-both-price-two",
+          "candidateSha256": "db7b24d0e723e7b1e2d0ee5c8876a6593241eef0e574dd6eac74bf0ad7aa4b3e",
+          "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+          "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+          "symbols": [
+            "AUDCAD",
+            "AUDJPY",
+            "AUDUSD",
+            "EURAUD",
+            "EURCHF",
+            "EURGBP",
+            "EURJPY",
+            "EURUSD",
+            "GBPAUD",
+            "GBPCHF",
+            "GBPJPY",
+            "GBPUSD",
+            "NZDJPY",
+            "NZDUSD",
+            "USDCAD",
+            "USDCHF",
+            "USDJPY"
+          ],
+          "objective": -32.9552,
+          "qualified": false,
+          "status": "rejected",
+          "profitFactor": 1.262,
+          "maxDrawdownR": 5.496,
+          "maxDrawdownPct": 5.4,
+          "entries": 42,
+          "returnPct": 4.79,
+          "risk": {
+            "maxPositionPct": 0.999,
+            "maxPortfolioPct": 0.999
+          },
+          "activeDayPct": 30.8,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 2,
+            "positiveWeekPct": 15.4,
+            "medianR": -0.503,
+            "worstR": -1.795,
+            "totalR": 0.78,
+            "maxDrawdownR": 5.497,
+            "entries": 21,
+            "trades": 21,
+            "pnl": 2.28
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -3.695,
+            "totalR": 4.05,
+            "maxDrawdownR": 4.031,
+            "entries": 21,
+            "trades": 21,
+            "pnl": 21.65
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 19,
+              "activeMarketDayPct": 29.2,
+              "profitableDays": 5,
+              "positiveActiveDayPct": 26.3,
+              "positiveMarketDayPct": 7.7,
+              "medianDayR": -0.503,
+              "worstDayR": -1.57,
+              "averageDayPnl": 0.12
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 21,
+              "activeMarketDayPct": 32.3,
+              "profitableDays": 11,
+              "positiveActiveDayPct": 52.4,
+              "positiveMarketDayPct": 16.9,
+              "medianDayR": 0.093,
+              "worstDayR": -1.693,
+              "averageDayPnl": 1.03
+            }
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": false,
+            "validationPositiveWeekPct": false,
+            "profitFactor": true,
+            "sampleSize": false,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": false
+          },
+          "evaluationSeconds": 0.09160283400001935
+        }
+      }
+    ],
+    "offHours": []
+  },
+  "candidate": {
+    "name": "greenred-15m-session-profile-portfolio-diagnostic",
+    "signalFamily": "greenred-mtf",
+    "method": "custom",
+    "rankByScore": true,
+    "signalTimeframe": "M15",
+    "triggerVariant": "any",
+    "confirmationMode": "higher",
+    "confirmationFrames": [
+      "H1",
+      "H4",
+      "D1"
+    ],
+    "filterMode": "ema-rsi",
+    "filterAgreement": "majority",
+    "minTrendStrengthAtr": 0.03,
+    "sessionWindows": [
+      [
+        0,
+        0
+      ]
+    ],
+    "minAtrPct": null,
+    "minBbWidthPct": null,
+    "minEmaDistPct": null,
+    "entryMode": "signal-breakout",
+    "riskPct": 0.01,
+    "marginUtilization": 0.9,
+    "stopATR": 1.5,
+    "stopMode": "signal-candle",
+    "stopBufferAtr": 0.05,
+    "rewardRisk": 2,
+    "hold": 480,
+    "breakEvenR": 0,
+    "trailATR": 0,
+    "cooldown": 30,
+    "maxDaily": 3,
+    "maxTotalDaily": 0,
+    "maxTotalPerSession": 5,
+    "maxPositions": 5,
+    "maxLossesPerSymbolDay": 3,
+    "maxLossesPerSymbolSession": 2,
+    "pendingOffsetAtr": 0,
+    "pendingExpiryMinutes": 60,
+    "weekdaysOnly": true,
+    "dailyFlat": true,
+    "dailyCloseMinuteUtc": 1440,
+    "symbols": [
+      "AUDCAD",
+      "AUDJPY",
+      "AUDUSD",
+      "EURAUD",
+      "EURCHF",
+      "EURGBP",
+      "EURJPY",
+      "EURUSD",
+      "GBPAUD",
+      "GBPCHF",
+      "GBPJPY",
+      "GBPUSD",
+      "NZDJPY",
+      "NZDUSD",
+      "USDCAD",
+      "USDCHF",
+      "USDJPY"
+    ],
+    "sessionProfiles": {
+      "asia": {
+        "symbols": [
+          "EURUSD",
+          "AUDJPY",
+          "GBPUSD",
+          "USDCAD",
+          "AUDUSD"
+        ]
+      },
+      "london": {
+        "symbols": [
+          "EURUSD",
+          "USDCAD",
+          "USDJPY",
+          "EURAUD",
+          "AUDJPY"
+        ]
+      },
+      "overlap": {
+        "symbols": [
+          "AUDJPY",
+          "EURUSD",
+          "EURAUD"
+        ]
+      },
+      "newYork": {
+        "symbols": [
+          "EURUSD"
+        ]
+      },
+      "offHours": {
+        "enabled": false,
+        "symbols": []
+      }
+    },
+    "pairSessionProfiles": {
+      "EURUSD": {
+        "asia": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "any",
+          "confirmationMode": "lower",
+          "confirmationFrames": [
+            "M15",
+            "M5"
+          ],
+          "filterMode": "rsi",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "london": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H4",
+          "triggerVariant": "any",
+          "confirmationMode": "higher",
+          "confirmationFrames": [
+            "D1"
+          ],
+          "filterMode": "ema",
+          "filterAgreement": "all",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 1260,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 720,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "overlap": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "M5",
+          "triggerVariant": "two",
+          "confirmationMode": "lower",
+          "confirmationFrames": [
+            "M1"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "all",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 240,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 30,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "newYork": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "two",
+          "confirmationMode": "both",
+          "confirmationFrames": [
+            "H4",
+            "M15"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "AUDJPY": {
+        "asia": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "M15",
+          "triggerVariant": "one",
+          "confirmationMode": "lower",
+          "confirmationFrames": [
+            "M5",
+            "M1"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "london": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "any",
+          "confirmationMode": "both",
+          "confirmationFrames": [
+            "H4",
+            "M15"
+          ],
+          "filterMode": "rsi",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "overlap": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "M15",
+          "triggerVariant": "any",
+          "confirmationMode": "higher",
+          "confirmationFrames": [
+            "H1",
+            "H4",
+            "D1"
+          ],
+          "filterMode": "ema-macd",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "GBPUSD": {
+        "asia": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "any",
+          "confirmationMode": "both",
+          "confirmationFrames": [
+            "H4",
+            "M15"
+          ],
+          "filterMode": "macd",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "USDCAD": {
+        "asia": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "any",
+          "confirmationMode": "higher",
+          "confirmationFrames": [
+            "H4",
+            "D1"
+          ],
+          "filterMode": "ema-macd",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "london": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H4",
+          "triggerVariant": "any",
+          "confirmationMode": "both",
+          "confirmationFrames": [
+            "D1",
+            "H1"
+          ],
+          "filterMode": "rsi",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 1260,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 720,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "AUDUSD": {
+        "asia": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H4",
+          "triggerVariant": "one",
+          "confirmationMode": "lower",
+          "confirmationFrames": [
+            "H1",
+            "M15"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 1260,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 720,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "USDJPY": {
+        "london": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "any",
+          "confirmationMode": "higher",
+          "confirmationFrames": [
+            "H4",
+            "D1"
+          ],
+          "filterMode": "ema-rsi",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      },
+      "EURAUD": {
+        "london": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H4",
+          "triggerVariant": "any",
+          "confirmationMode": "lower",
+          "confirmationFrames": [
+            "H1",
+            "M15"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 1260,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 720,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        },
+        "overlap": {
+          "signalFamily": "greenred-mtf",
+          "method": "custom",
+          "rankByScore": true,
+          "signalTimeframe": "H1",
+          "triggerVariant": "two",
+          "confirmationMode": "both",
+          "confirmationFrames": [
+            "H4",
+            "M15"
+          ],
+          "filterMode": "price",
+          "filterAgreement": "majority",
+          "minTrendStrengthAtr": 0.03,
+          "minAtrPct": null,
+          "minBbWidthPct": null,
+          "minEmaDistPct": null,
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 720,
+          "breakEvenR": 0,
+          "trailATR": 0,
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxTotalDaily": 0,
+          "maxTotalPerSession": 5,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 240,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440
+        }
+      }
+    }
+  },
+  "summary": {
+    "candidate": "greenred-15m-session-profile-portfolio-diagnostic",
+    "candidateSha256": "3bd478e4f9fbe9780213aeadeb6e953c4bc5e6340669defea364430221dd22da",
+    "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+    "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+    "symbols": [
+      "AUDCAD",
+      "AUDJPY",
+      "AUDUSD",
+      "EURAUD",
+      "EURCHF",
+      "EURGBP",
+      "EURJPY",
+      "EURUSD",
+      "GBPAUD",
+      "GBPCHF",
+      "GBPJPY",
+      "GBPUSD",
+      "NZDJPY",
+      "NZDUSD",
+      "USDCAD",
+      "USDCHF",
+      "USDJPY"
+    ],
+    "objective": 68.515,
+    "qualified": false,
+    "status": "rejected",
+    "profitFactor": 1.343,
+    "maxDrawdownR": 7.691,
+    "maxDrawdownPct": 10.8,
+    "entries": 458,
+    "returnPct": 85.69,
+    "risk": {
+      "maxPositionPct": 1,
+      "maxPortfolioPct": 1
+    },
+    "activeDayPct": 100,
+    "train": {
+      "weeks": 13,
+      "positiveWeeks": 7,
+      "positiveWeekPct": 53.8,
+      "medianR": 2.501,
+      "worstR": -2.877,
+      "totalR": 44.98,
+      "maxDrawdownR": 4.165,
+      "entries": 229,
+      "trades": 229,
+      "pnl": 222.22
+    },
+    "validation": {
+      "weeks": 13,
+      "positiveWeeks": 9,
+      "positiveWeekPct": 69.2,
+      "medianR": 4.276,
+      "worstR": -7.691,
+      "totalR": 42.826,
+      "maxDrawdownR": 7.691,
+      "entries": 229,
+      "trades": 229,
+      "pnl": 206.24
+    },
+    "dailyFolds": {
+      "train": {
+        "marketDays": 65,
+        "activeDays": 68,
+        "activeMarketDayPct": 104.6,
+        "profitableDays": 39,
+        "positiveActiveDayPct": 57.4,
+        "positiveMarketDayPct": 60,
+        "medianDayR": 0.781,
+        "worstDayR": -5.002,
+        "averageDayPnl": 3.27
+      },
+      "validation": {
+        "marketDays": 65,
+        "activeDays": 69,
+        "activeMarketDayPct": 106.2,
+        "profitableDays": 41,
+        "positiveActiveDayPct": 59.4,
+        "positiveMarketDayPct": 63.1,
+        "medianDayR": 0.993,
+        "worstDayR": -4.435,
+        "averageDayPnl": 2.99
+      }
+    },
+    "gates": {
+      "trainProfitable": true,
+      "validationProfitable": true,
+      "trainPositiveWeekPct": true,
+      "validationPositiveWeekPct": true,
+      "profitFactor": true,
+      "sampleSize": true,
+      "drawdown": true,
+      "perPositionRisk": true,
+      "portfolioRisk": true,
+      "fourSessionCoverage": false,
+      "trainPositiveDayPct": true,
+      "validationPositiveDayPct": true,
+      "dailyActivity": true
+    },
+    "evaluationSeconds": 115.76285212500001
+  },
+  "metadata": {
+    "candidateSha256": "3bd478e4f9fbe9780213aeadeb6e953c4bc5e6340669defea364430221dd22da",
+    "candidateName": "greenred-15m-session-profile-portfolio-diagnostic",
+    "evaluatorSha256": "4b197fbf2417d3ccba2a4da0ef6f269d81e6e1187d0c07481d722010e8edd4c5",
+    "datasetFingerprint": "8c6e2db3731911af94f3f75af67657b4452676c7980aaa661edaa1381ce939f1",
+    "symbols": [
+      "AUDCAD",
+      "AUDJPY",
+      "AUDUSD",
+      "EURAUD",
+      "EURCHF",
+      "EURGBP",
+      "EURJPY",
+      "EURUSD",
+      "GBPAUD",
+      "GBPCHF",
+      "GBPJPY",
+      "GBPUSD",
+      "NZDJPY",
+      "NZDUSD",
+      "USDCAD",
+      "USDCHF",
+      "USDJPY"
+    ],
+    "coverage": {
+      "AUDCAD": {
+        "M1": {
+          "rows": 233487,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "78ad215300471adbc08c7d3bdc3360c322d3d5dbb41b3b4001b0d7e8a3b63e3c"
+        },
+        "M5": {
+          "rows": 46809,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "3434e133d0bf3b1a2c8846a803b574c3680a3e7cb1926509900db52b877fc5f4"
+        },
+        "M15": {
+          "rows": 17083,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "84d7ee924c8b145692d53c27f0ef47adcfef6829df38d77e3ae22536c732f01c"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "5f4abf111b36b24b63024635c9f5d6ac8ad0fdced46f9e7765691f2acc797670"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "ed5bc09a55272fcba68274eb7e0e72571c296f4a4b3bf71bd8ed3af3d52895f0"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "1b8cf69a679b38f02200d494a2838fc4c25c1bef02f7b830421bb5c7123d1f83"
+        }
+      },
+      "AUDJPY": {
+        "M1": {
+          "rows": 233589,
+          "first": "2025-12-21T22:01:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "a1338d11a7ac3bdc45e92a54a65cdb2df7f4b64a5fa16e8c5bd9eea7e6c33ce1"
+        },
+        "M5": {
+          "rows": 46798,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "3943a9a7e2df2259439c5afc09d60b204df7c6cb1854f4364c10e9641df4f102"
+        },
+        "M15": {
+          "rows": 17081,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "44d41e2e6d583e44163619936d042f693b92d376c65307aedc04d9d306680dd7"
+        },
+        "H1": {
+          "rows": 4272,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "ee6014491fbef7b9ee53d7a84b1002a17c4146bbcda6eb9a09c8207736595244"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "2ae6e6861c6dd5c60aed3cee111f709736ec6c783bbee3c78ac2b07ff3cc15eb"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "c0f4c4adc88aae27fceee98f593e25716acf763ebb4ef8fb85f017cb16469b64"
+        }
+      },
+      "AUDUSD": {
+        "M1": {
+          "rows": 232699,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "f57ba0b1ec973865c98a0b1a413c6a1fe94e4d0788f55ee3f56f7f55ae4bf94e"
+        },
+        "M5": {
+          "rows": 46790,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "935fb68e88806b67c80e0331d4f30b0c9edc155a1a74a7ba6dd3cb3ed710b600"
+        },
+        "M15": {
+          "rows": 15653,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "18a2bf0485e47e7e82a5fe33d183bb76a7742e882a2cffc6a0dccd5891e708d2"
+        },
+        "H1": {
+          "rows": 3915,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "cf2a607c7149160351d7ae06d9808c7bd2659bab65f1be951d14feacd021de66"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "ba36961fcf5b525fcbe36898e361d293aae4e8c23e10e2d874b30c45dd2d7205"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "e6b250da13e234f071a9594280986903c1d59b2870aac015bf73a693de952c5d"
+        }
+      },
+      "EURAUD": {
+        "M1": {
+          "rows": 233824,
+          "first": "2025-12-21T22:04:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "562a8fd77b4048d33e53b18b3a303d498cc90232ba77804df62f79d491784fd7"
+        },
+        "M5": {
+          "rows": 46819,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "14ed2d97af6e1a52df4b31c430bd9b199d4f3d9360d5d0a607bbbc4c2c4a032b"
+        },
+        "M15": {
+          "rows": 17087,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "ffb2bef85fbf53eb9293c4ab1d2c127c8897e4b871695d9f14df93ce8ffa15cb"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "ec790fb322645cb7b750657af9772aea034c6acb1332057635f742e5d2b3feb8"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "1d8ddb77ad3fe7f7db59a535763c9692cfe8c0e5a53f3dfa36f64edf48177e1c"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "990f32e6eaa3e4f85e0d62320a8ac7c7f83cf27294ceefaef8601a709ba9bd9d"
+        }
+      },
+      "EURCHF": {
+        "M1": {
+          "rows": 232606,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "8f17866ce121cf549dd626f0035d13d4eaf4f0420a8e242255d1231c99b23cda"
+        },
+        "M5": {
+          "rows": 46729,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "7d83e667c1cc85f88c61df5259a351b9fc005163be1aa3ba11f5926abbc794a4"
+        },
+        "M15": {
+          "rows": 17058,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "c73fc0be1980fef5173a3315c59614ffc6c748e0175b2c35a6152aebf15e91f0"
+        },
+        "H1": {
+          "rows": 4266,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "54ff75f36245eb94b8c6bcc0effee4ac3c72fd7c2713acbcb7152cd4c35531c5"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "7b2843ea164d2b5a1beb489a9de7bfd2f4c7f791fd0a01671698ea36d1cfc10b"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "41b34e4d04ec6a6845ac29bed3b0d6d4af352d165fad0831441de926d2ac0e41"
+        }
+      },
+      "EURGBP": {
+        "M1": {
+          "rows": 232038,
+          "first": "2025-12-21T22:01:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "5d16bf8e4b9cf490ef28d28b4dd9a494c7f7c0da2d6a857a5f9204173a0ca942"
+        },
+        "M5": {
+          "rows": 46810,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "ff07ddbaac7eba5be84393b34b3503ce68a14ded20af64c231491660021e6a21"
+        },
+        "M15": {
+          "rows": 15658,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "cecc9e8a707c67faf69981ce67b543d2cede3d9c1b1377c61a937a877b9f84e7"
+        },
+        "H1": {
+          "rows": 3915,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "cb84d5c50bdaf5a64ad92aee143fdeea722213604c3ba28fe0e5d5595d7147c5"
+        },
+        "H4": {
+          "rows": 1104,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "b2f8f60e9bc0a42fddf38e86662ffffa6e6a7de91699e409c5bd040dc9c59055"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "8811ab717bec583284326ba84462811ed13719ce9ebeb5b7893b005f29b15cfb"
+        }
+      },
+      "EURJPY": {
+        "M1": {
+          "rows": 234079,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "fb78b90fbe38d321d6e189e2dcef9e87c8511223a6065493c8dabcc24729250e"
+        },
+        "M5": {
+          "rows": 46836,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "9dcb3ab7e2f1c52bb077bc1057876e4c3bf17ce285de099eab6a161b5b700248"
+        },
+        "M15": {
+          "rows": 17090,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "799d99aa924308400de08b270fd04bd33a7da977bcbbe342d3db581f0f879f1f"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "506eaff04d2898f8203e54ced3756ab9bed73cefd3188b812d333c695d81d18a"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "9aa08a806831b3956b5a2d008835c155cda3c55a616d1e899612774adb97aeef"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "6282e1d86bd20156eecf1a7ca04d370ffbd6932c4e8ab7378f73c480e8816f74"
+        }
+      },
+      "EURUSD": {
+        "M1": {
+          "rows": 233147,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "9aac0f46191e515c4d6e4d86949638a27fb29854c397162f9a880dfa1926d48c"
+        },
+        "M5": {
+          "rows": 46836,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "60709f20df773784ca76e0c356370144ddd95182cf7a80978ff56b4b164f5e20"
+        },
+        "M15": {
+          "rows": 15659,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "577ffde3c3f5ac0e1761e60b54c178abe3e472952ff6d7e7fc8ebbe4da8ab689"
+        },
+        "H1": {
+          "rows": 3915,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "968552ff224d932316b0a408c544b6f4e18828124ac1886646776b4640ae7470"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "37cfb1c43acdf0f293babb9caed5339882df2457485074469b06381bd212b521"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "dedbd839c9724c02e13b26c7057cc4f020d5c6a664f2edae61d1cca43ceabb16"
+        }
+      },
+      "GBPAUD": {
+        "M1": {
+          "rows": 230149,
+          "first": "2025-12-21T22:36:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "81e122f5f9546552a4c2f8c9ead08bbe4a7f0c723e3feed074e9d77824474533"
+        },
+        "M5": {
+          "rows": 46215,
+          "first": "2025-12-21T22:35:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "1d9ac0d610ca5859495d63959600bd740a00f35659097db047b1aae7e6541a5a"
+        },
+        "M15": {
+          "rows": 16912,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "defbcd287b22a16bb616315789c14c3786f80ab5f2a6b54d481f5dcc5571ef11"
+        },
+        "H1": {
+          "rows": 4270,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "11ea364920b3192ef5117013ddece1c4e6f6b968fd0bba2afdaea96271b15128"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "eb38ffd6106445ba1f0f084ea72c236d46c7b0af5f4bd6152c88f3f92f8075d3"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "9e45c0a7465e83666ecffa3386c4e780175927e52f6090c70cde2c6186e65357"
+        }
+      },
+      "GBPCHF": {
+        "M1": {
+          "rows": 233544,
+          "first": "2025-12-21T22:05:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "78ca7ec822f2b463a4ea1a77b65465a8f7aa8ecead2ba02286b54a9f24ae8204"
+        },
+        "M5": {
+          "rows": 46786,
+          "first": "2025-12-21T22:05:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "ebf2f88259eee1230438a5981ed48f5ee1f48615b0b2862616a809ab7cdd5103"
+        },
+        "M15": {
+          "rows": 17078,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "229e577c129a6c8649b4749eff5258786b3d423641f0ac7ad241e6a69e9d06b6"
+        },
+        "H1": {
+          "rows": 4271,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "de09d0082eb4ea10f7545fb06a298adef32b9374e10cc24747df40a3eb893d22"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "b0609ce26237c58549b2f6b6429a70a9ebe7483d4f17877e2b12f0c03385b3c5"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "93f8d6a95e678eacdcf68ccfd30976338e0ec8b9d13fcab02fc5bcb89fba6992"
+        }
+      },
+      "GBPJPY": {
+        "M1": {
+          "rows": 233994,
+          "first": "2025-12-21T22:04:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "b74f72adc67e6d261333b286fe4e03f8c3341a6034b3de249ee4d5a4e471bc52"
+        },
+        "M5": {
+          "rows": 46839,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "7010d139bf422855eea5a189472092f9b78c9c30ec723a8271345d25b5f8fbb7"
+        },
+        "M15": {
+          "rows": 17090,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "4548ce620b65e463bf8a833f6c68a30418d52dd6d38d1490e3110babe61e07b0"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "d8221194aebb9fb796b7a2995fead627f2567f7bf504de9585980e6bdc70cc45"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "7a68a53d2c20390bc3adb8e88ed862c2c894ca04761b768e870ed01436a8f59d"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "9f62d27186289db2b7ee5b9d7bf0d8c779ea49ea1ae2fc9c0a4d65284663c474"
+        }
+      },
+      "GBPUSD": {
+        "M1": {
+          "rows": 233572,
+          "first": "2025-12-21T22:08:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "02bc96b725c4cc8c781601cad2272fd239d76724afd90a7762d092e92c563cf8"
+        },
+        "M5": {
+          "rows": 46839,
+          "first": "2025-12-21T22:05:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "595641d7480d47ecb5b8cbb3fda89a11d074ac8c4309f7fba021f1513095de56"
+        },
+        "M15": {
+          "rows": 15660,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "3cdafa42a95b11685bb3c421b6e0e7ae1002d29add974c60cebf47d2bfcf5945"
+        },
+        "H1": {
+          "rows": 3915,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "816f17e08976692a9040ef074e6f411c551d5f8952defcc860288428cf4a9f8d"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "019bd4aed8c152e041f116a5306f184fc1620fd2a1fb4368f28d351f294f7b8e"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "d0986a96b73648bf1e211dcf363c400417ddf47e5fa300bd3ae09f683751637c"
+        }
+      },
+      "NZDJPY": {
+        "M1": {
+          "rows": 230109,
+          "first": "2025-12-24T09:20:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "f0a677b25a19e3b076142934dcd5b79815377fc9c8e613fe8c8327047f3fd20c"
+        },
+        "M5": {
+          "rows": 46088,
+          "first": "2025-12-24T09:25:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "f3055db9c24343c90be66f69ccf29a2826b1d6f93361336348efa1cffbc712b6"
+        },
+        "M15": {
+          "rows": 17085,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "6c929c9b2dffe811ecf1c8759a662f44d52d51e4df898319f784eb9412589b5c"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "c495112272dbfab8fc4e855a2e0c84e9f7bc1dc2403e094b011e61f1170e2a35"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "0119b902207aad5f71884bc00d0a4f1025570f4ae453b6600b18f2602367cacb"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "107a9803cefd159a5614f1de16458996cc2195fcd38e833517ce0bdfac4b1cce"
+        }
+      },
+      "NZDUSD": {
+        "M1": {
+          "rows": 229672,
+          "first": "2025-12-24T09:26:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "69344a2acce184dc25b88954523224f87496c9c81e8f39b89b276dac71081d7e"
+        },
+        "M5": {
+          "rows": 46108,
+          "first": "2025-12-24T09:35:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "126f821b3c0ea8017481f52dccf33570ead04e95189028db43df2215e8017b88"
+        },
+        "M15": {
+          "rows": 17088,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "4a89406cac454c61a90e0b987b81a61aa5705382eedd89b4803ce25170d7c8e4"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "75180bc17f95c5de729bbd4bfec907a6edc1305fbcf217ff2f49c6745de17cb3"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "95c8ccb0dadbadd83f4fb645bcb1ac3e1a524c1df1d03aaac561a55f3e1a4a0d"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "56a249518c5cba108a705273f6679bba2569f559fd885b5bdafcd2c823d4f0ef"
+        }
+      },
+      "USDCAD": {
+        "M1": {
+          "rows": 228852,
+          "first": "2025-12-24T09:32:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "522e220b2d4b7fa5503d8a05a9065ae1eae331b66ce0f4d8db375f2416eceee9"
+        },
+        "M5": {
+          "rows": 46121,
+          "first": "2025-12-24T09:40:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "06ff385bbc8b56cb449c8ca3c89fe3bb22f65c9e14419f3ac91f2eb30a661133"
+        },
+        "M15": {
+          "rows": 15421,
+          "first": "2025-12-24T09:45:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "64053f040cb288313bb211835d295804aefaa1e6658306bb7d1b1db45e1279af"
+        },
+        "H1": {
+          "rows": 3855,
+          "first": "2025-12-24T10:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "5f3bc5eed284c9b94aed273b8508ea39187f4bca0cae4b26c9f76016e61ee992"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "20c474a649405e16a2b0aa197659b351991e3b24ea9f0be57afd60e693a33b0a"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "fe5cf02f5ad60013c8d9c3ae46aa00da1ff2095dd1f42735ec74e96552a554be"
+        }
+      },
+      "USDCHF": {
+        "M1": {
+          "rows": 230068,
+          "first": "2025-12-24T09:38:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "04048d42c144fa975cae36c2ed002cac17ff372771e891f0bd53b5e7218761aa"
+        },
+        "M5": {
+          "rows": 46122,
+          "first": "2025-12-24T09:45:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "5c60d58723b0afc4c2ad4bf67347c80e9207ec4742c7a2a61363c2590df852df"
+        },
+        "M15": {
+          "rows": 17092,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "db414ed0868ea4e7f7c0fc0351a25ce37c3ac72dabc4c404781a108c21c65460"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "ddafce285eb58277d0319e955b96b0ab7189a0ca1076b71535b365eba7f83c52"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "9b2bd29f59c7e2c178cd3673ab46f2ab6ea2a8f76d3f2de53d2d91365aac147c"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "dfa9b5d8221df87b60ddf5e4bad5e9c9cab2a62956cbdb252c10c94d6bd00c25"
+        }
+      },
+      "USDJPY": {
+        "M1": {
+          "rows": 229801,
+          "first": "2025-12-24T09:44:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "3ec49d4e02174d739a0a9e5c02c75d91b8af911b837d0e83d3e75e49f9644fae"
+        },
+        "M5": {
+          "rows": 46127,
+          "first": "2025-12-24T09:50:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "3cd0a14be9d8f788dfb9973d77b6d181c8a7562e75d759982c8b92551b89e35a"
+        },
+        "M15": {
+          "rows": 17091,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "fbce6ffc2c6303be55a1274c3c78d1c5c0c4f0729e7eb3556dc26ad7040d492b"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "db9fb5b51789d112ff7e866e838c0d9bd0753efd1ecfd4704ce8149ac32a8e1b"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "c1303aa1ea1b72ee746d1dbd4ebd5ac0b1540da78c45b38fdf0418c71470aaea"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "aa77132e1302c23cf089aa5589cd63083c40bed142365f42d751b13bf306148d"
+        }
+      }
+    },
+    "evaluationSeconds": 115.76285212500001
+  },
+  "result": {
+    "protocol": {
+      "schemaVersion": 9,
+      "train": {
+        "fromWeek": "2026-W07",
+        "toWeek": "2026-W19"
+      },
+      "validation": {
+        "fromWeek": "2026-W20",
+        "toWeek": "2026-W32"
+      },
+      "evaluationEndExclusive": "2026-08-10T00:00:00.000Z",
+      "minimumCoverageEnd": "2026-08-07T20:00:00.000Z",
+      "lockedTest": "none-available-period-already-inspected-walk-forward-development-only",
+      "primaryMetric": "dailyObjective",
+      "startCapital": 500,
+      "leverage": {
+        "usdPairs": 30,
+        "crosses": 20
+      },
+      "risk": {
+        "maxPerPositionPct": 0.03,
+        "maxPortfolioPct": 0.15,
+        "marginUtilization": 0.9
+      },
+      "sizing": "fixed EUR 500 upside, balance-sensitive downside; quote-currency conversion at entry/exit",
+      "execution": "closed-candle signals, next-M1 entry, bid/ask prices, conservative SL-first OHLC ambiguity; weekday-only entries and forced daily flat"
+    },
+    "objective": 68.515,
+    "qualified": false,
+    "status": "rejected",
+    "gates": {
+      "trainProfitable": true,
+      "validationProfitable": true,
+      "trainPositiveWeekPct": true,
+      "validationPositiveWeekPct": true,
+      "profitFactor": true,
+      "sampleSize": true,
+      "drawdown": true,
+      "perPositionRisk": true,
+      "portfolioRisk": true,
+      "fourSessionCoverage": false,
+      "trainPositiveDayPct": true,
+      "validationPositiveDayPct": true,
+      "dailyActivity": true
+    },
+    "startCapital": 500,
+    "finalBalance": 928.45,
+    "returnPct": 85.69,
+    "trades": 458,
+    "entries": 458,
+    "partialExits": 0,
+    "pnl": 428.45,
+    "profitFactor": 1.343,
+    "maxDrawdownR": 7.691,
+    "maxDDPct": 10.8,
+    "risk": {
+      "maxPositionPct": 1,
+      "maxPortfolioPct": 1
+    },
+    "development": {
+      "weeks": 26,
+      "positiveWeeks": 16,
+      "positiveWeekPct": 61.5,
+      "medianR": 3.403,
+      "worstR": -7.691,
+      "totalR": 87.805,
+      "maxDrawdownR": 7.691
+    },
+    "folds": {
+      "train": {
+        "weeks": 13,
+        "positiveWeeks": 7,
+        "positiveWeekPct": 53.8,
+        "medianR": 2.501,
+        "worstR": -2.877,
+        "totalR": 44.98,
+        "maxDrawdownR": 4.165,
+        "entries": 229,
+        "trades": 229,
+        "pnl": 222.22
+      },
+      "validation": {
+        "weeks": 13,
+        "positiveWeeks": 9,
+        "positiveWeekPct": 69.2,
+        "medianR": 4.276,
+        "worstR": -7.691,
+        "totalR": 42.826,
+        "maxDrawdownR": 7.691,
+        "entries": 229,
+        "trades": 229,
+        "pnl": 206.24
+      }
+    },
+    "dailyFolds": {
+      "train": {
+        "marketDays": 65,
+        "activeDays": 68,
+        "activeMarketDayPct": 104.6,
+        "profitableDays": 39,
+        "positiveActiveDayPct": 57.4,
+        "positiveMarketDayPct": 60,
+        "medianDayR": 0.781,
+        "worstDayR": -5.002,
+        "averageDayPnl": 3.27
+      },
+      "validation": {
+        "marketDays": 65,
+        "activeDays": 69,
+        "activeMarketDayPct": 106.2,
+        "profitableDays": 41,
+        "positiveActiveDayPct": 59.4,
+        "positiveMarketDayPct": 63.1,
+        "medianDayR": 0.993,
+        "worstDayR": -4.435,
+        "averageDayPnl": 2.99
+      }
+    },
+    "precision": {
+      "trades": 458,
+      "positiveTrades": 195,
+      "winRate": 42.6,
+      "takeProfits": 156,
+      "tpRate": 34.1,
+      "stopLosses": 246,
+      "timeExits": 20,
+      "dailyExits": 36,
+      "tradesPerDay": 3.52,
+      "averagePnl": 0.935
+    },
+    "activeDayPct": 100,
+    "recent": {
+      "start": "2026-07-26T23:59:00.000Z",
+      "end": "2026-08-09T23:59:00.000Z",
+      "pnl": -3.2,
+      "profitFactor": 0.976,
+      "trades": 43,
+      "positiveTrades": 14,
+      "winRate": 32.6,
+      "takeProfits": 12,
+      "tpRate": 27.9,
+      "stopLosses": 27,
+      "timeExits": 0,
+      "dailyExits": 4,
+      "tradesPerDay": 0.86,
+      "averagePnl": -0.075
+    },
+    "symbolStats": {
+      "AUDCAD": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "AUDJPY": {
+        "development": {
+          "trades": 177,
+          "positiveTrades": 75,
+          "winRate": 42.4,
+          "takeProfits": 66,
+          "tpRate": 37.3,
+          "stopLosses": 98,
+          "timeExits": 9,
+          "dailyExits": 4,
+          "tradesPerDay": 1.36,
+          "averagePnl": 0.946
+        },
+        "r": 35.767,
+        "pnl": 167.35
+      },
+      "AUDUSD": {
+        "development": {
+          "trades": 27,
+          "positiveTrades": 12,
+          "winRate": 44.4,
+          "takeProfits": 6,
+          "tpRate": 22.2,
+          "stopLosses": 14,
+          "timeExits": 2,
+          "dailyExits": 5,
+          "tradesPerDay": 0.21,
+          "averagePnl": 0.235
+        },
+        "r": 1.264,
+        "pnl": 6.33
+      },
+      "EURAUD": {
+        "development": {
+          "trades": 22,
+          "positiveTrades": 9,
+          "winRate": 40.9,
+          "takeProfits": 3,
+          "tpRate": 13.6,
+          "stopLosses": 9,
+          "timeExits": 0,
+          "dailyExits": 10,
+          "tradesPerDay": 0.17,
+          "averagePnl": 0.154
+        },
+        "r": 0.913,
+        "pnl": 3.39
+      },
+      "EURCHF": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "EURGBP": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "EURJPY": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "EURUSD": {
+        "development": {
+          "trades": 123,
+          "positiveTrades": 51,
+          "winRate": 41.5,
+          "takeProfits": 42,
+          "tpRate": 34.1,
+          "stopLosses": 65,
+          "timeExits": 3,
+          "dailyExits": 13,
+          "tradesPerDay": 0.95,
+          "averagePnl": 1.096
+        },
+        "r": 25.958,
+        "pnl": 134.81
+      },
+      "GBPAUD": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "GBPCHF": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "GBPJPY": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "GBPUSD": {
+        "development": {
+          "trades": 48,
+          "positiveTrades": 21,
+          "winRate": 43.8,
+          "takeProfits": 20,
+          "tpRate": 41.7,
+          "stopLosses": 27,
+          "timeExits": 1,
+          "dailyExits": 0,
+          "tradesPerDay": 0.37,
+          "averagePnl": 1.368
+        },
+        "r": 13.4,
+        "pnl": 65.66
+      },
+      "NZDJPY": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "NZDUSD": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "USDCAD": {
+        "development": {
+          "trades": 34,
+          "positiveTrades": 14,
+          "winRate": 41.2,
+          "takeProfits": 8,
+          "tpRate": 23.5,
+          "stopLosses": 19,
+          "timeExits": 3,
+          "dailyExits": 4,
+          "tradesPerDay": 0.26,
+          "averagePnl": 0.242
+        },
+        "r": 1.547,
+        "pnl": 8.24
+      },
+      "USDCHF": {
+        "development": {
+          "trades": 0,
+          "positiveTrades": 0,
+          "winRate": 0,
+          "takeProfits": 0,
+          "tpRate": 0,
+          "stopLosses": 0,
+          "timeExits": 0,
+          "dailyExits": 0,
+          "tradesPerDay": 0,
+          "averagePnl": 0
+        },
+        "r": 0,
+        "pnl": 0
+      },
+      "USDJPY": {
+        "development": {
+          "trades": 27,
+          "positiveTrades": 13,
+          "winRate": 48.1,
+          "takeProfits": 11,
+          "tpRate": 40.7,
+          "stopLosses": 14,
+          "timeExits": 2,
+          "dailyExits": 0,
+          "tradesPerDay": 0.21,
+          "averagePnl": 1.58
+        },
+        "r": 8.957,
+        "pnl": 42.65
+      }
+    },
+    "sessionStats": {
+      "asia": {
+        "trades": 272,
+        "pnl": 336.97,
+        "r": 69.642
+      },
+      "overlap": {
+        "trades": 85,
+        "pnl": 45.91,
+        "r": 8.719
+      },
+      "london": {
+        "trades": 83,
+        "pnl": 43.44,
+        "r": 9.08
+      },
+      "newYork": {
+        "trades": 18,
+        "pnl": 2.12,
+        "r": 0.364
+      }
+    },
+    "regimeStats": {
+      "base": {
+        "trades": 458,
+        "pnl": 428.45,
+        "r": 87.805
+      }
+    },
+    "bestWeek": {
+      "week": "2026-W15",
+      "r": 17.817,
+      "pnl": 88.08
+    },
+    "daily": [
+      {
+        "day": "2026-02-09",
+        "pnl": 0,
+        "r": 0,
+        "entries": 1,
+        "closes": 0
+      },
+      {
+        "day": "2026-02-10",
+        "pnl": 11.81,
+        "r": 2.435,
+        "entries": 2,
+        "closes": 3
+      },
+      {
+        "day": "2026-02-11",
+        "pnl": 10.74,
+        "r": 2.006,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-02-12",
+        "pnl": -0.3,
+        "r": -0.024,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-02-13",
+        "pnl": -4.85,
+        "r": -0.996,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-02-16",
+        "pnl": 0.56,
+        "r": 0.113,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-02-17",
+        "pnl": 15.02,
+        "r": 3.005,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-02-18",
+        "pnl": -14.9,
+        "r": -2.997,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-02-19",
+        "pnl": -14.72,
+        "r": -3.002,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-02-20",
+        "pnl": -0.13,
+        "r": 0.004,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-02-23",
+        "pnl": 5.14,
+        "r": 1.001,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-02-24",
+        "pnl": -8.47,
+        "r": -1.692,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-02-25",
+        "pnl": 4.55,
+        "r": 0.99,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-02-26",
+        "pnl": -24.47,
+        "r": -5.002,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-02-27",
+        "pnl": 4.77,
+        "r": 0.999,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-03-02",
+        "pnl": 24.67,
+        "r": 5.017,
+        "entries": 7,
+        "closes": 7
+      },
+      {
+        "day": "2026-03-03",
+        "pnl": 7.23,
+        "r": 1.496,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-03-04",
+        "pnl": 14.49,
+        "r": 2.994,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-03-05",
+        "pnl": 15.07,
+        "r": 3.004,
+        "entries": 6,
+        "closes": 6
+      },
+      {
+        "day": "2026-03-06",
+        "pnl": -4.83,
+        "r": -0.997,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-03-09",
+        "pnl": 14.85,
+        "r": 2.997,
+        "entries": 6,
+        "closes": 6
+      },
+      {
+        "day": "2026-03-10",
+        "pnl": 0,
+        "r": 0,
+        "entries": 1,
+        "closes": 0
+      },
+      {
+        "day": "2026-03-11",
+        "pnl": 17.47,
+        "r": 3.544,
+        "entries": 3,
+        "closes": 4
+      },
+      {
+        "day": "2026-03-12",
+        "pnl": -9.91,
+        "r": -2.001,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-03-13",
+        "pnl": -9.95,
+        "r": -1.993,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-03-16",
+        "pnl": 4.87,
+        "r": 0.996,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-03-17",
+        "pnl": 25.25,
+        "r": 5.088,
+        "entries": 5,
+        "closes": 6
+      },
+      {
+        "day": "2026-03-18",
+        "pnl": -19.31,
+        "r": -4.006,
+        "entries": 7,
+        "closes": 7
+      },
+      {
+        "day": "2026-03-19",
+        "pnl": 14.75,
+        "r": 2.995,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-03-20",
+        "pnl": -4.92,
+        "r": -1.002,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-03-23",
+        "pnl": -9.79,
+        "r": -1.998,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-03-24",
+        "pnl": -7.02,
+        "r": -1.453,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-03-25",
+        "pnl": 26.11,
+        "r": 5.257,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-03-26",
+        "pnl": -14.91,
+        "r": -3,
+        "entries": 6,
+        "closes": 6
+      },
+      {
+        "day": "2026-03-27",
+        "pnl": 0.46,
+        "r": 0.102,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-03-30",
+        "pnl": 0.15,
+        "r": 0.007,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-03-31",
+        "pnl": 9.63,
+        "r": 2.015,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-04-01",
+        "pnl": -11.74,
+        "r": -2.356,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-04-02",
+        "pnl": -1.76,
+        "r": -0.353,
+        "entries": 2,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-03",
+        "pnl": -4.89,
+        "r": -1.001,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-04-06",
+        "pnl": 22.42,
+        "r": 4.555,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-07",
+        "pnl": -0.16,
+        "r": -0.003,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-08",
+        "pnl": 19.86,
+        "r": 4.005,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-04-09",
+        "pnl": 4.93,
+        "r": 0.996,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-04-10",
+        "pnl": -0.06,
+        "r": -0.005,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-13",
+        "pnl": 19.85,
+        "r": 3.993,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-04-14",
+        "pnl": 5.93,
+        "r": 1.191,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-15",
+        "pnl": 9.92,
+        "r": 1.999,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-04-16",
+        "pnl": -13.98,
+        "r": -3.002,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-17",
+        "pnl": 43.94,
+        "r": 8.824,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-04-20",
+        "pnl": 3.9,
+        "r": 0.781,
+        "entries": 2,
+        "closes": 1
+      },
+      {
+        "day": "2026-04-21",
+        "pnl": 7.4,
+        "r": 1.5,
+        "entries": 1,
+        "closes": 2
+      },
+      {
+        "day": "2026-04-22",
+        "pnl": -14.09,
+        "r": -3.001,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-23",
+        "pnl": 2.25,
+        "r": 0.998,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-04-24",
+        "pnl": -12.91,
+        "r": -2.602,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-04-27",
+        "pnl": -13.49,
+        "r": -2.719,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-28",
+        "pnl": 9.99,
+        "r": 2.001,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-04-29",
+        "pnl": 5.74,
+        "r": 1.138,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-04-30",
+        "pnl": -9.82,
+        "r": -2.002,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-01",
+        "pnl": 0.07,
+        "r": -0.002,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-04",
+        "pnl": -0.04,
+        "r": 0.006,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-05",
+        "pnl": 10.59,
+        "r": 2.128,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-06",
+        "pnl": 9.41,
+        "r": 1.986,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-05-07",
+        "pnl": 19.93,
+        "r": 3.996,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-05-08",
+        "pnl": 0.37,
+        "r": -0.004,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-11",
+        "pnl": 1.12,
+        "r": 0.23,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-05-12",
+        "pnl": 3.84,
+        "r": 0.804,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-13",
+        "pnl": 9.94,
+        "r": 2.003,
+        "entries": 2,
+        "closes": 1
+      },
+      {
+        "day": "2026-05-14",
+        "pnl": -2.25,
+        "r": -0.458,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-15",
+        "pnl": 8,
+        "r": 1.697,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-18",
+        "pnl": 4.95,
+        "r": 0.998,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-05-19",
+        "pnl": 24.79,
+        "r": 5.002,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-05-20",
+        "pnl": -14.9,
+        "r": -3,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-21",
+        "pnl": -5.01,
+        "r": -1.004,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-05-22",
+        "pnl": 19.08,
+        "r": 3.781,
+        "entries": 3,
+        "closes": 4
+      },
+      {
+        "day": "2026-05-25",
+        "pnl": -12.24,
+        "r": -3,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-26",
+        "pnl": 26.97,
+        "r": 6.001,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-05-27",
+        "pnl": -9.1,
+        "r": -2.001,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-05-28",
+        "pnl": 19.16,
+        "r": 4.004,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-05-29",
+        "pnl": 5,
+        "r": 0.993,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-06-01",
+        "pnl": 4.98,
+        "r": 0.998,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-02",
+        "pnl": 26.84,
+        "r": 5.995,
+        "entries": 6,
+        "closes": 6
+      },
+      {
+        "day": "2026-06-03",
+        "pnl": 2,
+        "r": 1.001,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-04",
+        "pnl": 10.62,
+        "r": 2.139,
+        "entries": 1,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-05",
+        "pnl": -4.83,
+        "r": -1.003,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-08",
+        "pnl": -14.74,
+        "r": -2.996,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-06-09",
+        "pnl": -4.97,
+        "r": -0.993,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-10",
+        "pnl": 6.5,
+        "r": 1.298,
+        "entries": 5,
+        "closes": 6
+      },
+      {
+        "day": "2026-06-11",
+        "pnl": -19.85,
+        "r": -4,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-12",
+        "pnl": -4.98,
+        "r": -0.999,
+        "entries": 1,
+        "closes": 1
+      },
+      {
+        "day": "2026-06-15",
+        "pnl": 9.94,
+        "r": 2.003,
+        "entries": 2,
+        "closes": 1
+      },
+      {
+        "day": "2026-06-16",
+        "pnl": 18.06,
+        "r": 3.642,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-06-17",
+        "pnl": 19.1,
+        "r": 5.012,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-18",
+        "pnl": -9.84,
+        "r": -2.003,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-19",
+        "pnl": 14.29,
+        "r": 2.94,
+        "entries": 3,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-22",
+        "pnl": 4.92,
+        "r": 0.999,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-23",
+        "pnl": 25.55,
+        "r": 5.008,
+        "entries": 7,
+        "closes": 7
+      },
+      {
+        "day": "2026-06-24",
+        "pnl": -4.99,
+        "r": -1,
+        "entries": 2,
+        "closes": 1
+      },
+      {
+        "day": "2026-06-25",
+        "pnl": -14.37,
+        "r": -2.899,
+        "entries": 3,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-26",
+        "pnl": 4.93,
+        "r": 0.996,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-06-29",
+        "pnl": 9.86,
+        "r": 1.995,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-06-30",
+        "pnl": -9.91,
+        "r": -2.002,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-01",
+        "pnl": -7.94,
+        "r": -1.6,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-02",
+        "pnl": 16.01,
+        "r": 2.991,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-03",
+        "pnl": 9.38,
+        "r": 1.901,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-06",
+        "pnl": 9.94,
+        "r": 1.995,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-07-07",
+        "pnl": 0.04,
+        "r": 0.001,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-08",
+        "pnl": 19.43,
+        "r": 3.907,
+        "entries": 4,
+        "closes": 4
+      },
+      {
+        "day": "2026-07-09",
+        "pnl": 4.96,
+        "r": 0.997,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-10",
+        "pnl": 0,
+        "r": 0,
+        "entries": 1,
+        "closes": 0
+      },
+      {
+        "day": "2026-07-13",
+        "pnl": -21.92,
+        "r": -4.435,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-07-14",
+        "pnl": 0,
+        "r": -0.003,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-15",
+        "pnl": 5.5,
+        "r": 0.997,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-16",
+        "pnl": -6.21,
+        "r": -1.267,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-07-17",
+        "pnl": 4.07,
+        "r": 1.001,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-20",
+        "pnl": 14.92,
+        "r": 3,
+        "entries": 3,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-21",
+        "pnl": 14.75,
+        "r": 2.999,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-22",
+        "pnl": 9.3,
+        "r": 1.681,
+        "entries": 5,
+        "closes": 6
+      },
+      {
+        "day": "2026-07-23",
+        "pnl": -9.87,
+        "r": -1.997,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-07-24",
+        "pnl": 4.99,
+        "r": 1,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-07-27",
+        "pnl": -19.8,
+        "r": -4.003,
+        "entries": 5,
+        "closes": 4
+      },
+      {
+        "day": "2026-07-28",
+        "pnl": -10.16,
+        "r": -2.105,
+        "entries": 5,
+        "closes": 6
+      },
+      {
+        "day": "2026-07-29",
+        "pnl": 15.03,
+        "r": 3,
+        "entries": 6,
+        "closes": 6
+      },
+      {
+        "day": "2026-07-30",
+        "pnl": -14.9,
+        "r": -3,
+        "entries": 4,
+        "closes": 3
+      },
+      {
+        "day": "2026-07-31",
+        "pnl": 28.28,
+        "r": 5.694,
+        "entries": 4,
+        "closes": 5
+      },
+      {
+        "day": "2026-08-03",
+        "pnl": -9.9,
+        "r": -2,
+        "entries": 3,
+        "closes": 2
+      },
+      {
+        "day": "2026-08-04",
+        "pnl": 0.92,
+        "r": 0.223,
+        "entries": 5,
+        "closes": 5
+      },
+      {
+        "day": "2026-08-05",
+        "pnl": -8.41,
+        "r": -2.055,
+        "entries": 5,
+        "closes": 6
+      },
+      {
+        "day": "2026-08-06",
+        "pnl": 19.87,
+        "r": 4.004,
+        "entries": 2,
+        "closes": 2
+      },
+      {
+        "day": "2026-08-07",
+        "pnl": -4.14,
+        "r": -0.999,
+        "entries": 4,
+        "closes": 4
+      }
+    ],
+    "weekly": [
+      {
+        "week": "2026-W07",
+        "r": 3.403,
+        "pnl": 17.32
+      },
+      {
+        "week": "2026-W08",
+        "r": -2.877,
+        "pnl": -14.16
+      },
+      {
+        "week": "2026-W09",
+        "r": -1.288,
+        "pnl": -7.11
+      },
+      {
+        "week": "2026-W10",
+        "r": 11.514,
+        "pnl": 56.62
+      },
+      {
+        "week": "2026-W11",
+        "r": 2.546,
+        "pnl": 12.45
+      },
+      {
+        "week": "2026-W12",
+        "r": 2.501,
+        "pnl": 12.95
+      },
+      {
+        "week": "2026-W13",
+        "r": -1.091,
+        "pnl": -5.15
+      },
+      {
+        "week": "2026-W14",
+        "r": -1.689,
+        "pnl": -8.6
+      },
+      {
+        "week": "2026-W15",
+        "r": 17.817,
+        "pnl": 88.08
+      },
+      {
+        "week": "2026-W16",
+        "r": 13.004,
+        "pnl": 65.67
+      },
+      {
+        "week": "2026-W17",
+        "r": -2.324,
+        "pnl": -13.46
+      },
+      {
+        "week": "2026-W18",
+        "r": -1.584,
+        "pnl": -7.5
+      },
+      {
+        "week": "2026-W19",
+        "r": 5.048,
+        "pnl": 25.11
+      },
+      {
+        "week": "2026-W20",
+        "r": 4.276,
+        "pnl": 20.65
+      },
+      {
+        "week": "2026-W21",
+        "r": 5.778,
+        "pnl": 28.91
+      },
+      {
+        "week": "2026-W22",
+        "r": 5.996,
+        "pnl": 29.79
+      },
+      {
+        "week": "2026-W23",
+        "r": 9.13,
+        "pnl": 39.61
+      },
+      {
+        "week": "2026-W24",
+        "r": -7.691,
+        "pnl": -38.05
+      },
+      {
+        "week": "2026-W25",
+        "r": 11.594,
+        "pnl": 51.55
+      },
+      {
+        "week": "2026-W26",
+        "r": 2.532,
+        "pnl": 13.2
+      },
+      {
+        "week": "2026-W27",
+        "r": 3.544,
+        "pnl": 18.67
+      },
+      {
+        "week": "2026-W28",
+        "r": 6.73,
+        "pnl": 33.55
+      },
+      {
+        "week": "2026-W29",
+        "r": -3.342,
+        "pnl": -16.82
+      },
+      {
+        "week": "2026-W30",
+        "r": 5.519,
+        "pnl": 28.38
+      },
+      {
+        "week": "2026-W31",
+        "r": -0.413,
+        "pnl": -1.55
+      },
+      {
+        "week": "2026-W32",
+        "r": -0.827,
+        "pnl": -1.65
+      }
+    ],
+    "monthly": {
+      "2026-02": {
+        "pnl": -15.33,
+        "r": -3.178,
+        "trades": 51,
+        "wins": 17,
+        "winRate": 33.3
+      },
+      "2026-03": {
+        "pnl": 98.04,
+        "r": 19.908,
+        "trades": 93,
+        "wins": 40,
+        "winRate": 43
+      },
+      "2026-04": {
+        "pnl": 114.32,
+        "r": 23.205,
+        "trades": 67,
+        "wins": 33,
+        "winRate": 49.3
+      },
+      "2026-05": {
+        "pnl": 104.53,
+        "r": 21.096,
+        "trades": 70,
+        "wins": 33,
+        "winRate": 47.1
+      },
+      "2026-06": {
+        "pnl": 66.25,
+        "r": 15.558,
+        "trades": 73,
+        "wins": 32,
+        "winRate": 43.8
+      },
+      "2026-07": {
+        "pnl": 62.28,
+        "r": 12.044,
+        "trades": 85,
+        "wins": 34,
+        "winRate": 40
+      },
+      "2026-08": {
+        "pnl": -1.65,
+        "r": -0.827,
+        "trades": 19,
+        "wins": 6,
+        "winRate": 31.6
+      }
+    }
+  }
+}
