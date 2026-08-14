@@ -1,5 +1,5 @@
-import { getOpenPositions, getWorkingOrders, cancelWorkingOrder } from "./api.js";
-import { RISK, PROFILES } from "./config.js";
+import { getOpenPositions, getWorkingOrders, cancelWorkingOrder, getMarketDetails, getHistorical } from "./api.js";
+import { RISK, PROFILES, PORTFOLIO, TIMEFRAMES } from "./config.js";
 
 import tradingService from "./services/trading.js";
 import webSocketService from "./services/websocket.js";
@@ -19,6 +19,8 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
 
         bot.monitorInProgress = true;
         try {
+            await pendingInvalidationCheck();
+            await bot.delay(3000);
             await trailingStopCheck(bot);
             await bot.delay(3000);
             await weekendFlatCheck(bot);
@@ -27,10 +29,67 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
             await bot.delay(3000);
             await maxHoldCheck(bot);
             await bot.delay(3000);
+        } catch (error) {
+            logger.error("[Monitoring] Monitor tick failed:", error);
         } finally {
             bot.monitorInProgress = false;
         }
     }, intervalMs);
+}
+
+// GBPJPY and GBPUSD research cancels a pending breakout when price reaches
+// the intended stop before the entry. The broker cannot infer that rule from
+// a working STOP order, so the monitor applies it explicitly.
+export async function pendingInvalidationCheck() {
+    try {
+        const result = await getWorkingOrders();
+        const orders = result?.workingOrders || [];
+
+        for (const item of orders) {
+            const order = item?.workingOrderData;
+            const symbol = order?.epic;
+            const profile = PROFILES[symbol];
+
+            if (
+                !order?.dealId ||
+                !PORTFOLIO.SYMBOLS.includes(symbol) ||
+                profile?.entry?.cancelIfStopTouchedBeforeEntry !== true
+            ) {
+                continue;
+            }
+
+            const stopLevel = Number(order.stopLevel);
+            if (!Number.isFinite(stopLevel)) continue;
+
+            const marketData = item?.marketData;
+            const details = marketData ? null : await getMarketDetails(symbol);
+            const bid = Number(marketData?.bid ?? details?.snapshot?.bid);
+            const ask = Number(marketData?.offer ?? marketData?.ask ?? details?.snapshot?.offer);
+            const spread = Number.isFinite(bid) && Number.isFinite(ask) ? Math.max(0, ask - bid) : 0;
+            const direction = String(order.direction || "").toUpperCase();
+            const createdAt = Date.parse(order.createdDateUTC ?? order.createdDate ?? "");
+            const createdMinute = Number.isFinite(createdAt) ? Math.floor(createdAt / 60_000) * 60_000 : null;
+            const history = await getHistorical(symbol, TIMEFRAMES.M1, 65);
+            const orderCandles = (history?.prices || []).filter((candle) => {
+                const timestamp = Date.parse(candle.timestamp);
+                return createdMinute === null || (Number.isFinite(timestamp) && timestamp >= createdMinute);
+            });
+            const buyStopTouched =
+                (Number.isFinite(bid) && bid <= stopLevel) ||
+                orderCandles.some((candle) => Number(candle.low) <= stopLevel);
+            const sellStopTouched =
+                (Number.isFinite(ask) && ask >= stopLevel) ||
+                orderCandles.some((candle) => Number(candle.high) + spread >= stopLevel);
+            const invalidated = direction === "BUY" ? buyStopTouched : direction === "SELL" ? sellStopTouched : false;
+
+            if (!invalidated) continue;
+
+            await cancelWorkingOrder(order.dealId);
+            logger.info(`[Orders] Cancelled invalidated ${symbol} pending ${direction} order`);
+        }
+    } catch (error) {
+        logger.error("[Orders] Pending invalidation check failed:", error);
+    }
 }
 
 export async function trailingStopCheck() {
@@ -47,6 +106,8 @@ export async function trailingStopCheck() {
             const position = item.position;
             const market = item.market;
             const symbol = market?.epic ?? position?.epic;
+
+            if (!PORTFOLIO.SYMBOLS.includes(symbol)) continue;
 
             await tradingService.updateTrailingStopIfNeeded({
                 symbol,
@@ -89,6 +150,7 @@ export async function dailyFlatCheck(bot) {
 
     try {
         await cancelOrders((symbol) => {
+            if (!PORTFOLIO.SYMBOLS.includes(symbol)) return false;
             const closeMinute = getCloseMinute(symbol);
 
             return closeMinute < 24 * 60 && currentMinute >= closeMinute;
@@ -99,6 +161,8 @@ export async function dailyFlatCheck(bot) {
         for (const pos of positions.positions) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+
+            if (!PORTFOLIO.SYMBOLS.includes(symbol)) continue;
 
             const closeMinute = getCloseMinute(symbol);
 
@@ -128,13 +192,16 @@ export async function weekendFlatCheck(bot) {
     if (now.getUTCDay() !== 5 || now.getUTCHours() < closeHour) return;
 
     try {
-        await cancelOrders(() => true);
+        await cancelOrders((symbol) => PORTFOLIO.SYMBOLS.includes(symbol));
         const positions = await getOpenPositions();
         if (!positions?.positions?.length) return;
 
         for (const pos of positions.positions) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+
+            if (!PORTFOLIO.SYMBOLS.includes(symbol)) continue;
+
             if (!dealId) {
                 logger.error(`[WeekendFlat] Missing dealId for ${symbol}, cannot close.`);
                 continue;
@@ -173,11 +240,14 @@ export async function maxHoldCheck(bot) {
 
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
+
+            if (!PORTFOLIO.SYMBOLS.includes(symbol)) continue;
+
             const maxHoldMinutes = resolveMaxHoldMinutes(pos, symbol);
 
             logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${maxHoldMinutes}`);
 
-            if (minutesHeld >= maxHoldMinutes && !pos.position.trailingStop) {
+            if (minutesHeld >= maxHoldMinutes && !pos?.position?.trailingStop) {
                 if (!dealId) {
                     logger.error(`[Bot] Missing dealId for ${pos?.market?.epic}, cannot close.`);
                     continue;

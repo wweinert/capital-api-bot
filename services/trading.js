@@ -1,5 +1,4 @@
 import {
-    placePosition,
     placeOrder,
     enableTrailingStop,
     getDealConfirmation,
@@ -15,9 +14,10 @@ import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
 
-class TradingService {
+export class TradingService {
     constructor() {
         this.openTrades = [];
+        this.openTradeCount = 0;
         this.accountBalance = 0;
         this.availableMargin = 0;
 
@@ -30,6 +30,7 @@ class TradingService {
     }
     setOpenTrades(trades) {
         this.openTrades = trades;
+        this.openTradeCount = Array.isArray(trades) ? trades.length : 0;
     }
     setAvailableMargin(m) {
         this.availableMargin = m;
@@ -87,7 +88,9 @@ class TradingService {
 
         const orderSymbols = orders.map((item) => item?.workingOrderData?.epic);
 
-        this.openTrades = [...new Set([...positionSymbols, ...orderSymbols].filter(Boolean))];
+        const allOpenSymbols = [...positionSymbols, ...orderSymbols].filter(Boolean);
+        this.openTrades = [...new Set(allOpenSymbols)];
+        this.openTradeCount = allOpenSymbols.length;
     }
 
     async getPositionContext(dealId) {
@@ -135,7 +138,7 @@ class TradingService {
         const todayEntries = [
             ...new Map(
                 activities
-                    .filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED" && activity.source === "USER")
+                    .filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED")
                     .map((activity) => [activity.dealId, activity]),
             ).values(),
         ];
@@ -166,32 +169,49 @@ class TradingService {
             return [];
         }
         return candidates.filter((candidate) => {
-            const risk = candidate.profile.risk;
+            const symbolEntries = todayEntries.filter((entry) => {
+                const activitySymbol = String(entry.epic ?? entry.details?.epic ?? entry.details?.marketName ?? "")
+                    .toUpperCase()
+                    .replace(/[^A-Z]/g, "");
 
-            const symbolEntries = todayEntries.filter((entry) => entry.epic === candidate.symbol);
+                return activitySymbol === candidate.symbol;
+            });
 
-            const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)));
+            const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)).filter(Number.isFinite));
 
-            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= risk.cooldownMinutes * 60_000;
+            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= RISK.COOLDOWN_MINUTES * 60_000;
 
-            const lastEntryMinute = Math.min(risk.lastEntryMinute, RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
-
-            return currentMinute < lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
+            return (
+                currentMinute < RISK.DAILY_LAST_ENTRY_MINUTE_UTC &&
+                symbolEntries.length < RISK.MAX_DAILY_TRADES_PER_SYMBOL &&
+                cooldownPassed
+            );
         });
     }
 
     async processCandidates(candidates = []) {
         await this.syncOpenTradesFromBroker();
 
-        const freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
+        const freePositions = PORTFOLIO.MAX_POSITIONS - this.openTradeCount;
 
         if (freePositions <= 0) {
             logger.info("[Trading] No free positions");
             return [];
         }
-        const allowedCandidates = await this.getAllowedCandidates(candidates);
+        const portfolioCandidates = candidates.filter((candidate) => PORTFOLIO.SYMBOLS.includes(candidate.symbol));
+        const allowedCandidates = await this.getAllowedCandidates(portfolioCandidates);
 
-        const selected = allowedCandidates.filter((candidate) => !this.isSymbolTraded(candidate.symbol)).slice(0, freePositions);
+        const selected = [];
+        const selectedSymbols = new Set();
+
+        for (const candidate of allowedCandidates) {
+            if (this.isSymbolTraded(candidate.symbol) || selectedSymbols.has(candidate.symbol)) continue;
+
+            selected.push(candidate);
+            selectedSymbols.add(candidate.symbol);
+
+            if (selected.length >= freePositions) break;
+        }
 
         logger.info(`[Trading] Selected: ${selected.length ? selected.map((candidate) => candidate.symbol).join(", ") : "none"}`);
 
@@ -202,6 +222,7 @@ class TradingService {
 
             if (success) {
                 this.openTrades.push(candidate.symbol);
+                this.openTradeCount += 1;
                 executed.push(candidate);
             }
         }
@@ -341,7 +362,8 @@ class TradingService {
 
         const brokerAvailableMargin = this.toNumber(this.availableMargin);
         const availableMargin = Number.isFinite(brokerAvailableMargin) && brokerAvailableMargin > 0 ? brokerAvailableMargin : accountBalance;
-        const maxMarginPerTrade = Math.min(availableMargin, accountBalance / PORTFOLIO.MAX_POSITIONS) * PORTFOLIO.MARGIN_USAGE;
+        const marginSlot = (accountBalance * PORTFOLIO.MARGIN_USAGE) / PORTFOLIO.MAX_POSITIONS;
+        const maxMarginPerTrade = Math.min(availableMargin, marginSlot);
 
         if (!(Number.isFinite(maxMarginPerTrade) && maxMarginPerTrade > 0)) {
             logger.error(`[PositionSize] Invalid margin budget for ${symbol}: availableMargin=${this.availableMargin}, balance=${accountBalance}`);
@@ -403,43 +425,52 @@ class TradingService {
     //                    Place the Trade
     // ============================================================
     async executeCandidate(candidate) {
+        if (!candidate || candidate.entryType !== "stop" || !PORTFOLIO.SYMBOLS.includes(candidate.symbol)) {
+            logger.warn("[Trading] Rejected non-pending candidate");
+            return false;
+        }
+
         const { symbol, signal, entryType, entryPrice, stopLoss, profile } = candidate;
+        const targetR = Number(profile?.exit?.targetR);
+        const expiryBars = Number(profile?.entry?.expiryBars);
+        const timeframeMinutes = {
+            M5: 5,
+            M15: 15,
+            H1: 60,
+        }[profile?.signal?.timeframe];
+
+        if (!symbol || !["BUY", "SELL"].includes(signal) || ![entryPrice, stopLoss, targetR, expiryBars, timeframeMinutes].every(Number.isFinite)) {
+            logger.warn(`[Trading] Invalid candidate for ${symbol || "unknown"}`);
+            return false;
+        }
 
         const riskDistance = Math.abs(entryPrice - stopLoss);
 
-        const takeProfit = signal === "BUY" ? entryPrice + riskDistance * profile.exit.targetR : entryPrice - riskDistance * profile.exit.targetR;
-        const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, profile.risk.perTrade);
+        if (!(riskDistance > 0) || targetR <= 0 || expiryBars <= 0) {
+            logger.warn(`[Trading] Invalid risk or expiry for ${symbol}`);
+            return false;
+        }
+
+        const takeProfit = signal === "BUY" ? entryPrice + riskDistance * targetR : entryPrice - riskDistance * targetR;
+        const profileRiskPct = Number(profile?.strategy?.riskPerTrade ?? PER_TRADE);
+        const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, profileRiskPct);
 
         if (!sizing.size) {
             return false;
         }
 
-        let result;
-
-        if (entryType === "stop" || entryType === "limit") {
-            const timeframeMinutes = {
-                M5: 5,
-                M15: 15,
-                H1: 60,
-            };
-
-            const expiryMinutes = timeframeMinutes[profile.signal.timeframe] * profile.entry.expiryBars;
-
-            const goodTillDate = new Date(Date.now() + expiryMinutes * 60_000).toISOString().slice(0, 19);
-
-            result = await placeOrder({
-                symbol,
-                type: entryType.toUpperCase(),
-                direction: signal,
-                size: sizing.size,
-                level: entryPrice,
-                stopLevel: stopLoss,
-                profitLevel: takeProfit,
-                goodTillDate,
-            });
-        } else {
-            result = await placePosition(symbol, signal, sizing.size, entryPrice, stopLoss, takeProfit);
-        }
+        const expiryMinutes = timeframeMinutes * expiryBars;
+        const goodTillDate = new Date(Date.now() + expiryMinutes * 60_000).toISOString().slice(0, 19);
+        const result = await placeOrder({
+            symbol,
+            type: "STOP",
+            direction: signal,
+            size: sizing.size,
+            level: entryPrice,
+            stopLevel: stopLoss,
+            profitLevel: takeProfit,
+            goodTillDate,
+        });
 
         if (!result?.dealReference) {
             logger.warn(`[Trading] ${symbol}: order was not created`);

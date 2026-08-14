@@ -96,6 +96,8 @@ function enrich(rows) {
       bearBB: i > 0 && bb[i - 1] && bb[i] && close[i - 1] >= bb[i - 1].upper && close[i] < bb[i].upper,
       bullRSI: i > 0 && rsi[i - 1] < 30 && rsi[i] >= 30,
       bearRSI: i > 0 && rsi[i - 1] > 70 && rsi[i] <= 70,
+      bullMACD: i > 0 && macd[i - 1]?.histogram <= 0 && macd[i]?.histogram > 0,
+      bearMACD: i > 0 && macd[i - 1]?.histogram >= 0 && macd[i]?.histogram < 0,
       bullBreakout: i >= 20 && close[i] > hi20,
       bearBreakout: i >= 20 && close[i] < lo20,
     };
@@ -140,6 +142,7 @@ function fxTradingDayKey(timestamp) {
 const SESSION_TIME_FORMATTERS = Object.freeze({
   london: new Intl.DateTimeFormat("en-US", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }),
   newYork: new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }),
+  frankfurt: new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Berlin", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }),
 });
 const SESSION_BOUNDARY_CACHE = new Map();
 
@@ -203,7 +206,7 @@ function entryConfigFor(event, config) {
   // The event is labelled from the closed signal candle. Recomputing from
   // the decision timestamp shifts exact session-boundary closes into the next
   // session even though every causal feature belongs to the prior candle.
-  const session = event.session ?? marketSession(event.t);
+  const session = config.fixedSessionLabel ?? event.session ?? marketSession(event.t);
   let resolved = config;
   const sessionProfile = config.sessionProfiles?.[session];
   if (sessionProfile) resolved = { ...resolved, ...sessionProfile };
@@ -310,6 +313,47 @@ function continuationCandle(rows, index, side, pullbackBars) {
   return true;
 }
 
+// Independent, closed-candle Price Action and indicator triggers. These are
+// deliberately separate from Green-Red so a candidate can use them alone or
+// combine them with higher-timeframe context in train.js.
+function candleSignalFlags(rows, index, side) {
+  const current = rows[index], previous = rows[index - 1], mother = rows[index - 2];
+  if (!current || !previous || !mother || !(current.atr > 0)) return {};
+  const buy = side === "buy";
+  const directional = buy ? current.close > current.open : current.close < current.open;
+  const body = Math.abs(current.close - current.open);
+  const range = current.high - current.low;
+  const upperWick = current.high - Math.max(current.open, current.close);
+  const lowerWick = Math.min(current.open, current.close) - current.low;
+  const closesNearExtreme = range > 0 && (buy
+    ? (current.close - current.low) / range >= 0.7
+    : (current.high - current.close) / range >= 0.7);
+  const bodyFloor = Math.max(body, current.atr * 0.05);
+  const previousOpposite = buy ? previous.close < previous.open : previous.close > previous.open;
+  const bodyEngulfing = buy
+    ? current.open <= previous.close && current.close >= previous.open
+    : current.open >= previous.close && current.close <= previous.open;
+  const previousInsideMother = previous.high < mother.high && previous.low > mother.low;
+  const insideBreak = buy ? current.close > mother.high : current.close < mother.low;
+  const outsideBar = current.high > previous.high && current.low < previous.low;
+
+  return {
+    Engulfing: directional && previousOpposite && bodyEngulfing,
+    PinBar: directional && closesNearExtreme && (buy
+      ? lowerWick >= 2 * bodyFloor && upperWick <= bodyFloor
+      : upperWick >= 2 * bodyFloor && lowerWick <= bodyFloor),
+    InsideBreak: directional && previousInsideMother && insideBreak,
+    OutsideBar: directional && outsideBar && closesNearExtreme,
+    Momentum: directional && closesNearExtreme && body / current.atr >= 0.5,
+    Breakout20: buy ? current.bullBreakout : current.bearBreakout,
+    EmaCross: buy ? current.bullCross : current.bearCross,
+    EmaReclaim: buy ? current.bullReclaim : current.bearReclaim,
+    BollingerReentry: buy ? current.bullBB : current.bearBB,
+    RsiReversal: buy ? current.bullRSI : current.bearRSI,
+    MacdCross: buy ? current.bullMACD : current.bearMACD,
+  };
+}
+
 // Causal formalization of the discretionary sequence: directional impulse,
 // one to six opposite-colour pullback candles, then the first candle resuming
 // the impulse. The earlier impulse extreme supplies the lower-high/higher-low
@@ -349,6 +393,51 @@ function priceActionContinuation(rows, index, side) {
   return { pullbackBars, impulseAtr, swingGapAtr: (pullbackExtreme - priorSwing) / atr,
     retrace: impulseAtr > 0 ? (impulseExtreme - pullbackExtreme) / (impulseExtreme - priorSwing) : null,
     signalBodyAtr: Math.abs(signal.close - signal.open) / atr };
+}
+
+function discretionaryContinuation(rows, index, side) {
+  const signal = rows[index];
+  if (!signal?.atr || index < 310) return null;
+  const directional = (row) => side === "buy" ? row.close > row.open : row.close < row.open;
+  if (!directional(signal)) return null;
+  let pauseBars = 0;
+  for (let i = index - 1; i >= index - 6; i -= 1) {
+    const row = rows[i], bodyAtr = Math.abs(row.close - row.open) / signal.atr;
+    const opposite = side === "buy" ? row.close <= row.open : row.close >= row.open;
+    if (!opposite && bodyAtr > 0.35) break;
+    pauseBars += 1;
+  }
+  if (!pauseBars) return null;
+  const impulseEnd = index - pauseBars - 1;
+  let bestImpulse = null;
+  for (let length = 3; length <= 8 && impulseEnd - length + 1 >= 0; length += 1) {
+    const impulse = rows.slice(impulseEnd - length + 1, impulseEnd + 1);
+    const net = side === "buy"
+      ? impulse.at(-1).close - impulse[0].open
+      : impulse[0].open - impulse.at(-1).close;
+    const travelled = impulse.reduce((sum, row, i) => sum + Math.abs(row.close - (i ? impulse[i - 1].close : row.open)), 0);
+    const votes = impulse.filter(directional).length / length;
+    const value = { length, netAtr: net / signal.atr, efficiency: travelled > 0 ? Math.max(0, net) / travelled : 0, votes };
+    if (!bestImpulse || value.netAtr * value.efficiency > bestImpulse.netAtr * bestImpulse.efficiency) bestImpulse = value;
+  }
+  const highs = confirmedPivots(rows, index, "high", 2, 96);
+  const lows = confirmedPivots(rows, index, "low", 2, 96);
+  const latestHigh = highs[0]?.value, previousHigh = highs[1]?.value;
+  const latestLow = lows[0]?.value, previousLow = lows[1]?.value;
+  const swing = side === "buy"
+    ? Number.isFinite(latestLow) && Number.isFinite(previousLow) && latestLow > previousLow
+    : Number.isFinite(latestHigh) && Number.isFinite(previousHigh) && latestHigh < previousHigh;
+  const breakout = side === "buy"
+    ? Number.isFinite(latestHigh) && signal.close > latestHigh
+    : Number.isFinite(latestLow) && signal.close < latestLow;
+  const impulse = bestImpulse?.netAtr >= 0.6 && bestImpulse.efficiency >= 0.3 && bestImpulse.votes >= 0.6;
+  const signalStop = side === "buy" ? signal.low : signal.askHigh;
+  const swingStop = side === "buy"
+    ? Math.min(signal.low, Number.isFinite(latestLow) ? latestLow : signal.low)
+    : Math.max(signal.askHigh, Number.isFinite(latestHigh) ? latestHigh + Math.max(0, signal.askClose - signal.close) : signal.askHigh);
+  return { pauseBars, impulse, swing, breakout, impulseBars: bestImpulse?.length ?? 0,
+    impulseAtr: bestImpulse?.netAtr ?? 0, impulseEfficiency: bestImpulse?.efficiency ?? 0,
+    signalBodyAtr: Math.abs(signal.close - signal.open) / signal.atr, signalStop, swingStop };
 }
 
 function confirmedPivots(rows, index, kind, width = 2, lookback = 32) {
@@ -413,7 +502,15 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
     const hashes = {};
     for (const tf of Object.keys(TF)) {
       const loaded = load(path.join(datasetDir, `${symbol}_${tf}.jsonl`), symbol, endExclusive);
-      frames[tf] = enrich(loaded.rows);
+      const spreadMultiplier = options.spreadMultiplier ?? 1;
+      const rows = spreadMultiplier === 1 ? loaded.rows : loaded.rows.map((row) => ({
+        ...row,
+        askOpen: row.open + spreadMultiplier * (row.askOpen - row.open),
+        askHigh: row.high + spreadMultiplier * (row.askHigh - row.high),
+        askLow: row.low + spreadMultiplier * (row.askLow - row.low),
+        askClose: row.close + spreadMultiplier * (row.askClose - row.close),
+      }));
+      frames[tf] = enrich(rows);
       hashes[tf] = loaded.sha256;
       if (frames[tf].length < 202) throw new Error(`${symbol}_${tf}.jsonl has only ${frames[tf].length} usable rows before the fixed evaluation cutoff.`);
       if (frames[tf].at(-1).t < minimumCoverageEnd) throw new Error(`${symbol}_${tf}.jsonl ends at ${new Date(frames[tf].at(-1).t).toISOString()}, before required validation coverage ${protocol.minimumCoverageEnd}.`);
@@ -429,9 +526,12 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
   }]))]));
   const start = Math.max(...[...data.values()].map((f) => f.M1[0].t));
   const end = Math.min(...[...data.values()].map((f) => f.M1.at(-1).t));
+  const decisionTimeframe = options.decisionTimeframe ?? "M15";
+  if (!Object.hasOwn(TF, decisionTimeframe)) throw new Error(`Unsupported decision timeframe: ${decisionTimeframe}`);
   const events = [];
   for (const [symbol, f] of data) {
     let dayKey = null, dayStart = 0, dayOpen = null, dayHigh = -Infinity, dayLow = Infinity, openingHigh = -Infinity, openingLow = Infinity;
+    let gmt0700Range = null;
     let activeSession = null, sessionOpen = null, sessionHigh = -Infinity, sessionLow = Infinity, sessionLast = null, sessionStartedAt = null;
     let lastCompletedSession = null, beforeLastCompletedSession = null;
     // The video's intraday examples distinguish the pre-Frankfurt Asian
@@ -494,12 +594,14 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
       }
       const nextDayKey = new Date(m1.t).toISOString().slice(0, 10);
       if (nextDayKey !== dayKey) {
-        dayKey = nextDayKey; dayStart = i; dayOpen = m1.open; dayHigh = m1.high; dayLow = m1.low; openingHigh = m1.high; openingLow = m1.low;
+        dayKey = nextDayKey; dayStart = i; dayOpen = m1.open; dayHigh = m1.high; dayLow = m1.low; openingHigh = m1.high; openingLow = m1.low; gmt0700Range = null;
       } else {
         dayHigh = Math.max(dayHigh, m1.high); dayLow = Math.min(dayLow, m1.low);
         if (i - dayStart < 60) { openingHigh = Math.max(openingHigh, m1.high); openingLow = Math.min(openingLow, m1.low); }
       }
-      if (decision < start || decision > end || decision % TF.M15 !== 0) continue;
+      const utcMinute = new Date(m1.t).getUTCHours() * 60 + new Date(m1.t).getUTCMinutes();
+      if (utcMinute >= 7 * 60 && utcMinute < 8 * 60) gmt0700Range = extendRange(gmt0700Range);
+      if (decision < start || decision > end || decision % TF[decisionTimeframe] !== 0) continue;
       const frameIndexes = {
         M1: i,
         M5: atOrBefore(f.M5, decision - TF.M5),
@@ -515,6 +617,42 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
       if (i5 < 200 || i15 < 200 || i60 < 200 || i240 < 200 || iD1 < 50) continue;
       const m5 = f.M5[i5], m15 = f.M15[i15], h1 = f.H1[i60], h4 = f.H4[i240], d1 = f.D1[iD1];
       if (![m1.atr, m15.atr, h1.atr, h4.atr, d1.atr].every((x) => x != null)) continue;
+      if (options.lightweightM1 === true) {
+        const buy1 = continuationCandle(f.M1, i, "buy", 1), sell1 = continuationCandle(f.M1, i, "sell", 1);
+        const buy2 = continuationCandle(f.M1, i, "buy", 2), sell2 = continuationCandle(f.M1, i, "sell", 2);
+        const decisionDate = new Date(decision), decisionUtcMinute = decisionDate.getUTCHours() * 60 + decisionDate.getUTCMinutes();
+        const decisionLondon = zonedClock(decision, SESSION_TIME_FORMATTERS.london);
+        const decisionFrankfurt = zonedClock(decision, SESSION_TIME_FORMATTERS.frankfurt);
+        const TokyoFix = decisionDate.getUTCHours() === 0 && decisionUtcMinute === 55;
+        const EcbFix = decisionFrankfurt.hour === 14 && decisionFrankfurt.minute === 15;
+        const LondonFix = decisionLondon.hour === 16 && decisionLondon.minute === 0;
+        if (!(buy1 || sell1 || buy2 || sell2 || TokyoFix || EcbFix || LondonFix)) continue;
+        const pip = symbol.endsWith("JPY") ? 0.01 : 0.0001, step = 50 * pip;
+        const previous = f.M1[i - 1], priorHigh = lastCompletedSession?.high, priorLow = lastCompletedSession?.low;
+        const nextRound = Math.ceil((m1.askClose + Number.EPSILON) / step) * step;
+        const previousRound = Math.floor((m1.close - Number.EPSILON) / step) * step;
+        events.push({
+          t: decision, symbol, next: i + 1, atr: m15.atr, m1Atr: m1.atr, signalClose: m1.close, signalAskClose: m1.askClose,
+          spread: Math.max(0, m1.askClose - m1.close), session,
+          buyM1GreenRed1: buy1, sellM1GreenRed1: sell1, buyM1GreenRed2: buy2, sellM1GreenRed2: sell2,
+          buyM1GreenRed: buy1 || buy2, sellM1GreenRed: sell1 || sell2,
+          M1SignalOpen: m1.open, M1SignalHigh: m1.high, M1SignalLow: m1.low, M1SignalClose: m1.close,
+          M1SignalAskHigh: m1.askHigh, M1SignalAskLow: m1.askLow, M1SignalAskClose: m1.askClose, M1SignalAtr: m1.atr,
+          M15SpreadAtr: Math.max(0, m15.askClose - m15.close) / m15.atr,
+          M1DayMoveAtr: (m1.close - dayOpen) / m15.atr,
+          SessionAgeMinutes: sessionStartedAt == null ? 0 : (decision - sessionStartedAt) / MINUTE,
+          buyM1RoundRoomAtr: (nextRound - m1.askClose) / m15.atr,
+          sellM1RoundRoomAtr: (m1.close - previousRound) / m15.atr,
+          buyM1RoundBreakout: Math.floor(previous.askClose / step) < Math.floor(m1.askClose / step),
+          sellM1RoundBreakout: Math.ceil(previous.close / step) > Math.ceil(m1.close / step),
+          buyM1PreviousSessionRoomAtr: Number.isFinite(priorHigh) && priorHigh > m1.askClose ? (priorHigh - m1.askClose) / m15.atr : 99,
+          sellM1PreviousSessionRoomAtr: Number.isFinite(priorLow) && priorLow < m1.close ? (m1.close - priorLow) / m15.atr : 99,
+          buyM1PreviousSessionBreakout: Number.isFinite(priorHigh) && previous.close <= priorHigh && m1.close > priorHigh,
+          sellM1PreviousSessionBreakout: Number.isFinite(priorLow) && previous.askClose >= priorLow && m1.askClose < priorLow,
+          TokyoFix, EcbFix, LondonFix,
+        });
+        continue;
+      }
       const signalFields = {};
       let hasSignal = false;
       for (const tf of Object.keys(TF)) {
@@ -546,10 +684,57 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
         signalFields[`sell${tf}Score`] = frameScore(f[tf], index, "sell");
         signalFields[`buy${tf}Mask`] = frameMask(f[tf], index, "buy");
         signalFields[`sell${tf}Mask`] = frameMask(f[tf], index, "sell");
-        hasSignal ||= buy1 || sell1 || buy2 || sell2;
+        const buySignals = closedNow ? candleSignalFlags(f[tf], index, "buy") : {};
+        const sellSignals = closedNow ? candleSignalFlags(f[tf], index, "sell") : {};
+        for (const [name, enabled] of Object.entries(buySignals)) signalFields[`buy${tf}${name}`] = enabled;
+        for (const [name, enabled] of Object.entries(sellSignals)) signalFields[`sell${tf}${name}`] = enabled;
+        hasSignal ||= buy1 || sell1 || buy2 || sell2 ||
+          Object.values(buySignals).some(Boolean) || Object.values(sellSignals).some(Boolean);
       }
       const buyM15PriceAction = priceActionContinuation(f.M15, i15, "buy");
       const sellM15PriceAction = priceActionContinuation(f.M15, i15, "sell");
+      const buyM15Discretionary = discretionaryContinuation(f.M15, i15, "buy");
+      const sellM15Discretionary = discretionaryContinuation(f.M15, i15, "sell");
+      const liveGreenRed = typeof options.greenRedPattern === "function"
+        ? options.greenRedPattern(f.M15.slice(Math.max(0, i15 - 16), i15 + 1), f.M15[i15 - 1], f.M15[i15])
+        : false;
+      signalFields.buyM15LiveGreenRed = liveGreenRed === "BUY";
+      signalFields.sellM15LiveGreenRed = liveGreenRed === "SELL";
+      signalFields.buyM15LiveEntry = m15.high + Math.max(0, m15.askClose - m15.close);
+      signalFields.sellM15LiveEntry = m15.low;
+      signalFields.buyM15LiveStop = m15.low;
+      signalFields.sellM15LiveStop = m15.high + Math.max(0, m15.askClose - m15.close);
+      signalFields.M15LiveSignalBodyAtr = Math.abs(m15.close - m15.open) / m15.atr;
+      signalFields.M15SignalBodyRatio = Math.abs(m15.close - m15.open) / Math.max(m15.high - m15.low, Number.EPSILON);
+      const h1AverageVolume = f.H1.slice(Math.max(0, i60 - 20), i60).reduce((sum, row) => sum + row.volume, 0) / 20;
+      signalFields.H1VolumeRatio = h1AverageVolume > 0 ? h1.volume / h1AverageVolume : 0;
+      signalFields.buyH1VolumePressure = h1.close > h1.open && signalFields.H1VolumeRatio >= 1;
+      signalFields.sellH1VolumePressure = h1.close < h1.open && signalFields.H1VolumeRatio >= 1;
+      const context300 = f.M15.slice(i15 - 299, i15 + 1);
+      const atrRank = context300.filter((row) => row.atr <= m15.atr).length / context300.length;
+      const recent24 = f.M15.slice(i15 - 23, i15 + 1);
+      const recent4 = recent24.slice(-4);
+      const travelled24 = recent24.slice(1).reduce((sum, row, j) => sum + Math.abs(row.close - recent24[j].close), 0);
+      signalFields.M15AtrPercentile300 = atrRank;
+      signalFields.M15Efficiency24 = travelled24 > 0 ? Math.abs(recent24.at(-1).close - recent24[0].open) / travelled24 : 0;
+      signalFields.M15Activity4 = recent4.reduce((sum, row) => sum + (row.high - row.low), 0) / (4 * m15.atr);
+      signalFields.M15VolumeRatio20 = m15.volume / Math.max(1, recent24.slice(-21, -1).reduce((sum, row) => sum + row.volume, 0) / 20);
+      const currentSessionRows = f.M15.slice(Math.max(0, i15 - 40), i15 + 1).filter((row) => marketSession(row.t) === session);
+      signalFields.M15SessionRangeAtr = currentSessionRows.length
+        ? (Math.max(...currentSessionRows.map((row) => row.high)) - Math.min(...currentSessionRows.map((row) => row.low))) / m15.atr : 0;
+      for (const [side, setup] of [["buy", buyM15Discretionary], ["sell", sellM15Discretionary]]) {
+        signalFields[`${side}M15Discretionary`] = Boolean(setup);
+        signalFields[`${side}M15DiscretionaryImpulse`] = Boolean(setup?.impulse);
+        signalFields[`${side}M15DiscretionarySwing`] = Boolean(setup?.swing);
+        signalFields[`${side}M15DiscretionaryBreakout`] = Boolean(setup?.breakout);
+        signalFields[`${side}M15DiscretionaryPauseBars`] = setup?.pauseBars ?? 0;
+        signalFields[`${side}M15DiscretionaryImpulseBars`] = setup?.impulseBars ?? 0;
+        signalFields[`${side}M15DiscretionaryImpulseAtr`] = setup?.impulseAtr ?? 0;
+        signalFields[`${side}M15DiscretionaryImpulseEfficiency`] = setup?.impulseEfficiency ?? 0;
+        signalFields[`${side}M15DiscretionarySignalBodyAtr`] = setup?.signalBodyAtr ?? 0;
+        signalFields[`${side}M15DiscretionarySignalStop`] = setup?.signalStop ?? null;
+        signalFields[`${side}M15DiscretionarySwingStop`] = setup?.swingStop ?? null;
+      }
       const buyH1Structure = h1PriceStructure(f.H1, i60, "buy");
       const sellH1Structure = h1PriceStructure(f.H1, i60, "sell");
       for (const [side, setup] of [["buy", buyM15PriceAction], ["sell", sellM15PriceAction]]) {
@@ -566,6 +751,57 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
         signalFields[`${side}H1SwingGapAtr`] = structure.gapAtr;
       }
       signalFields.M15SpreadAtr = Math.max(0, m15.askClose - m15.close) / m15.atr;
+      signalFields.M1DayMoveAtr = (m1.close - dayOpen) / m15.atr;
+      signalFields.SessionAgeMinutes = sessionStartedAt == null ? 0 : (decision - sessionStartedAt) / MINUTE;
+      signalFields.PreviousSessionName = lastCompletedSession?.name ?? null;
+      for (const [tf, row, index] of [["M1", m1, i], ["M15", m15, i15]]) {
+        const pip = symbol.endsWith("JPY") ? 0.01 : 0.0001;
+        const step = 50 * pip;
+        const buyReference = row.askClose;
+        const sellReference = row.close;
+        const nextRound = Math.ceil((buyReference + Number.EPSILON) / step) * step;
+        const previousRound = Math.floor((sellReference - Number.EPSILON) / step) * step;
+        const previous = f[tf][index - 1];
+        signalFields[`buy${tf}RoundRoomAtr`] = (nextRound - buyReference) / row.atr;
+        signalFields[`sell${tf}RoundRoomAtr`] = (sellReference - previousRound) / row.atr;
+        signalFields[`buy${tf}RoundBreakout`] = Boolean(previous && Math.floor(previous.askClose / step) < Math.floor(row.askClose / step));
+        signalFields[`sell${tf}RoundBreakout`] = Boolean(previous && Math.ceil(previous.close / step) > Math.ceil(row.close / step));
+        const priorHigh = lastCompletedSession?.high;
+        const priorLow = lastCompletedSession?.low;
+        signalFields[`buy${tf}PreviousSessionRoomAtr`] = Number.isFinite(priorHigh) && priorHigh > buyReference ? (priorHigh - buyReference) / row.atr : 99;
+        signalFields[`sell${tf}PreviousSessionRoomAtr`] = Number.isFinite(priorLow) && priorLow < sellReference ? (sellReference - priorLow) / row.atr : 99;
+        signalFields[`buy${tf}PreviousSessionBreakout`] = Boolean(previous && Number.isFinite(priorHigh) && previous.close <= priorHigh && row.close > priorHigh);
+        signalFields[`sell${tf}PreviousSessionBreakout`] = Boolean(previous && Number.isFinite(priorLow) && previous.askClose >= priorLow && row.askClose < priorLow);
+      }
+      const openingRangeReady = localMinute === 7 * 60 + 59 && frankfurtRange != null;
+      signalFields.buyLondonOpeningRange = openingRangeReady;
+      signalFields.sellLondonOpeningRange = openingRangeReady;
+      signalFields.buyLondonOpeningRangeEntry = openingRangeReady ? frankfurtRange.askHigh : null;
+      signalFields.sellLondonOpeningRangeEntry = openingRangeReady ? frankfurtRange.low : null;
+      signalFields.buyLondonOpeningRangeStop = openingRangeReady ? frankfurtRange.low : null;
+      signalFields.sellLondonOpeningRangeStop = openingRangeReady ? frankfurtRange.askHigh : null;
+      const gmt0700RangeReady = utcMinute === 7 * 60 + 59 && gmt0700Range != null;
+      signalFields.buyGmt0700Range = gmt0700RangeReady;
+      signalFields.sellGmt0700Range = gmt0700RangeReady;
+      signalFields.buyGmt0700RangeEntry = gmt0700RangeReady ? gmt0700Range.askHigh : null;
+      signalFields.sellGmt0700RangeEntry = gmt0700RangeReady ? gmt0700Range.low : null;
+      signalFields.buyGmt0700RangeStop = gmt0700RangeReady ? gmt0700Range.low : null;
+      signalFields.sellGmt0700RangeStop = gmt0700RangeReady ? gmt0700Range.askHigh : null;
+      const londonBreakoutWindow = localMinute >= 8 * 60 && localMinute < 12 * 60 && frankfurtRange != null;
+      const previousM15 = f.M15[i15 - 1];
+      signalFields.buyLondonOpeningCloseBreak = Boolean(londonBreakoutWindow && previousM15 && previousM15.close <= frankfurtRange.askHigh && m15.close > frankfurtRange.askHigh);
+      signalFields.sellLondonOpeningCloseBreak = Boolean(londonBreakoutWindow && previousM15 && previousM15.askClose >= frankfurtRange.low && m15.askClose < frankfurtRange.low);
+      signalFields.buyLondonOpeningCloseBreakEntry = m15.askHigh;
+      signalFields.sellLondonOpeningCloseBreakEntry = m15.low;
+      signalFields.buyLondonOpeningCloseBreakStop = frankfurtRange?.low ?? null;
+      signalFields.sellLondonOpeningCloseBreakStop = frankfurtRange?.askHigh ?? null;
+      const decisionDate = new Date(decision);
+      const decisionUtcMinute = decisionDate.getUTCHours() * 60 + decisionDate.getUTCMinutes();
+      const decisionLondon = zonedClock(decision, SESSION_TIME_FORMATTERS.london);
+      const decisionFrankfurt = zonedClock(decision, SESSION_TIME_FORMATTERS.frankfurt);
+      signalFields.TokyoFix = decisionDate.getUTCHours() === 0 && decisionUtcMinute === 55;
+      signalFields.EcbFix = decisionFrankfurt.hour === 14 && decisionFrankfurt.minute === 15;
+      signalFields.LondonFix = decisionLondon.hour === 16 && decisionLondon.minute === 0;
       for (const [prefix, range, sweeps] of [["Asia", asiaRange, asiaSweeps], ["Frankfurt", frankfurtRange, frankfurtSweeps]]) {
         for (const side of ["buy", "sell"]) {
           const sweep = sweeps[side];
@@ -580,7 +816,9 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
         }
       }
       signalFields.londonLocalMinute = localMinute;
-      hasSignal ||= Boolean(buyM15PriceAction || sellM15PriceAction);
+      hasSignal ||= Boolean(buyM15PriceAction || sellM15PriceAction || buyM15Discretionary || sellM15Discretionary || liveGreenRed ||
+        openingRangeReady || gmt0700RangeReady || signalFields.buyLondonOpeningCloseBreak || signalFields.sellLondonOpeningCloseBreak ||
+        signalFields.TokyoFix || signalFields.EcbFix || signalFields.LondonFix);
       if (!hasSignal) continue;
       const buyGreenRed1 = signalFields.buyM1GreenRed1, sellGreenRed1 = signalFields.sellM1GreenRed1;
       const buyGreenRed2 = signalFields.buyM1GreenRed2, sellGreenRed2 = signalFields.sellM1GreenRed2;
@@ -602,7 +840,8 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
   }
   events.sort((a, b) => a.t - b.t || symbols.indexOf(a.symbol) - symbols.indexOf(b.symbol));
   if (!events.length) throw new Error("The fixed research window produced no causal signal events.");
-  return { data, events, start: events[0].t, end: Math.min(end, endExclusive - 1), symbols, coverage, protocol, strictWindow: options.strictWindow === true };
+  return { data, events, start: events[0].t, end: Math.min(end, endExclusive - 1), symbols, coverage, protocol,
+    strictWindow: options.strictWindow === true, decisionTimeframe, spreadMultiplier: options.spreadMultiplier ?? 1 };
 }
 
 export function validateCandidateConfig(config) {
@@ -632,9 +871,12 @@ export function validateCandidateConfig(config) {
     if (!(Number.isFinite(config.pendingOffsetAtr) && config.pendingOffsetAtr >= 0)) throw new Error("Pending entry modes require pendingOffsetAtr >= 0.");
     if (!(Number.isFinite(config.pendingExpiryMinutes) && config.pendingExpiryMinutes > 0)) throw new Error("Pending entry modes require pendingExpiryMinutes > 0.");
   }
-  const runnerModes = new Set(["none", "always", "fast-1r", "signal-body"]);
+  const runnerModes = new Set(["none", "always", "fast-1r", "signal-body", "fixed-target-trail"]);
   if (config.runnerMode != null && !runnerModes.has(config.runnerMode)) throw new Error(`Unsupported runnerMode: ${config.runnerMode}`);
   if (config.trailR != null && (!Number.isFinite(config.trailR) || config.trailR < 0)) throw new Error("trailR must be a non-negative R multiple.");
+  for (const key of ["entrySlippageR", "stopSlippageR", "entryDelayMinutes"]) {
+    if (config[key] != null && (!Number.isFinite(config[key]) || config[key] < 0)) throw new Error(`${key} must be a non-negative number.`);
+  }
   if (config.runnerMode === "fast-1r" && (!Number.isFinite(config.runnerFastMinutes) || config.runnerFastMinutes <= 0)) throw new Error("fast-1r runners require runnerFastMinutes > 0.");
   if (config.runnerMode === "signal-body" && (!Number.isFinite(config.runnerSignalBodyAtr) || config.runnerSignalBodyAtr <= 0)) throw new Error("signal-body runners require runnerSignalBodyAtr > 0.");
   return { rewardRisk };
@@ -704,6 +946,10 @@ export function evaluate(prepared, c) {
       const originalSize = p.size; p.size -= closeSize; p.margin *= p.size / originalSize;
     }
   };
+  const entryWithSlippage = (event, config, side, entry) => {
+    const slippage = (config.entrySlippageR ?? 0) * config.stopATR * event.atr;
+    return side === "buy" ? entry + slippage : entry - slippage;
+  };
   const buildPosition = ({ event, config, side, entry, opened, next, session, regime }) => {
     const signalFrame = config.signalTimeframe ?? "M15";
     const signalAtr = event[`${signalFrame}SignalAtr`] ?? event.atr;
@@ -751,8 +997,10 @@ export function evaluate(prepared, c) {
       breakEvenR: config.breakEvenR ?? 0, trailATR: config.trailATR ?? 0, trailR: config.trailR ?? 0, breakEvenMoved: false,
       runnerMode: config.runnerMode ?? "none", runnerFastMinutes: config.runnerFastMinutes ?? 0,
       runnerSignalBodyAtr: config.runnerSignalBodyAtr ?? 0, signalBodyAtr, runnerActivated: false,
+      keepTargetAfterRunner: config.keepTargetAfterRunner === true,
       partialR: config.partialR ?? 0, partialFraction: config.partialFraction ?? 0, moveStopOnPartial: config.moveStopOnPartial ?? false,
-      partialRunner: config.partialRunner === true, partialTaken: false, realizedPnl: 0, rewardRisk, hold: config.hold, dailyFlat: config.dailyFlat === true, forcedCloseAt, session, regime };
+      partialRunner: config.partialRunner === true, partialTaken: false, realizedPnl: 0, rewardRisk, hold: config.hold,
+      stopSlippageR: config.stopSlippageR ?? 0, dailyFlat: config.dailyFlat === true, forcedCloseAt, session, regime };
   };
   const activatePending = (to) => {
     for (const order of [...pendingOrders]) {
@@ -771,6 +1019,14 @@ export function evaluate(prepared, c) {
         // the conservative SL-first position replay handle the ambiguity.
         if (invalidated && !filled) { pendingOrders.splice(pendingOrders.indexOf(order), 1); break; }
         if (filled) {
+          const sibling = order.ocoKey ? pendingOrders.find((candidate) => candidate !== order && candidate.ocoKey === order.ocoKey) : null;
+          const siblingFilled = sibling && (sibling.side === "buy" ? bar.askHigh >= sibling.level : bar.low <= sibling.level);
+          if (siblingFilled) {
+            pendingOrders.splice(pendingOrders.indexOf(sibling), 1);
+            pendingOrders.splice(pendingOrders.indexOf(order), 1);
+            break;
+          }
+          if (sibling) pendingOrders.splice(pendingOrders.indexOf(sibling), 1);
           const day = new Date(bar.t).toISOString().slice(0, 10), key = `${day}:${order.event.symbol}`;
           const dayLossKey = `${day}:${order.event.symbol}`, sessionLossKey = `${day}:${order.session}:${order.event.symbol}`;
           const breakerOpen = (order.config.maxLossesPerSymbolDay && (symbolDayLosses.get(dayLossKey) ?? 0) >= order.config.maxLossesPerSymbolDay) ||
@@ -781,7 +1037,8 @@ export function evaluate(prepared, c) {
               (!order.config.maxTotalPerSession || (sessionDayCount.get(sessionDayKey) ?? 0) < order.config.maxTotalPerSession)) {
             // The fill bar is evaluated conservatively as well. With OHLC data
             // we cannot prove that a stop/target touch happened after entry.
-            const position = buildPosition({ event: order.event, config: order.config, side: order.side, entry: order.level, opened: bar.t, next: i, session: order.session, regime: order.regime });
+            const entry = entryWithSlippage(order.event, order.config, order.side, order.level);
+            const position = buildPosition({ event: order.event, config: order.config, side: order.side, entry, opened: bar.t, next: i, session: order.session, regime: order.regime });
             if (position) { positions.push(position); recordOpenRisk(position); dayCount.set(key, (dayCount.get(key) ?? 0) + 1); totalDayCount.set(day, (totalDayCount.get(day) ?? 0) + 1); sessionDayCount.set(sessionDayKey, (sessionDayCount.get(sessionDayKey) ?? 0) + 1); }
           }
           pendingOrders.splice(pendingOrders.indexOf(order), 1);
@@ -792,7 +1049,7 @@ export function evaluate(prepared, c) {
       if (pendingOrders.includes(order)) order.next = i;
     }
   };
-  const advance = (to) => { activatePending(to); for (const p of [...positions]) { const rows = data.get(p.symbol).M1; let i = p.next; while (i < rows.length && rows[i].t <= to) { const b = rows[i]; if (p.dailyFlat && b.t >= p.forcedCloseAt) { close(p, b.t, p.side === "buy" ? b.open : b.askOpen, "daily"); break; } const sl = p.side === "buy" ? b.low <= p.stop : b.askHigh >= p.stop; const tp = p.side === "buy" ? b.high >= p.target : b.askLow <= p.target; if (sl) { close(p, b.t, p.stop, p.runnerActivated ? "runner-trail" : p.breakEvenMoved ? "breakeven" : "sl"); break; } if (tp) { close(p, b.t, p.target, "tp"); break; }
+  const advance = (to) => { activatePending(to); for (const p of [...positions]) { const rows = data.get(p.symbol).M1; let i = p.next; while (i < rows.length && rows[i].t <= to) { const b = rows[i]; if (p.dailyFlat && b.t >= p.forcedCloseAt) { close(p, b.t, p.side === "buy" ? b.open : b.askOpen, "daily"); break; } const sl = p.side === "buy" ? b.low <= p.stop : b.askHigh >= p.stop; const tp = p.side === "buy" ? b.high >= p.target : b.askLow <= p.target; if (sl) { const stopPrice = p.side === "buy" ? p.stop - p.stopSlippageR * p.stopDistance : p.stop + p.stopSlippageR * p.stopDistance; close(p, b.t, stopPrice, p.runnerActivated ? "runner-trail" : p.breakEvenMoved ? "breakeven" : "sl"); break; } if (tp) { close(p, b.t, p.target, "tp"); break; }
       // Exit adjustments become active only on the following minute. This is
       // deliberately conservative: a single OHLC bar cannot tell which level
       // was touched first.
@@ -813,12 +1070,14 @@ export function evaluate(prepared, c) {
       const reachedBreakEven = !p.breakEvenMoved && p.breakEvenR > 0 && (p.side === "buy" ? b.high >= p.entry + p.breakEvenR * p.stopDistance : b.askLow <= p.entry - p.breakEvenR * p.stopDistance);
       if (reachedBreakEven) {
         const ageMinutes = (b.t + MINUTE - p.opened) / MINUTE;
-        const runnerEligible = p.runnerMode === "always" ||
+        const runnerEligible = p.runnerMode === "always" || p.runnerMode === "fixed-target-trail" ||
           (p.runnerMode === "fast-1r" && ageMinutes <= p.runnerFastMinutes) ||
           (p.runnerMode === "signal-body" && p.signalBodyAtr >= p.runnerSignalBodyAtr);
         if (runnerEligible) {
-          p.stop = p.side === "buy" ? Math.max(p.stop, p.entry) : Math.min(p.stop, p.entry);
-          p.target = p.side === "buy" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+          if (p.runnerMode !== "fixed-target-trail" && !p.keepTargetAfterRunner) {
+            p.stop = p.side === "buy" ? Math.max(p.stop, p.entry) : Math.min(p.stop, p.entry);
+            p.target = p.side === "buy" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+          }
           p.breakEvenMoved = true;
           p.runnerActivated = true;
         }
@@ -903,6 +1162,35 @@ export function evaluate(prepared, c) {
     if (ec.enabled === false || !inSessionWindows(e.t, ec.sessionWindows) || !passesResearchFilters(e, ec) || (ec.symbols && !ec.symbols.includes(e.symbol))) continue;
     const ranked = c.rankByScore ? rankedSignalAt.get(e.t)?.find((candidate) => candidate.event === e) : null;
     if (c.rankByScore && !ranked) continue;
+    if (ec.allowStraddle) {
+      const sides = ["buy", "sell"].filter((candidateSide) => pass(e, candidateSide, ec));
+      if (sides.length !== 2 || positions.some((position) => position.symbol === e.symbol) || pendingOrders.some((order) => order.event.symbol === e.symbol)) continue;
+      if (e.t - (lastClose.get(e.symbol) ?? -Infinity) < ec.cooldown * MINUTE) continue;
+      const day = new Date(e.t).toISOString().slice(0, 10), key = `${day}:${e.symbol}`;
+      const sessionLossKey = `${day}:${entryPolicy.session}:${e.symbol}`;
+      if ((ec.maxLossesPerSymbolDay && (symbolDayLosses.get(key) ?? 0) >= ec.maxLossesPerSymbolDay) ||
+          (ec.maxLossesPerSymbolSession && (symbolSessionLosses.get(sessionLossKey) ?? 0) >= ec.maxLossesPerSymbolSession)) continue;
+      const sessionDayKey = `${day}:${entryPolicy.session}`;
+      if ((dayCount.get(key) ?? 0) >= ec.maxDaily || (ec.maxTotalDaily && (totalDayCount.get(day) ?? 0) >= ec.maxTotalDaily) ||
+          (ec.maxTotalPerSession && (sessionDayCount.get(sessionDayKey) ?? 0) >= ec.maxTotalPerSession)) continue;
+      const pendingSlots = new Set(pendingOrders.map((order) => order.ocoKey ?? `${order.event.symbol}:${order.event.t}:${order.side}`)).size;
+      if (positions.length + pendingSlots >= ec.maxPositions) continue;
+      const signalFrame = ec.signalTimeframe ?? "M15";
+      const signalAtr = e[`${signalFrame}SignalAtr`] ?? e.atr;
+      const offset = signalAtr * ec.pendingOffsetAtr;
+      const ocoKey = `${e.symbol}:${e.t}`;
+      for (const side of sides) {
+        const eventEntry = ec.entryEventPrefix ? e[`${side}${ec.entryEventPrefix}Entry`] : null;
+        if (!Number.isFinite(eventEntry)) continue;
+        const level = side === "buy" ? eventEntry + offset : eventEntry - offset;
+        pendingOrders.push({ event: e, config: ec, side, kind: "continuation", level, invalidatesAt: null, next: e.next + (ec.entryDelayMinutes ?? 0),
+          expiresAt: e.t + ec.pendingExpiryMinutes * MINUTE, session: entryPolicy.session, regime: entryPolicy.regime, ocoKey });
+      }
+      continue;
+    }
+    const side = ranked?.side ?? (pass(e, "buy", ec) ? "buy" : pass(e, "sell", ec) ? "sell" : null); if (!side || !(e.atr > 0)) continue;
+    const previousPending = pendingOrders.find((order) => order.event.symbol === e.symbol);
+    if (previousPending && ec.replacePendingOnSignal) pendingOrders.splice(pendingOrders.indexOf(previousPending), 1);
     if (positions.length + pendingOrders.length >= ec.maxPositions || positions.some((p) => p.symbol === e.symbol) || pendingOrders.some((order) => order.event.symbol === e.symbol)) continue;
     if (e.t - (lastClose.get(e.symbol) ?? -Infinity) < ec.cooldown * MINUTE) continue;
     const day = new Date(e.t).toISOString().slice(0, 10), key = `${day}:${e.symbol}`;
@@ -912,14 +1200,16 @@ export function evaluate(prepared, c) {
     const sessionDayKey = `${day}:${entryPolicy.session}`;
     if ((dayCount.get(key) ?? 0) >= ec.maxDaily || (ec.maxTotalDaily && (totalDayCount.get(day) ?? 0) >= ec.maxTotalDaily) ||
         (ec.maxTotalPerSession && (sessionDayCount.get(sessionDayKey) ?? 0) >= ec.maxTotalPerSession)) continue;
-    const side = ranked?.side ?? (pass(e, "buy", ec) ? "buy" : pass(e, "sell", ec) ? "sell" : null); if (!side || !(e.atr > 0)) continue;
     const pendingMode = ec.entryMode === "adaptive-pending" && e[`${side}Current`] < ec.pendingBelowScore ? ec.pendingKind : ec.entryMode;
     if (pendingMode === "continuation" || pendingMode === "pullback" || pendingMode === "signal-breakout") {
       const signalFrame = ec.signalTimeframe ?? "M15";
       const signalAtr = e[`${signalFrame}SignalAtr`] ?? e.atr;
       const offset = signalAtr * ec.pendingOffsetAtr;
       const signalPrice = side === "buy" ? e[`${signalFrame}SignalAskClose`] : e[`${signalFrame}SignalClose`];
-      const breakoutPrice = side === "buy" ? e[`${signalFrame}SignalAskHigh`] : e[`${signalFrame}SignalLow`];
+      const eventEntry = ec.entryEventPrefix ? e[`${side}${ec.entryEventPrefix}Entry`] : null;
+      const breakoutPrice = Number.isFinite(eventEntry)
+        ? eventEntry
+        : side === "buy" ? e[`${signalFrame}SignalAskHigh`] : e[`${signalFrame}SignalLow`];
       const level = pendingMode === "signal-breakout"
         ? (side === "buy" ? breakoutPrice + offset : breakoutPrice - offset)
         : pendingMode === "continuation"
@@ -929,11 +1219,17 @@ export function evaluate(prepared, c) {
       const invalidatesAt = ec.stopMode === "signal-candle"
         ? (side === "buy" ? e[`${signalFrame}SignalLow`] - stopBuffer : e[`${signalFrame}SignalAskHigh`] + stopBuffer)
         : null;
-      pendingOrders.push({ event: e, config: ec, side, kind: pendingMode === "signal-breakout" ? "continuation" : pendingMode, level, invalidatesAt, next: e.next, expiresAt: e.t + ec.pendingExpiryMinutes * MINUTE, session: entryPolicy.session, regime: entryPolicy.regime });
+      pendingOrders.push({ event: e, config: ec, side, kind: pendingMode === "signal-breakout" ? "continuation" : pendingMode, level, invalidatesAt,
+        next: e.next + (ec.entryDelayMinutes ?? 0), expiresAt: e.t + ec.pendingExpiryMinutes * MINUTE, session: entryPolicy.session, regime: entryPolicy.regime });
       continue;
     }
-    const bar = data.get(e.symbol).M1[e.next]; if (!bar || bar.t !== e.t) continue;
-    const position = buildPosition({ event: e, config: ec, side, entry: side === "buy" ? bar.askOpen : bar.open, opened: e.t, next: e.next, session: entryPolicy.session, regime: entryPolicy.regime });
+    const entryIndex = e.next + (ec.entryDelayMinutes ?? 0);
+    const bar = data.get(e.symbol).M1[entryIndex];
+    const opened = e.t + (ec.entryDelayMinutes ?? 0) * MINUTE;
+    if (!bar || bar.t !== opened) continue;
+    const rawEntry = side === "buy" ? bar.askOpen : bar.open;
+    const entry = entryWithSlippage(e, ec, side, rawEntry);
+    const position = buildPosition({ event: e, config: ec, side, entry, opened, next: entryIndex, session: entryPolicy.session, regime: entryPolicy.regime });
     if (!position) continue;
     positions.push(position); recordOpenRisk(position); dayCount.set(key, (dayCount.get(key) ?? 0) + 1); totalDayCount.set(day, (totalDayCount.get(day) ?? 0) + 1); sessionDayCount.set(sessionDayKey, (sessionDayCount.get(sessionDayKey) ?? 0) + 1);
   }

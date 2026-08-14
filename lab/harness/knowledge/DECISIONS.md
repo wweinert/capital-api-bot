@@ -1,5 +1,284 @@
 # Trading Data Availability
 
+## 2026-08-14 — Three pair-specific profiles are jointly profitable in development
+
+- Replayed EURUSD, GBPJPY and GBPUSD as one chronological portfolio from EUR
+  500. The portfolio reserves 90% of available capital for margin, divides it
+  into three equal 30% slots, permits at most three simultaneous positions and
+  at most one position per traded symbol. EURJPY was loaded only for causal
+  GBPJPY quote-currency conversion and produced no trades.
+- The exact frozen pair rules were: EURUSD London close-confirmed range break
+  at 1% requested risk; GBPJPY strong London M15 structural continuation with
+  H1-or-H4 price direction at 3%; and GBPUSD London/overlap M15 EMA(9/21)
+  cross at 3%. All use pending signal breakouts, same-day flat, no more than
+  three entries per pair/day and a 30-minute cooldown.
+- Fixed development protocol: W07-W19 train and W20-W32 validation, historical
+  bid/ask, closed-candle decisions and conservative SL-first M1 replay. The
+  four-symbol/six-timeframe dataset fingerprint was
+  `50daba025ff58cb2a82c5926a1c3249b9dd2c1813f0a3e6bc5a181aa45e023f4`;
+  evaluator SHA-256 was
+  `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`.
+- Nominal result: EUR 850.67 final balance, +EUR 350.67/+70.13%, PF 1.428,
+  7.9% cash drawdown and 429 trades. Train made EUR 195.69 and validation EUR
+  154.99; 9/13 and 10/13 weeks were positive. The system traded on 129 of 130
+  market days, averaging 3.30 trades/day, with 49.0% total win rate. Every
+  calendar month in the evaluated window was profitable.
+- Pair attribution remained positive for all three traded profiles: EURUSD
+  +EUR 125.53 from 120 trades (52.5% wins), GBPJPY +EUR 65.50 from 176 trades
+  (40.9%), and GBPUSD +EUR 159.64 from 133 trades (56.4%). London contributed
+  EUR 297.13 and overlap EUR 53.54.
+- Sizing constraints were respected: maximum requested/realized position risk
+  was 2.966%, aggregate open risk 3.724%, one-position margin 30.000%, and
+  aggregate margin 88.214%. Aggregate margin above 60% confirms that all three
+  slots were exercised concurrently; the evaluator independently rejects a
+  second open or pending position for an already occupied symbol.
+- Without retuning, spread x1.25 stayed positive at EUR 806.79 final balance,
+  +61.36%, PF 1.342, 8.0% cash drawdown and 424 trades. Both folds remained
+  profitable and every applicable profitability, drawdown, risk, sample and
+  activity gate passed.
+- The generic platform status is still `rejected` solely because the inherited
+  four-session coverage gate is false: these intentionally session-specific
+  rules trade only London and the London/New York overlap. This gate mismatch
+  does not erase the result, but it must not be silently reclassified as a
+  fully qualified platform candidate.
+- Decision: retain as a joint forward-test hypothesis, not evidence of a live
+  edge. All three component profiles and this combination were selected on the
+  already-inspected development period. Require genuinely unseen weeks plus
+  broker minimum-size/stop-distance, slippage, gap, financing and correlated
+  GBP exposure checks before a human live decision. Evidence:
+  `lab/autoresearch/reports/three-profile-eurusd-gbpjpy-gbpusd-90margin-2026-08-14.json`
+  and
+  `lab/autoresearch/reports/three-profile-eurusd-gbpjpy-gbpusd-spread-x125-2026-08-14.json`.
+
+### Fourth-slot diagnostic
+
+- Merely reserving a fourth equal slot reduces every margin ceiling from 30%
+  to 22.5%. With no fourth strategy, the same three profiles fell from
+  +70.13% to +57.58%; cash drawdown improved from 7.9% to 6.6%. The fourth
+  profile therefore needs to add more than EUR 62.77 over this development
+  period merely to restore the original three-slot cash profit.
+- The best already-documented diversification hypothesis was tested without
+  enabling it live: AUDJPY overlap M15 Green-Red with closed H1 EMA+MACD
+  direction, a signal-body runner and 1% requested risk. The four-profile
+  diagnostic returned +64.84%, PF 1.387, 6.6% drawdown and 547 entries.
+  AUDJPY contributed EUR 35.61, so it recovered part but not all of the slot
+  dilution; the three-profile system still made more cash at +70.13%.
+- Decision: keep the live allowlist at three symbols. AUDJPY is the preferred
+  next research/forward-test candidate because it removes additional GBP
+  concentration and has the strongest existing cross-session evidence, but
+  do not enable it from this diagnostic: its isolated overlap hypothesis lost
+  all seven trades in the last two inspected weeks. Evidence:
+  `lab/autoresearch/reports/three-profile-reserved-fourth-slot-2026-08-14.json`
+  and
+  `lab/autoresearch/reports/four-profile-audjpy-diagnostic-2026-08-14.json`.
+- A fixed three-slot one-for-one replacement matrix confirmed that the current
+  EURUSD/GBPJPY/GBPUSD set remains the cash-return leader at +70.13%, PF 1.428
+  and 7.9% drawdown. Replacing GBPJPY with AUDJPY was the only competitive
+  alternative: +66.49%, PF 1.421, 6.8% drawdown, 52.0% win rate and positive
+  cash in both folds. It also retained +58.72%, PF 1.342 and 7.5% drawdown at
+  spread x1.25. Replacing GBPUSD fell to +46.91%/11.4% drawdown; replacing
+  EURUSD fell to +54.52% and lost money in the final inspected 14 days.
+- Recommendation remains unchanged for maximum development profit: keep the
+  current three. For a deliberately smoother, less GBP-concentrated demo
+  forward test, EURUSD/GBPUSD/AUDJPY is defensible, but it is a lower-return
+  risk trade-off rather than a historically better system. Evidence:
+  `lab/autoresearch/reports/three-slot-audjpy-replacement-matrix-2026-08-14.json`
+  and
+  `lab/autoresearch/reports/eurusd-gbpusd-audjpy-spread-x125-2026-08-14.json`.
+
+## 2026-08-14 — GBPUSD M15 EMA cross is a short-hold forward-test hypothesis
+
+- A fixed 1,200-second GBPUSD-only intraday search evaluated 13,183 of
+  248,672 deterministically shuffled candidates on the already-inspected
+  W07-W32 development snapshot. The final in-flight evaluation and runtime
+  accounting brought recorded search time to 1,310.3 seconds. EURUSD was
+  loaded only for causal USD-to-EUR conversion. The frozen evaluator SHA-256
+  was `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`;
+  the two-symbol dataset fingerprint was
+  `05306ab227f01ba063e3cd5001eccc0f1b6a5fbc2f905d7446d20273a90c5cf3`.
+- The declared matrix covered all six signal timeframes; independent
+  engulfing, pin-bar, inside-break, outside-bar, momentum, breakout,
+  structural/discretionary continuation and London close-break price action;
+  EMA, Bollinger, RSI and MACD triggers; 36,480 explicit PA+PA,
+  PA+indicator and Green-Red+indicator intersections; no-filter through
+  six-timeframe context; eight session modes; 60-480 minute holds, fixed and
+  ATR stops, runners, and requested 1%/3% risk.
+- No candidate passed every platform gate because a single-pair/session rule
+  cannot satisfy the inherited four-session portfolio-coverage gate. Five
+  candidates passed every applicable single-pair gate and were profitable in
+  cash and R in both folds. No explicit multi-trigger intersection reached
+  that strict set.
+- The formal objective winner was an H1 MACD cross with H1 RSI direction,
+  all-session entry, fixed 1.5R, 120-minute hold and requested 3% risk. It made
+  +15.71%, PF 1.201, 98 entries and 4.702R drawdown, but only 50.0% of train
+  active days were profitable versus the fixed 52% gate. It is rejected as
+  the selected hypothesis.
+- The user-aligned profit-per-time frontier is materially simpler: a freshly
+  closed M15 EMA(9/21) cross during the DST-aware London or London/New York
+  overlap session; no additional direction filter; 60-minute pending breakout
+  at the signal-candle extreme; signal-candle stop plus 0.05 M15 ATR; fixed
+  1.25R target; 180-minute maximum hold; daily flat and at most three entries.
+  At requested 1% risk it returned +30.40%/EUR 151.98, PF 1.544, 56.4% win
+  rate, 133 entries and 2.752R/5.7% cash drawdown. Train/validation cash P/L
+  was EUR 73.42/EUR 78.54, positive weeks were 84.6%/76.9%, activity was
+  70.8%/76.9%, and positive active days were 67.4%/62.0%.
+- Declared post-search diagnostics remained positive at spread x1.25
+  (+20.19%, PF 1.340), 0.02R entry slippage (+24.80%, PF 1.429), and 0.02R
+  stop slippage (+29.29%, PF 1.514). A 120-minute hold still passed every
+  applicable single-pair gate at +18.28% and PF 1.348; combining 1R with that
+  shorter hold failed train positive-week and positive-day gates. London alone
+  made +22.56%/PF 1.739 but had only 76 entries; overlap alone was weaker.
+- Requested 3% risk on the selected 180-minute rule produced +68.07% with
+  10.9% cash drawdown, but used 89.99% of available margin and made May
+  negative. Treat this as an aggressive leverage diagnostic, not evidence
+  that the signal edge tripled. The highest strict profit candidate made
+  +36.41% at 3% risk but used an eight-hour Green-Red runner and had only
+  53.8% positive weeks in each fold, so it does not meet the short-hold goal as
+  well as the M15 EMA-cross rule.
+- Decision: no live implementation. Freeze the 1% M15 EMA-cross rule and its
+  separately labelled 3% diagnostic as development-selected forward-test
+  hypotheses. Require genuinely unseen weeks plus broker minimum-distance and
+  size checks, gap/financing stress, and nominal/spread-x1.25 parallel evidence
+  before human probation review. Evidence:
+  `lab/autoresearch/reports/gbpusd-intraday-multi-pattern-20min-2026-08-14.json`.
+
+## 2026-08-14 — GBPJPY broad multi-pattern search selects a forward-test hypothesis
+
+- A fixed 1,200-second GBPJPY-only intraday search evaluated 15,518 of
+  67,040 deterministically shuffled candidates on the already-inspected
+  W07-W32 development snapshot. EURJPY was loaded only for causal JPY-to-EUR
+  conversion. The frozen evaluator SHA-256 was
+  `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`;
+  the two-symbol dataset fingerprint was
+  `666c44c4fcc0af5d5f680c450ca1c3eee01c74765fd030e4be7fd58161df5df8`.
+- The declared matrix went materially beyond Green-Red. It covered all six
+  candle timeframes; engulfing, pin bar, inside break, outside bar, momentum,
+  20-bar breakout, structural impulse/pullback/resumption, discretionary
+  impulse/swing, and London close-break price action; EMA cross/reclaim,
+  Bollinger re-entry, RSI reversal, and MACD cross; zero/one/multiple
+  timeframe filters; previous-session/day context; eight session modes;
+  fixed and ATR stops, runners, 1.25R-2.5R targets, and 1%/3% risk. The
+  baseline M15 Green-Red control lost 38.64%, with PF 0.702 and 57.472R
+  drawdown.
+- The formal objective winner was a strong M15 structural continuation in the
+  DST-aware London session, H1 price direction at least 0.25 ATR, signal-candle
+  stop plus 0.05 M15 ATR, 1.25R target, 180-minute hold, and 1% risk. It made
+  +19.36%/EUR 96.79, PF 1.311, 146 entries and 4.432R/6.8% drawdown. Train and
+  validation made EUR 61.40 and EUR 35.41; both had 61.5% positive weeks.
+  Activity was 80.0%/83.1% and positive active days 63.5%/53.7%. It passed
+  every fixed gate except the inherited four-session portfolio gate.
+- The profit frontier retained the same strong M15 structural pattern and
+  London session but accepted H1-or-H4 causal price direction, used a fixed 2R
+  target and 480-minute hold. At requested 1% risk it made +31.58%/EUR 157.90,
+  PF 1.330, 176 entries, 40.9% win rate and 8.487R/11.5% cash drawdown. Train
+  and validation made EUR 101.30 and EUR 56.59; both had 53.8% positive weeks.
+  Activity was 92.3%/96.9% and positive active days 55.0%/54.0%. Only seven
+  searched candidates passed every single-pair gate, had positive cash P/L in
+  both folds, and failed solely the inapplicable four-session gate.
+- Declared post-search diagnostics stayed profitable at spread x1.25
+  (+25.29%, PF 1.264), 0.02R entry slippage (+25.33%, PF 1.261), and 0.02R stop
+  slippage (+29.50%, PF 1.304). Spread x1.25 missed the train positive-day
+  gate. A 1.5R target made +18.18% and retained all single-pair gates; 2.5R
+  failed drawdown and positive-day gates. A 600-minute hold failed validation
+  positive weeks.
+- The 3% risk diagnostic made +40.10% but reached 22.2% cash drawdown, used
+  essentially 90% of margin, and lost EUR 1.64 in the final 14 days. Even at
+  requested 1% the single-position sizing used about 90% margin because
+  GBPJPY is a 20:1 cross and the evaluator gives one position the full margin
+  budget. March and July were negative; much of the profit came from April
+  and June. The final 14 days were only +EUR 1.63/PF 1.037.
+- Decision: no live implementation. Freeze the 1% profit-frontier rule as a
+  development-selected forward-test hypothesis. Require genuinely unseen
+  weeks, lower-margin sizing, broker minimum-distance/size checks, gap and
+  financing stress, and nominal/spread-x1.25 parallel evidence before human
+  probation review. Evidence:
+  `lab/autoresearch/reports/gbpjpy-intraday-multi-pattern-20min-2026-08-14.json`.
+
+## 2026-08-14 — EURUSD London close-confirmed range breakout is forward-test only
+
+- A fixed 1,200-second EURUSD-only intraday search evaluated 28,476 of
+  54,144 declared candidates on the already-inspected W07-W32 snapshot. It
+  compared M15 Green-Red, structural price action, previous-session context,
+  DST-aware sessions, zero to two indicator families, 1-3 trades/day, fixed
+  targets, ATR/candle stops, and 1%/3% requested risk. All positions were
+  forced flat on the entry day. No fixed-platform candidate qualified because
+  every single-session rule necessarily fails the inherited four-session
+  portfolio gate.
+- The formal objective winner is rejected even as a single-pair hypothesis:
+  at 3% requested risk its train fold was -EUR 60.10 in cash despite positive
+  summed R, PF was 1.054, drawdown was 14.879R, validation positive weeks were
+  46.2%, and its last 14 days lost EUR 66.91. This exposes a mismatch between
+  R-based profitability gates/objective and cash P/L under margin-constrained
+  sizing; do not use the formal winner as a profit claim.
+- The user-aligned frontier is a simple, indicator-free London rule: build the
+  Europe/London 07:00-08:00 range; between 08:00 and 12:00 require a closed M15
+  candle to cross the boundary after the previous M15 close was inside; place
+  a 60-minute pending breakout at the signal candle extreme; stop beyond the
+  opposite range boundary plus 0.05 M15 ATR; fixed 2R target; maximum 480-minute
+  hold and same-day flat.
+- At requested 1% risk it returned +25.37% (EUR 626.83), PF 1.494, 52.5% win
+  rate, 120 entries, 3.566R/4.1% maximum drawdown, +EUR 44.75 train and
+  +EUR 82.07 validation. Positive weeks were 61.5%/53.8%; activity was
+  90.8%/83.1% of market days and positive active days were 54.2%/57.4%.
+  Every fixed gate except four-session coverage passed.
+- Declared post-search stress remained positive at spread x1.25 (+25.03%, PF
+  1.504), 0.05R entry-slippage proxy (+24.07%, PF 1.471), 0.02R stop slippage
+  (+24.40%, PF 1.466), and 1.5R target (+16.99%, PF 1.337). A 2.5R target
+  failed validation positive weeks, a 360-minute hold failed train positive
+  weeks, and a 720-minute hold failed train positive-day quality.
+- The prior 17-FX opening-range study is not contradictory at pair level: its
+  portfolio lost overall, but the EURUSD slice of the London close-break rule
+  was already +11.682R/EUR 30.80 over 67 retained entries. The isolated study
+  retains 120 EURUSD entries without other pairs competing for five slots.
+- Requested 3% risk produced +75.27% with 12.0% cash drawdown but used 90% of
+  available margin. It is a leverage diagnostic, not a recommendation. The
+  selected forward hypothesis remains 1% risk.
+- Decision: no live implementation. This rule was selected after 28,476 tests
+  on fully inspected development data and has no fresh holdout. Freeze it for
+  8-12 genuinely unseen weeks with nominal and spread-x1.25 parallel evidence,
+  plus broker minimum-distance/size, gap, slippage, financing, and point-in-time
+  news checks before a human probation decision. Evidence:
+  `lab/autoresearch/reports/eurusd-intraday-single-pair-20min-2026-08-14.json`
+  and
+  `lab/autoresearch/reports/eurusd-london-close-break-selected-2026-08-14.json`.
+
+## 2026-08-13 — Deep Research strategy comparison leaves only forward-test hypotheses
+
+- Replayed the Deep Research candidates independently of live signal and trade
+  management on the local read-only 17-FX W07-W32 snapshot, EUR 500 start,
+  historical bid/ask, closed-candle/next-M1 execution, 1% risk and fixed
+  train/validation folds. No server, broker, live file or PM2 process was
+  changed or executed.
+- The new frozen evaluator reproduced AUDJPY Asia M1 day-pullback as +20.46%,
+  PF 1.110, 406 entries and 10.9% cash drawdown. The archive says +22.89% and
+  408 entries under evaluator SHA `548f6227...`, whose exact uncommitted source
+  is absent from Git. Keep the results separate; the archive is not an exact
+  rerun.
+- Candidate A is cost-fragile: spread x1.25 returned -5.98%, 0.05R entry
+  slippage returned -11.82%, and 0.05R stop slippage made validation flat to
+  negative. Across 48 parameter perturbations only 16 were positive in both
+  folds; median PF was 1.039 and median validation was -6.108R.
+- AUDJPY overlap M15/H1 EMA+MACD body-runner returned +19.06%, PF 1.303,
+  118 entries and 6.0% cash drawdown; validation was +3.005R. It retained
+  positive validation at spread x1.25 and 0.02R entry slippage, but not at
+  0.05R entry slippage or spread x2. Its last two weeks were seven losses from
+  seven trades. It is the best forward-test hypothesis, not a live candidate.
+- A 0.25-M15-ATR round-number room filter modestly improved A's validation;
+  a 1-ATR previous-session room filter led aggregate return but failed the
+  validation positive-week gate. Both are inspected post-hoc hypotheses.
+- Literal GMT and DST-aware London 07:00 opening ranges, close-confirmed
+  breakout, ATR-stop variants, and all Tokyo/ECB/London post-fix retail
+  reversal variants failed. The best opening-range aggregate had only PF
+  1.026 with 25.8% cash drawdown. Every fix variant lost money.
+- A point-in-time historical news calendar was unavailable, so no news filter
+  was fabricated. Decision: no live implementation. Freeze B, A, and A plus
+  0.25-ATR round room for 8-12 genuinely unseen weeks with broker-rule and
+  nominal/x1.25 spread parallel evidence before any demo probation review.
+- Evidence:
+  `lab/autoresearch/reports/deep-research-strategy-comparison-2026-08-13.json`,
+  `lab/autoresearch/reports/deep-research-overlap-stress-2026-08-13.json`, and
+  `lab/autoresearch/reports/deep-research-strategy-comparison-2026-08-13.md`.
+
 - Historical market data for the last 6+ months is available on the server.
 - Market data is available across multiple timeframes, including D1, H4, H1, M15, M5, and M1.
 - Coverage includes 15+ currency pairs, such as EURUSD.

@@ -9,7 +9,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SERIES_SYMBOLS = ["AUDCAD", "AUDJPY", "AUDUSD", "EURAUD", "EURCHF", "EURGBP", "EURJPY", "EURUSD", "GBPAUD", "GBPCHF", "GBPJPY", "GBPUSD", "NZDJPY", "NZDUSD", "USDCAD", "USDCHF", "USDJPY"];
 export const DAILY_PROTOCOL = Object.freeze({
   ...RESEARCH_PROTOCOL,
-  schemaVersion: 12,
+  schemaVersion: 14,
   train: Object.freeze({ fromWeek: "2026-W07", toWeek: "2026-W19" }),
   validation: Object.freeze({ fromWeek: "2026-W20", toWeek: "2026-W32" }),
   evaluationEndExclusive: "2026-08-10T00:00:00.000Z",
@@ -23,23 +23,35 @@ export const DAILY_PROTOCOL = Object.freeze({
 // Change one coherent idea per experiment. The evaluator, split, and output
 // code below this region are fixed for the duration of an experiment series.
 export const CANDIDATE = {
-  name: "m15-greenred-h1-trend-runner-v4-baseline",
-  signalFamily: "greenred-mtf",
+  name: "portfolio-eurusd-gbpjpy-gbpusd-three-slots",
+  signalFamily: "three-pair-profile-portfolio",
   method: "custom",
   rankByScore: true,
+  rankAtTimestampLimit: 3,
+  symbols: ["EURUSD", "GBPJPY", "GBPUSD"],
+  signalKind: "greenred",
   signalTimeframe: "M15",
   triggerVariant: "any",
-  confirmationMode: "higher",
-  confirmationFrames: ["H1"],
-  filterMode: "price",
+  confirmationFrames: [],
+  filterMode: "none",
   filterAgreement: "all",
   minTrendStrengthAtr: 0,
+  minImpulseAtr: 0,
+  minSwingGapAtr: 0,
+  minSignalBodyAtr: 0,
+  maxRetrace: 1,
+  previousSessionMode: "none",
+  previousSessionRoomAtr: 0,
+  dayContext: "none",
+  minDayMoveAtr: 0,
+  minSessionAgeMinutes: 0,
   sessionWindows: [[0, 0]],
+  allowedSessions: null,
   minAtrPct: null,
   minBbWidthPct: null,
   minEmaDistPct: null,
   entryMode: "signal-breakout",
-  riskPct: 0.01,
+  riskPct: 0.03,
   marginUtilization: 0.9,
   stopATR: 1.5,
   stopMode: "signal-candle",
@@ -53,20 +65,121 @@ export const CANDIDATE = {
   cooldown: 30,
   maxDaily: 3,
   maxTotalDaily: 0,
-  maxTotalPerSession: 5,
-  maxPositions: 5,
-  maxLossesPerSymbolDay: 3,
+  maxTotalPerSession: 9,
+  maxPositions: 3,
+  maxLossesPerSymbolDay: 2,
   maxLossesPerSymbolSession: 2,
   pendingOffsetAtr: 0,
   pendingExpiryMinutes: 60,
   weekdaysOnly: true,
   dailyFlat: true,
-  dailyCloseMinuteUtc: 1440,
+  dailyCloseMinuteUtc: 1320,
+  pairSessionProfiles: {
+    EURUSD: {
+      asia: { enabled: false },
+      london: {
+        enabled: true,
+        signalKind: "london-close-break",
+        signalTimeframe: "M15",
+        entryEventPrefix: "LondonOpeningCloseBreak",
+        stopEventPrefix: "LondonOpeningCloseBreak",
+        stopMode: "event-level",
+        stopBufferAtr: 0.05,
+        confirmationFrames: [],
+        filterMode: "none",
+        entryMode: "signal-breakout",
+        pendingExpiryMinutes: 60,
+        rewardRisk: 2,
+        hold: 480,
+        riskPct: 0.01,
+      },
+      overlap: {
+        enabled: true,
+        signalKind: "london-close-break",
+        signalTimeframe: "M15",
+        entryEventPrefix: "LondonOpeningCloseBreak",
+        stopEventPrefix: "LondonOpeningCloseBreak",
+        stopMode: "event-level",
+        stopBufferAtr: 0.05,
+        confirmationFrames: [],
+        filterMode: "none",
+        entryMode: "signal-breakout",
+        pendingExpiryMinutes: 60,
+        rewardRisk: 2,
+        hold: 480,
+        riskPct: 0.01,
+      },
+      newYork: { enabled: false },
+      offHours: { enabled: false },
+    },
+    GBPJPY: {
+      asia: { enabled: false },
+      london: {
+        enabled: true,
+        signalKind: "price-action",
+        signalTimeframe: "M15",
+        minImpulseAtr: 1.5,
+        minSwingGapAtr: 0.25,
+        minSignalBodyAtr: 0.3,
+        maxRetrace: 0.65,
+        confirmationFrames: ["H1", "H4"],
+        filterMode: "price",
+        filterAgreement: "majority",
+        minTrendStrengthAtr: 0,
+        entryMode: "signal-breakout",
+        pendingExpiryMinutes: 60,
+        stopMode: "signal-candle",
+        stopBufferAtr: 0.05,
+        rewardRisk: 2,
+        hold: 480,
+        riskPct: 0.03,
+      },
+      overlap: { enabled: false },
+      newYork: { enabled: false },
+      offHours: { enabled: false },
+    },
+    GBPUSD: {
+      asia: { enabled: false },
+      london: {
+        enabled: true,
+        signalKind: "event-signal",
+        signalTimeframe: "M15",
+        signalPattern: "EmaCross",
+        confirmationFrames: [],
+        filterMode: "none",
+        entryMode: "signal-breakout",
+        pendingExpiryMinutes: 60,
+        stopMode: "signal-candle",
+        stopBufferAtr: 0.05,
+        rewardRisk: 1.25,
+        hold: 180,
+        riskPct: 0.03,
+      },
+      overlap: {
+        enabled: true,
+        signalKind: "event-signal",
+        signalTimeframe: "M15",
+        signalPattern: "EmaCross",
+        confirmationFrames: [],
+        filterMode: "none",
+        entryMode: "signal-breakout",
+        pendingExpiryMinutes: 60,
+        stopMode: "signal-candle",
+        stopBufferAtr: 0.05,
+        rewardRisk: 1.25,
+        hold: 180,
+        riskPct: 0.03,
+      },
+      newYork: { enabled: false },
+      offHours: { enabled: false },
+    },
+  },
 };
 
 const MASK = Object.freeze({ FAST_EMA: 1 << 0, SLOW_EMA: 1 << 1, PRICE_EMA: 1 << 2, MACD: 1 << 3, EMA_SLOPE: 1 << 4, RSI: 1 << 5 });
 
 function frameFilterPass(event, side, frame, config) {
+  if (config.filterMode === "none") return true;
   const mask = event[`${side}${frame}Mask`] ?? 0;
   const emaVotes = [MASK.FAST_EMA, MASK.SLOW_EMA, MASK.PRICE_EMA, MASK.EMA_SLOPE].filter((bit) => mask & bit).length;
   const ema = emaVotes >= 3;
@@ -95,96 +208,306 @@ function triggerName(config) {
   return `${config.signalTimeframe}${suffix}`;
 }
 
+function atomicSignalPass(event, side, config) {
+  if (config.signalKind === "event-signal") {
+    return Boolean(event[`${side}${config.signalTimeframe}${config.signalPattern}`]);
+  }
+  if (config.signalKind === "price-action") {
+    return Boolean(event[`${side}M15PriceAction`]) &&
+      (event[`${side}M15ImpulseAtr`] ?? 0) >= config.minImpulseAtr &&
+      (event[`${side}M15SwingGapAtr`] ?? 0) >= config.minSwingGapAtr &&
+      (event[`${side}M15SignalBodyAtr`] ?? 0) >= config.minSignalBodyAtr &&
+      (event[`${side}M15Retrace`] ?? Number.POSITIVE_INFINITY) <= config.maxRetrace;
+  }
+  if (config.signalKind === "discretionary") {
+    if (!event[`${side}M15Discretionary`]) return false;
+    if (config.requireImpulse && !event[`${side}M15DiscretionaryImpulse`]) return false;
+    if (config.requireSwing && !event[`${side}M15DiscretionarySwing`]) return false;
+    if (config.requireBreakout && !event[`${side}M15DiscretionaryBreakout`]) return false;
+    return (event[`${side}M15DiscretionarySignalBodyAtr`] ?? 0) >= config.minSignalBodyAtr;
+  }
+  if (config.signalKind === "london-close-break") return Boolean(event[`${side}LondonOpeningCloseBreak`]);
+  return Boolean(event[`${side}${triggerName(config)}`]);
+}
+
+function signalPass(event, side, config) {
+  if (config.signalKind === "combination") {
+    return config.signalComponents.every((component) => atomicSignalPass(event, side, component));
+  }
+  return atomicSignalPass(event, side, config);
+}
+
+function intradayContextPass(event, side, config) {
+  if ((event.SessionAgeMinutes ?? 0) < config.minSessionAgeMinutes) return false;
+  if (config.previousSessionMode === "room" &&
+      (event[`${side}M15PreviousSessionRoomAtr`] ?? 0) < config.previousSessionRoomAtr) return false;
+  if (config.previousSessionMode === "breakout" && !event[`${side}M15PreviousSessionBreakout`]) return false;
+  const direction = side === "buy" ? 1 : -1;
+  const directedDayMove = direction * (event.M1DayMoveAtr ?? 0);
+  if (config.dayContext === "continuation" && directedDayMove < config.minDayMoveAtr) return false;
+  if (config.dayContext === "reversal" && directedDayMove > -config.minDayMoveAtr) return false;
+  return true;
+}
+
 export function decide(event, side, config) {
-  return Boolean(event[`${side}${triggerName(config)}`]) && confirmationPass(event, side, config);
+  return signalPass(event, side, config) &&
+    confirmationPass(event, side, config) &&
+    intradayContextPass(event, side, config);
 }
 
 export function rank(event, side, config = CANDIDATE) {
   const scores = (config.confirmationFrames ?? []).map((frame) => event[`${side}${frame}Score`] ?? 0);
   const confidence = scores.reduce((sum, score) => sum + score, 0) / Math.max(scores.length, 1);
   const signalAtr = event[`${config.signalTimeframe}SignalAtr`] ?? event.atr;
-  return 100 * confidence - event.spread / Math.max(signalAtr, Number.EPSILON);
+  const priceActionQuality = (event[`${side}M15ImpulseAtr`] ?? 0) + (event[`${side}M15SignalBodyAtr`] ?? 0);
+  return 100 * confidence + 10 * priceActionQuality - event.spread / Math.max(signalAtr, Number.EPSILON);
 }
 
 CANDIDATE.decide = decide;
 CANDIDATE.rank = rank;
 
-const SESSION_BASKETS = Object.freeze({
-  asia: { allowedSessions: ["asia"] },
-  london: { allowedSessions: ["london"] },
-  overlap: { allowedSessions: ["overlap"] },
-  newYork: { allowedSessions: ["newYork"] },
-  offHours: { allowedSessions: ["offHours"] },
-});
-
 function candidateVariant(name, overrides = {}) {
   const candidate = {
     ...CANDIDATE,
     name,
-    rewardRisk: 2,
     pendingOffsetAtr: 0,
     ...overrides,
   };
-  candidate.rewardRisk = 2;
-  if (!Object.hasOwn(overrides, "symbols") && name !== "baseline-replay") delete candidate.symbols;
   delete candidate.tpATR;
   candidate.decide = decide;
   candidate.rank = rank;
   return candidate;
 }
 
-const FILTERS = Object.freeze([
-  { key: "price-0", filterMode: "price", minTrendStrengthAtr: 0 },
-  { key: "price-010", filterMode: "price", minTrendStrengthAtr: 0.1 },
-  { key: "price-025", filterMode: "price", minTrendStrengthAtr: 0.25 },
-  { key: "price-050", filterMode: "price", minTrendStrengthAtr: 0.5 },
-  { key: "ema", filterMode: "ema" },
-  { key: "rsi", filterMode: "rsi" },
-  { key: "macd", filterMode: "macd" },
-  { key: "ema-rsi", filterMode: "ema-rsi" },
-  { key: "ema-macd", filterMode: "ema-macd" },
-  { key: "composite", filterMode: "composite" },
-]);
-
-const RUNNERS = Object.freeze([
-  { key: "fixed-2r", runnerMode: "none", breakEvenR: 0, trailR: 0 },
-  { key: "always-be1-trail050r", runnerMode: "always", breakEvenR: 1, trailR: 0.5 },
-  { key: "fast15-be1-trail050r", runnerMode: "fast-1r", runnerFastMinutes: 15, breakEvenR: 1, trailR: 0.5 },
-  { key: "fast30-be1-trail050r", runnerMode: "fast-1r", runnerFastMinutes: 30, breakEvenR: 1, trailR: 0.5 },
-  { key: "fast60-be1-trail050r", runnerMode: "fast-1r", runnerFastMinutes: 60, breakEvenR: 1, trailR: 0.5 },
-  { key: "body025-be1-trail050r", runnerMode: "signal-body", runnerSignalBodyAtr: 0.25, breakEvenR: 1, trailR: 0.5 },
-  { key: "body050-be1-trail050r", runnerMode: "signal-body", runnerSignalBodyAtr: 0.5, breakEvenR: 1, trailR: 0.5 },
-  { key: "body075-be1-trail050r", runnerMode: "signal-body", runnerSignalBodyAtr: 0.75, breakEvenR: 1, trailR: 0.5 },
-]);
-
-const GLOBAL_SEARCH_SEEDS = Object.freeze(RUNNERS.flatMap((runner) => FILTERS.map((filter) => candidateVariant(
-  `global-${filter.key}-any-${runner.key}`,
-  {
-    ...filter,
-    ...runner,
+const SIGNAL_TIMEFRAMES = ["M1", "M5", "M15", "H1", "H4", "D1"];
+const GREEN_RED_SIGNALS = [
+  ...SIGNAL_TIMEFRAMES.map((signalTimeframe) => ({
+    key: `${signalTimeframe.toLowerCase()}-gr-control`,
+    signalKind: "greenred",
+    signalTimeframe,
     triggerVariant: "any",
-    symbols: SERIES_SYMBOLS,
-    maxPositions: 5,
-  },
-))));
+  })),
+  { key: "m15-gr-one-control", signalKind: "greenred", signalTimeframe: "M15", triggerVariant: "one" },
+  { key: "m15-gr-two-control", signalKind: "greenred", signalTimeframe: "M15", triggerVariant: "two" },
+];
 
-const PAIR_MATRIX_SESSIONS = Object.freeze({
-  asia: ["asia"],
-  london: ["london"],
-  overlap: ["overlap"],
-  newYork: ["newYork"],
-  offHours: ["offHours"],
+const PRICE_ACTION_SIGNALS = SIGNAL_TIMEFRAMES.flatMap((signalTimeframe) =>
+  ["Engulfing", "PinBar", "InsideBreak", "OutsideBar", "Momentum", "Breakout20"].map((signalPattern) => ({
+    key: `${signalTimeframe.toLowerCase()}-${signalPattern.toLowerCase()}`,
+    signalKind: "event-signal",
+    signalTimeframe,
+    signalPattern,
+  })),
+);
+
+const INDICATOR_SIGNALS = ["M5", "M15", "H1", "H4"].flatMap((signalTimeframe) =>
+  ["EmaCross", "EmaReclaim", "BollingerReentry", "RsiReversal", "MacdCross"].map((signalPattern) => ({
+    key: `${signalTimeframe.toLowerCase()}-${signalPattern.toLowerCase()}`,
+    signalKind: "event-signal",
+    signalTimeframe,
+    signalPattern,
+  })),
+);
+
+const signalComponent = (signalKind, signalTimeframe, signalPattern, extra = {}) => ({
+  signalKind,
+  signalTimeframe,
+  signalPattern,
+  ...extra,
 });
 
-export const SEARCH_SEEDS = Object.freeze([
-  ...GLOBAL_SEARCH_SEEDS,
-  ...RUNNERS.filter((runner) => ["fixed-2r", "always-be1-trail050r", "fast30-be1-trail050r", "body050-be1-trail050r"].includes(runner.key)).flatMap((runner) =>
-    FILTERS.filter((filter) => ["price-0", "price-025", "ema", "rsi", "macd", "ema-rsi", "ema-macd"].includes(filter.key)).flatMap((filter) =>
-      Object.entries(PAIR_MATRIX_SESSIONS).flatMap(([session, allowedSessions]) => SERIES_SYMBOLS.map((symbol) => candidateVariant(
-        `pairmatrix-${session}-${symbol}-${filter.key}-any-${runner.key}`,
-        { ...filter, ...runner, triggerVariant: "any", sessionWindows: [[0, 0]], allowedSessions, symbols: [symbol], maxPositions: 1 },
-      ))))),
+// Explicit intersections answer a different question from a single trigger
+// plus a trend filter: did two independently defined entry events occur on
+// the same causal decision candle? Sparse combinations are retained as
+// negative evidence instead of being silently replaced with Green-Red.
+const COMBINATION_SIGNALS = Object.freeze([
+  {
+    key: "m15-engulfing-momentum",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "Engulfing"),
+      signalComponent("event-signal", "M15", "Momentum"),
+    ],
+  },
+  {
+    key: "m15-insidebreak-momentum",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "InsideBreak"),
+      signalComponent("event-signal", "M15", "Momentum"),
+    ],
+  },
+  {
+    key: "m15-breakout20-momentum",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "Breakout20"),
+      signalComponent("event-signal", "M15", "Momentum"),
+    ],
+  },
+  {
+    key: "m15-pinbar-bollinger",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "PinBar"),
+      signalComponent("event-signal", "M15", "BollingerReentry"),
+    ],
+  },
+  {
+    key: "m15-engulfing-ema-reclaim",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "Engulfing"),
+      signalComponent("event-signal", "M15", "EmaReclaim"),
+    ],
+  },
+  {
+    key: "m15-momentum-macd-cross",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "Momentum"),
+      signalComponent("event-signal", "M15", "MacdCross"),
+    ],
+  },
+  {
+    key: "m15-greenred-ema-reclaim",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("greenred", "M15"),
+      signalComponent("event-signal", "M15", "EmaReclaim"),
+    ],
+  },
+  {
+    key: "m15-greenred-macd-cross",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("greenred", "M15"),
+      signalComponent("event-signal", "M15", "MacdCross"),
+    ],
+  },
+  {
+    key: "m15-pa-balanced-ema-reclaim",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("price-action", "M15", null, { minImpulseAtr: 1, minSwingGapAtr: 0.1, minSignalBodyAtr: 0.2, maxRetrace: 0.75 }),
+      signalComponent("event-signal", "M15", "EmaReclaim"),
+    ],
+  },
+  {
+    key: "m15-pa-balanced-macd-cross",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("price-action", "M15", null, { minImpulseAtr: 1, minSwingGapAtr: 0.1, minSignalBodyAtr: 0.2, maxRetrace: 0.75 }),
+      signalComponent("event-signal", "M15", "MacdCross"),
+    ],
+  },
+  {
+    key: "m5-momentum-m15-ema-reclaim",
+    signalKind: "combination",
+    signalTimeframe: "M5",
+    signalComponents: [
+      signalComponent("event-signal", "M5", "Momentum"),
+      signalComponent("event-signal", "M15", "EmaReclaim"),
+    ],
+  },
+  {
+    key: "m15-momentum-h1-macd-cross",
+    signalKind: "combination",
+    signalTimeframe: "M15",
+    signalComponents: [
+      signalComponent("event-signal", "M15", "Momentum"),
+      signalComponent("event-signal", "H1", "MacdCross"),
+    ],
+  },
 ]);
+
+const SIGNALS = Object.freeze([
+  ...GREEN_RED_SIGNALS,
+  ...PRICE_ACTION_SIGNALS,
+  ...INDICATOR_SIGNALS,
+  ...COMBINATION_SIGNALS,
+  { key: "pa-loose", signalKind: "price-action", minImpulseAtr: 0, minSwingGapAtr: 0, minSignalBodyAtr: 0, maxRetrace: 1 },
+  { key: "pa-balanced", signalKind: "price-action", minImpulseAtr: 1, minSwingGapAtr: 0.1, minSignalBodyAtr: 0.2, maxRetrace: 0.75 },
+  { key: "pa-strong", signalKind: "price-action", minImpulseAtr: 1.5, minSwingGapAtr: 0.25, minSignalBodyAtr: 0.3, maxRetrace: 0.65 },
+  { key: "disc-impulse", signalKind: "discretionary", requireImpulse: true, requireSwing: false, requireBreakout: false, minSignalBodyAtr: 0.15 },
+  { key: "disc-swing", signalKind: "discretionary", requireImpulse: true, requireSwing: true, requireBreakout: false, minSignalBodyAtr: 0.15 },
+  { key: "london-close-break", signalKind: "london-close-break", entryEventPrefix: "LondonOpeningCloseBreak", stopEventPrefix: "LondonOpeningCloseBreak", stopMode: "event-level" },
+]);
+
+const CONTEXTS = Object.freeze([
+  { key: "none", confirmationFrames: [], filterMode: "none" },
+  { key: "previous-session-room", confirmationFrames: [], filterMode: "none", previousSessionMode: "room", previousSessionRoomAtr: 0.5 },
+  { key: "day-continuation", confirmationFrames: [], filterMode: "none", dayContext: "continuation", minDayMoveAtr: 0.1 },
+  { key: "h1-price25", confirmationFrames: ["H1"], filterMode: "price", minTrendStrengthAtr: 0.25 },
+  { key: "h1-ema", confirmationFrames: ["H1"], filterMode: "ema" },
+  { key: "h1-rsi", confirmationFrames: ["H1"], filterMode: "rsi" },
+  { key: "h1-macd", confirmationFrames: ["H1"], filterMode: "macd" },
+  { key: "h1-ema-macd-room", confirmationFrames: ["H1"], filterMode: "ema-macd", previousSessionMode: "room", previousSessionRoomAtr: 0.25 },
+  { key: "h1-ema-rsi-day", confirmationFrames: ["H1"], filterMode: "ema-rsi", dayContext: "continuation", minDayMoveAtr: 0.1 },
+  { key: "h4-price25", confirmationFrames: ["H4"], filterMode: "price", minTrendStrengthAtr: 0.25 },
+  { key: "h4-ema", confirmationFrames: ["H4"], filterMode: "ema" },
+  { key: "h4-macd", confirmationFrames: ["H4"], filterMode: "macd" },
+  { key: "d1-price", confirmationFrames: ["D1"], filterMode: "price", minTrendStrengthAtr: 0 },
+  { key: "h1-h4-price", confirmationFrames: ["H1", "H4"], filterMode: "price", minTrendStrengthAtr: 0, filterAgreement: "majority" },
+  { key: "h4-d1-price", confirmationFrames: ["H4", "D1"], filterMode: "price", minTrendStrengthAtr: 0, filterAgreement: "majority" },
+  { key: "h1-h4-d1-price", confirmationFrames: ["H1", "H4", "D1"], filterMode: "price", minTrendStrengthAtr: 0, filterAgreement: "majority" },
+  { key: "m15-h1-ema", confirmationFrames: ["M15", "H1"], filterMode: "ema", filterAgreement: "majority" },
+  { key: "m5-m15-h1-price", confirmationFrames: ["M5", "M15", "H1"], filterMode: "price", minTrendStrengthAtr: 0, filterAgreement: "majority" },
+  { key: "six-frame-price", confirmationFrames: ["M1", "M5", "M15", "H1", "H4", "D1"], filterMode: "price", minTrendStrengthAtr: 0, filterAgreement: "majority" },
+]);
+
+const SESSIONS = Object.freeze([
+  { key: "all", allowedSessions: null },
+  { key: "london", allowedSessions: ["london"] },
+  { key: "overlap", allowedSessions: ["overlap"] },
+  { key: "newyork", allowedSessions: ["newYork"] },
+  { key: "london-overlap", allowedSessions: ["london", "overlap"] },
+  { key: "active-three", allowedSessions: ["london", "overlap", "newYork"] },
+  { key: "asia-control", allowedSessions: ["asia"] },
+  { key: "offhours-control", allowedSessions: ["offHours"] },
+]);
+
+const EXITS = Object.freeze([
+  { key: "candle-rr1-60", stopMode: "signal-candle", rewardRisk: 1, hold: 60, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr125-120", stopMode: "signal-candle", rewardRisk: 1.25, hold: 120, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr15-120", stopMode: "signal-candle", rewardRisk: 1.5, hold: 120, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr125-180", stopMode: "signal-candle", rewardRisk: 1.25, hold: 180, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr15-240", stopMode: "signal-candle", rewardRisk: 1.5, hold: 240, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr2-480", stopMode: "signal-candle", rewardRisk: 2, hold: 480, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "candle-rr25-480", stopMode: "signal-candle", rewardRisk: 2.5, hold: 480, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "atr15-rr15-240", stopMode: "atr", stopATR: 1.5, rewardRisk: 1.5, hold: 240, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "atr1-rr125-120", stopMode: "atr", stopATR: 1, rewardRisk: 1.25, hold: 120, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "runner-be1-trail05", stopMode: "signal-candle", rewardRisk: 2, hold: 480, runnerMode: "always", breakEvenR: 1, trailR: 0.5 },
+]);
+
+const EXECUTION_POLICIES = Object.freeze([
+  { key: "risk1-daily3", riskPct: 0.01, maxDaily: 3, maxTotalPerSession: 3, maxLossesPerSymbolDay: 2, maxLossesPerSymbolSession: 2 },
+  { key: "risk3-daily3", riskPct: 0.03, maxDaily: 3, maxTotalPerSession: 3, maxLossesPerSymbolDay: 2, maxLossesPerSymbolSession: 2 },
+]);
+
+function stableSearchOrder(candidate) {
+  let hash = 2166136261;
+  for (const character of candidate.name) hash = Math.imul(hash ^ character.charCodeAt(0), 16777619);
+  return hash >>> 0;
+}
+
+export const SEARCH_SEEDS = Object.freeze([
+  ...EXECUTION_POLICIES.flatMap((execution) => EXITS.flatMap((exit) => SESSIONS.flatMap((session) =>
+    SIGNALS.filter((signal) => !(signal.signalKind === "london-close-break" && exit.stopMode === "atr")).flatMap((signal) => CONTEXTS.map((context) => candidateVariant(
+      `global-gbpusd-${exit.key}-${execution.key}-${session.key}-${signal.key}-${context.key}`,
+      { ...exit, ...execution, ...session, ...signal, ...context },
+    )))))),
+].sort((left, right) => stableSearchOrder(left) - stableSearchOrder(right)));
 // AUTORESEARCH MUTABLE REGION END
 
 function sha256(value) {
@@ -314,7 +637,7 @@ export function runSearch(datasetDir, requestedSymbols, searchSeconds, protocol 
     const portfolioBest = best?.candidate.name.startsWith("portfolio-five-") ?? false;
     const improves = eligibleWinner && (!best || (portfolioCandidate && !portfolioBest) || (portfolioCandidate === portfolioBest && ((summary.qualified && !best.summary.qualified) || (summary.qualified === best.summary.qualified && summary.objective > best.summary.objective))));
     if (improves) best = { candidate, summary, result };
-    if (portfolioCandidate && summary.qualified && (!profitLeader || summary.returnPct > profitLeader.summary.returnPct)) profitLeader = { candidate, summary, result };
+    if (eligibleWinner && summary.qualified && (!profitLeader || summary.returnPct > profitLeader.summary.returnPct)) profitLeader = { candidate, summary, result };
     console.log(`[search ${record.iteration}] ${candidate.name} objective=${summary.objective.toFixed(4)} qualified=${summary.qualified} validationR=${summary.validation.totalR.toFixed(3)} entries=${summary.entries} best=${best?.candidate.name ?? "pending-portfolio"}`);
   }
   return {
@@ -324,8 +647,9 @@ export function runSearch(datasetDir, requestedSymbols, searchSeconds, protocol 
     metadata,
     legacyEvidencePolicy: "Reports were used only to seed hypotheses and identify invalid assumptions; their inspected forward periods were not reused as holdout.",
     knownLimitations: [
-      "Signals are evaluated every 15 minutes from a freshly closed M15 Green-Red candle, with the last closed H1 candle as the only trend-filter timeframe. Pending breakout entries and stops use the M15 signal candle.",
-      "The control exit is fixed at 2R. Runner variants are evaluated once price reaches 1R: the stop moves to breakeven, the 2R target is removed, and a 0.5R trailing stop is updated from completed M1 monitoring bars. Fast-1R and signal-body rules are historical-candle momentum proxies, not tick/order-flow measurements.",
+      "Decision points occur every 15 minutes. M1 and M5 triggers are therefore sampled only when their close aligns with that fixed decision clock; higher-timeframe triggers occur only on their own closed-candle boundaries.",
+      "The declared matrix includes Green-Red controls, engulfing, pin-bar, inside-break, outside-bar, momentum, 20-bar breakout, structural continuation, opening-range breakout, EMA cross/reclaim, Bollinger re-entry, RSI reversal, and MACD cross, alone and with causal multi-timeframe/session context.",
+      "Pending entries use the selected signal timeframe. Fixed-target, ATR-stop, and runner variants are historical-candle proxies, not tick/order-flow measurements.",
       "Pair/session diagnostics and any derived session baskets are selected on already-inspected development train/validation evidence; they require genuinely new forward confirmation.",
       "The evaluator does not yet apply broker-specific minimum deal size, minimum stop distance, gap/slippage stress, financing, or guaranteed-stop premiums.",
       "Repeated search iterations select against the development validation fold; only the external human-controlled locked test can provide a fresh confirmation.",

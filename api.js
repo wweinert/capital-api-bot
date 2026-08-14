@@ -42,6 +42,20 @@ function toRoundedNumber(value, decimals = 0) {
     return Number(num.toFixed(digits));
 }
 
+function assertDemoApi() {
+    let host;
+
+    try {
+        host = new URL(API.BASE_URL).hostname;
+    } catch {
+        throw new Error("Invalid API base URL. Check BASE_URL and API_PATH.");
+    }
+
+    if (host !== API.DEMO_HOST) {
+        throw new Error(`Demo-only safety lock: refusing API access to ${host || "unknown host"}.`);
+    }
+}
+
 export const getHeaders = (includeContentType = false) => {
     const baseHeaders = {
         "X-SECURITY-TOKEN": xsecurity,
@@ -72,6 +86,8 @@ export const getAccountTransactions = async (from, to) =>
     });
 
 export const startSession = async () => {
+    assertDemoApi();
+
     try {
         const response = await axios.post(
             `${API.BASE_URL}/session`,
@@ -198,7 +214,7 @@ export async function getHistorical(symbol, resolution, count) {
                     high: p.highPrice?.bid,
                     low: p.lowPrice?.bid,
                     open: p.openPrice?.bid,
-                    timestamp: `${p.snapshotTimeUTC}Z`,
+                    timestamp: String(p.snapshotTimeUTC).endsWith("Z") ? p.snapshotTimeUTC : `${p.snapshotTimeUTC}Z`,
                 })),
             };
         } catch (error) {
@@ -220,16 +236,29 @@ export const getWorkingOrders = async () =>
         return response.data;
     });
 
-export const cancelWorkingOrder = async (dealId) =>
-    withSessionRetry(async () => {
+export const cancelWorkingOrder = async (dealId) => {
+    assertDemoApi();
+
+    return withSessionRetry(async () => {
         const response = await axios.delete(`${API.BASE_URL}/workingorders/${dealId}`, {
             headers: getHeaders(),
         });
 
         return response.data;
     });
+};
 
 export async function placeOrder({ symbol, type = "STOP", direction, size, level, stopLevel, profitLevel, goodTillDate }) {
+    assertDemoApi();
+
+    const orderType = String(type).toUpperCase();
+    const orderDirection = String(direction).toUpperCase();
+    const orderSize = Number(size);
+
+    if (!symbol || orderType !== "STOP" || !["BUY", "SELL"].includes(orderDirection) || !(orderSize > 0) || !goodTillDate) {
+        throw new Error(`Invalid pending order request for ${symbol || "unknown"}`);
+    }
+
     const rules = await getAllowedTPRange(symbol);
     const decimals = rules.decimals;
 
@@ -241,13 +270,11 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
         throw new Error(`Invalid pending order prices for ${symbol}`);
     }
 
-    const isBuy = direction.toUpperCase() === "BUY";
+    const isBuy = orderDirection === "BUY";
 
     const marketPrice = isBuy ? Number(rules.market.offer) : Number(rules.market.bid);
 
-    const orderType = type.toUpperCase();
-
-    const entryIsValid = orderType === "STOP" ? (isBuy ? entry > marketPrice : entry < marketPrice) : isBuy ? entry < marketPrice : entry > marketPrice;
+    const entryIsValid = isBuy ? entry > marketPrice : entry < marketPrice;
 
     if (!entryIsValid) {
         logger.warn(`[API] ${symbol}: ${orderType} entry is behind market price`);
@@ -256,7 +283,7 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
 
     const protection = validateMarketProtection({
         symbol,
-        direction,
+        direction: orderDirection,
         stopLevel: stop,
         profitLevel: target,
         bid: entry,
@@ -272,8 +299,8 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
 
     const order = {
         epic: symbol,
-        direction: direction.toUpperCase(),
-        size: Number(size),
+        direction: orderDirection,
+        size: orderSize,
         level: entry,
         type: orderType,
         guaranteedStop: false,
@@ -290,8 +317,10 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
     return response.data;
 }
 
-export const enableTrailingStop = async (dealId, stopDistance, profitLevel) =>
-    withSessionRetry(async () => {
+export const enableTrailingStop = async (dealId, stopDistance, profitLevel) => {
+    assertDemoApi();
+
+    return withSessionRetry(async () => {
         const response = await axios.put(
             `${API.BASE_URL}/positions/${dealId}`,
             {
@@ -306,6 +335,7 @@ export const enableTrailingStop = async (dealId, stopDistance, profitLevel) =>
 
         return response.data;
     });
+};
 
 function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, bid, offer, minSLDistancePrice, minTPDistancePrice }) {
     const isBuy = String(direction).toUpperCase() === "BUY";
@@ -336,6 +366,8 @@ function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, b
 }
 
 export async function placePosition(symbol, direction, size, price, SL, TP) {
+    assertDemoApi();
+
     try {
         const range = await getAllowedTPRange(symbol);
         const decimals = Number.isInteger(range.decimals) ? range.decimals : symbol.includes("JPY") ? 3 : 5;
@@ -438,6 +470,8 @@ export async function getDealConfirmation(dealReference) {
 }
 
 export async function closePosition(dealId) {
+    assertDemoApi();
+
     try {
         const response = await axios.delete(`${API.BASE_URL}/positions/${dealId}`, {
             headers: getHeaders(true),

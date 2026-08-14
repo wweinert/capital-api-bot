@@ -1,13 +1,13 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, TIMEFRAMES, SESSIONS, PROFILES } from "./config.js";
+import { API, DEV, TIMEFRAMES, SESSIONS, PROFILES, PORTFOLIO } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
 import Strategy from "./strategies/strategies.js";
 
-const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
+const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
 const ANALYSIS_DELAY_MS = 1 * 1000;
 const TIMEFRAME_MINUTES = {
     m1: 1,
@@ -17,7 +17,7 @@ const TIMEFRAME_MINUTES = {
     h4: 240,
     d1: 1440,
 };
-class TradingBot {
+export class TradingBot {
     constructor() {
         this.isRunning = false;
         this.analysisInterval = null;
@@ -38,11 +38,45 @@ class TradingBot {
         this.MONITOR_INTERVAL_MS = 60 * 1000; // 1 minute
         this.openedBrockerDealIds = [];
         this.activeSymbols = [];
-        this.lastAnalyzedCandles = {};
+        this.latestCandles = {};
         this.tokens = null;
     }
 
+    checkRuntimeConfiguration() {
+        const missingCredentials = [API.KEY, API.IDENTIFIER, API.PASSWORD].some((value) => !String(value || "").trim());
+        let apiHost = null;
+
+        try {
+            apiHost = new URL(API.BASE_URL).hostname;
+        } catch {
+            throw new Error("Invalid API base URL. Check BASE_URL and API_PATH.");
+        }
+
+        if (apiHost !== API.DEMO_HOST) {
+            throw new Error(`Demo-only safety lock: API host must be ${API.DEMO_HOST}.`);
+        }
+        if (missingCredentials) {
+            throw new Error("Missing demo API credentials.");
+        }
+        if (PORTFOLIO.MAX_POSITIONS !== PORTFOLIO.SYMBOLS.length) {
+            throw new Error("Portfolio slot count must match the number of configured trading symbols.");
+        }
+        if (PORTFOLIO.MAX_POSITIONS_PER_SYMBOL !== 1) {
+            throw new Error("This system requires exactly one open position or working order per symbol.");
+        }
+
+        return {
+            apiHost,
+            symbols: [...PORTFOLIO.SYMBOLS],
+            maxPositions: PORTFOLIO.MAX_POSITIONS,
+            marginUsage: PORTFOLIO.MARGIN_USAGE,
+        };
+    }
+
     async initialize() {
+        const configuration = this.checkRuntimeConfiguration();
+        logger.info(`[Bot] Demo-only safety lock enabled for ${configuration.symbols.join(", ")}`);
+
         for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
             try {
                 await startSession();
@@ -108,7 +142,7 @@ class TradingBot {
             }
         };
 
-        // First run: align to the next M5 candle close + 5 seconds
+        // First run: align to the next configured analysis boundary.
         const interval = this.getInitialIntervalMs();
 
         logger.info(`[${DEV.MODE ? "DEV" : "PROD"}] Setting up analysis interval: ${interval}ms`);
@@ -116,7 +150,7 @@ class TradingBot {
         this.analysisStartTimeout = setTimeout(() => {
             void runAnalysis();
 
-            // Repeat after every M5 candle
+            // Keep polling; only closed candles are passed to the strategy.
             this.analysisInterval = setInterval(() => {
                 void runAnalysis();
             }, this.getRepeatIntervalMs());
@@ -150,46 +184,17 @@ class TradingBot {
         }
     }
 
-    getActiveSymbfols() {
-        const now = new Date();
-        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-
-        const symbols = [];
-
-        for (const [symbol, profile] of Object.entries(PROFILES)) {
-            const session = SESSIONS[profile.signal?.session];
-
-            if (!session) {
-                logger.warn(`[Bot] Unknown session: ${profile.signal?.session}`);
-                continue;
-            }
-
-            let isActive;
-
-            if (session.START < session.END) {
-                isActive = currentMinutes >= session.START && currentMinutes < session.END;
-            } else {
-                isActive = currentMinutes >= session.START || currentMinutes < session.END;
-            }
-
-            if (isActive) {
-                symbols.push(symbol);
-            }
-        }
-
-        logger.info(`[Bot] Tradable symbols: ${symbols.join(", ") || "none"}`);
-
-        return symbols;
-    }
     async getActiveSymbols() {
         const now = new Date();
         const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
 
-        const sessionSymbols = Array.isArray(SESSIONS.SYMBOLS) ? SESSIONS.SYMBOLS : [];
         const tradableSymbols = [];
 
-        for (const [sessionName, session] of Object.entries(SESSIONS)) {
-            if (session.SYMBOLS.length < 0) return console.warn("[Bot] No symbols defined in session:", session);
+        for (const session of Object.values(SESSIONS)) {
+            if (!Array.isArray(session.SYMBOLS) || !session.SYMBOLS.length) {
+                logger.warn("[Bot] Session has no symbols");
+                continue;
+            }
 
             let isActive;
             if (session.START < session.END) {
@@ -203,14 +208,15 @@ class TradingBot {
             }
         }
 
-        logger.info(`[Bot] Tradable symbols: ${tradableSymbols.length ? tradableSymbols.join(", ") : "none"}`);
-        return tradableSymbols;
+        const uniqueSymbols = [...new Set(tradableSymbols)].filter(
+            (symbol) => PORTFOLIO.SYMBOLS.includes(symbol) && PROFILES[symbol],
+        );
+        logger.info(`[Bot] Tradable symbols: ${uniqueSymbols.length ? uniqueSymbols.join(", ") : "none"}`);
+        return uniqueSymbols;
     }
 
     async analyzeAllSymbols() {
         this.activeSymbols = await this.getActiveSymbols();
-
-        console.log(this.activeSymbols);
 
         const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol)));
 
@@ -232,6 +238,7 @@ class TradingBot {
     async fetchAllCandles(symbol) {
         try {
             const profile = PROFILES[symbol];
+            if (!profile) throw new Error(`Missing profile for ${symbol}`);
             const signalTimeframe = profile.signal.timeframe;
             const contextTimeframes = profile.signal.context === "majority" ? ["H1", "H4", "D1"] : [profile.signal.context.toUpperCase()];
 
@@ -253,35 +260,12 @@ class TradingBot {
         }
     }
 
-    shouldAnalyzeCandle(symbol, profile, candles) {
-        const timeframe = profile.signal.timeframe.toLowerCase();
-        const signalCandles = candles[timeframe];
-
-        if (!Array.isArray(signalCandles) || signalCandles.length === 0) {
-            logger.warn(`[Bot] No ${profile.signal.timeframe} candles for ${symbol}`);
-
-            return false;
-        }
-
-        const lastCandle = signalCandles[signalCandles.length - 1];
-        const candleId = `${profile.signal.timeframe}:${lastCandle.timestamp}`;
-
-        if (this.lastAnalyzedCandles[symbol] === candleId) {
-            logger.debug(`[Bot] ${symbol}: ${candleId} already analyzed`);
-
-            return false;
-        }
-
-        this.lastAnalyzedCandles[symbol] = candleId;
-
-        return true;
-    }
-
     // Analyzes a single symbol: fetches data, calculates indicators, and triggers trading logic.
     async analyzeSymbol(symbol, candleData) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
 
         const profile = PROFILES[symbol];
+        if (!profile || !candleData || typeof candleData !== "object") return null;
         const candles = {};
 
         for (const [tf, prices] of Object.entries(candleData)) {
@@ -295,10 +279,6 @@ class TradingBot {
                 return closeTime <= Date.now();
             });
         }
-
-        // if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
-        //     return null;
-        // }
 
         const indicators = {};
 
@@ -341,6 +321,7 @@ class TradingBot {
         clearInterval(this.sessionRefreshInterval);
         clearInterval(this.sessionPingInterval);
         clearInterval(this.monitorInterval);
+        clearInterval(this.dealIdMonitorInterval);
     }
 
     async startMonitorOpenTrades() {
@@ -368,10 +349,10 @@ class TradingBot {
         const nextMidnight = new Date(now);
         nextMidnight.setHours(24, 0, 0, 0); // Next 00:00
         const msUntilMidnight = nextMidnight - now;
-        setTimeout(() => {
+        this.sessionRefreshInterval = setTimeout(() => {
             this.refreshSessionAtMidnight();
             // After first run, repeat every 24h
-            setInterval(() => this.refreshSessionAtMidnight(), 24 * 60 * 60 * 1000);
+            this.sessionRefreshInterval = setInterval(() => this.refreshSessionAtMidnight(), 24 * 60 * 60 * 1000);
         }, msUntilMidnight);
         logger.info(`[Bot] Scheduled session refresh at midnight in ${(msUntilMidnight / 1000 / 60).toFixed(2)} minutes.`);
     }
@@ -423,13 +404,26 @@ class TradingBot {
     }
 }
 
-const bot = new TradingBot();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    const bot = new TradingBot();
 
-if ([0, 6].includes(new Date().getUTCDay())) {
-    logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
-} else {
-    bot.initialize().catch((error) => {
-        logger.error("[bot.js] Bot initialization failed:", error);
-        process.exit(1);
-    });
+    if (process.argv.includes("--check")) {
+        try {
+            const configuration = bot.checkRuntimeConfiguration();
+            logger.info(
+                `[Bot] Demo readiness check passed: ${configuration.symbols.length} symbols, ` +
+                    `${configuration.maxPositions} slots, ${(configuration.marginUsage * 100).toFixed(0)}% margin ceiling`,
+            );
+        } catch (error) {
+            logger.error(`[Bot] Demo readiness check failed: ${error.message}`);
+            process.exitCode = 1;
+        }
+    } else if ([0, 6].includes(new Date().getUTCDay())) {
+        logger.info("[Bot] It's the weekend. Bot will not start until Monday.");
+    } else {
+        bot.initialize().catch((error) => {
+            logger.error("[bot.js] Bot initialization failed:", error);
+            process.exit(1);
+        });
+    }
 }

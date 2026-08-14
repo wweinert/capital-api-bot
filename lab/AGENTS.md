@@ -5,7 +5,7 @@ strategy idea into reproducible evidence.
 
 ## Required workflow
 
-- Read `README.md` and `knowledge/DECISIONS.md`.
+- Read `README.md` and `harness/knowledge/DECISIONS.md`.
 
 ## Hard guardrails
 
