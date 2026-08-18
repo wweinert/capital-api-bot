@@ -23,10 +23,9 @@ The project focuses on backend architecture, data handling and modular strategy 
 - JavaScript ES Modules
 - REST APIs
 - WebSocket communication
-- Axios / node-fetch
+- Axios 
 - technicalindicators
 - dotenv
-- Mocha basics
 
 ## Project Structure
 
