@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "symbol": "AUDUSD",
+  "enabled": false,
+  "researchStatus": "strong-development-candidate",
+  "generatedAt": "2026-08-21T20:48:25.962Z",
+  "profile": {
+    "signalTimeframe": "M15",
+    "contextTimeframe": null,
+    "activeSessions": ["overlap", "newYork"],
+    "signal": {
+      "kind": "discretionary-structural-price-action",
+      "requireImpulse": true,
+      "requireSwing": true,
+      "requireBreakout": false,
+      "minSignalBodyAtr": 0.3,
+      "maxAtrPercentile": 0.9,
+      "previousSessionMode": "room",
+      "previousSessionRoomAtr": 0.25,
+      "minSessionAgeMinutes": 30,
+      "indicatorFilter": "none"
+    },
+    "entry": {
+      "mode": "signal-breakout",
+      "pendingOffsetAtr": 0.15,
+      "pendingExpiryMinutes": 30
+    },
+    "stop": {
+      "mode": "signal-candle",
+      "bufferAtr": 0.025
+    },
+    "management": {
+      "partialAtR": 2,
+      "partialFraction": 0.5,
+      "moveStopToBreakEvenAfterPartial": true,
+      "runnerTrailAtr": 2,
+      "fixedFinalTargetR": null,
+      "maxHoldMinutes": 720
+    },
+    "controls": {
+      "researchRiskPct": 0.01,
+      "maxTradesPerDay": 1,
+      "maxPositions": 1,
+      "cooldownMinutes": 15
+    }
+  },
+  "metrics": {
+    "development": {
+      "period": "2026-W03..W32",
+      "entries": 137,
+      "r": 29.551,
+      "returnPctAt1PctRisk": 29.21,
+      "profitFactor": 1.388,
+      "winRatePct": 57.2,
+      "maxDrawdownR": 5.19,
+      "positiveWeekPct": 63.3,
+      "temporalThirds": [
+        { "period": "2026-W03..W12", "r": 12.267, "positiveWeekPct": 70 },
+        { "period": "2026-W13..W22", "r": 9.699, "positiveWeekPct": 50 },
+        { "period": "2026-W23..W32", "r": 7.584, "positiveWeekPct": 70 }
+      ]
+    },
+    "recentDiagnostic": {
+      "period": "2026-W33..W34-partial",
+      "entries": 7,
+      "r": -1.415,
+      "returnPctAt1PctRisk": -1.46,
+      "profitFactor": 0.717,
+      "winRatePct": 37.5
+    }
+  },
+  "stress": {
+    "spreadX125": { "r": 15.393, "profitFactor": 1.191, "winRatePct": 54.1, "maxDrawdownR": 6.593 },
+    "entrySlippage002R": { "r": 26.408, "profitFactor": 1.342, "winRatePct": 56.5, "maxDrawdownR": 5.227 },
+    "stopSlippage002R": { "r": 27.621, "profitFactor": 1.356, "winRatePct": 56.7, "maxDrawdownR": 5.37 }
+  },
+  "riskDiagnostics": {
+    "risk2Pct": { "returnPct": 58.11, "maxDrawdownPct": 15 },
+    "risk3Pct": { "returnPct": 80.23, "maxDrawdownPct": 21.2 },
+    "warning": "These are isolated single-pair sizing diagnostics, not a five-position portfolio replay. Keep research risk at 1% until portfolio correlation, margin and fresh-forward gates pass."
+  },
+  "search": {
+    "requestedSeconds": 600,
+    "totalWallSecondsIncludingAudits": 1258.652,
+    "seed": 23082026,
+    "uniqueCandidates": 6862,
+    "applicableCandidates": 36,
+    "preparedEvents": 28904,
+    "selectionProtocol": "W03-W32 three mandatory positive temporal blocks; W33-W34 partial diagnostic opened once after selection",
+    "evaluatorSha256": "a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1",
+    "datasetFingerprint": "64e376e4c2c8d3fb19d9f3db8565671df9edb29c53f47871a316367e6072bf48"
+  },
+  "admission": {
+    "passed": false,
+    "failures": ["fresh_forward_unavailable", "recent_partial_diagnostic_negative"]
+  },
+  "limitations": [
+    "All selection blocks are already-inspected development evidence, not a fresh holdout.",
+    "The recent diagnostic is negative but contains only seven entries.",
+    "EURUSD was loaded only for causal USD-to-EUR conversion and generated no trades.",
+    "Broker minimum size, financing, gaps and multi-pair portfolio correlation remain outside this evaluator."
+  ],
+  "warning": "Research profile only. Do not enable or copy into protected live config.js before fresh-forward and chronological portfolio validation."
+}

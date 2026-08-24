@@ -23,12 +23,12 @@ export const DAILY_PROTOCOL = Object.freeze({
 // Change one coherent idea per experiment. The evaluator, split, and output
 // code below this region are fixed for the duration of an experiment series.
 export const CANDIDATE = {
-  name: "portfolio-eurusd-gbpjpy-gbpusd-three-slots",
-  signalFamily: "three-pair-profile-portfolio",
+  name: "audusd-sydney-m15-greenred-control",
+  signalFamily: "intraday-multi-pattern",
   method: "custom",
   rankByScore: true,
-  rankAtTimestampLimit: 3,
-  symbols: ["EURUSD", "GBPJPY", "GBPUSD"],
+  rankAtTimestampLimit: 1,
+  symbols: ["AUDUSD"],
   signalKind: "greenred",
   signalTimeframe: "M15",
   triggerVariant: "any",
@@ -46,12 +46,15 @@ export const CANDIDATE = {
   minDayMoveAtr: 0,
   minSessionAgeMinutes: 0,
   sessionWindows: [[0, 0]],
-  allowedSessions: null,
+  allowedSessions: ["offHours", "asia"],
+  fixedSessionLabel: "sydney",
+  sydneyStartMinute: 8 * 60,
+  sydneyEndMinute: 17 * 60,
   minAtrPct: null,
   minBbWidthPct: null,
   minEmaDistPct: null,
   entryMode: "signal-breakout",
-  riskPct: 0.03,
+  riskPct: 0.01,
   marginUtilization: 0.9,
   stopATR: 1.5,
   stopMode: "signal-candle",
@@ -65,8 +68,8 @@ export const CANDIDATE = {
   cooldown: 30,
   maxDaily: 3,
   maxTotalDaily: 0,
-  maxTotalPerSession: 9,
-  maxPositions: 3,
+  maxTotalPerSession: 3,
+  maxPositions: 1,
   maxLossesPerSymbolDay: 2,
   maxLossesPerSymbolSession: 2,
   pendingOffsetAtr: 0,
@@ -74,109 +77,15 @@ export const CANDIDATE = {
   weekdaysOnly: true,
   dailyFlat: true,
   dailyCloseMinuteUtc: 1320,
-  pairSessionProfiles: {
-    EURUSD: {
-      asia: { enabled: false },
-      london: {
-        enabled: true,
-        signalKind: "london-close-break",
-        signalTimeframe: "M15",
-        entryEventPrefix: "LondonOpeningCloseBreak",
-        stopEventPrefix: "LondonOpeningCloseBreak",
-        stopMode: "event-level",
-        stopBufferAtr: 0.05,
-        confirmationFrames: [],
-        filterMode: "none",
-        entryMode: "signal-breakout",
-        pendingExpiryMinutes: 60,
-        rewardRisk: 2,
-        hold: 480,
-        riskPct: 0.01,
-      },
-      overlap: {
-        enabled: true,
-        signalKind: "london-close-break",
-        signalTimeframe: "M15",
-        entryEventPrefix: "LondonOpeningCloseBreak",
-        stopEventPrefix: "LondonOpeningCloseBreak",
-        stopMode: "event-level",
-        stopBufferAtr: 0.05,
-        confirmationFrames: [],
-        filterMode: "none",
-        entryMode: "signal-breakout",
-        pendingExpiryMinutes: 60,
-        rewardRisk: 2,
-        hold: 480,
-        riskPct: 0.01,
-      },
-      newYork: { enabled: false },
-      offHours: { enabled: false },
-    },
-    GBPJPY: {
-      asia: { enabled: false },
-      london: {
-        enabled: true,
-        signalKind: "price-action",
-        signalTimeframe: "M15",
-        minImpulseAtr: 1.5,
-        minSwingGapAtr: 0.25,
-        minSignalBodyAtr: 0.3,
-        maxRetrace: 0.65,
-        confirmationFrames: ["H1", "H4"],
-        filterMode: "price",
-        filterAgreement: "majority",
-        minTrendStrengthAtr: 0,
-        entryMode: "signal-breakout",
-        pendingExpiryMinutes: 60,
-        stopMode: "signal-candle",
-        stopBufferAtr: 0.05,
-        rewardRisk: 2,
-        hold: 480,
-        riskPct: 0.03,
-      },
-      overlap: { enabled: false },
-      newYork: { enabled: false },
-      offHours: { enabled: false },
-    },
-    GBPUSD: {
-      asia: { enabled: false },
-      london: {
-        enabled: true,
-        signalKind: "event-signal",
-        signalTimeframe: "M15",
-        signalPattern: "EmaCross",
-        confirmationFrames: [],
-        filterMode: "none",
-        entryMode: "signal-breakout",
-        pendingExpiryMinutes: 60,
-        stopMode: "signal-candle",
-        stopBufferAtr: 0.05,
-        rewardRisk: 1.25,
-        hold: 180,
-        riskPct: 0.03,
-      },
-      overlap: {
-        enabled: true,
-        signalKind: "event-signal",
-        signalTimeframe: "M15",
-        signalPattern: "EmaCross",
-        confirmationFrames: [],
-        filterMode: "none",
-        entryMode: "signal-breakout",
-        pendingExpiryMinutes: 60,
-        stopMode: "signal-candle",
-        stopBufferAtr: 0.05,
-        rewardRisk: 1.25,
-        hold: 180,
-        riskPct: 0.03,
-      },
-      newYork: { enabled: false },
-      offHours: { enabled: false },
-    },
-  },
 };
 
 const MASK = Object.freeze({ FAST_EMA: 1 << 0, SLOW_EMA: 1 << 1, PRICE_EMA: 1 << 2, MACD: 1 << 3, EMA_SLOPE: 1 << 4, RSI: 1 << 5 });
+const SYDNEY_FORMATTER = new Intl.DateTimeFormat("en-AU", {
+  timeZone: "Australia/Sydney",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
 
 function frameFilterPass(event, side, frame, config) {
   if (config.filterMode === "none") return true;
@@ -249,8 +158,23 @@ function intradayContextPass(event, side, config) {
   return true;
 }
 
+function sydneySessionPass(event, config) {
+  if (!Number.isFinite(config.sydneyStartMinute) || !Number.isFinite(config.sydneyEndMinute)) return true;
+  const parts = Object.fromEntries(
+    SYDNEY_FORMATTER.formatToParts(new Date(event.t)).map(({ type, value }) => [type, value]),
+  );
+  const localMinute = Number(parts.hour) * 60 + Number(parts.minute);
+  const start = config.sydneyStartMinute;
+  const end = config.sydneyEndMinute;
+  if (![localMinute, start, end].every(Number.isFinite)) return false;
+  return start < end
+    ? localMinute >= start && localMinute < end
+    : localMinute >= start || localMinute < end;
+}
+
 export function decide(event, side, config) {
-  return signalPass(event, side, config) &&
+  return sydneySessionPass(event, config) &&
+    signalPass(event, side, config) &&
     confirmationPass(event, side, config) &&
     intradayContextPass(event, side, config);
 }
@@ -467,14 +391,14 @@ const CONTEXTS = Object.freeze([
 ]);
 
 const SESSIONS = Object.freeze([
-  { key: "all", allowedSessions: null },
-  { key: "london", allowedSessions: ["london"] },
-  { key: "overlap", allowedSessions: ["overlap"] },
-  { key: "newyork", allowedSessions: ["newYork"] },
-  { key: "london-overlap", allowedSessions: ["london", "overlap"] },
-  { key: "active-three", allowedSessions: ["london", "overlap", "newYork"] },
-  { key: "asia-control", allowedSessions: ["asia"] },
-  { key: "offhours-control", allowedSessions: ["offHours"] },
+  { key: "sydney-full-0800-1700", sydneyStartMinute: 8 * 60, sydneyEndMinute: 17 * 60 },
+  { key: "sydney-open-0800-1100", sydneyStartMinute: 8 * 60, sydneyEndMinute: 11 * 60 },
+  { key: "sydney-morning-0800-1300", sydneyStartMinute: 8 * 60, sydneyEndMinute: 13 * 60 },
+  { key: "sydney-core-0800-1400", sydneyStartMinute: 8 * 60, sydneyEndMinute: 14 * 60 },
+  { key: "sydney-mid-1000-1500", sydneyStartMinute: 10 * 60, sydneyEndMinute: 15 * 60 },
+  { key: "sydney-late-1100-1700", sydneyStartMinute: 11 * 60, sydneyEndMinute: 17 * 60 },
+  { key: "sydney-close-1400-1700", sydneyStartMinute: 14 * 60, sydneyEndMinute: 17 * 60 },
+  { key: "sydney-preopen-0700-1000", sydneyStartMinute: 7 * 60, sydneyEndMinute: 10 * 60 },
 ]);
 
 const EXITS = Object.freeze([
@@ -502,11 +426,12 @@ function stableSearchOrder(candidate) {
 }
 
 export const SEARCH_SEEDS = Object.freeze([
-  ...EXECUTION_POLICIES.flatMap((execution) => EXITS.flatMap((exit) => SESSIONS.flatMap((session) =>
-    SIGNALS.filter((signal) => !(signal.signalKind === "london-close-break" && exit.stopMode === "atr")).flatMap((signal) => CONTEXTS.map((context) => candidateVariant(
-      `global-gbpusd-${exit.key}-${execution.key}-${session.key}-${signal.key}-${context.key}`,
-      { ...exit, ...execution, ...session, ...signal, ...context },
-    )))))),
+  ...["AUDUSD", "AUDCAD", "NZDUSD", "NZDJPY", "EURAUD"].flatMap((symbol) =>
+    EXECUTION_POLICIES.flatMap((execution) => EXITS.flatMap((exit) => SESSIONS.flatMap((session) =>
+      SIGNALS.filter((signal) => signal.signalKind !== "london-close-break").flatMap((signal) => CONTEXTS.map((context) => candidateVariant(
+        `global-sydney-${symbol.toLowerCase()}-${exit.key}-${execution.key}-${session.key}-${signal.key}-${context.key}`,
+        { ...exit, ...execution, ...session, ...signal, ...context, symbols: [symbol] },
+      ))))))),
 ].sort((left, right) => stableSearchOrder(left) - stableSearchOrder(right)));
 // AUTORESEARCH MUTABLE REGION END
 

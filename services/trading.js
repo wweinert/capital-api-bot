@@ -14,6 +14,29 @@ import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
 
+const positiveRuleValue = (rule) => {
+    const value = Number(rule?.value);
+    return rule?.unit === "POINTS" && Number.isFinite(value) && value > 0 ? value : null;
+};
+
+const decimalPlaces = (value) => {
+    const text = String(value);
+    return text.includes(".") ? text.split(".")[1].length : 0;
+};
+
+export function normalizeDealSize(rawSize, marginLimitedSize, rules) {
+    const minimum = positiveRuleValue(rules?.minDealSize);
+    const increment = positiveRuleValue(rules?.minSizeIncrement);
+    const maximum = positiveRuleValue(rules?.maxDealSize) ?? Number.POSITIVE_INFINITY;
+    const capacity = Math.min(Number(rawSize), Number(marginLimitedSize), maximum);
+
+    if (![minimum, increment, capacity].every(Number.isFinite) || capacity < minimum) return 0;
+
+    const steps = Math.floor((capacity + increment * 1e-9) / increment);
+    const size = Number((steps * increment).toFixed(decimalPlaces(increment)));
+    return size >= minimum && size <= maximum ? size : 0;
+}
+
 export class TradingService {
     constructor() {
         this.openTrades = [];
@@ -137,9 +160,7 @@ export class TradingService {
 
         const todayEntries = [
             ...new Map(
-                activities
-                    .filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED")
-                    .map((activity) => [activity.dealId, activity]),
+                activities.filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED").map((activity) => [activity.dealId, activity]),
             ).values(),
         ];
 
@@ -179,13 +200,11 @@ export class TradingService {
 
             const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)).filter(Number.isFinite));
 
-            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= RISK.COOLDOWN_MINUTES * 60_000;
+            const maxDailyTrades = Number(candidate.profile?.strategy?.maxDailyTrades ?? RISK.MAX_DAILY_TRADES_PER_SYMBOL);
+            const cooldownMinutes = Number(candidate.profile?.strategy?.cooldownMinutes ?? RISK.COOLDOWN_MINUTES);
+            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= cooldownMinutes * 60_000;
 
-            return (
-                currentMinute < RISK.DAILY_LAST_ENTRY_MINUTE_UTC &&
-                symbolEntries.length < RISK.MAX_DAILY_TRADES_PER_SYMBOL &&
-                cooldownPassed
-            );
+            return currentMinute < RISK.DAILY_LAST_ENTRY_MINUTE_UTC && symbolEntries.length < maxDailyTrades && cooldownPassed;
         });
     }
 
@@ -242,6 +261,25 @@ export class TradingService {
             return 100 / marginFactor;
         } catch (error) {
             logger.warn(`[PositionSize] Cannot get leverage for ${symbol}: ${error.message}`);
+            return null;
+        }
+    }
+
+    async marketSizingForSymbol(symbol) {
+        try {
+            const details = await getMarketDetails(symbol);
+            const marginFactor = Number(details?.instrument?.marginFactor);
+            const leverage =
+                details?.instrument?.marginFactorUnit === "PERCENTAGE" && Number.isFinite(marginFactor) && marginFactor > 0 ? 100 / marginFactor : null;
+            const rules = details?.dealingRules;
+
+            if (!leverage || !positiveRuleValue(rules?.minDealSize) || !positiveRuleValue(rules?.minSizeIncrement)) {
+                return null;
+            }
+
+            return { leverage, rules };
+        } catch (error) {
+            logger.warn(`[PositionSize] Cannot get broker sizing rules for ${symbol}: ${error.message}`);
             return null;
         }
     }
@@ -351,11 +389,12 @@ export class TradingService {
 
         const requestedRiskAmount = accountBalance * safeRiskPct;
         const rawSize = (requestedRiskAmount * quotePerEur) / riskDistance;
-        const leverage = await this.leverageForSymbol(symbol);
+        const marketSizing = await this.marketSizingForSymbol(symbol);
 
-        if (!leverage) {
-            return this.emptyPositionSizing(symbol, "missing_leverage");
+        if (!marketSizing) {
+            return this.emptyPositionSizing(symbol, "missing_broker_sizing_rules");
         }
+        const { leverage, rules } = marketSizing;
 
         const notionalEurForSize = (value) => (value * entry) / quotePerEur;
         const marginForSize = (value) => notionalEurForSize(value) / leverage;
@@ -371,28 +410,19 @@ export class TradingService {
         }
 
         const rawMargin = marginForSize(rawSize);
-        const marginScale = rawMargin > maxMarginPerTrade ? maxMarginPerTrade / rawMargin : 1;
-        let size = Math.floor((rawSize * marginScale) / 100) * 100;
-        if (size < 100) {
-            logger.warn(`[PositionSize] ${symbol}: minimum size 100 exceeds sizing constraints. raw=${rawSize}, marginCap=${maxMarginPerTrade}`);
-            return this.emptyPositionSizing(symbol, "below_min_size");
-        }
+        const marginLimitedSize = (maxMarginPerTrade * leverage * quotePerEur) / entry;
+        const size = normalizeDealSize(rawSize, marginLimitedSize, rules);
+        const marginRequired = marginForSize(size);
 
-        let marginRequired = marginForSize(size);
-        if (marginRequired > maxMarginPerTrade) {
-            size = Math.floor((maxMarginPerTrade * leverage * quotePerEur) / entry / 100) * 100;
-            marginRequired = marginForSize(size);
-        }
-
-        if (!(Number.isFinite(size) && size >= 100 && marginRequired <= maxMarginPerTrade)) {
+        if (!(Number.isFinite(size) && size > 0 && marginRequired <= maxMarginPerTrade)) {
             logger.warn(`[PositionSize] ${symbol}: adjusted size still exceeds margin cap. size=${size}, margin=${marginRequired}, cap=${maxMarginPerTrade}`);
-            return this.emptyPositionSizing(symbol, "margin_cap_too_small");
+            return this.emptyPositionSizing(symbol, "broker_size_or_margin_cap_too_small");
         }
 
         const effectiveRiskAmount = (size * riskDistance) / quotePerEur;
         const effectiveRiskPct = effectiveRiskAmount / accountBalance;
         const stopLossPips = riskDistance / this.getPipValue(symbol);
-        const marginCapHit = rawMargin > maxMarginPerTrade || size < Math.floor(rawSize / 100) * 100;
+        const marginCapHit = rawMargin > maxMarginPerTrade || size < rawSize;
         const positionSizing = {
             symbol,
             baseCurrency: base,

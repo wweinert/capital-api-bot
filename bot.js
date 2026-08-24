@@ -33,7 +33,7 @@ export class TradingBot {
         this.monitorInProgress = false; // Prevent overlapping monitor runs
         this.priceMonitorInProgress = false;
         this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
-        this.maxCandleHistory = 201; // Rolling window size for indicators
+        this.maxCandleHistory = 322;
         this.openedPositions = {}; // Track opened positions
         this.MONITOR_INTERVAL_MS = 60 * 1000; // 1 minute
         this.openedBrockerDealIds = [];
@@ -42,7 +42,7 @@ export class TradingBot {
         this.tokens = null;
     }
 
-    checkRuntimeConfiguration() {
+    checkRuntimeConfiguration({ requireCredentials = true, requireExecution = true } = {}) {
         const missingCredentials = [API.KEY, API.IDENTIFIER, API.PASSWORD].some((value) => !String(value || "").trim());
         let apiHost = null;
 
@@ -55,14 +55,33 @@ export class TradingBot {
         if (apiHost !== API.DEMO_HOST) {
             throw new Error(`Demo-only safety lock: API host must be ${API.DEMO_HOST}.`);
         }
-        if (missingCredentials) {
+        if (requireCredentials && missingCredentials) {
             throw new Error("Missing demo API credentials.");
         }
-        if (PORTFOLIO.MAX_POSITIONS !== PORTFOLIO.SYMBOLS.length) {
-            throw new Error("Portfolio slot count must match the number of configured trading symbols.");
+
+        if (PORTFOLIO.MAX_POSITIONS > PORTFOLIO.SYMBOLS.length) {
+            throw new Error("Portfolio slot count cannot exceed enabled symbols.");
         }
         if (PORTFOLIO.MAX_POSITIONS_PER_SYMBOL !== 1) {
             throw new Error("This system requires exactly one open position or working order per symbol.");
+        }
+        if (!PORTFOLIO.SYMBOLS.length || new Set(PORTFOLIO.SYMBOLS).size !== PORTFOLIO.SYMBOLS.length) {
+            throw new Error("Portfolio symbols must be a non-empty unique allowlist.");
+        }
+        for (const symbol of PORTFOLIO.SYMBOLS) {
+            const profile = PROFILES[symbol];
+            if (!profile || profile.strategy?.name !== "greenRedContinuation") {
+                throw new Error(`Missing Green-Red profile for ${symbol}.`);
+            }
+            if (
+                profile.signal?.timeframe !== "M15" ||
+                profile.entry?.type !== "stop" ||
+                !(Number(profile.exit?.targetR) > 0) ||
+                !(Number(profile.exit?.maxHoldMinutes) > 0) ||
+                !(Number(profile.strategy?.riskPerTrade) > 0 && Number(profile.strategy?.riskPerTrade) <= 0.01)
+            ) {
+                throw new Error(`Unsafe or incomplete demo profile for ${symbol}.`);
+            }
         }
 
         return {
@@ -208,9 +227,7 @@ export class TradingBot {
             }
         }
 
-        const uniqueSymbols = [...new Set(tradableSymbols)].filter(
-            (symbol) => PORTFOLIO.SYMBOLS.includes(symbol) && PROFILES[symbol],
-        );
+        const uniqueSymbols = [...new Set(tradableSymbols)].filter((symbol) => PORTFOLIO.SYMBOLS.includes(symbol) && PROFILES[symbol]);
         logger.info(`[Bot] Tradable symbols: ${uniqueSymbols.length ? uniqueSymbols.join(", ") : "none"}`);
         return uniqueSymbols;
     }
@@ -409,10 +426,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 
     if (process.argv.includes("--check")) {
         try {
-            const configuration = bot.checkRuntimeConfiguration();
+            const configuration = bot.checkRuntimeConfiguration({ requireExecution: false });
             logger.info(
                 `[Bot] Demo readiness check passed: ${configuration.symbols.length} symbols, ` +
-                    `${configuration.maxPositions} slots, ${(configuration.marginUsage * 100).toFixed(0)}% margin ceiling`,
+                    `${configuration.maxPositions} slots, ${(configuration.marginUsage * 100).toFixed(0)}% margin ceiling, ` +
+                    `execution=${configuration.executionEnabled ? "armed" : "disarmed"}`,
             );
         } catch (error) {
             logger.error(`[Bot] Demo readiness check failed: ${error.message}`);

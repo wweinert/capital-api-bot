@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "symbol": "EURGBP",
+  "enabled": false,
+  "researchStatus": "no-qualifying-profile",
+  "generatedAt": "2026-08-22T15:57:09.864Z",
+  "profile": null,
+  "search": {
+    "requestedSeconds": 600,
+    "seed": 24082026,
+    "uniqueCandidates": 4720,
+    "applicableCandidates": 0,
+    "signalTimeframe": "M15",
+    "selectionPeriod": "2026-W03..W32",
+    "selectionProtocol": "Three mandatory positive temporal blocks: W03-W12, W13-W22 and W23-W32",
+    "requiredGates": {
+      "minimumEntries": 100,
+      "minimumWinRatePctExclusive": 50,
+      "minimumProfitFactor": 1.1,
+      "maximumDrawdownR": 12,
+      "minimumPositiveWeekPctPerBlock": 40,
+      "positiveRRequiredInEveryBlock": true
+    },
+    "signalVariants": [
+      "structural-price-action",
+      "green-red-candle",
+      "discretionary-impulse-swing-resumption"
+    ],
+    "contextVariants": {
+      "sessions": ["asia", "london", "overlap", "newYork", "offHours"],
+      "higherTimeframe": ["none", "H1-price", "H1-EMA", "H1-RSI", "H1-MACD", "H1-combinations"],
+      "marketContext": ["previous-session-room", "previous-session-breakout", "day-continuation", "day-reversal"],
+      "activityFilters": ["ATR-percentile", "Bollinger-width", "EMA-distance"]
+    },
+    "managementVariants": {
+      "fixedTargetsR": [1, 1.25, 1.5, 2, 2.5],
+      "strongMoveDetection": [
+        "reach-0.75R-or-1R-within-15-to-60-minutes",
+        "M15-signal-body-0.3-to-1.0-ATR"
+      ],
+      "runnerActivation": ["fast-1R", "signal-body", "always-control", "fixed-target-trail"],
+      "atrTrailDistances": [1, 1.5, 2, 2.5, 3, 4],
+      "trailTimeframes": ["M1", "M15"],
+      "partialRunner": ["33%-67%-partial-at-1R-to-2R-then-ATR-trail"],
+      "maximumHoldMinutes": [120, 180, 240, 360, 480, 720]
+    },
+    "evaluatorSha256": "a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1",
+    "datasetFilesSha256": {
+      "D1": "0e68e0efba26854bdaa28c2a9230d96a4ac039c4d19724643c67d6d6a0864a5d",
+      "H4": "ba9db39b5bc59372ed77bbf68fa3231a760a9a78c96365687245aea2058d589e",
+      "H1": "1c217f9d7c7ecc7f7aec7fcf7b209b56d3e0f65cf02186bffb28e457a2467003",
+      "M15": "1d18819cc4e9b70e05737ff570a0edb11b9f388dd3148e409a00e6a673945bb6",
+      "M5": "f7d486ffc32c1047be24c9f8a7cf8809d2c450b0b0d140a057beda764cdb9032",
+      "M1": "267719897bfc46e3f786eb033e74de8a0b74099ba15f71241c6e04922825d57c"
+    }
+  },
+  "alternativeStrategySearch": {
+    "requestedSeconds": 600,
+    "wallSecondsIncludingPreparation": 811.641,
+    "seed": 25082026,
+    "uniqueCandidates": 7269,
+    "applicableCandidates": 0,
+    "selectionSpreadMultiplier": 1.25,
+    "minimumEntries": 80,
+    "strategyFamilies": [
+      "Bollinger-reentry",
+      "RSI-reversal",
+      "EMA-cross-and-reclaim",
+      "MACD-cross",
+      "momentum-and-breakout",
+      "candlestick-patterns",
+      "Green-Red",
+      "London-range-close-break"
+    ],
+    "signalTimeframes": ["M5", "M15", "H1", "H4"],
+    "selectionProtocol": "W03-W32 three mandatory positive temporal blocks; selection performed directly under spread x1.25",
+    "evaluatorSha256": "a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1",
+    "datasetFingerprint": "877e01d194fdb6a5aa2b8501e1f3c2c3a6dd5ea0e3347d2c0d2f99f6b26310da",
+    "bestRejectedDiagnostic": {
+      "signal": "H1-Momentum",
+      "context": "H1/H4 EMA-RSI majority, day reversal",
+      "sessions": ["asia", "london", "overlap"],
+      "management": "fixed 2R with BE at 1R and 1 ATR M15 trail; 60-minute maximum hold",
+      "entries": 42,
+      "r": -6.467,
+      "returnPct": -6.18,
+      "profitFactor": 0.361,
+      "winRatePct": 35.7,
+      "maxDrawdownR": 6.467,
+      "temporalBlocks": [
+        { "period": "2026-W03..W12", "r": -2.528, "positiveWeekPct": 10 },
+        { "period": "2026-W13..W22", "r": -1.401, "positiveWeekPct": 20 },
+        { "period": "2026-W23..W32", "r": -2.541, "positiveWeekPct": 20 }
+      ],
+      "rejectionReasons": [
+        "negative-in-every-temporal-block",
+        "profit-factor-below-1.10",
+        "win-rate-not-above-50pct",
+        "sample-below-80"
+      ]
+    }
+  },
+  "firstEurusdProfileTransferReplay": {
+    "source": "lab/pair-profiles/EURUSD.json",
+    "sourceProfileSummary": {
+      "signal": "M15 1-6 bar impulse/pullback/resumption with lower-high/higher-low structure",
+      "scoring": "H1 one-bar price move >=0.1 ATR plus Bollinger directional room >=0.75 ATR; minimum score 2/2",
+      "entry": "2-point buffered signal-wick breakout, one M15 bar pending lifetime",
+      "management": "fixed 1.5R target; breakeven at 1R after at least 30 minutes; 120-minute maximum hold",
+      "controls": "maximum three trades/day, stop after two losses/day, one position, 15-minute cooldown"
+    },
+    "reproductionAudit": {
+      "status": "semantic-reconstruction-not-bit-exact",
+      "reason": "The original temporary evaluator was removed; the JSON retains parameters but not every pivot and intrabar ordering implementation detail.",
+      "recordedEurusd": { "trades": 489, "r": 146.813, "profitFactor": 1.86, "winRatePct": 51.3 },
+      "reconstructedEurusd": { "trades": 402, "r": 106.529, "profitFactor": 1.705, "winRatePct": 50.2 }
+    },
+    "eurgbpNominal": {
+      "trades": 79,
+      "r": -17.187,
+      "profitFactor": 0.564,
+      "winRatePct": 30.4,
+      "maxDrawdownR": 18.034,
+      "positiveWeekPct": 33.3,
+      "temporalBlocks": [
+        { "period": "2026-W03..W12", "r": -9.536, "positiveWeekPct": 33.3 },
+        { "period": "2026-W13..W22", "r": -1.598, "positiveWeekPct": 33.3 },
+        { "period": "2026-W23..W32", "r": -3.174, "positiveWeekPct": 40 }
+      ]
+    },
+    "eurgbpStress": {
+      "spreadX125": { "trades": 82, "r": -27.186, "profitFactor": 0.405, "winRatePct": 25.6, "maxDrawdownR": 27.186 },
+      "slippage002R": { "trades": 77, "r": -21.316, "profitFactor": 0.471, "winRatePct": 29.9, "maxDrawdownR": 22.027 },
+      "spreadX125PlusSlippage002R": { "trades": 80, "r": -29.77, "profitFactor": 0.362, "winRatePct": 26.3, "maxDrawdownR": 29.77 }
+    },
+    "relaxedOfficialEngineSensitivity": {
+      "description": "Official impulse+swing/H1-price replay without the exact Bollinger-room veto and without the 30-minute BE delay; intentionally more permissive, not an exact profile result.",
+      "nominal": { "entries": 339, "r": -154.777, "profitFactor": 0.249, "winRatePct": 22.4 },
+      "spreadX125": { "entries": 332, "r": -159.293, "profitFactor": 0.221, "winRatePct": 20.2 }
+    },
+    "conclusion": "The first EURUSD profile does not transfer to EURGBP under either the closer semantic reconstruction or the deliberately relaxed sensitivity interpretation."
+  },
+  "correctedGreenRedSearch": {
+    "status": "no-qualifying-profile",
+    "requestedSeconds": 600,
+    "searchSeconds": 607.613,
+    "preparationSeconds": 6.86,
+    "seed": 22082026,
+    "uniqueCandidates": 13627,
+    "errors": 0,
+    "signalTimeframe": "M15",
+    "selectionPeriod": "2025-W52..2026-W34",
+    "selectionProtocol": "Flexible-length M15 Green-Red structure; H1 none or two-closed-bar price direction only; M15 Bollinger/RSI/volume score 0-2; close and wick entry; fixed 1.5R-3R, ATR runners and partial runners.",
+    "requiredGates": {
+      "minimumEntries": 100,
+      "minimumWinRatePctExclusive": 50,
+      "minimumProfitFactor": 1.1,
+      "maximumDrawdownR": 12,
+      "minimumPositiveWeekPctPerBlock": 40,
+      "positiveRRequiredInEveryBlock": true
+    },
+    "evaluatorSha256": "45e506016f9c6068b89cbc6d1dbfed2ffa8f2a8f4b638975f27450bd5247d7d1",
+    "runnerSha256": "18a0de2eff0902ad838df84df35ef31464ccd786058a6a692b0afa6230c065d4",
+    "datasetCoverage": {
+      "M1": { "rows": 245840, "first": "2025-12-21T22:01:00.000Z", "last": "2026-08-21T20:59:00.000Z", "sha256": "b589ec20af164eb6114f24c886bdc8e69a5628513aceee29158f68324aa004d4" },
+      "M5": { "rows": 49634, "first": "2025-12-21T22:00:00.000Z", "last": "2026-08-21T20:55:00.000Z", "sha256": "35d186eed2c1673a9c7ef5e7f4f374c04f1412e338ba60ec026cf0725bfda862" },
+      "M15": { "rows": 16602, "first": "2025-12-21T22:00:00.000Z", "last": "2026-08-21T20:45:00.000Z", "sha256": "d4032010a7e6331c0f8c61e030f3d96b3241363ba8dae151dd6fa2a8a038427a" },
+      "H1": { "rows": 4151, "first": "2025-12-21T22:00:00.000Z", "last": "2026-08-21T20:00:00.000Z", "sha256": "eaca0d225ae0cf1c4654bd79cbf780b3053a397ef6148f747d906f8404b0b9f2" },
+      "H4": { "rows": 1164, "first": "2025-12-01T00:00:00.000Z", "last": "2026-08-21T20:00:00.000Z", "sha256": "f81ff852b954db627746aab3a742c164335e3e821105cd1547bcf27e1680c100" },
+      "D1": { "rows": 239, "first": "2025-11-16T00:00:00.000Z", "last": "2026-08-21T00:00:00.000Z", "sha256": "a822b25f955bea27bfa078674e1895dfa63afeb81f1a6a9c5efd858f9f069e00" }
+    },
+    "bestRejectedDiagnostic": {
+      "candidateSha256": "ea974ae2ba54c9b45b6a3d2b7ece3b806737d1d964937c80192ba2b2aa0ec506",
+      "config": {
+        "signal": "M15 flexible Green-Red discretionary confirmed swing",
+        "h1Context": "two-closed-H1-bar price direction",
+        "minimumM15IndicatorScore": 2,
+        "session": "overlap",
+        "entry": "60-minute pending at signal wick",
+        "stop": "signal candle plus 0.03 M15 ATR",
+        "management": "50% at 1R; remainder breakeven and 3 M15 ATR runner; 240-minute maximum hold",
+        "cooldownMinutes": 30,
+        "maximumEntriesPerDay": 5
+      },
+      "nominal": {
+        "entries": 46,
+        "tradesIncludingPartialExits": 62,
+        "r": 4.748,
+        "returnPct": 4.87,
+        "profitFactor": 1.239,
+        "reportedExitLegWinRatePct": 59.7,
+        "maxDrawdownR": 5.216,
+        "positiveWeekPct": 34.4,
+        "trainR": -0.157,
+        "validationR": 4.905
+      },
+      "temporalBlocks": [
+        { "period": "2025-W52..2026-W10", "r": -0.008, "positiveWeekPct": 37.5 },
+        { "period": "2026-W11..W22", "r": -0.311, "positiveWeekPct": 33.3 },
+        { "period": "2026-W23..W34", "r": 5.067, "positiveWeekPct": 33.3 }
+      ],
+      "spreadX125": {
+        "entries": 44,
+        "r": 2.431,
+        "returnPct": 2.2,
+        "profitFactor": 1.127,
+        "reportedExitLegWinRatePct": 59.3,
+        "maxDrawdownR": 5.665,
+        "trainR": -0.924,
+        "validationR": 3.353,
+        "temporalBlocks": [
+          { "period": "2025-W52..2026-W10", "r": -0.442, "positiveWeekPct": 37.5 },
+          { "period": "2026-W11..W22", "r": -0.299, "positiveWeekPct": 25 },
+          { "period": "2026-W23..W34", "r": 3.17, "positiveWeekPct": 33.3 }
+        ]
+      },
+      "failedGates": [
+        "entries-below-100",
+        "negative-early-block",
+        "negative-middle-block",
+        "positive-week-rate-below-40pct-in-every-block",
+        "train-not-positive-under-spread-x1.25"
+      ]
+    },
+    "conclusion": "The corrected logic finds a small profitable overlap cluster, but it is sparse and concentrated in the late block. Keep EURGBP disabled; retain the configuration only as a forward-observation hypothesis."
+  },
+  "highWinRateSearch": {
+    "status": "win-rate-above-50-but-negative-expectancy-rejected",
+    "selectionPeriod": "2025-W52..2026-W34",
+    "signalTimeframe": "M15",
+    "entryWinRateDefinition": "All partial and runner legs are aggregated back to one original entry before classifying a win.",
+    "selectionStress": "historical bid/ask replay repeated at spread x1.25",
+    "rounds": [
+      { "name": "broad", "requestedSeconds": 600, "searchSeconds": 600.027, "evaluated": 9711, "errors": 0, "runnerSha256": "74bb27abca849e95572a89014dc23b0dcf7d087a67c31d8c9d4baaba9cb13e3d" },
+      { "name": "frequency-diagnostic", "requestedSeconds": 120, "searchSeconds": 120.029, "evaluated": 1534, "errors": 0, "runnerSha256": "745d666a82f3ba921052fb60f0b3b3089df0d19cadc09b22867637dfe1d35e99" },
+      { "name": "side-search", "requestedSeconds": 180, "searchSeconds": 180.054, "evaluated": 2366, "errors": 0, "runnerSha256": "b139dcf6b2b54564652f732d0cb847e2ad66614492774896b79075c341137e42" },
+      { "name": "management-frontier", "requestedSeconds": 600, "searchSeconds": 600.016, "evaluated": 8119, "errors": 0, "runnerSha256": "5c04fdd6527a287187a013cbc8bab8ee7ebd81b5f5036ece38b767c0ef87cf57" },
+      { "name": "session-context", "requestedSeconds": 600, "searchSeconds": 600.031, "evaluated": 8527, "errors": 0, "runnerSha256": "4e72a8005262eca5a5ae3980e0e368ff16288b930f9700b67a9b54ab86595c6b" },
+      { "name": "wide-stop-long-management", "requestedSeconds": 600, "searchSeconds": 600.076, "evaluated": 8046, "errors": 0, "runnerSha256": "966e28f64e579266c91766e318db23df954a0834df477392ba906eeb97f82e6d" }
+    ],
+    "totalEvaluated": 38303,
+    "evaluatorSha256": "ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db",
+    "requiredGates": {
+      "minimumNominalEntries": 100,
+      "minimumStressEntries": 90,
+      "minimumWinRatePctExclusiveNominalAndStress": 50,
+      "minimumProfitFactorNominal": 1.1,
+      "minimumProfitFactorStress": 1.05,
+      "maximumDrawdownR": 12,
+      "positiveRRequiredInEveryTemporalBlock": true,
+      "minimumPositiveWeekPctPerBlock": 40
+    },
+    "bestRejectedDiagnostic": {
+      "candidateSha256": "3d45ae6c657ae063c9a7ee8d1131a766563b881fed6294c76655ac44a9f5f1d7",
+      "profile": {
+        "direction": "sell-only",
+        "session": "DST-aware London, 30 to 360 minutes after open",
+        "signal": "M15 flexible Green-Red plus causal price-action continuation",
+        "minimumImpulseAtr": 0.5,
+        "minimumSignalBodyAtr": 0.075,
+        "minimumSignalBodyRatio": 0.2,
+        "minimumActivity4": 0.5,
+        "minimumVolumeRatio20": 0.9,
+        "minimumIndicatorScore": 1,
+        "minimumCurrentSessionRangeAtr": 0.75,
+        "minimumPreviousSessionRoomAtr": 0.5,
+        "maximumSpreadAtr": 1.25,
+        "higherTimeframeFilter": "disabled",
+        "entry": "pending sell 0.03 ATR below the signal wick; 120-minute expiry",
+        "stop": "above signal candle plus 0.2 M15 ATR",
+        "management": "60% at 0.65R; move stop to breakeven; trail the 40% runner by 3 M15 ATR",
+        "maximumHoldMinutes": 720,
+        "cooldownMinutes": 30,
+        "maximumEntriesPerDay": 5,
+        "maximumLossesPerDay": 2,
+        "maximumLossesPerSession": 2
+      },
+      "nominal": {
+        "entries": 115,
+        "entryWinRatePct": 56.5,
+        "r": -9.775,
+        "returnPct": -9.74,
+        "profitFactor": 0.804,
+        "maxDrawdownR": 12.996,
+        "positiveWeekPct": 40.6,
+        "trainR": -2.079,
+        "validationR": -7.694
+      },
+      "spreadX125": {
+        "entries": 96,
+        "entryWinRatePct": 56.3,
+        "r": -11.382,
+        "returnPct": -10.91,
+        "profitFactor": 0.729,
+        "maxDrawdownR": 11.908,
+        "positiveWeekPct": 34.4,
+        "trainR": -4.122,
+        "validationR": -7.259
+      },
+      "nominalTemporalBlocks": [
+        { "period": "2025-W52..2026-W10", "r": -0.076, "positiveWeekPct": 62.5 },
+        { "period": "2026-W11..W22", "r": 1.228, "positiveWeekPct": 50 },
+        { "period": "2026-W23..W34", "r": -10.925, "positiveWeekPct": 16.7 }
+      ],
+      "stressTemporalBlocks": [
+        { "period": "2025-W52..2026-W10", "r": -3.145, "positiveWeekPct": 37.5 },
+        { "period": "2026-W11..W22", "r": -0.865, "positiveWeekPct": 50 },
+        { "period": "2026-W23..W34", "r": -7.371, "positiveWeekPct": 16.7 }
+      ],
+      "failedGates": [
+        "negative-expectancy-nominal-and-stress",
+        "profit-factor-below-required-floor-nominal-and-stress",
+        "nominal-drawdown-above-12R",
+        "negative-early-and-late-nominal-blocks",
+        "negative-all-stress-blocks",
+        "positive-week-rate-below-40pct-in-stressed-early-and-late-blocks"
+      ]
+    },
+    "conclusion": "The search can manufacture an entry win rate above 50%, but the wins are too small relative to full stop losses. No profitable high-win-rate EURGBP profile exists in the inspected matrix. Keep disabled."
+  },
+  "result": {
+    "winner": null,
+    "bestRejected": "highWinRateSearch.bestRejectedDiagnostic",
+    "costStress": "spread-x1.25-run-in-selection-for-every-candidate",
+    "recentDiagnostic": "included-in-inspected-late-block-through-2026-W34",
+    "riskDiagnostics": "not-run-because-no-positive-edge"
+  },
+  "admission": {
+    "passed": false,
+    "failures": [
+      "no_candidate_passed_all_three_temporal_blocks",
+      "no_alternative_strategy_passed_cost_aware_gates",
+      "first_eurusd_profile_transfer_failed",
+      "corrected_green_red_profile_sparse_and_negative_in_early_middle_blocks",
+      "high_win_rate_profile_has_negative_expectancy_and_fails_temporal_stability",
+      "fresh_forward_unavailable"
+    ]
+  },
+  "priorEvidence": {
+    "reference": "lab/harness/knowledge/DECISIONS.md — 2026-08-12 structural M15 price-action portfolio",
+    "finding": "EURGBP previously had no pair/session cell profitable in both folds; the best train-ranked profile was negative in both."
+  },
+  "warning": "No EURGBP trading profile was found. Keep this symbol disabled; do not invent fallback parameters or copy them into protected live config.js."
+}

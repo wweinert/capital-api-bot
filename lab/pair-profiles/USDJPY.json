@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "symbol": "USDJPY",
+  "enabled": false,
+  "researchStatus": "forward-observation-hypothesis-not-admitted",
+  "generatedAt": "2026-08-22T12:18:15.997Z",
+  "profile": {
+    "signalTimeframe": "M15",
+    "signalMode": "flexible-green-red-only",
+    "higherTimeframeFilter": "none",
+    "allowedSessions": ["london", "overlap"],
+    "minimumM15IndicatorScore": 1,
+    "minimumM15AtrPercentile300": 0.25,
+    "minimumM15Efficiency24": 0.25,
+    "minimumM15Activity4": 0.75,
+    "minimumSignalBodyRatio": 0.2,
+    "maximumSpreadAtr": 1,
+    "entry": {
+      "mode": "signal-wick-breakout",
+      "offsetAtr": 0.02,
+      "expiryMinutes": 30
+    },
+    "stop": {
+      "mode": "signal-candle",
+      "bufferAtr": 0.03
+    },
+    "management": {
+      "partialAtR": 0.65,
+      "partialFraction": 0.6,
+      "moveStopToBreakEvenAfterPartial": true,
+      "runnerTrailAtr": 2,
+      "runnerTrailTimeframe": "M15",
+      "maximumHoldMinutes": 360
+    },
+    "controls": {
+      "cooldownMinutes": 45,
+      "maximumEntriesPerDay": 2,
+      "maximumLossesPerDay": 2,
+      "maximumLossesPerSession": 1,
+      "maximumPositions": 1
+    }
+  },
+  "correctedGreenRedSearch": {
+    "status": "no-qualifying-profile",
+    "requestedSeconds": 600,
+    "searchSeconds": 615.667,
+    "preparationSeconds": 14.441,
+    "seed": 22082026,
+    "uniqueCandidates": 11927,
+    "errors": 0,
+    "signalTimeframe": "M15",
+    "selectionPeriod": "2025-W52..2026-W34",
+    "selectionProtocol": "Flexible-length M15 Green-Red structure; H1 none or two-closed-bar direction only; soft M15 Bollinger/RSI/volume score; close or wick breakout entry; fixed targets, wide ATR runners and partial runners.",
+    "requiredGates": {
+      "minimumEntries": 100,
+      "minimumWinRatePctExclusive": 50,
+      "minimumProfitFactor": 1.1,
+      "maximumDrawdownR": 12,
+      "minimumPositiveWeekPctPerBlock": 40,
+      "positiveRRequiredInEveryBlock": true
+    },
+    "evaluatorSha256": "45e506016f9c6068b89cbc6d1dbfed2ffa8f2a8f4b638975f27450bd5247d7d1",
+    "runnerSha256": "a3077fc9f9de9e3bca94cfb928e0614d39a8550715ee4f57d3017168323a2532",
+    "datasetCoverage": {
+      "M1": { "rows": 239450, "first": "2025-12-24T09:44:00.000Z", "last": "2026-08-18T17:54:00.000Z", "sha256": "398ef9ae1057cb387d5bc4732bfaa658ce046636037673eea31521225a841c38" },
+      "M5": { "rows": 48065, "first": "2025-12-24T09:50:00.000Z", "last": "2026-08-18T17:50:00.000Z", "sha256": "0143317aead8b23b20ef8cec1589920fa145124af568132e9930b1f7fbfdf1e5" },
+      "M15": { "rows": 17738, "first": "2025-12-01T00:00:00.000Z", "last": "2026-08-18T17:30:00.000Z", "sha256": "d80f4005bbb3f97c443a3a74689b14e273f26dc6fd3f2ea539e4cdf3dd9c20a0" },
+      "H1": { "rows": 4434, "first": "2025-12-01T00:00:00.000Z", "last": "2026-08-18T16:00:00.000Z", "sha256": "24b0fe26e24fb630520e2e1ed37e97ff6abdaf626307fbc2f455188f89129be0" },
+      "H4": { "rows": 1147, "first": "2025-12-01T00:00:00.000Z", "last": "2026-08-18T12:00:00.000Z", "sha256": "5a2b7b3be0f7673979b1853261e18211f4521a742a4ad82135b382561fdef9d5" },
+      "D1": { "rows": 236, "first": "2025-11-16T00:00:00.000Z", "last": "2026-08-17T00:00:00.000Z", "sha256": "00766888a413feae4cafce0f577e298646ff13d4952fbf7027ca5699c886f6ca" }
+    },
+    "bestRejectedDiagnostic": {
+      "candidateSha256": "27125fad46f9aa3ff3ca4bed4af2cd58d288a90d4c8d663d9788c2c4be3876b2",
+      "config": {
+        "signal": "M15 flexible Green-Red price-action swing",
+        "structure": "impulse >= 1.25 ATR; swing gap >= 0.25 ATR; retrace 0.10-0.80; signal body >= 0.05 ATR",
+        "h1Context": "disabled",
+        "minimumM15IndicatorScore": 1,
+        "maxSpreadAtr": 1,
+        "session": "overlap",
+        "entry": "30-minute pending at signal wick plus 0.03 M15 ATR",
+        "stop": "signal candle plus 0.03 M15 ATR",
+        "management": "breakeven at 1R; always-on 4 M15 ATR runner; 240-minute maximum hold",
+        "cooldownMinutes": 30,
+        "maximumEntriesPerDay": 5,
+        "maximumLossesPerDay": 3,
+        "maximumLossesPerSession": 2
+      },
+      "nominal": {
+        "entries": 160,
+        "r": 19.951,
+        "returnPct": 17.92,
+        "profitFactor": 1.249,
+        "winRatePct": 26.3,
+        "maxDrawdownR": 13.033,
+        "positiveWeekPct": 53.1,
+        "trainR": 2.166,
+        "validationR": 17.785
+      },
+      "temporalBlocks": [
+        { "period": "2025-W52..2026-W10", "r": 6.068, "positiveWeekPct": 50 },
+        { "period": "2026-W11..W22", "r": 3.415, "positiveWeekPct": 50 },
+        { "period": "2026-W23..W34", "r": 10.468, "positiveWeekPct": 58.3 }
+      ],
+      "spreadX125": {
+        "entries": 159,
+        "r": -8.095,
+        "returnPct": -9.67,
+        "profitFactor": 0.905,
+        "winRatePct": 24.5,
+        "maxDrawdownR": 20.777,
+        "trainR": -16.505,
+        "validationR": 8.408,
+        "temporalBlocks": [
+          { "period": "2025-W52..2026-W10", "r": -13.012, "positiveWeekPct": 37.5 },
+          { "period": "2026-W11..W22", "r": 1.024, "positiveWeekPct": 50 },
+          { "period": "2026-W23..W34", "r": 3.891, "positiveWeekPct": 58.3 }
+        ]
+      },
+      "failedGates": [
+        "win-rate-not-above-50pct",
+        "nominal-drawdown-above-12R",
+        "negative-total-under-spread-x1.25",
+        "negative-early-block-under-spread-x1.25",
+        "profit-factor-below-1.10-under-spread-x1.25"
+      ]
+    },
+    "conclusion": "USDJPY produced a nominally profitable three-block cluster, but the edge depends on optimistic transaction costs and has low win rate. Keep disabled and retain only as a research hypothesis."
+  },
+  "highWinRateSearch": {
+    "status": "profitable-high-win-rate-hypothesis-failed-one-temporal-block",
+    "generatedAt": "2026-08-22T12:18:15.997Z",
+    "rounds": [
+      { "mode": "broad-short-target", "requestedSeconds": 600, "uniqueCandidates": 8172 },
+      { "mode": "broad-entry-level-partial-runner", "requestedSeconds": 600, "uniqueCandidates": 7870 },
+      { "mode": "local-frontier", "requestedSeconds": 600, "uniqueCandidates": 6980 },
+      { "mode": "narrow-frontier", "requestedSeconds": 300, "uniqueCandidates": 3464 }
+    ],
+    "entryLevelWinRate": true,
+    "candidateSha256": "0c2ed80a4d2965608f9f07b5ddfbdd9f8425580bf0d1f72814b9504ad22c41ee",
+    "evaluatorSha256": "ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db",
+    "runnerSha256": "fd250fc5098dcae1f014b6ba6ee312a864d501dcf59f437994c5f079233c6bd9",
+    "nominal": {
+      "entries": 119,
+      "exitLegs": 191,
+      "r": 12.391,
+      "returnPct": 12.12,
+      "entryProfitFactor": 1.273,
+      "entryWinRatePct": 61.3,
+      "maxDrawdownR": 9.584,
+      "trainR": 8.431,
+      "validationR": 3.958
+    },
+    "nominalTemporalBlocks": [
+      { "period": "2025-W52..W10", "r": 11.879, "positiveWeekPct": 62.5 },
+      { "period": "2026-W11..W22", "r": -4.827, "positiveWeekPct": 41.7 },
+      { "period": "2026-W23..W34", "r": 5.337, "positiveWeekPct": 75 }
+    ],
+    "spreadX125": {
+      "entries": 119,
+      "exitLegs": 189,
+      "r": 8.778,
+      "returnPct": 8.67,
+      "entryProfitFactor": 1.185,
+      "entryWinRatePct": 59.7,
+      "maxDrawdownR": 8.2,
+      "trainR": 6.86,
+      "validationR": 1.92,
+      "temporalBlocks": [
+        { "period": "2025-W52..W10", "r": 9.09, "positiveWeekPct": 50 },
+        { "period": "2026-W11..W22", "r": -5.044, "positiveWeekPct": 50 },
+        { "period": "2026-W23..W34", "r": 4.734, "positiveWeekPct": 66.7 }
+      ]
+    },
+    "passedGates": [
+      "minimum-100-entries",
+      "entry-win-rate-above-50pct-nominal-and-spread-x1.25",
+      "positive-expectancy-nominal-and-spread-x1.25",
+      "profit-factor-gates-nominal-and-spread-x1.25",
+      "drawdown-below-12R-nominal-and-spread-x1.25",
+      "positive-train-and-validation-nominal-and-spread-x1.25",
+      "positive-week-rate-at-least-40pct-in-every-block"
+    ],
+    "failedGates": [
+      "negative-middle-temporal-block-nominal",
+      "negative-middle-temporal-block-under-spread-x1.25"
+    ],
+    "conclusion": "The method raises entry-level win rate above 50% while retaining positive total expectancy and cost stress. It is retained as the USDJPY forward-observation profile, but remains disabled because the middle temporal block is negative."
+  },
+  "result": {
+    "winner": null,
+    "researchCandidate": "profile",
+    "bestRejected": "highWinRateSearch",
+    "costStress": "highWinRateSearch.spreadX125"
+  },
+  "admission": {
+    "passed": false,
+    "failures": [
+      "no_candidate_passed_all_required_gates",
+      "high_win_rate_candidate_failed_middle_temporal_block_nominal",
+      "high_win_rate_candidate_failed_middle_temporal_block_under_spread_x1.25"
+    ]
+  },
+  "warning": "The USDJPY profile is a development-selected forward-observation hypothesis, not an admitted live profile. Keep disabled until genuinely unseen data confirms the edge."
+}

@@ -313,6 +313,35 @@ function continuationCandle(rows, index, side, pullbackBars) {
   return true;
 }
 
+// Green-Red is a structural resumption pattern, not a one/two-candle pattern.
+// Keep the legacy 1/2 flags for reproducibility, but expose a flexible M15
+// trigger whose correction lasts until the most recent candle in the resumed
+// direction. There is deliberately no trading threshold on the candle count.
+export function flexibleContinuationBars(rows, index, side) {
+  const followsDirection = (row) => side === "buy" ? row.close > row.open : row.close < row.open;
+  if (!rows[index] || !followsDirection(rows[index])) return 0;
+  let correctionBars = 0;
+  for (let i = index - 1; i >= 0; i -= 1) {
+    if (followsDirection(rows[i])) return correctionBars > 0 ? correctionBars : 0;
+    correctionBars += 1;
+  }
+  return 0;
+}
+
+// A position may have several exit legs (partial profit plus a runner).  The
+// strategy win rate must count the combined position once, not count each leg
+// as an independent trade.
+export function aggregateEntryOutcomes(trades) {
+  const entries = new Map();
+  for (const trade of trades) {
+    const current = entries.get(trade.entryId) ?? { entryId: trade.entryId, pnl: 0, r: 0 };
+    current.pnl += trade.pnl;
+    current.r += trade.r;
+    entries.set(trade.entryId, current);
+  }
+  return [...entries.values()];
+}
+
 // Independent, closed-candle Price Action and indicator triggers. These are
 // deliberately separate from Green-Red so a candidate can use them alone or
 // combine them with higher-timeframe context in train.js.
@@ -366,7 +395,7 @@ function priceActionContinuation(rows, index, side) {
   if (!followsDirection(signal)) return null;
   let pullbackBars = 0;
   for (let i = index - 1; i >= 0 && opposesDirection(rows[i]); i -= 1) pullbackBars += 1;
-  if (pullbackBars < 1 || pullbackBars > 6) return null;
+  if (pullbackBars < 1) return null;
   const impulseEnd = index - pullbackBars - 1;
   if (impulseEnd < 8 || !followsDirection(rows[impulseEnd])) return null;
   let impulseStart = impulseEnd;
@@ -401,7 +430,7 @@ function discretionaryContinuation(rows, index, side) {
   const directional = (row) => side === "buy" ? row.close > row.open : row.close < row.open;
   if (!directional(signal)) return null;
   let pauseBars = 0;
-  for (let i = index - 1; i >= index - 6; i -= 1) {
+  for (let i = index - 1; i >= Math.max(0, index - 24); i -= 1) {
     const row = rows[i], bodyAtr = Math.abs(row.close - row.open) / signal.atr;
     const opposite = side === "buy" ? row.close <= row.open : row.close >= row.open;
     if (!opposite && bodyAtr > 0.35) break;
@@ -662,12 +691,18 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
         const sell1 = closedNow && continuationCandle(f[tf], index, "sell", 1);
         const buy2 = closedNow && continuationCandle(f[tf], index, "buy", 2);
         const sell2 = closedNow && continuationCandle(f[tf], index, "sell", 2);
+        const buyFlexibleBars = tf === "M15" && closedNow ? flexibleContinuationBars(f[tf], index, "buy") : 0;
+        const sellFlexibleBars = tf === "M15" && closedNow ? flexibleContinuationBars(f[tf], index, "sell") : 0;
         signalFields[`buy${tf}GreenRed1`] = buy1;
         signalFields[`sell${tf}GreenRed1`] = sell1;
         signalFields[`buy${tf}GreenRed2`] = buy2;
         signalFields[`sell${tf}GreenRed2`] = sell2;
-        signalFields[`buy${tf}GreenRed`] = buy1 || buy2;
-        signalFields[`sell${tf}GreenRed`] = sell1 || sell2;
+        signalFields[`buy${tf}GreenRedFlexible`] = buyFlexibleBars > 0;
+        signalFields[`sell${tf}GreenRedFlexible`] = sellFlexibleBars > 0;
+        signalFields[`buy${tf}GreenRedCorrectionBars`] = buyFlexibleBars;
+        signalFields[`sell${tf}GreenRedCorrectionBars`] = sellFlexibleBars;
+        signalFields[`buy${tf}GreenRed`] = buy1 || buy2 || buyFlexibleBars > 0;
+        signalFields[`sell${tf}GreenRed`] = sell1 || sell2 || sellFlexibleBars > 0;
         signalFields[`${tf}SignalOpen`] = row.open;
         signalFields[`${tf}SignalHigh`] = row.high;
         signalFields[`${tf}SignalLow`] = row.low;
@@ -688,7 +723,7 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
         const sellSignals = closedNow ? candleSignalFlags(f[tf], index, "sell") : {};
         for (const [name, enabled] of Object.entries(buySignals)) signalFields[`buy${tf}${name}`] = enabled;
         for (const [name, enabled] of Object.entries(sellSignals)) signalFields[`sell${tf}${name}`] = enabled;
-        hasSignal ||= buy1 || sell1 || buy2 || sell2 ||
+        hasSignal ||= buy1 || sell1 || buy2 || sell2 || buyFlexibleBars > 0 || sellFlexibleBars > 0 ||
           Object.values(buySignals).some(Boolean) || Object.values(sellSignals).some(Boolean);
       }
       const buyM15PriceAction = priceActionContinuation(f.M15, i15, "buy");
@@ -719,6 +754,23 @@ export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options 
       signalFields.M15Efficiency24 = travelled24 > 0 ? Math.abs(recent24.at(-1).close - recent24[0].open) / travelled24 : 0;
       signalFields.M15Activity4 = recent4.reduce((sum, row) => sum + (row.high - row.low), 0) / (4 * m15.atr);
       signalFields.M15VolumeRatio20 = m15.volume / Math.max(1, recent24.slice(-21, -1).reduce((sum, row) => sum + row.volume, 0) / 20);
+      for (const side of ["buy", "sell"]) {
+        const buy = side === "buy";
+        const bollingerRoomAtr = m15.bb && m15.atr > 0
+          ? (buy ? m15.bb.upper - m15.askClose : m15.close - m15.bb.lower) / m15.atr
+          : null;
+        const bollingerRejection = Boolean(m15.bb && (buy
+          ? m15.low <= m15.bb.lower && m15.close > m15.bb.lower
+          : m15.high >= m15.bb.upper && m15.close < m15.bb.upper));
+        const rsiExtreme = Number.isFinite(m15.rsi) && (buy ? m15.rsi <= 30 : m15.rsi >= 70);
+        const volumeExpansion = signalFields.M15VolumeRatio20 >= 1;
+        const supportResistanceRoom = Number.isFinite(bollingerRoomAtr) && bollingerRoomAtr >= 1;
+        signalFields[`${side}M15BollingerRoomAtr`] = bollingerRoomAtr;
+        signalFields[`${side}M15BollingerRejection`] = bollingerRejection;
+        signalFields[`${side}M15RsiExtreme`] = rsiExtreme;
+        signalFields[`${side}M15VolumeExpansion`] = volumeExpansion;
+        signalFields[`${side}M15IndicatorScore`] = [bollingerRejection || supportResistanceRoom, rsiExtreme, volumeExpansion].filter(Boolean).length;
+      }
       const currentSessionRows = f.M15.slice(Math.max(0, i15 - 40), i15 + 1).filter((row) => marketSession(row.t) === session);
       signalFields.M15SessionRangeAtr = currentSessionRows.length
         ? (Math.max(...currentSessionRows.map((row) => row.high)) - Math.min(...currentSessionRows.map((row) => row.low))) / m15.atr : 0;
@@ -1266,6 +1318,15 @@ export function evaluate(prepared, c) {
     };
   };
   const selectionPrecision = precisionStats(selectionTrades, sel.weeks);
+  const selectionEntryOutcomes = aggregateEntryOutcomes(selectionTrades);
+  const entryGrossWinR = selectionEntryOutcomes.filter((entry) => entry.r > 0).reduce((sum, entry) => sum + entry.r, 0);
+  const entryGrossLossR = selectionEntryOutcomes.filter((entry) => entry.r < 0).reduce((sum, entry) => sum + entry.r, 0);
+  const entryProfitFactor = entryGrossLossR ? entryGrossWinR / Math.abs(entryGrossLossR) : entryGrossWinR > 0 ? 10 : 0;
+  const selectionEntryPrecision = {
+    ...precisionStats(selectionEntryOutcomes, sel.weeks),
+    entries: selectionEntryOutcomes.length,
+    profitFactor: +entryProfitFactor.toFixed(3),
+  };
   const recentStart = end - 14 * DAY;
   const recentTrades = trades.filter((trade) => trade.t >= recentStart);
   const recentGrossWin = recentTrades.filter((trade) => trade.pnl > 0).reduce((sum, trade) => sum + trade.pnl, 0);
@@ -1399,5 +1460,5 @@ export function evaluate(prepared, c) {
     (dailyFolds.validation.positiveActiveDayPct >= 50 ? 0 : (50 - dailyFolds.validation.positiveActiveDayPct)) -
     ["asia", "london", "overlap", "newYork"].reduce((penalty, session) => penalty + Math.max(0, 20 - (sessionStats[session]?.trades ?? 0)), 0);
   const objective = dailyMode ? dailyObjective : robustObjective;
-  return { protocol, objective: +objective.toFixed(4), qualified, status: qualified ? "candidate" : "rejected", gates, startCapital, finalBalance: +selectionFinalBalance.toFixed(2), returnPct: +selectionReturnPct.toFixed(2), trades: selectionTrades.length, entries: selectionEntries, partialExits: selectionTrades.filter((trade) => trade.reason === "partial").length, pnl: +selectionPnl.toFixed(2), profitFactor: +pf.toFixed(3), maxDrawdownR: sel.maxDrawdownR, maxDDPct: +maxDDPct.toFixed(1), risk: { maxPositionPct: +(100 * maxPositionRiskPct).toFixed(3), maxPortfolioPct: +(100 * maxOpenRiskPct).toFixed(3), maxPositionMarginPct: +(100 * maxPositionMarginPct).toFixed(3), maxMarginUsagePct: +(100 * maxMarginUsagePct).toFixed(3) }, development: sel, folds, dailyFolds, precision: selectionPrecision, activeDayPct, recent, symbolStats, sessionStats, regimeStats, bestWeek, daily, weekly, monthly };
+  return { protocol, objective: +objective.toFixed(4), qualified, status: qualified ? "candidate" : "rejected", gates, startCapital, finalBalance: +selectionFinalBalance.toFixed(2), returnPct: +selectionReturnPct.toFixed(2), trades: selectionTrades.length, entries: selectionEntries, partialExits: selectionTrades.filter((trade) => trade.reason === "partial").length, pnl: +selectionPnl.toFixed(2), profitFactor: +pf.toFixed(3), entryPrecision: selectionEntryPrecision, maxDrawdownR: sel.maxDrawdownR, maxDDPct: +maxDDPct.toFixed(1), risk: { maxPositionPct: +(100 * maxPositionRiskPct).toFixed(3), maxPortfolioPct: +(100 * maxOpenRiskPct).toFixed(3), maxPositionMarginPct: +(100 * maxPositionMarginPct).toFixed(3), maxMarginUsagePct: +(100 * maxMarginUsagePct).toFixed(3) }, development: sel, folds, dailyFolds, precision: selectionPrecision, activeDayPct, recent, symbolStats, sessionStats, regimeStats, bestWeek, daily, weekly, monthly };
 }

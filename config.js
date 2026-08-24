@@ -13,8 +13,9 @@ export const API = {
 };
 
 export const RISK = {
-    PER_TRADE: 0.03,
-    MAX_DAILY_TRADES_PER_SYMBOL: 3,
+    PER_TRADE: 0.01,
+    MAX_DAILY_TRADES_PER_SYMBOL: 1,
+    MAX_LOSSES_PER_SYMBOL_DAY: 2,
     COOLDOWN_MINUTES: 30,
     MAX_HOLD_TIME: 24 * 60,
     DAILY_FORCED_CLOSE_UTC: true,
@@ -31,13 +32,13 @@ export const RISK = {
 };
 
 export const PORTFOLIO = {
-    // Only researched pair-specific strategies are allowed to trade. Keeping
-    // the allowlist here makes adding/removing a pair an explicit decision.
-    SYMBOLS: ["EURUSD", "GBPJPY", "GBPUSD"],
-    MAX_POSITIONS: 3,
+    // Only the fixed-exit profile that passed nominal and spread-stress
+    // development gates is enabled for demo forward observation.
+    SYMBOLS: ["EURUSD"],
+    MAX_POSITIONS: 1,
     MAX_POSITIONS_PER_SYMBOL: 1,
-    MAX_DAILY_LOSS_PCT: 0.1,
-    MAX_WEEKLY_LOSS_PCT: 0.2,
+    MAX_DAILY_LOSS_PCT: 0.03,
+    MAX_WEEKLY_LOSS_PCT: 0.06,
     MARGIN_USAGE: 0.9,
 };
 
@@ -93,8 +94,6 @@ const profile = (signal, entry, stop, exit, strategy = { name: "greenRedContinua
 
     entry: {
         ...entry,
-        // Current strategies use pending STOP entries. Keep STOP last so a
-        // profile cannot accidentally replace it with a market order.
         type: "stop",
     },
 
@@ -127,22 +126,31 @@ export const PROFILES = {
     AUDJPY: profile(
         {
             timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 1.5,
-            structure: "move",
-            consolidationBars: 2,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 52,
-            flowLevel: 0.1,
-            location: "bollingerRetest",
-            locationAtr: 0,
+            context: "h1",
+            maxSpreadAtr: 0.5,
         },
-        { bufferAtr: 0.1, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 2, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
+        {
+            bufferAtr: 0,
+            expiryBars: 4,
+            cancelIfStopTouchedBeforeEntry: true,
+        },
+        {
+            type: "signal",
+            bufferAtr: 0.05,
+        },
+        {
+            targetR: 2,
+            trailActivationR: 1,
+            trailDistanceR: 0.5,
+            maxHoldMinutes: 240,
+            dailyCloseMinute: 22 * 60,
+        },
+        {
+            name: "audjpyAsiaM15Breakout20H1Rsi",
+            londonTimeZone: "Europe/London",
+            londonOpenMinute: 8 * 60,
+            riskPerTrade: 0.01,
+        },
     ),
 
     AUDUSD: profile(
@@ -232,30 +240,25 @@ export const PROFILES = {
     EURUSD: profile(
         {
             timeframe: "M15",
-            maxSpreadAtr: 0.5,
+            context: "h1",
+            sessions: ["london"],
+            h1DirectionBars: 1,
+            minH1TrendAtr: 0.1,
+            minScore: 0,
+            minAtrPercentile: 0.1,
+            minEfficiency: 0.05,
+            minActivity: 1.25,
+            minBodyRatio: 0.3,
+            minVolumeRatio: 0.8,
+            maxSpreadAtr: 1,
         },
-        { bufferAtr: 0, expiryBars: 4 },
-        { type: "londonRange", bufferAtr: 0.05 },
-        { targetR: 2, maxHoldMinutes: 480, dailyCloseMinute: 22 * 60 },
+        { bufferAtr: 0, expiryBars: 5, cancelIfStopTouchedBeforeEntry: true },
+        { type: "signal", bufferAtr: 0.03 },
+        { targetR: 0.75, maxHoldMinutes: 180, dailyCloseMinute: 22 * 60 },
         {
-            name: "eurusdLondonCloseBreakout",
-
-            // All session minutes below are local London time. The strategy
-            // converts candle timestamps with Europe/London, including DST.
-            timeZone: "Europe/London",
-            rangeStartMinute: 7 * 60,
-            rangeEndMinute: 8 * 60,
-            signalStartMinute: 8 * 60,
-            signalEndMinute: 12 * 60,
-            minimumRangeCandles: 4,
-            requirePreviousCloseBeforeBreak: true,
-
-            // These values document the tested operating limits for EUR/USD.
-            // The sizing service reads the pair-specific risk below and still
-            // applies the global 3% hard cap.
+            name: "greenRedContinuation",
             riskPerTrade: 0.01,
-            maxRiskPerTrade: 0.03,
-            maxDailyTrades: 3,
+            maxDailyTrades: 1,
             cooldownMinutes: 30,
         },
     ),
@@ -347,29 +350,26 @@ export const PROFILES = {
     GBPUSD: profile(
         {
             timeframe: "M15",
-            maxSpreadAtr: 0.5,
+            context: "h1",
+            sessions: ["overlap"],
+            h1DirectionBars: 1,
+            minH1TrendAtr: 0.15,
+            minScore: 1,
+            minAtrPercentile: 0.25,
+            minEfficiency: 0.05,
+            minActivity: 1,
+            minBodyRatio: 0.2,
+            minVolumeRatio: 1,
+            maxSpreadAtr: 1.25,
         },
-        { bufferAtr: 0, expiryBars: 4, cancelIfStopTouchedBeforeEntry: true },
-        { type: "signal", bufferAtr: 0.05 },
-        { targetR: 1.25, maxHoldMinutes: 180, dailyCloseMinute: 22 * 60 },
+        { bufferAtr: 0.01, expiryBars: 5, cancelIfStopTouchedBeforeEntry: true },
+        { type: "signal", bufferAtr: 0.03 },
+        { targetR: 3, trailActivationR: 0.65, trailDistanceR: 0.65, maxHoldMinutes: 360 },
         {
-            name: "gbpusdLondonOverlapM15EmaCross",
-
-            // The searched London + overlap union is 08:00-17:00 London time.
-            // Europe/London keeps both boundaries correct through DST.
-            timeZone: "Europe/London",
-            sessionStartMinute: 8 * 60,
-            sessionEndMinute: 17 * 60,
-
-            fastEmaPeriod: 9,
-            slowEmaPeriod: 21,
-
-            // The user selected the aggressive 3% diagnostic for live sizing.
-            riskPerTrade: 0.03,
-            maxRiskPerTrade: 0.03,
-            maxDailyTrades: 3,
-            cooldownMinutes: 30,
-            maxPositions: 1,
+            name: "greenRedContinuation",
+            riskPerTrade: 0.01,
+            maxDailyTrades: 1,
+            cooldownMinutes: 45,
         },
     ),
 
@@ -417,22 +417,33 @@ export const PROFILES = {
     EURAUD: profile(
         {
             timeframe: "M15",
-            trendLookback: 16,
-            minTrendAtr: 1.5,
-            structure: "both",
-            consolidationBars: 3,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 55,
-            flowLevel: 0.05,
-            location: "bollingerRetest",
-            locationAtr: 0.5,
+            context: "h1",
+            maxSpreadAtr: 0.5,
         },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.2 },
-        { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+        {
+            type: "stop",
+            bufferAtr: 0,
+            expiryBars: 4,
+            cancelIfStopTouchedBeforeEntry: true,
+        },
+        {
+            type: "signal",
+            bufferAtr: 0.05,
+        },
+        {
+            targetR: 2,
+            trailActivationR: 1,
+            trailDistanceR: 0.5,
+            maxHoldMinutes: 240,
+            dailyCloseMinute: 22 * 60,
+        },
+        {
+            name: "euraudSydneyM15BreakoutMomentumH1Macd",
+            timeZone: "Australia/Sydney",
+            sessionStartMinute: 11 * 60,
+            sessionEndMinute: 17 * 60,
+            riskPerTrade: 0.01,
+        },
     ),
 
     USDCAD: profile(
@@ -480,21 +491,17 @@ export const PROFILES = {
     USDJPY: profile(
         {
             timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 0.5,
-            structure: "halves",
-            consolidationBars: 3,
-            maxPauseAtr: 2.25,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 50,
-            flowLevel: 0.2,
-            location: "localLevel",
-            locationAtr: 0,
+            sessions: ["london", "overlap"],
+            minScore: 1,
+            minAtrPercentile: 0.25,
+            minEfficiency: 0.25,
+            minActivity: 0.75,
+            minBodyRatio: 0.2,
+            maxSpreadAtr: 1,
         },
-        { bufferAtr: 0.1, expiryBars: 1 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 3, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 1440 },
+        { bufferAtr: 0.02, expiryBars: 2, cancelIfStopTouchedBeforeEntry: true },
+        { type: "signal", bufferAtr: 0.03 },
+        { targetR: 3, trailActivationR: 0.65, trailDistanceR: 0.65, maxHoldMinutes: 360 },
+        { name: "greenRedContinuation", riskPerTrade: 0.01, maxDailyTrades: 2, cooldownMinutes: 45 },
     ),
 };

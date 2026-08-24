@@ -13,7 +13,7 @@ const SESSIONS = ["asia", "london", "overlap", "newYork", "offHours"];
 
 export const PROTOCOL = Object.freeze({
   ...RESEARCH_PROTOCOL,
-  schemaVersion: 13,
+  schemaVersion: 14,
   train: Object.freeze({ fromWeek: "2026-W07", toWeek: "2026-W19" }),
   validation: Object.freeze({ fromWeek: "2026-W20", toWeek: "2026-W33" }),
   evaluationEndExclusive: "2026-08-11T10:00:00.000Z",
@@ -21,7 +21,7 @@ export const PROTOCOL = Object.freeze({
   lockedTest: "none-available-entire-period-is-inspected-development-evidence",
   primaryMetric: "dailyObjective",
   sizing: "EUR 500 fixed upside and balance-sensitive downside; <=3% position risk, <=15% open risk; 90% margin divided into five equal per-position budgets",
-  execution: `${RESEARCH_PROTOCOL.execution}; M15 structural price action, H1 causal trend, spread veto, pending invalidation, 24-hour maximum hold`,
+  execution: `${RESEARCH_PROTOCOL.execution}; flexible-length M15 structural resumption, optional two-hour H1 direction, M15 indicators as ranking context, close or wick entry, 24-hour maximum hold`,
 });
 
 const BASE = Object.freeze({
@@ -35,7 +35,7 @@ const BASE = Object.freeze({
   minAtrPct: null,
   minBbWidthPct: null,
   minEmaDistPct: null,
-  entryMode: "signal-breakout",
+  entryMode: "market",
   riskPct: 0.01,
   marginUtilization: 0.9,
   stopATR: 1.5,
@@ -67,6 +67,10 @@ const MASK = Object.freeze({ FAST_EMA: 1 << 0, SLOW_EMA: 1 << 1, PRICE_EMA: 1 <<
 
 function trendPass(event, side, config) {
   if (config.trendMode === "none") return true;
+  if (config.trendMode === "h1-direction") {
+    const direction = event.h1CloseTrend2Atr;
+    return Number.isFinite(direction) && (side === "buy" ? direction > 0 : direction < 0);
+  }
   const mask = event[`${side}H1Mask`] ?? 0;
   const emaVotes = [MASK.FAST_EMA, MASK.SLOW_EMA, MASK.PRICE_EMA, MASK.EMA_SLOPE].filter((bit) => mask & bit).length;
   const ema = emaVotes >= 3, macd = Boolean(mask & MASK.MACD), rsi = Boolean(mask & MASK.RSI);
@@ -107,7 +111,7 @@ export function decide(event, side, config) {
       event.M15LiveSignalBodyAtr >= config.minSignalBodyAtr && event.M15SpreadAtr <= config.maxSpreadAtr && trendPass(event, side, config);
   }
   if (config.signalFamily === "discretionary-m15-price-action") {
-    if (!event[`${side}M15Discretionary`] || event[`${side}M15DiscretionaryPauseBars`] > config.maxPauseBars) return false;
+    if (!event[`${side}M15Discretionary`] || (Number.isFinite(config.maxPauseBars) && event[`${side}M15DiscretionaryPauseBars`] > config.maxPauseBars)) return false;
     const impulse = Boolean(event[`${side}M15DiscretionaryImpulse`]);
     const structural = Boolean(event[`${side}M15DiscretionarySwing`] || event[`${side}M15DiscretionaryBreakout`]);
     const structurePass = config.structureMode === "impulse" ? impulse
@@ -123,8 +127,7 @@ export function decide(event, side, config) {
   if (!event[`${side}M15PriceAction`]) return false;
   const impulse = event[`${side}M15ImpulseAtr`], gap = event[`${side}M15SwingGapAtr`];
   const retrace = event[`${side}M15Retrace`], body = event[`${side}M15SignalBodyAtr`];
-  return event[`${side}M15PullbackBars`] <= config.maxPullbackBars &&
-    Number.isFinite(impulse) && impulse >= config.minImpulseAtr &&
+  return Number.isFinite(impulse) && impulse >= config.minImpulseAtr &&
     Number.isFinite(gap) && gap >= config.minSwingGapAtr &&
     Number.isFinite(retrace) && retrace >= config.minRetrace && retrace <= config.maxRetrace &&
     Number.isFinite(body) && body >= config.minSignalBodyAtr &&
@@ -132,44 +135,42 @@ export function decide(event, side, config) {
 }
 
 export function rank(event, side, config) {
+  const m15IndicatorScore = event[`${side}M15IndicatorScore`] ?? 0;
   if (config.signalFamily === "discretionary-m15-price-action") {
     return 8 * event[`${side}M15DiscretionaryImpulseAtr`] +
       5 * event[`${side}M15DiscretionaryImpulseEfficiency`] +
       3 * event[`${side}M15DiscretionarySignalBodyAtr`] +
-      2 * event.M15Activity4 + event.M15SessionRangeAtr + event.M15VolumeRatio20 - 10 * event.M15SpreadAtr;
+      2 * event.M15Activity4 + event.M15SessionRangeAtr + event.M15VolumeRatio20 + 2 * m15IndicatorScore - 10 * event.M15SpreadAtr;
   }
   if (config.signalFamily === "live-green-red-movement") {
     const mask = event[`${side}H1Mask`] ?? 0;
     const votes = [MASK.FAST_EMA, MASK.SLOW_EMA, MASK.PRICE_EMA, MASK.MACD, MASK.EMA_SLOPE, MASK.RSI].filter((bit) => mask & bit).length;
-    return 10 * event.M15SignalBodyRatio + 5 * event.M15LiveSignalBodyAtr + votes - 10 * event.M15SpreadAtr;
+    return 10 * event.M15SignalBodyRatio + 5 * event.M15LiveSignalBodyAtr + votes + 2 * m15IndicatorScore - 10 * event.M15SpreadAtr;
   }
-  if (config.trendMode === "none") {
+  if (config.trendMode === "none" || config.trendMode === "h1-direction") {
     return 12 * event[`${side}M15ImpulseAtr`] + 8 * event[`${side}M15SwingGapAtr`] +
-      4 * event[`${side}M15SignalBodyAtr`] - 20 * event.M15SpreadAtr;
+      4 * event[`${side}M15SignalBodyAtr`] + 2 * m15IndicatorScore - 20 * event.M15SpreadAtr;
   }
   const mask = event[`${side}H1Mask`] ?? 0;
   const indicatorVotes = [MASK.FAST_EMA, MASK.SLOW_EMA, MASK.PRICE_EMA, MASK.MACD, MASK.EMA_SLOPE].filter((bit) => mask & bit).length;
   return 100 * indicatorVotes + 12 * event[`${side}M15ImpulseAtr`] + 8 * event[`${side}M15SwingGapAtr`] +
-    4 * event[`${side}M15SignalBodyAtr`] - 20 * event.M15SpreadAtr;
+    4 * event[`${side}M15SignalBodyAtr`] + 2 * m15IndicatorScore - 20 * event.M15SpreadAtr;
 }
 
 const PATTERNS = Object.freeze([
-  { key: "loose", maxPullbackBars: 6, minImpulseAtr: 0.5, minSwingGapAtr: 0, minRetrace: 0.10, maxRetrace: 0.95, minSignalBodyAtr: 0, maxSpreadAtr: 1.75 },
-  { key: "balanced", maxPullbackBars: 4, minImpulseAtr: 0.75, minSwingGapAtr: 0.10, minRetrace: 0.20, maxRetrace: 0.85, minSignalBodyAtr: 0.10, maxSpreadAtr: 1.50 },
-  { key: "prominent", maxPullbackBars: 6, minImpulseAtr: 1.25, minSwingGapAtr: 0.25, minRetrace: 0.25, maxRetrace: 0.75, minSignalBodyAtr: 0.20, maxSpreadAtr: 1.25 },
+  { key: "loose", maxPullbackBars: null, minImpulseAtr: 0.5, minSwingGapAtr: 0, minRetrace: 0.10, maxRetrace: 0.95, minSignalBodyAtr: 0, maxSpreadAtr: 1.75 },
+  { key: "balanced", maxPullbackBars: null, minImpulseAtr: 0.75, minSwingGapAtr: 0.10, minRetrace: 0.20, maxRetrace: 0.85, minSignalBodyAtr: 0.10, maxSpreadAtr: 1.50 },
+  { key: "prominent", maxPullbackBars: null, minImpulseAtr: 1.25, minSwingGapAtr: 0.25, minRetrace: 0.25, maxRetrace: 0.75, minSignalBodyAtr: 0.20, maxSpreadAtr: 1.25 },
 ]);
 
 const TRENDS = Object.freeze([
-  { key: "swing", trendMode: "swing" },
-  { key: "swing-trend", trendMode: "swing-trend" },
-  { key: "swing-ema", trendMode: "swing-ema" },
-  { key: "swing-macd", trendMode: "swing-macd" },
-  { key: "swing-ema-macd", trendMode: "swing-ema-macd" },
-  { key: "ema-macd-control", trendMode: "ema-macd" },
+  { key: "m15-only", trendMode: "none" },
+  { key: "h1-direction", trendMode: "h1-direction" },
 ]);
 
 const EXITS = Object.freeze([
   { key: "fixed-2r", runnerMode: "none", breakEvenR: 0, trailATR: 0, partialRunner: false, partialR: 0, partialFraction: 0 },
+  { key: "fixed-3r", rewardRisk: 3, runnerMode: "none", breakEvenR: 0, trailATR: 0, partialRunner: false, partialR: 0, partialFraction: 0 },
   { key: "be1-trail-3atr", runnerMode: "always", breakEvenR: 1, trailATR: 3, partialRunner: false, partialR: 0, partialFraction: 0 },
   { key: "fast30-be1-trail-3atr", runnerMode: "fast-1r", runnerFastMinutes: 30, breakEvenR: 1, trailATR: 3, partialRunner: false, partialR: 0, partialFraction: 0 },
   { key: "half-at-2r-runner-3atr", runnerMode: "none", breakEvenR: 0, trailATR: 3, partialRunner: true, partialR: 2, partialFraction: 0.5, moveStopOnPartial: true },
@@ -218,17 +219,14 @@ const DISCRETIONARY_ACTIVITY = Object.freeze([
 
 const DISCRETIONARY_TRENDS = Object.freeze([
   { key: "m15-only", trendMode: "none" },
-  { key: "h1-ema", trendMode: "ema" },
-  { key: "h1-macd", trendMode: "macd" },
-  { key: "h1-rsi", trendMode: "rsi" },
-  { key: "h1-swing-sr", trendMode: "swing" },
-  { key: "h1-ema-macd", trendMode: "ema-macd" },
+  { key: "h1-direction", trendMode: "h1-direction" },
 ]);
 
 const DISCRETIONARY_ENTRIES = Object.freeze([
-  { key: "zero-30m", pendingOffsetAtr: 0, pendingExpiryMinutes: 30 },
-  { key: "005-30m", pendingOffsetAtr: 0.05, pendingExpiryMinutes: 30 },
-  { key: "010-60m", pendingOffsetAtr: 0.1, pendingExpiryMinutes: 60 },
+  { key: "close", entryMode: "market", pendingOffsetAtr: 0, pendingExpiryMinutes: 30 },
+  { key: "wick-zero-30m", entryMode: "signal-breakout", pendingOffsetAtr: 0, pendingExpiryMinutes: 30 },
+  { key: "wick-005-30m", entryMode: "signal-breakout", pendingOffsetAtr: 0.05, pendingExpiryMinutes: 30 },
+  { key: "wick-010-60m", entryMode: "signal-breakout", pendingOffsetAtr: 0.1, pendingExpiryMinutes: 60 },
 ]);
 
 const DISCRETIONARY_STOPS = Object.freeze([
@@ -238,6 +236,8 @@ const DISCRETIONARY_STOPS = Object.freeze([
 
 const DISCRETIONARY_EXITS = Object.freeze([
   { key: "fixed-2r", rewardRisk: 2, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "fixed-3r", rewardRisk: 3, runnerMode: "none", breakEvenR: 0, trailR: 0 },
+  { key: "open-be1-trail-3atr", rewardRisk: 3, runnerMode: "always", breakEvenR: 1, trailATR: 3, trailR: 0 },
   { key: "fixed-2r-fast-trail", rewardRisk: 2, runnerMode: "fast-1r", runnerFastMinutes: 30, breakEvenR: 1, trailR: 0.5, keepTargetAfterRunner: true },
   { key: "fixed-2r-body-trail", rewardRisk: 2, runnerMode: "signal-body", runnerSignalBodyAtr: 0.5, breakEvenR: 1, trailR: 0.5, keepTargetAfterRunner: true },
   { key: "open-fast-runner", rewardRisk: 2, runnerMode: "fast-1r", runnerFastMinutes: 30, breakEvenR: 1, trailR: 0.5 },
@@ -253,8 +253,8 @@ function matrixCandidate(symbol, session, pattern, trend, exit, pending = null) 
       signalFamily: "discretionary-m15-price-action", ...pattern.structure, ...pattern.activity, ...trend, ...pending.entry, ...pending.stop, ...exit,
       patternKey: `${pattern.structure.key}-${pattern.activity.key}`, trendKey: trend.key, exitKey: exit.key,
       pendingKey: pending.entry.key, stopKey: pending.stop.key, maxPauseBars: pattern.maxPauseBars,
-      minSignalBodyAtr: pattern.minSignalBodyAtr, maxSpreadAtr: 0.5,
-      entryEventPrefix: "M15Live", stopMode: "event-level", entryMode: "signal-breakout",
+      minSignalBodyAtr: pattern.minSignalBodyAtr, maxSpreadAtr: 1.25,
+      entryEventPrefix: "M15Live", stopMode: "event-level", entryMode: pending.entry.entryMode,
       replacePendingOnSignal: true, dailyFlat: true, dailyCloseMinuteUtc: 22 * 60,
       cooldown: 15, maxDaily: 3, maxLossesPerSymbolDay: 10, maxLossesPerSymbolSession: 10,
       hold: 720, symbols: [symbol], allowedSessions: [session], rankAtTimestampLimit: 1,
@@ -303,7 +303,7 @@ function buildSearchSpace(trends = TRENDS, live = false, discretionary = false) 
             entry: DISCRETIONARY_ENTRIES[(structureIndex + 2 * activityIndex + trendIndex) % DISCRETIONARY_ENTRIES.length],
             stop: DISCRETIONARY_STOPS[(structureIndex + activityIndex + trendIndex) % DISCRETIONARY_STOPS.length],
             exit: DISCRETIONARY_EXITS[(structureIndex + 3 * activityIndex + trendIndex) % DISCRETIONARY_EXITS.length],
-            maxPauseBars: (structureIndex + trendIndex) % 2 ? 5 : 3,
+            maxPauseBars: null,
             minSignalBodyAtr: activityIndex % 2 ? 0.1 : 0,
           });
         }

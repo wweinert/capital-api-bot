@@ -1,5 +1,236 @@
 # Trading Data Availability
 
+## 2026-08-23 — Three-per-session Green-Red coverage is not supported
+
+- A fixed 1,800-second follow-up used the frozen 13-profile session result and
+  spent 1,200 seconds searching 8,138 additional New-York M15 Green-Red
+  configurations across all 17 FX symbols. The remaining 600 seconds were
+  reserved for causal portfolio combinations and could run only if every
+  session first contained at least three different admitted symbols.
+- The expanded matrix varied optional H1 direction, session age/range and
+  previous-session room, daily continuation/reversal, flexible Green-Red and
+  price-action structure, M15 Bollinger/RSI/volume filters, activity and
+  volatility, pending entries, candle stops, fixed targets and partial ATR
+  runners. Profile admission required more than 50% wins, positive train and
+  validation R, PF>=1.10 and <=12R drawdown, followed by a separate spread
+  x1.25 replay with PF>=1.05 and the same profitability/stability checks.
+- Two New-York symbols passed the nominal search, but only AUDUSD survived the
+  declared spread stress. Its admitted profile produced 37 entries: 62.2%
+  wins, +3.138R, PF 1.233 and 3.029R drawdown nominal; stress retained 62.2%
+  wins, +2.566R, PF 1.188 and 3.288R drawdown. Train and validation stayed
+  positive in both runs, but activity was only 0.26 entries/day.
+- Final distinct-symbol coverage was Asia 4, London 5, overlap 3 and New York
+  1. The coverage gate therefore failed, the reserved portfolio search was
+  not executed, and no best portfolio was selected. The generated manifest is
+  explicitly `no-qualified-portfolio` with `winner: null`; no weak pair was
+  inserted merely to satisfy the three-pair quota.
+- Decision: reject the claim that the current search supports three active
+  pairs in every session. Keep AUDUSD New York as a research candidate only;
+  do not integrate this manifest into live trading. A later attempt must
+  change a predeclared hypothesis or add independent data, then repeat the
+  complete admission and portfolio gates. No live file or broker state was
+  changed.
+- Evidence:
+  `lab/autoresearch/reports/session-balanced-greenred-portfolio-30min-2026-08-23.json`
+  and `lab/pair-profiles/session-greenred-balanced-portfolio.json`. Evaluator
+  SHA-256:
+  `ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db`;
+  dataset fingerprint:
+  `cc9ffbc65c2beaa3a0abef541a6fe78aad7642f0266d51e32462551a8be04fa6`.
+
+## 2026-08-23 — Session Green-Red search finds 13 profiles, but the naive capped portfolio loses cash
+
+- A fixed 1,800-second offline search evaluated 11,647 unique M15 flexible
+  Green-Red profiles across 17 FX symbols and four DST-aware sessions (68
+  pair/session cells). The selection period was 2025-W52 through 2026-W30;
+  W31-W34 was excluded for the later portfolio diagnostic, although it has
+  already been inspected in earlier studies and is not a fresh holdout.
+- Each cell searched optional closed-H1 price direction, the M15
+  Bollinger/RSI/volume score, ATR rank, efficiency, activity, body and volume
+  filters, signal-wick pending entries, candle stops, fixed exits and partial
+  ATR runners. Admission required more than 50% entry win rate, positive train
+  and validation R, PF>=1.10, stable weeks and <=12R drawdown; leaders were
+  then frozen and replayed at spread x1.25 with a separate fixed stress gate.
+- Thirteen profiles survived both nominal and spread stress: Asia AUDUSD,
+  EURUSD, GBPAUD and AUDJPY; London EURUSD, EURJPY, GBPUSD, AUDJPY and AUDUSD;
+  overlap AUDUSD, GBPUSD and USDCAD; New York AUDUSD. Every retained profile
+  remained above 50% entry win rate and positive R in both replays. Five
+  profiles is a per-session ceiling, not a quota; no failing symbol was added.
+- A chronological diagnostic combined all retained profiles with at most five
+  open positions, two entries per session and three entries per day. It
+  achieved the requested activity (2.87 entries/day, 100% active days) and
+  retained 54.5% nominal / 53.2% stressed win rates over 402 entries, but it
+  was not profitable in cash: -0.59% nominal and -4.06% at spread x1.25.
+  Nominal PF was 1.088 with 12.472R drawdown; stressed train was -0.053R and
+  drawdown expanded to 17.542R.
+- Decision: retain the 13 pair/session profiles as development candidates, but
+  reject the naive all-profile portfolio. The next main backtest must evaluate
+  causal portfolio ranking, signal competition, currency concentration and
+  margin-weighted cash expectancy on the excluded W31-W34 diagnostic before
+  any live integration. Do not claim that win rate above 50% alone guarantees
+  portfolio profitability. No live file or broker state was changed.
+- Evidence:
+  `lab/autoresearch/reports/session-greenred-17fx-30min-2026-08-23.json` and
+  `lab/pair-profiles/session-greenred-portfolio.json`. Evaluator SHA-256:
+  `ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db`;
+  dataset fingerprint:
+  `cc9ffbc65c2beaa3a0abef541a6fe78aad7642f0266d51e32462551a8be04fa6`.
+
+## 2026-08-17 — Five-pair portfolio improves nominal return, but EURAUD fails execution-cost admission
+
+- Replayed EURUSD, GBPJPY, GBPUSD, the selected AUDJPY Asia hypothesis and
+  the selected EURAUD Sydney hypothesis as one chronological portfolio from
+  EUR 500. EURJPY was loaded only for causal JPY-to-EUR conversion. The main
+  architecture kept the original 90% margin budget and three reusable 30%
+  slots, with at most one open or pending position per symbol. The evaluator
+  SHA-256 was
+  `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`;
+  the six-symbol dataset fingerprint was
+  `8efa3fe793acdbb7b64df18198d5a5325320e141b5b0c0a3491a420759d76f48`.
+- The existing three-pair baseline reproduced EUR 850.67 final balance,
+  +70.13%, PF 1.428, 429 entries and 7.9% cash drawdown. Adding AUDJPY at 1%
+  requested risk while reusing the same three slots reproduced EUR 907.90,
+  +81.58%, PF 1.373, 580 entries and 9.6% drawdown.
+- Adding EURAUD at 1% requested risk and a 240-minute hold produced the best
+  nominal five-pair result: EUR 921.62, +84.32%, PF 1.344, 670 entries, 51.0%
+  wins, 100% active market days and 8.8% cash/7.144R drawdown. Train returned
+  +60.035R/EUR 257.26 and validation +48.802R/EUR 164.31; 11/13 and 9/13
+  weeks were positive. EURAUD contributed only EUR 13.41 from 90 trades while
+  AUDJPY contributed EUR 68.47 from 153.
+- The 240-minute EURAUD rule beat its 480-minute version (+84.32% versus
+  +83.53%). Raising only EURAUD requested risk from 1% to 3% added just EUR
+  2.44 (+84.81%) because margin constrained the cross, so the extra nominal
+  risk is not justified. Giving all five symbols five fixed 18% slots diluted
+  the system to +57.46%, despite lower 6.1% cash drawdown; allowed symbols and
+  simultaneous margin slots must remain separate concepts.
+- At spread x1.25 the five-pair/three-slot portfolio remained profitable at
+  +74.64%, PF 1.281 and 11.684R drawdown, but EURAUD itself lost EUR 2.89.
+  Combining spread x1.25 with 0.02R entry and stop slippage returned +63.86%,
+  PF 1.220 and 15.237R/9.9% drawdown. The portfolio remained profitable in
+  both folds, but failed the fixed 12R drawdown gate; EURAUD lost EUR 13.84.
+- A same-stream control under the combined execution stress isolated the
+  admission effect. The existing three pairs returned +56.33%, PF 1.300 and
+  11.903R drawdown, passing every applicable gate. Four pairs with AUDJPY
+  returned +66.57%, PF 1.268 and 15.702R drawdown. Five pairs with EURAUD
+  returned +63.86%, PF 1.220 and 15.237R drawdown. EURAUD therefore reduced
+  stressed portfolio return by 2.71 percentage points/EUR 13.56 relative to
+  the otherwise identical four-pair portfolio; its nominal diversification
+  benefit did not survive conservative execution costs.
+- Every portfolio still failed four-session coverage because there is no
+  New-York-only strategy. Decision: do not add EURAUD to protected demo/live
+  code from this evidence. Retain the five-pair, three-reusable-slot result as
+  a nominal research diagnostic, keep EURAUD in cost-aware research, and use
+  the current three-pair portfolio as the only tested configuration that also
+  stays inside the 12R gate under combined spread/slippage stress. AUDJPY
+  remains a separate aggressive demo-forward hypothesis, not a fully admitted
+  component. Evidence:
+  `lab/autoresearch/reports/five-profile-three-reusable-slots-portfolio-2026-08-17.json`.
+
+## 2026-08-17 — EURAUD is the Sydney research candidate, but the found edge is cost-fragile
+
+- A fixed 1,200-second cross-pair Sydney search evaluated 8,228 unique
+  candidates across AUDUSD, AUDCAD, NZDUSD, NZDJPY and EURAUD. The session
+  windows were evaluated in `Australia/Sydney` local time so Australian DST
+  shifts were causal rather than approximated by one fixed UTC range. EURUSD,
+  USDCAD and EURJPY were loaded only where required for quote-to-EUR
+  conversion. The evaluator SHA-256 was
+  `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`;
+  the eight-symbol dataset fingerprint was
+  `2da570e8a892b5c3b68060789f7f37e5f226329ca50169931c65b0dedf61ff22`.
+- The declared matrix compared all six signal timeframes; Green-Red controls;
+  independent and combined engulfing, pin-bar, inside-break, outside-bar,
+  momentum, breakout, structural/discretionary price action, EMA, Bollinger,
+  RSI and MACD signals; no-filter through six-timeframe context; eight Sydney
+  local-time windows; 60-480 minute holds; fixed/ATR stops, runners and 1%/3%
+  requested risk.
+- The formal objective winner was NZDUSD H4 engulfing in the 08:00-11:00
+  Sydney window. It returned +5.97% with four wins, but had only four entries
+  in 26 weeks, 3.1% active days and no trades in the final inspected 14 days.
+  It failed sample-size, weekly-stability and daily-activity gates and was
+  rejected as sparse selection noise.
+- EURAUD was the only one of 8,228 candidates to pass every applicable
+  single-session gate. The rule combined an M15 20-bar breakout or momentum
+  trigger from 11:00-17:00 Sydney local time with closed H1 MACD direction,
+  a pending signal break, signal-candle stop plus 0.05 ATR, breakeven at +1R,
+  a 0.5R runner and a 480-minute maximum hold. At 1% requested risk it made
+  +5.83%/EUR 29.16, PF 1.145, 90 entries, 53.3% wins, 61.5% active market
+  days and 5.871R/7.2% drawdown. Train made +3.521R from 46 entries and
+  validation +2.450R from 44; their positive-week rates were 53.8% and 61.5%.
+- Raising requested risk to 3% produced only +7.05% because cross-pair margin
+  constrained sizing, while cash drawdown rose to 15.9%. A shorter 240-minute
+  hold retained the applicable gates at +5.52%, PF 1.142 and 7.0% drawdown;
+  60, 120 and 180 minutes each lost money in validation.
+- Execution stress invalidated readiness. Spread x1.25 reduced the 1% result
+  to +1.00%, PF 1.029 and made train -1.054R. Entry and stop slippage of 0.02R
+  reduced it to +1.76%/PF 1.046. Combining both produced -3.16%, PF 0.930 and
+  12.123R drawdown; at 3% requested risk the same stressed signals lost 8.36%
+  with 22.7% cash drawdown.
+- Decision: choose EURAUD over AUDUSD, AUDCAD, NZDUSD and NZDJPY as the next
+  Sydney-session research/forward-observation pair, but do not implement this
+  configuration in protected demo/live code. Its nominal edge is too small
+  relative to execution costs, the full period has losing April and June,
+  and all evidence is from an already-inspected development window. The next
+  search should optimize under spread/slippage stress from the start and then
+  require genuinely unseen weeks plus broker minimum-size, stop-distance,
+  financing and gap checks. Evidence:
+  `lab/autoresearch/reports/sydney-five-pair-multi-pattern-20min-2026-08-17.json`
+  and
+  `lab/autoresearch/reports/euraud-sydney-post-search-stress-2026-08-17.json`.
+
+## 2026-08-17 — AUDJPY Asia improves a three-slot portfolio, but misses spread drawdown gate
+
+- A fixed 1,200-second AUDJPY-only Asia/Tokyo search evaluated 39,289 unique
+  candidates on the already-inspected W07-W32 development snapshot. EURJPY
+  was loaded only for causal JPY-to-EUR conversion. The evaluator SHA-256 was
+  `a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1`;
+  the two-symbol dataset fingerprint was
+  `34a72a48884e0f00f6a6b49e8c34cd9caba0e2db1c97fc7822244e807d0d6817`.
+- The declared matrix compared all six signal timeframes; Green-Red controls;
+  independent engulfing, pin-bar, inside-break, outside-bar, momentum,
+  breakout and structural/discretionary price action; EMA, Bollinger, RSI and
+  MACD triggers; explicit multi-trigger combinations; no-filter through
+  six-timeframe context; full Asia, Tokyo sub-windows and pre-open windows;
+  60-480 minute holds; fixed and ATR stops; runners; and requested 1%/3% risk.
+- The formal objective winner was an indicator-free M15 impulse/pullback/
+  resumption pattern during 00:00-03:00 UTC, signal-candle stop, 1.25R target,
+  120-minute maximum hold and 1% risk. It returned +21.59%, PF 1.252, 191
+  entries and 8.9% cash drawdown, with positive train and validation. It is
+  rejected as the selected hypothesis: the final inspected 14 days lost EUR
+  22.95/PF 0.563, August lost EUR 20.18, and spread x1.25 reduced validation
+  positive weeks to 46.2%.
+- The strongest post-search profit/stability alternative was an M15 20-bar
+  breakout during Asia in the direction of closed H1 RSI, a pending breakout,
+  signal-candle stop plus 0.05 ATR, breakeven after +1R and a 0.5R runner. At
+  requested 3% risk and 480 minutes it returned +45.23%, PF 1.268, 151 entries
+  and 8.9% drawdown. Entry/stop slippage at 0.02R remained +39.76%/+39.40%;
+  spread x1.25 remained +40.54%. A user-aligned 240-minute hold retained every
+  applicable single-pair gate at +41.43%, PF 1.244 and 7.9% drawdown. This
+  shorter hold was selected after inspecting development and is not
+  independent evidence.
+- Giving four symbols four fixed 22.5% margin slots did not beat the current
+  three-profile system: AUDJPY at 1% returned +68.21% and at 3% returned
+  +67.04%, versus +70.13% for the existing three 30% slots. The correct
+  diversification diagnostic reused three 30% slots across four allowed
+  symbols because AUDJPY trades earlier than the London profiles. It returned
+  +81.58% at AUDJPY 1% risk and +80.95% at 3%, with 580 entries; AUDJPY added
+  153 Asia trades and EUR 68.20 at 1%. Maximum margin remained 88.214% and
+  maximum aggregate open risk 3.724%.
+- The three-reusable-slot portfolio at spread x1.25 stayed profitable at
+  +74.27%/PF 1.321, but its 12.082R drawdown narrowly exceeded the fixed 12R
+  gate. Four-session coverage also remained false because the system still
+  has no New York-only profile. Daily activity stayed 99.2%; AUDJPY adds Asia
+  coverage rather than more active calendar days.
+- Decision: do not weaken the drawdown gate or automatically change protected
+  live/demo code. Retain the 240-minute AUDJPY breakout/H1-RSI runner as a
+  development-selected forward-test hypothesis. If the human explicitly
+  approves demo probation despite the failed spread gate, prefer 1% AUDJPY
+  risk and four allowed symbols sharing three reusable slots; it made more
+  development cash than 3% while preserving the existing 90%/three-slot risk
+  architecture. Require new, genuinely unseen data and broker minimum-size,
+  minimum-distance, gap and financing checks before any live-money decision.
+  Evidence: `lab/autoresearch/reports/audjpy-asia-multi-pattern-20min-2026-08-17.json`
+  and `lab/autoresearch/reports/four-profile-audjpy-asia-portfolio-diagnostic-2026-08-17.json`.
+
 ## 2026-08-14 — Three pair-specific profiles are jointly profitable in development
 
 - Replayed EURUSD, GBPJPY and GBPUSD as one chronological portfolio from EUR

@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "symbol": "GBPUSD",
+  "enabled": false,
+  "researchStatus": "qualified-development-candidate-forward-test-required",
+  "generatedAt": "2026-08-22T12:41:37.189Z",
+  "previousSearch": {
+    "requestedSeconds": 600,
+    "totalWallSecondsIncludingAudits": 674.371,
+    "seed": 22082026,
+    "uniqueCandidates": 4375,
+    "applicableDevelopmentCandidates": 47,
+    "preparedEvents": 28994,
+    "selectionProtocol": "W03-W22 development search -> select one winner -> W23-W32 diagnostic replay",
+    "evaluatorSha256": "a1a89f5f34240202ff55bb9f70d1d2dafd60bf86feb0cfa6af962b2d46070bc1",
+    "datasetFingerprint": "35dc03b77e95ac89a0866cd626670d3c38bf498d50264e805aa22742ce060b6f"
+  },
+  "profile": {
+    "signalTimeframe": "M15",
+    "signalMode": "flexible-green-red-only",
+    "structureMode": "either",
+    "context": {
+      "h1DirectionBars": 1,
+      "minimumH1TrendAtr": 0.15
+    },
+    "activeSessions": ["overlap"],
+    "filters": {
+      "minimumM15IndicatorScore": 1,
+      "scoreComponents": ["bollinger-support-resistance-or-rejection", "rsi-extreme", "volume-expansion"],
+      "minimumM15AtrPercentile300": 0.25,
+      "minimumM15Efficiency24": 0.05,
+      "minimumM15Activity4": 1,
+      "minimumSignalBodyRatio": 0.2,
+      "minimumVolumeRatio20": 1,
+      "maximumSpreadAtr": 1.25
+    },
+    "entry": {
+      "mode": "signal-wick-breakout",
+      "pendingOffsetAtr": 0.01,
+      "pendingExpiryMinutes": 75,
+      "stopMode": "signal-candle",
+      "stopBufferAtr": 0.03
+    },
+    "management": {
+      "partialAtR": 0.65,
+      "partialFraction": 0.6,
+      "moveStopToBreakEvenAfterPartial": true,
+      "runnerTrailAtr": 4,
+      "runnerTrailTimeframe": "M15",
+      "maximumHoldMinutes": 360
+    },
+    "controls": {
+      "riskPct": 0.01,
+      "maximumEntriesPerDay": 1,
+      "maximumPositions": 1,
+      "cooldownMinutes": 45,
+      "maximumLossesPerDay": 2,
+      "maximumLossesPerSession": 1
+    }
+  },
+  "previousProfile": {
+    "signalTimeframe": "M15",
+    "contextTimeframe": "H1",
+    "activeSessions": ["london", "overlap"],
+    "entry": {
+      "signalKind": "price-action",
+      "minImpulseAtr": 0.75,
+      "minSwingGapAtr": 0.25,
+      "minSignalBodyAtr": 0.2,
+      "maxRetrace": 0.95,
+      "h1Filter": "price-direction",
+      "minH1TrendStrengthAtr": 0.1,
+      "maxAtrPercentile": 0.9,
+      "pendingOffsetAtr": 0.1,
+      "pendingExpiryMinutes": 60,
+      "stopMode": "signal-candle",
+      "stopBufferAtr": 0
+    },
+    "management": {
+      "targetR": 1,
+      "maxHoldMinutes": 180,
+      "searchedRunnerMode": "always-after-1R-with-0.5R-trail",
+      "effectiveBehavior": "fixed 1R target; the evaluator checks the 1R target before activating the runner at the same threshold"
+    },
+    "controls": {
+      "riskPct": 0.01,
+      "maxTradesPerDay": 1,
+      "maxPositions": 1,
+      "cooldownMinutes": 60
+    }
+  },
+  "previousProfileMetrics": {
+    "development": {
+      "entries": 96,
+      "r": 14.693,
+      "returnPct": 14.47,
+      "profitFactor": 1.389,
+      "winRatePct": 57.3,
+      "maxDrawdownR": 3.068,
+      "positiveWeekPct": 65,
+      "trainR": 8.438,
+      "validationR": 6.257
+    },
+    "postSearch": {
+      "entries": 50,
+      "r": -4.979,
+      "returnPct": -4.94,
+      "profitFactor": 0.809,
+      "winRatePct": 46,
+      "maxDrawdownR": 7.98,
+      "positiveWeekPct": 40,
+      "earlyR": -4.879,
+      "lateR": -0.098
+    },
+    "full": {
+      "entries": 146,
+      "r": 9.714,
+      "returnPct": 9.57,
+      "profitFactor": 1.152,
+      "winRatePct": 53.4,
+      "maxDrawdownR": 7.98,
+      "positiveWeekPct": 56.7
+    }
+  },
+  "sessionAudit": {
+    "london": { "trades": 132, "r": 13.195 },
+    "overlap": { "trades": 14, "r": -3.481 }
+  },
+  "monthlyAudit": {
+    "2026-01": { "trades": 11, "r": 0.398, "winRatePct": 45.5 },
+    "2026-02": { "trades": 20, "r": 1.537, "winRatePct": 55 },
+    "2026-03": { "trades": 22, "r": 7.502, "winRatePct": 68.2 },
+    "2026-04": { "trades": 22, "r": 0.828, "winRatePct": 50 },
+    "2026-05": { "trades": 21, "r": 4.428, "winRatePct": 61.9 },
+    "2026-06": { "trades": 22, "r": -1.88, "winRatePct": 50 },
+    "2026-07": { "trades": 23, "r": -3, "winRatePct": 43.5 },
+    "2026-08": { "trades": 5, "r": -0.098, "winRatePct": 40 }
+  },
+  "previousStress": {
+    "spreadX125": { "entries": 146, "r": 5.451, "profitFactor": 1.083, "winRatePct": 51.4, "maxDrawdownR": 11.119 },
+    "entrySlippage002R": { "entries": 146, "r": 5.594, "profitFactor": 1.085, "winRatePct": 52.1, "maxDrawdownR": 11.098 },
+    "stopSlippage002R": { "entries": 146, "r": 8.474, "profitFactor": 1.13, "winRatePct": 53.4, "maxDrawdownR": 8.2 }
+  },
+  "previousAdmission": {
+    "passed": false,
+    "failures": [
+      "post_search_not_profitable",
+      "post_search_profit_factor_below_1_10",
+      "post_search_win_rate_not_above_50pct",
+      "fresh_forward_unavailable"
+    ]
+  },
+  "greenRedHighWinRateSearch": {
+    "status": "passed-all-development-and-cost-stress-gates",
+    "generatedAt": "2026-08-22T12:41:37.189Z",
+    "rounds": [
+      { "mode": "broad", "requestedSeconds": 600, "uniqueCandidates": 7782 },
+      { "mode": "frontier", "requestedSeconds": 300, "uniqueCandidates": 3374 }
+    ],
+    "entryLevelWinRate": true,
+    "candidateSha256": "107f96eeb0199a6f7c562499396b58031c579dc7a597db43425faa2391483012",
+    "evaluatorSha256": "ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db",
+    "runnerSha256": "4e5d1eb0f299d902b8fe9e96689671ba82cf95a0c6f6f46daa994d9930a30e5f",
+    "nominal": {
+      "entries": 104,
+      "exitLegs": 167,
+      "r": 7.518,
+      "returnPct": 7.42,
+      "entryProfitFactor": 1.206,
+      "entryWinRatePct": 61.5,
+      "maxDrawdownR": 4.413,
+      "trainR": 2.927,
+      "validationR": 4.591,
+      "positiveWeekPct": 53.1
+    },
+    "nominalTemporalBlocks": [
+      { "period": "2025-W52..W10", "r": 4.604, "positiveWeekPct": 50 },
+      { "period": "2026-W11..W22", "r": 0.746, "positiveWeekPct": 58.3 },
+      { "period": "2026-W23..W34", "r": 2.168, "positiveWeekPct": 50 }
+    ],
+    "spreadX125": {
+      "entries": 104,
+      "exitLegs": 167,
+      "r": 6.762,
+      "returnPct": 6.57,
+      "entryProfitFactor": 1.185,
+      "entryWinRatePct": 61.5,
+      "maxDrawdownR": 4.897,
+      "trainR": 2.953,
+      "validationR": 3.811,
+      "positiveWeekPct": 53.1,
+      "temporalBlocks": [
+        { "period": "2025-W52..W10", "r": 4.573, "positiveWeekPct": 50 },
+        { "period": "2026-W11..W22", "r": 0.332, "positiveWeekPct": 58.3 },
+        { "period": "2026-W23..W34", "r": 1.859, "positiveWeekPct": 50 }
+      ]
+    },
+    "passedGates": [
+      "minimum-100-entries",
+      "entry-win-rate-above-50pct-nominal-and-spread-x1.25",
+      "positive-expectancy-nominal-and-spread-x1.25",
+      "profit-factor-gates-nominal-and-spread-x1.25",
+      "drawdown-below-12R-nominal-and-spread-x1.25",
+      "positive-train-and-validation-nominal-and-spread-x1.25",
+      "positive-r-and-at-least-40pct-positive-weeks-in-every-temporal-block"
+    ],
+    "conclusion": "This GBPUSD Green-Red profile passed every declared development and spread-x1.25 gate. Keep disabled until genuinely unseen forward data and broker execution checks confirm it."
+  },
+  "admission": {
+    "passed": true,
+    "scope": "development-and-spread-stress-only",
+    "remainingRequirements": [
+      "genuinely-unseen-forward-weeks",
+      "broker-minimum-size-and-stop-distance",
+      "slippage-gap-and-financing-checks",
+      "human-live-decision"
+    ]
+  },
+  "data": {
+    "root": "/private/tmp/capital-dataset-current-2026-08-18",
+    "development": "2026-W03..W22",
+    "postSearch": "2026-W23..W32",
+    "freshForwardAvailable": false
+  },
+  "limitations": [
+    "All periods are already-inspected development evidence, not a fresh holdout.",
+    "The post-search period was also opened by the shorter timer-defect pilot before the corrected 600-second run.",
+    "EURUSD was loaded only as the causal USD-to-EUR conversion series and generated no trades.",
+    "Broker minimum size, minimum distance, financing and gap behavior remain outside this evaluator."
+  ],
+  "warning": "Qualified development candidate only. Keep enabled=false and do not copy into protected live config.js before forward evidence and human approval."
+}

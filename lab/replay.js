@@ -2,8 +2,8 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CANDIDATE, SERIES_SYMBOLS } from "../autoresearch/train.js";
-import { evaluate, prepare, RESEARCH_PROTOCOL } from "../autoresearch/prepare.js";
+import { CANDIDATE, SERIES_SYMBOLS } from "./autoresearch/train.js";
+import { evaluate, prepare, RESEARCH_PROTOCOL } from "./autoresearch/prepare.js";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 

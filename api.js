@@ -8,6 +8,9 @@ let sessionStartTime = Date.now();
 const MAX_GET_REQUESTS_PER_SECOND = 8;
 const requestStarts = [];
 
+// ============================================================
+//                    Helper Functions 
+// ============================================================
 async function acquireGetSlot() {
     while (true) {
         const now = Date.now();
@@ -22,17 +25,13 @@ async function acquireGetSlot() {
         }
 
         const waitMs = Math.max(1, 1000 - (now - requestStarts[0]) + 10);
-        await delay(waitMs);
+        await new Promise((resolve) => setTimeout(resolve, waitMs));
     }
 }
 
 async function apiGet(url, options = {}) {
     await acquireGetSlot();
     return axios.get(url, options);
-}
-
-function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function toRoundedNumber(value, decimals = 0) {
@@ -42,20 +41,10 @@ function toRoundedNumber(value, decimals = 0) {
     return Number(num.toFixed(digits));
 }
 
-function assertDemoApi() {
-    let host;
 
-    try {
-        host = new URL(API.BASE_URL).hostname;
-    } catch {
-        throw new Error("Invalid API base URL. Check BASE_URL and API_PATH.");
-    }
-
-    if (host !== API.DEMO_HOST) {
-        throw new Error(`Demo-only safety lock: refusing API access to ${host || "unknown host"}.`);
-    }
-}
-
+// ============================================================
+//                    API Functions
+// ============================================================
 export const getHeaders = (includeContentType = false) => {
     const baseHeaders = {
         "X-SECURITY-TOKEN": xsecurity,
@@ -86,8 +75,6 @@ export const getAccountTransactions = async (from, to) =>
     });
 
 export const startSession = async () => {
-    assertDemoApi();
-
     try {
         const response = await axios.post(
             `${API.BASE_URL}/session`,
@@ -214,6 +201,7 @@ export async function getHistorical(symbol, resolution, count) {
                     high: p.highPrice?.bid,
                     low: p.lowPrice?.bid,
                     open: p.openPrice?.bid,
+                    volume: p.lastTradedVolume,
                     timestamp: String(p.snapshotTimeUTC).endsWith("Z") ? p.snapshotTimeUTC : `${p.snapshotTimeUTC}Z`,
                 })),
             };
@@ -221,7 +209,7 @@ export async function getHistorical(symbol, resolution, count) {
             if (error.response?.status === 429 && attempt < maxAttempts) {
                 const waitMs = 1500 * attempt;
                 logger.warn(`[API] Rate limited fetching ${symbol} ${resolution}. Retry ${attempt}/${maxAttempts} in ${waitMs}ms`);
-                await delay(waitMs);
+                await new Promise((resolve) => setTimeout(resolve, waitMs));
                 continue;
             }
             throw error;
@@ -237,8 +225,6 @@ export const getWorkingOrders = async () =>
     });
 
 export const cancelWorkingOrder = async (dealId) => {
-    assertDemoApi();
-
     return withSessionRetry(async () => {
         const response = await axios.delete(`${API.BASE_URL}/workingorders/${dealId}`, {
             headers: getHeaders(),
@@ -249,8 +235,6 @@ export const cancelWorkingOrder = async (dealId) => {
 };
 
 export async function placeOrder({ symbol, type = "STOP", direction, size, level, stopLevel, profitLevel, goodTillDate }) {
-    assertDemoApi();
-
     const orderType = String(type).toUpperCase();
     const orderDirection = String(direction).toUpperCase();
     const orderSize = Number(size);
@@ -318,8 +302,6 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
 }
 
 export const enableTrailingStop = async (dealId, stopDistance, profitLevel) => {
-    assertDemoApi();
-
     return withSessionRetry(async () => {
         const response = await axios.put(
             `${API.BASE_URL}/positions/${dealId}`,
@@ -366,8 +348,6 @@ function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, b
 }
 
 export async function placePosition(symbol, direction, size, price, SL, TP) {
-    assertDemoApi();
-
     try {
         const range = await getAllowedTPRange(symbol);
         const decimals = Number.isInteger(range.decimals) ? range.decimals : symbol.includes("JPY") ? 3 : 5;
@@ -470,8 +450,6 @@ export async function getDealConfirmation(dealReference) {
 }
 
 export async function closePosition(dealId) {
-    assertDemoApi();
-
     try {
         const response = await axios.delete(`${API.BASE_URL}/positions/${dealId}`, {
             headers: getHeaders(true),
