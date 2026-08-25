@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "symbol": "EURUSD",
+  "enabled": false,
+  "researchStatus": "strong-development-candidate",
+  "generatedAt": "2026-08-21T12:52:17.883Z",
+  "search": {
+    "requestedSeconds": 600,
+    "wallSeconds": 600.036,
+    "seed": 21082026,
+    "stages": {
+      "stage1": 1455,
+      "stage2": 17983,
+      "stage3": 9836,
+      "duplicates": 0,
+      "exampleRejected": 28956
+    },
+    "uniqueProfiles": 58230,
+    "uniqueEntryProfiles": 33132,
+    "trainQualified": 64,
+    "validationQualified": 64,
+    "selectionProtocol": "train shortlist -> validation winner -> one final test replay"
+  },
+  "profile": {
+    "signalTimeframe": "M15",
+    "contextTimeframe": "H1",
+    "entry": {
+      "signal": {
+        "minPullbackBars": 1,
+        "maxPullbackBars": 6,
+        "structureLookback": 72,
+        "pivotLeft": 2,
+        "pivotRight": 1,
+        "minImpulseAtr": 0.5,
+        "minSwingGapAtr": 0.1,
+        "maxRetrace": 1.05,
+        "minBodyRatio": 0.2,
+        "minBodyAtr": 0,
+        "bufferPoints": 2,
+        "stopReference": "wick",
+        "pendingBars": 1,
+        "maxSpreadAtr": 0.5
+      },
+      "scoring": {
+        "enabled": {
+          "h1": true,
+          "bollinger": true,
+          "rsi": false,
+          "volume": false,
+          "volatility": false
+        },
+        "minimumScore": 2,
+        "h1Mode": "price",
+        "h1LookbackBars": 1,
+        "minH1MoveAtr": 0.1,
+        "bollingerMode": "room",
+        "minBandRoomAtr": 0.75,
+        "rsiMode": "pullback",
+        "rsiOversold": 35,
+        "rsiOverbought": 65,
+        "minVolumeRatio": 1,
+        "minAtrRegime": 0.7,
+        "maxAtrRegime": 3
+      }
+    },
+    "management": {
+      "exitMode": "fixed",
+      "targetR": 1.5,
+      "breakEvenAtR": 1,
+      "breakEvenLockR": 0,
+      "breakEvenDelayMinutes": 30,
+      "partialAtR": null,
+      "partialFraction": 0,
+      "trailActivationR": 2.5,
+      "trailAtr": 1.5,
+      "trailBasis": "signal",
+      "minTrailDistanceR": 0.25,
+      "maxHoldMinutes": 120
+    },
+    "controls": {
+      "maxTradesPerDay": 3,
+      "maxLossesPerDay": 2,
+      "maxPositions": 1,
+      "maxRiskyPositions": 1,
+      "cooldownMinutes": 15
+    }
+  },
+  "indicators": {
+    "bollinger": "20-period, 2 standard deviations; signal scoring only",
+    "rsi": "14-period; direction/extreme/pullback scoring",
+    "volume": "signal volume divided by 20-candle mean",
+    "volatility": "ATR14 divided by rolling 50-candle ATR mean; ATR trailing when selected"
+  },
+  "examples": [
+    {
+      "signalTime": "2026-08-17T09:30:00.000Z",
+      "detected": true,
+      "filled": true,
+      "r": 1.5,
+      "fillTime": "2026-08-17T09:50:00.000Z",
+      "exitTime": "2026-08-17T10:54:00.000Z",
+      "reason": "target"
+    },
+    {
+      "signalTime": "2026-08-17T14:15:00.000Z",
+      "detected": true,
+      "filled": true,
+      "r": 0.1739130434782294,
+      "fillTime": "2026-08-17T14:34:00.000Z",
+      "exitTime": "2026-08-17T16:34:00.000Z",
+      "reason": "time"
+    },
+    {
+      "signalTime": "2026-08-17T16:45:00.000Z",
+      "detected": true,
+      "filled": true,
+      "r": 1.5,
+      "fillTime": "2026-08-17T17:05:00.000Z",
+      "exitTime": "2026-08-17T17:37:00.000Z",
+      "reason": "target"
+    }
+  ],
+  "metrics": {
+    "all": {
+      "trades": 489,
+      "r": 146.8133598465294,
+      "profitFactor": 1.860474651834158,
+      "winRate": 0.5132924335378323,
+      "lossRate": 0.3885480572597137,
+      "breakEvenRate": 0.09815950920245399,
+      "maxDrawdownR": 8.146099290779205,
+      "positiveWeekRate": 0.8285714285714286,
+      "weeks": 35
+    },
+    "train": {
+      "trades": 262,
+      "r": 100.41739852871027,
+      "profitFactor": 2.1895501614005086,
+      "winRate": 0.5419847328244275,
+      "lossRate": 0.36259541984732824,
+      "breakEvenRate": 0.09541984732824428,
+      "maxDrawdownR": 5,
+      "positiveWeekRate": 0.9473684210526315,
+      "weeks": 19
+    },
+    "validation": {
+      "trades": 104,
+      "r": 30.46018658519057,
+      "profitFactor": 1.8028352754156678,
+      "winRate": 0.5288461538461539,
+      "lossRate": 0.3942307692307692,
+      "breakEvenRate": 0.07692307692307693,
+      "maxDrawdownR": 4.5,
+      "positiveWeekRate": 0.875,
+      "weeks": 8
+    },
+    "test": {
+      "trades": 108,
+      "r": 12.967883457765046,
+      "profitFactor": 1.3090153215234985,
+      "winRate": 0.4351851851851852,
+      "lossRate": 0.42592592592592593,
+      "breakEvenRate": 0.1388888888888889,
+      "maxDrawdownR": 8.146099290779214,
+      "positiveWeekRate": 0.625,
+      "weeks": 8
+    },
+    "calibration": {
+      "trades": 15,
+      "r": 2.96789127486355,
+      "profitFactor": 1.4713321671140323,
+      "winRate": 0.4666666666666667,
+      "lossRate": 0.5333333333333333,
+      "breakEvenRate": 0,
+      "maxDrawdownR": 3.288617886178637,
+      "positiveWeekRate": 0.5,
+      "weeks": 2
+    },
+    "forward": {
+      "trades": 0,
+      "r": 0,
+      "profitFactor": 0,
+      "winRate": 0,
+      "lossRate": 0,
+      "breakEvenRate": 0,
+      "maxDrawdownR": 0,
+      "positiveWeekRate": 0,
+      "weeks": 0
+    }
+  },
+  "directionAudit": {
+    "buy": {
+      "trades": 230,
+      "r": 81.69494642608215,
+      "profitFactor": 2.0675990006254223,
+      "winRate": 0.5391304347826087,
+      "maxDrawdownR": 5.4151535237484865
+    },
+    "sell": {
+      "trades": 259,
+      "r": 65.11841342044725,
+      "profitFactor": 1.6920355915040843,
+      "winRate": 0.49034749034749037,
+      "maxDrawdownR": 5.519143239625224
+    }
+  },
+  "monthlyAudit": {
+    "2025-12": { "trades": 17, "r": 7.105208594782207 },
+    "2026-01": { "trades": 62, "r": 21.20877444810494 },
+    "2026-02": { "trades": 58, "r": 7.086906571741224 },
+    "2026-03": { "trades": 65, "r": 31.76386769924218 },
+    "2026-04": { "trades": 64, "r": 36.75264121483972 },
+    "2026-05": { "trades": 59, "r": 17.786030292438642 },
+    "2026-06": { "trades": 62, "r": 12.27868117963006 },
+    "2026-07": { "trades": 67, "r": 7.205178932757544 },
+    "2026-08": { "trades": 35, "r": 5.626070912992918 }
+  },
+  "stress": {
+    "slippage002RPerTrade": {
+      "all": {
+        "trades": 489,
+        "r": 137.03335984652972,
+        "profitFactor": 1.7813553952308725,
+        "winRate": 0.5132924335378323,
+        "lossRate": 0.4867075664621677,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 8.586099290779146,
+        "positiveWeekRate": 0.8285714285714286,
+        "weeks": 35
+      },
+      "train": {
+        "trades": 262,
+        "r": 95.17739852871031,
+        "profitFactor": 2.0963081972965,
+        "winRate": 0.5419847328244275,
+        "lossRate": 0.4580152671755725,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 5.119999999999997,
+        "positiveWeekRate": 0.9473684210526315,
+        "weeks": 19
+      },
+      "validation": {
+        "trades": 104,
+        "r": 28.3801865851906,
+        "profitFactor": 1.7291784914270998,
+        "winRate": 0.5288461538461539,
+        "lossRate": 0.47115384615384615,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 4.639999999999997,
+        "positiveWeekRate": 0.875,
+        "weeks": 8
+      },
+      "test": {
+        "trades": 108,
+        "r": 10.807883457765056,
+        "profitFactor": 1.2502683458829804,
+        "winRate": 0.4351851851851852,
+        "lossRate": 0.5648148148148148,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 8.586099290779211,
+        "positiveWeekRate": 0.625,
+        "weeks": 8
+      },
+      "calibration": {
+        "trades": 15,
+        "r": 2.6678912748635484,
+        "profitFactor": 1.413190007309295,
+        "winRate": 0.4666666666666667,
+        "lossRate": 0.5333333333333333,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 3.4286178861786385,
+        "positiveWeekRate": 0.5,
+        "weeks": 2
+      },
+      "forward": {
+        "trades": 0,
+        "r": 0,
+        "profitFactor": 0,
+        "winRate": 0,
+        "lossRate": 0,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 0,
+        "positiveWeekRate": 0,
+        "weeks": 0
+      }
+    },
+    "slippage005RPerTrade": {
+      "all": {
+        "trades": 489,
+        "r": 122.36335984653013,
+        "profitFactor": 1.670405471203802,
+        "winRate": 0.5112474437627812,
+        "lossRate": 0.4887525562372188,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 9.246099290779156,
+        "positiveWeekRate": 0.8,
+        "weeks": 35
+      },
+      "train": {
+        "trades": 262,
+        "r": 87.31739852871047,
+        "profitFactor": 1.965701088653145,
+        "winRate": 0.5381679389312977,
+        "lossRate": 0.4618320610687023,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 5.300000000000004,
+        "positiveWeekRate": 0.9473684210526315,
+        "weeks": 19
+      },
+      "validation": {
+        "trades": 104,
+        "r": 25.260186585190514,
+        "profitFactor": 1.6253950618435613,
+        "winRate": 0.5288461538461539,
+        "lossRate": 0.47115384615384615,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 4.850000000000005,
+        "positiveWeekRate": 0.875,
+        "weeks": 8
+      },
+      "test": {
+        "trades": 108,
+        "r": 7.567883457765047,
+        "profitFactor": 1.1681184775885454,
+        "winRate": 0.4351851851851852,
+        "lossRate": 0.5648148148148148,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 9.246099290779213,
+        "positiveWeekRate": 0.5,
+        "weeks": 8
+      },
+      "calibration": {
+        "trades": 15,
+        "r": 2.2178912748635504,
+        "profitFactor": 1.3311860048183164,
+        "winRate": 0.4666666666666667,
+        "lossRate": 0.5333333333333333,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 3.6386178861786362,
+        "positiveWeekRate": 0.5,
+        "weeks": 2
+      },
+      "forward": {
+        "trades": 0,
+        "r": 0,
+        "profitFactor": 0,
+        "winRate": 0,
+        "lossRate": 0,
+        "breakEvenRate": 0,
+        "maxDrawdownR": 0,
+        "positiveWeekRate": 0,
+        "weeks": 0
+      }
+    }
+  },
+  "admission": {
+    "passed": false,
+    "failures": [
+      "test_win_rate_not_above_50pct",
+      "fresh_forward_unavailable"
+    ]
+  },
+  "data": {
+    "root": "/private/tmp/capital-dataset-current-2026-08-18",
+    "firstM1": "2025-12-21T22:00:00.000Z",
+    "lastM1": "2026-08-18T17:54:00.000Z",
+    "calibrationStart": "2026-08-12T00:00:00.000Z",
+    "freshForwardAvailable": false
+  },
+  "warning": "Strong development candidate only. Test expectancy is positive, but test win rate is 43.5% and no fresh forward data exists. Do not enable or copy into live config.js."
+}
