@@ -1,0 +1,2426 @@
+{
+  "generatedAt": "2026-08-23T18:28:51.291Z",
+  "protocol": {
+    "schemaVersion": 16,
+    "train": {
+      "fromWeek": "2025-W52",
+      "toWeek": "2026-W14"
+    },
+    "validation": {
+      "fromWeek": "2026-W15",
+      "toWeek": "2026-W30"
+    },
+    "evaluationEndExclusive": "2026-08-19T00:00:00.000Z",
+    "minimumCoverageEnd": "2026-08-17T00:00:00.000Z",
+    "lockedTest": "none-period-already-inspected-development-only",
+    "primaryMetric": "pair-session-green-red-quality-then-capped-portfolio-activity",
+    "startCapital": 500,
+    "leverage": {
+      "usdPairs": 30,
+      "crosses": 20
+    },
+    "risk": {
+      "maxPerPositionPct": 0.03,
+      "maxPortfolioPct": 0.15,
+      "marginUtilization": 0.9
+    },
+    "sizing": "fixed EUR 500 upside, balance-sensitive downside; quote-currency conversion at entry/exit",
+    "execution": "closed-candle signals, next-M1 entry, bid/ask prices, conservative SL-first OHLC ambiguity"
+  },
+  "search": {
+    "requestedSeconds": 1800,
+    "actualSeconds": 1800.1,
+    "preparationSeconds": 170.2,
+    "stressPreparationSeconds": 397.7,
+    "attempts": 11647,
+    "evaluated": 11647,
+    "cells": 68
+  },
+  "evaluatorSha256": "ce5a6d9d6147605e9d34e9573fdd56233f6e942f8d1ba52415313ec4a30751db",
+  "datasetFingerprint": "cc9ffbc65c2beaa3a0abef541a6fe78aad7642f0266d51e32462551a8be04fa6",
+  "coverage": {
+    "AUDCAD": {
+      "M1": {
+        "rows": 243122,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "cf56494203595fb0aad8cca29595750be25cc4391c17626203df0a832fde8d3c"
+      },
+      "M5": {
+        "rows": 48745,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "dce931d0d79f1035a2e25b2c9e0da503ddb52a9a4cf4f1ea88debd3444852101"
+      },
+      "M15": {
+        "rows": 17730,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "a74d003619c73e10033c0ac994a99d60959c250acd53ef1ab99a5ca4f29d9441"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "57409876f8bffae01ce002700a52118b1c180d2de4fcd38db24e3777cb969a8a"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "01649251b8f9e29a6993d069bc836da0b3a50bfdaa4a53108c3f5175ce97a165"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "c02c7c35c1dc12dbe1893da0771d3b8a8722e2864bc01f008a389dc1a15d5929"
+      }
+    },
+    "AUDJPY": {
+      "M1": {
+        "rows": 243249,
+        "first": "2025-12-21T22:01:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "fbba036db81f7165c11b0b5079de209b46861d345cb0e0028160b663a292600e"
+      },
+      "M5": {
+        "rows": 48735,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "4358bfc60c381d28d2334642bfd07d4e00b051244d916a4c6a58c6ac45d7fc6a"
+      },
+      "M15": {
+        "rows": 17728,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "50cf663c3251ce838725f72b98b8e68044433ae011f84f44d32d4b662ae1a6e9"
+      },
+      "H1": {
+        "rows": 4433,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "46b09160bfc93f3d5661658407dba384f451f65fbb73b19c88ebc4ffec9bbab9"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "4d021ac68a8401ae01e37525e1ebbf3aa6ae54dec8d62e9f01c47ee1b4a92c18"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "86ab97a6dec2b44088d2e8c99f8704bad3d17e7d316fc2018f5a2869baf2c677"
+      }
+    },
+    "AUDUSD": {
+      "M1": {
+        "rows": 242284,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "6e4dbf77e8254bc9a1a632cdc2fa20aaf64492991f28b041411029e3e788f605"
+      },
+      "M5": {
+        "rows": 48727,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "69a95693d4e964a3bc2fa3b515f3ebea74299329f4e5915b4f99b332b2027e53"
+      },
+      "M15": {
+        "rows": 16300,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "3f26de103d616b51b250316e3333ecc65a37558689db6fb15d55bc476ce02fdf"
+      },
+      "H1": {
+        "rows": 4076,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "67b2e07f128cdd3e161fcee26c5e8b6c43208e978894d8a2cf6a7156df35d4be"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "419ea6d4890c00184462b0738396c7495578f847cb716361a5dcc1fa6ec1fb6c"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "80922ad955cec4609fbb1219c15b8d6063a44a93731e7ac2c669bde40a8c2658"
+      }
+    },
+    "EURAUD": {
+      "M1": {
+        "rows": 243503,
+        "first": "2025-12-21T22:04:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "8aeab66a6bd78edeb7e16a243dbc156674eb787f73c7ed25a69132f2ad52ef77"
+      },
+      "M5": {
+        "rows": 48757,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "eae7e41f17b64875cc29a6f0f53fd949280cae66ec6a39973b19b9d4cc236149"
+      },
+      "M15": {
+        "rows": 17734,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "1273cb07e6f03f847a2222452ef4aba81ebd8147a146c015f8a8ca4112976a22"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "d1db5ec6b93dea55db8e48391524a359deae705d5b7b547f40dbb21c1695107b"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "3b1770891ae455e12f212c8deb6b4cea26a537e91aceea8a40375e117e851b2b"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "2f486de9ecb3d513766d09f89a4704a30b9f2f1d567d03f0f174edad3af986ec"
+      }
+    },
+    "EURCHF": {
+      "M1": {
+        "rows": 242081,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "7536b71e929b54b9b6d5c677d6c3076f90195c943275c12ee974514334dc5e1b"
+      },
+      "M5": {
+        "rows": 48654,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "bbab762ba731b620c508b6d85a08eb830be26e64297b011d67b5573fdf929101"
+      },
+      "M15": {
+        "rows": 17703,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "0749d134103f6463a02c5e8ac94488678308b0b398e3c4622a4f414d9a9cb98b"
+      },
+      "H1": {
+        "rows": 4427,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "1d61e58c098192aa037f93ae25a4d9248f0492c6c6da9f1c7de18a17806e962f"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "7c894f87a55dc7593b24cf4bd07cd23f48255de132488519698bbf8808b7c8c1"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "e81e89b5fbc6739cba3abca7db166198efedec2940a17f19b4c71f0643903312"
+      }
+    },
+    "EURGBP": {
+      "M1": {
+        "rows": 241424,
+        "first": "2025-12-21T22:01:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "267719897bfc46e3f786eb033e74de8a0b74099ba15f71241c6e04922825d57c"
+      },
+      "M5": {
+        "rows": 48736,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "f7d486ffc32c1047be24c9f8a7cf8809d2c450b0b0d140a057beda764cdb9032"
+      },
+      "M15": {
+        "rows": 16302,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "1d18819cc4e9b70e05737ff570a0edb11b9f388dd3148e409a00e6a673945bb6"
+      },
+      "H1": {
+        "rows": 4076,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "1c217f9d7c7ecc7f7aec7fcf7b209b56d3e0f65cf02186bffb28e457a2467003"
+      },
+      "H4": {
+        "rows": 1145,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "ba9db39b5bc59372ed77bbf68fa3231a760a9a78c96365687245aea2058d589e"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "0e68e0efba26854bdaa28c2a9230d96a4ac039c4d19724643c67d6d6a0864a5d"
+      }
+    },
+    "EURJPY": {
+      "M1": {
+        "rows": 243748,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "ee9fa0910f915504ebd6e6b7dab8db1679858599144b8375a4eae0606c3e370d"
+      },
+      "M5": {
+        "rows": 48773,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "2ca61b572d6dfcfb48f297f922ea641e90074ee8adc29dc18d15ba5a47ece8ac"
+      },
+      "M15": {
+        "rows": 17737,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "422231f4d26464d9975d4f7333440a2391a5be370d71f62361a2ad2377bccc51"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "a25922df02a2f654ba937a79cc32c17c7bcb3fce72c4f0b56173f31bf0ab4b3a"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "6c09b3b0ddc8bf9c8b07422c04528b9a5d6a3ed4715759acb0c0b438dd0986ae"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "8099239d4993508a11eeee57d54ca718947d0fbb82128ce533b2836c7ef799c5"
+      }
+    },
+    "EURUSD": {
+      "M1": {
+        "rows": 242699,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "41a8be0e1635ac45d608c90fbe2797101cb476f40374cd5558f0a9a202587e88"
+      },
+      "M5": {
+        "rows": 48769,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "7e48eea6f0cb3a8d53e45763bfdeb70b074aa0c395de4547d3b18acedd674323"
+      },
+      "M15": {
+        "rows": 16306,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "6babf66b101f9300f6c7399a95648b4b5fe29c1b0ac58fc93189869d505f736b"
+      },
+      "H1": {
+        "rows": 4076,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "c8ab9fefd2402ffb3f0d4713f2d1877143eee7ee5803c0794d6130772ccac7d0"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "86d1f9cfd6a562878318e345cdf01e16f03572333b4a07f8cae6740aa7d27a2f"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "ec7389fbc0cadd2cd710d0aa09946bd896960890122997db69bdcc225dc3e46f"
+      }
+    },
+    "GBPAUD": {
+      "M1": {
+        "rows": 239657,
+        "first": "2025-12-21T22:36:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "988a518327ca48ace6a68c7ba11a47d7d5c49391d98e6e6cd889413c56988e07"
+      },
+      "M5": {
+        "rows": 48123,
+        "first": "2025-12-21T22:35:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "aa11ec8a7e43af8a4dae4ff7e54f02b88cf00f7f5c8c58bb28848a43e17555ce"
+      },
+      "M15": {
+        "rows": 17551,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "e0efe61585d42688cff936ff70541473779503361b05f305a4618cd72f0b3be0"
+      },
+      "H1": {
+        "rows": 4430,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "8eeaf2287ab0dd8535f0d1a8c0ac147bd8ea4db9e8e5fff7e55b0e03b8521b9a"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "5fb395f5b091cdba8e9e36ab2a7d764f941a34991a847f17feef4233433f2042"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "711217272289a43bae4d211e0db30eefd775b3a02b335b32872aeb35b3612ddd"
+      }
+    },
+    "GBPCHF": {
+      "M1": {
+        "rows": 243141,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "b637816ea4e2c30580d10c96ec6e7575bf3c0e484fa42731ce9c863ef06b767a"
+      },
+      "M5": {
+        "rows": 48713,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "5537e86f851b5a63f485246e31442cb298434d9d0e18c891b6a6efddb3bd721a"
+      },
+      "M15": {
+        "rows": 17721,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "43d91dc27c1c3bb902314cd738611b9646a19090a7179d57f237265262e0dc90"
+      },
+      "H1": {
+        "rows": 4432,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "bb0452c5179781c0f469e759015713a92266b07dae68f8b9177c7e8e6d971e96"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "72f32498401ca1ef208c94aaff6bfb5780a7cd68a7a34e7e921001f0b6e9ab29"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "66c457ca01aa55355d439d893641db66c74b812f90a8563bc428d2601a0648fd"
+      }
+    },
+    "GBPJPY": {
+      "M1": {
+        "rows": 243661,
+        "first": "2025-12-21T22:04:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "33bacc81dee646619783164c309b47b9b7c614af8696ae2f6e01e09a1484b580"
+      },
+      "M5": {
+        "rows": 48775,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "e30421c1ef94ced6d3fa3a36bc771a321b89867986f28050d1d8e28093d8c4d5"
+      },
+      "M15": {
+        "rows": 17737,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "aea2e7810d08937ccc46916233236626f61142cb5e1120f7ae48e5caf02136b2"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "fb21a3d9a5f1171462341361c55bff894059fea95fe34d61955d1086d8799488"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "efc8ede9d76bc9780541391015be2c5084939a295934da58b4b7d495969a0648"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "561938879d299afa2398ed0f063b1d129ab958214c1c0c87424fd368839d4af2"
+      }
+    },
+    "GBPUSD": {
+      "M1": {
+        "rows": 243239,
+        "first": "2025-12-21T22:08:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "461a4480ff5da024282cb552aa0784db81e20a5f65434d0fbccf9b7946581154"
+      },
+      "M5": {
+        "rows": 48777,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "ce554c234b8e5877e532edbf2913eff91cf86c95b31374dbd1a425cd1baffe42"
+      },
+      "M15": {
+        "rows": 16307,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "a58b79460bbeebe143305db852e75f7db390ae90cedc1e2e16cdd1bd7cd2c609"
+      },
+      "H1": {
+        "rows": 4076,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "3179c8c0d8a0f1251460c8a3e7511bdddf0ab3fbce5ce58002147d2c7819b76c"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "9190527f60936a5514cd79bb544b493d541df46285236f0adc04ef6bb0f4bda2"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "08168ba7f849b2597f38ac04cc41b6d2dc9d1c21176204e06f126efb58596656"
+      }
+    },
+    "NZDJPY": {
+      "M1": {
+        "rows": 239739,
+        "first": "2025-12-24T09:20:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "39b48695d139fc4d61f15acd0bdf71937869a53d8947e4013bab4d5fef7963f8"
+      },
+      "M5": {
+        "rows": 48025,
+        "first": "2025-12-24T09:25:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "63236114257c723bfbbd3fa8055e8785d28f20fe8aa86fa1a906f3e6c03fa90c"
+      },
+      "M15": {
+        "rows": 17732,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "accc284af922440b74632780ac5bb4f37e46888ae04afaf1db6e6188c5e2cf7d"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "a42c5b51325704c5e5a1589818ad53628cbeb4f17ad7c7d23184a3cb7973ad44"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "a6429925cefd45a5664b1570a917ed60a6c6506eff639f63107fa010a1295229"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "16bb6805347aba70f87d26207dd84a2c9fb2462e399d203763bc9043abacb935"
+      }
+    },
+    "NZDUSD": {
+      "M1": {
+        "rows": 239278,
+        "first": "2025-12-24T09:26:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "941fb321d5fe35be5adec6c1717d7e6812a9bc5edb7a09d1861ac6e14ce3aa40"
+      },
+      "M5": {
+        "rows": 48043,
+        "first": "2025-12-24T09:35:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "09ab494f8a93a0fbac292386ca0afec1c14be2badb9f07c6cd6e6a59834202ad"
+      },
+      "M15": {
+        "rows": 17735,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "648a6975ad21723d32a8aee7058eb7190187569869671ac9d36c19d7a2b57291"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "a492ca7a4e17dd2424aff103acabab1b5ff4754d7496542558b35db094eed4df"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "d4dd9ecf683e0efbf3e9ef31ed0ee7126760e1427221a255ff6919d0ae361bb5"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "6e7e8ea26ceb10487229ccf0c961b49dab22becb706f1b40a23a28990b80b53a"
+      }
+    },
+    "USDCAD": {
+      "M1": {
+        "rows": 238358,
+        "first": "2025-12-24T09:32:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "6d433616c9100f00cb704cab70f372a4f69c47270272471682e7ce3d98113953"
+      },
+      "M5": {
+        "rows": 48057,
+        "first": "2025-12-24T09:40:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "df03e35f556e6c643141c4fa6184079329b4d13dc7ec263598857fdae084bec5"
+      },
+      "M15": {
+        "rows": 16068,
+        "first": "2025-12-24T09:45:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "986b8fc79b2b2fd0e8160ed923d3bf4f1b3df1eed3113ee006fff8ded92dc75c"
+      },
+      "H1": {
+        "rows": 4016,
+        "first": "2025-12-24T10:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "cc121c8dc82ddd04436ec371f2710624454a3a9cd8738aaf1d8c1ec71d42316f"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "367499995e3e118fb80454a4c066f8c437c4fe76f51c8c32b98444a964a75343"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "3d159f5b74ddf060bf750f6150b8fcb30917f6dc637b079d051e1fd51302cd3b"
+      }
+    },
+    "USDCHF": {
+      "M1": {
+        "rows": 239724,
+        "first": "2025-12-24T09:38:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "283fd0310d40d9a5ce5b696aa0eb8e48cd01c19a50d7cdf776eefe93ebb16a24"
+      },
+      "M5": {
+        "rows": 48060,
+        "first": "2025-12-24T09:45:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "d8f1b8c1b4d6fd896edbeee949b3f6e90b438a107caec89b1dc7bdbeca6d3e46"
+      },
+      "M15": {
+        "rows": 17739,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "8997d7462c9fa99258239bde17ea26fcc52bb6226e2a4d62106181ded209c37c"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "6b030835ee879f9bdd8c87e97318298eaeff74b7a61d7d0d9fb92c01824cdd6b"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "b52badc3581c47c53efdf2f02f3dee22bae0b2d6883d296615df32fd77a42b5b"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "120a5bdb1851b5f2c7d4a7166978032d3ea67529a58f13625e96f06e78f8c249"
+      }
+    },
+    "USDJPY": {
+      "M1": {
+        "rows": 239450,
+        "first": "2025-12-24T09:44:00.000Z",
+        "last": "2026-08-18T17:54:00.000Z",
+        "sha256": "398ef9ae1057cb387d5bc4732bfaa658ce046636037673eea31521225a841c38"
+      },
+      "M5": {
+        "rows": 48065,
+        "first": "2025-12-24T09:50:00.000Z",
+        "last": "2026-08-18T17:50:00.000Z",
+        "sha256": "0143317aead8b23b20ef8cec1589920fa145124af568132e9930b1f7fbfdf1e5"
+      },
+      "M15": {
+        "rows": 17738,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T17:30:00.000Z",
+        "sha256": "d80f4005bbb3f97c443a3a74689b14e273f26dc6fd3f2ea539e4cdf3dd9c20a0"
+      },
+      "H1": {
+        "rows": 4434,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T16:00:00.000Z",
+        "sha256": "24b0fe26e24fb630520e2e1ed37e97ff6abdaf626307fbc2f455188f89129be0"
+      },
+      "H4": {
+        "rows": 1147,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-08-18T12:00:00.000Z",
+        "sha256": "5a2b7b3be0f7673979b1853261e18211f4521a742a4ad82135b382561fdef9d5"
+      },
+      "D1": {
+        "rows": 236,
+        "first": "2025-11-16T00:00:00.000Z",
+        "last": "2026-08-17T00:00:00.000Z",
+        "sha256": "00766888a413feae4cafce0f577e298646ff13d4952fbf7027ca5699c886f6ca"
+      }
+    }
+  },
+  "acceptance": {
+    "nominal": "entries>=40, validation entries>=12, entry win rate>50%, PF>=1.10, positive train and validation, >=50% positive weeks in both, drawdown<=12R",
+    "stress": "spread x1.25; entries>=35, validation entries>=10, entry win rate>50%, PF>=1.05, positive train and validation, >=40% positive weeks in both, drawdown<=12R",
+    "sessionCapacity": 5,
+    "portfolioDailyEntryCap": 3,
+    "portfolioSessionEntryCap": 2
+  },
+  "selected": {
+    "asia": [
+      {
+        "symbol": "AUDUSD",
+        "session": "asia",
+        "config": {
+          "name": "AUDUSD-asia-green-red-7754",
+          "profileKey": "AUDUSD:asia",
+          "method": "custom",
+          "symbols": [
+            "AUDUSD"
+          ],
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 1.1,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-3atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 3,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 54,
+          "validationEntries": 28,
+          "winRate": 66.7,
+          "tradesPerDay": 0.39,
+          "totalR": 8.71,
+          "returnPct": 8.63,
+          "profitFactor": 1.521,
+          "maxDrawdownR": 2.1,
+          "trainR": 1.911,
+          "validationR": 6.799,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 46.4,
+          "validationActiveDays": 35
+        },
+        "stress": {
+          "entries": 54,
+          "validationEntries": 28,
+          "winRate": 66.7,
+          "tradesPerDay": 0.39,
+          "totalR": 8.373,
+          "returnPct": 8.21,
+          "profitFactor": 1.5,
+          "maxDrawdownR": 2.1,
+          "trainR": 1.776,
+          "validationR": 6.597,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 46.4,
+          "validationActiveDays": 35
+        }
+      },
+      {
+        "symbol": "EURUSD",
+        "session": "asia",
+        "config": {
+          "name": "EURUSD-asia-green-red-6263",
+          "profileKey": "EURUSD:asia",
+          "method": "custom",
+          "symbols": [
+            "EURUSD"
+          ],
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.25,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 79,
+          "validationEntries": 43,
+          "winRate": 55.7,
+          "tradesPerDay": 0.56,
+          "totalR": 13.59,
+          "returnPct": 13.53,
+          "profitFactor": 1.468,
+          "maxDrawdownR": 5.592,
+          "trainR": 9.105,
+          "validationR": 4.488,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 62.5,
+          "trainActiveDays": 53.6,
+          "validationActiveDays": 48.8
+        },
+        "stress": {
+          "entries": 78,
+          "validationEntries": 42,
+          "winRate": 55.1,
+          "tradesPerDay": 0.56,
+          "totalR": 12.543,
+          "returnPct": 12.38,
+          "profitFactor": 1.435,
+          "maxDrawdownR": 6.47,
+          "trainR": 8.991,
+          "validationR": 3.554,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 62.5,
+          "trainActiveDays": 53.6,
+          "validationActiveDays": 48.8
+        }
+      },
+      {
+        "symbol": "GBPAUD",
+        "session": "asia",
+        "config": {
+          "name": "GBPAUD-asia-green-red-10480",
+          "profileKey": "GBPAUD:asia",
+          "method": "custom",
+          "symbols": [
+            "GBPAUD"
+          ],
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0.75,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.5,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.25r",
+          "rewardRisk": 1.25,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 55,
+          "validationEntries": 28,
+          "winRate": 54.5,
+          "tradesPerDay": 0.39,
+          "totalR": 10.599,
+          "returnPct": 9.37,
+          "profitFactor": 1.441,
+          "maxDrawdownR": 2.998,
+          "trainR": 8.189,
+          "validationR": 2.411,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 42.9,
+          "validationActiveDays": 31.3
+        },
+        "stress": {
+          "entries": 55,
+          "validationEntries": 28,
+          "winRate": 52.7,
+          "tradesPerDay": 0.39,
+          "totalR": 8.235,
+          "returnPct": 7.27,
+          "profitFactor": 1.329,
+          "maxDrawdownR": 3.246,
+          "trainR": 5.924,
+          "validationR": 2.312,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 42.9,
+          "validationActiveDays": 31.3
+        }
+      },
+      {
+        "symbol": "AUDJPY",
+        "session": "asia",
+        "config": {
+          "name": "AUDJPY-asia-green-red-8773",
+          "profileKey": "AUDJPY:asia",
+          "method": "custom",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0,
+          "minEfficiency24": 0.05,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.5,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 60,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 360,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 205,
+          "validationEntries": 121,
+          "winRate": 52.7,
+          "tradesPerDay": 1.46,
+          "totalR": 20.116,
+          "returnPct": 19.78,
+          "profitFactor": 1.209,
+          "maxDrawdownR": 7.81,
+          "trainR": 0.646,
+          "validationR": 19.469,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 62.5,
+          "trainActiveDays": 100,
+          "validationActiveDays": 100
+        },
+        "stress": {
+          "entries": 202,
+          "validationEntries": 118,
+          "winRate": 50.5,
+          "tradesPerDay": 1.44,
+          "totalR": 10.43,
+          "returnPct": 10.4,
+          "profitFactor": 1.105,
+          "maxDrawdownR": 11.038,
+          "trainR": 0.639,
+          "validationR": 9.789,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 100,
+          "validationActiveDays": 100
+        }
+      }
+    ],
+    "london": [
+      {
+        "symbol": "EURUSD",
+        "session": "london",
+        "config": {
+          "name": "EURUSD-london-green-red-5532",
+          "profileKey": "EURUSD:london",
+          "method": "custom",
+          "symbols": [
+            "EURUSD"
+          ],
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0.8,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 75,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-0.75r",
+          "rewardRisk": 0.75,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 60,
+          "validationEntries": 39,
+          "winRate": 71.7,
+          "tradesPerDay": 0.43,
+          "totalR": 14.327,
+          "returnPct": 14.21,
+          "profitFactor": 1.897,
+          "maxDrawdownR": 2.553,
+          "trainR": 6.834,
+          "validationR": 7.492,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 37.5,
+          "validationActiveDays": 48.8
+        },
+        "stress": {
+          "entries": 60,
+          "validationEntries": 39,
+          "winRate": 68.3,
+          "tradesPerDay": 0.43,
+          "totalR": 11.945,
+          "returnPct": 11.83,
+          "profitFactor": 1.703,
+          "maxDrawdownR": 2.562,
+          "trainR": 5.068,
+          "validationR": 6.876,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 37.5,
+          "validationActiveDays": 48.8
+        }
+      },
+      {
+        "symbol": "EURJPY",
+        "session": "london",
+        "config": {
+          "name": "EURJPY-london-green-red-4987",
+          "profileKey": "EURJPY:london",
+          "method": "custom",
+          "symbols": [
+            "EURJPY"
+          ],
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 90,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.65r-trail-2atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 2,
+          "partialRunner": true,
+          "partialR": 0.65,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 85,
+          "validationEntries": 57,
+          "winRate": 68.2,
+          "tradesPerDay": 0.61,
+          "totalR": 10.865,
+          "returnPct": 10.3,
+          "profitFactor": 1.412,
+          "maxDrawdownR": 2.948,
+          "trainR": 3.315,
+          "validationR": 7.552,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 50,
+          "validationActiveDays": 71.3
+        },
+        "stress": {
+          "entries": 86,
+          "validationEntries": 57,
+          "winRate": 66.3,
+          "tradesPerDay": 0.61,
+          "totalR": 6.997,
+          "returnPct": 6.92,
+          "profitFactor": 1.247,
+          "maxDrawdownR": 3.621,
+          "trainR": 2.927,
+          "validationR": 4.073,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 51.8,
+          "validationActiveDays": 71.3
+        }
+      },
+      {
+        "symbol": "GBPUSD",
+        "session": "london",
+        "config": {
+          "name": "GBPUSD-london-green-red-4584",
+          "profileKey": "GBPUSD:london",
+          "method": "custom",
+          "symbols": [
+            "GBPUSD"
+          ],
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.2,
+          "minVolumeRatio": 1,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-2atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 2,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 45,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 58,
+          "validationEntries": 31,
+          "winRate": 65.5,
+          "tradesPerDay": 0.41,
+          "totalR": 11.936,
+          "returnPct": 11.84,
+          "profitFactor": 1.614,
+          "maxDrawdownR": 4.962,
+          "trainR": 6.3,
+          "validationR": 5.638,
+          "trainPositiveWeeks": 75,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 48.2,
+          "validationActiveDays": 38.8
+        },
+        "stress": {
+          "entries": 58,
+          "validationEntries": 31,
+          "winRate": 63.8,
+          "tradesPerDay": 0.41,
+          "totalR": 10.835,
+          "returnPct": 10.72,
+          "profitFactor": 1.544,
+          "maxDrawdownR": 4.982,
+          "trainR": 5.918,
+          "validationR": 4.918,
+          "trainPositiveWeeks": 75,
+          "validationPositiveWeeks": 43.8,
+          "trainActiveDays": 48.2,
+          "validationActiveDays": 38.8
+        }
+      },
+      {
+        "symbol": "AUDJPY",
+        "session": "london",
+        "config": {
+          "name": "AUDJPY-london-green-red-3826",
+          "profileKey": "AUDJPY:london",
+          "method": "custom",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 2,
+          "minH1TrendAtr": 0.05,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-4atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 4,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 120,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 65,
+          "validationEntries": 39,
+          "winRate": 61.5,
+          "tradesPerDay": 0.46,
+          "totalR": 10.127,
+          "returnPct": 9.71,
+          "profitFactor": 1.445,
+          "maxDrawdownR": 3.463,
+          "trainR": 5.561,
+          "validationR": 4.569,
+          "trainPositiveWeeks": 50,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 46.4,
+          "validationActiveDays": 48.8
+        },
+        "stress": {
+          "entries": 65,
+          "validationEntries": 39,
+          "winRate": 56.9,
+          "tradesPerDay": 0.46,
+          "totalR": 5.114,
+          "returnPct": 4.98,
+          "profitFactor": 1.201,
+          "maxDrawdownR": 3.478,
+          "trainR": 3.554,
+          "validationR": 1.561,
+          "trainPositiveWeeks": 50,
+          "validationPositiveWeeks": 43.8,
+          "trainActiveDays": 46.4,
+          "validationActiveDays": 48.8
+        }
+      },
+      {
+        "symbol": "AUDUSD",
+        "session": "london",
+        "config": {
+          "name": "AUDUSD-london-green-red-5935",
+          "profileKey": "AUDUSD:london",
+          "method": "custom",
+          "symbols": [
+            "AUDUSD"
+          ],
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.15,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0.4,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 62,
+          "validationEntries": 38,
+          "winRate": 53.2,
+          "tradesPerDay": 0.44,
+          "totalR": 5.953,
+          "returnPct": 5.91,
+          "profitFactor": 1.226,
+          "maxDrawdownR": 4.03,
+          "trainR": 2.445,
+          "validationR": 3.509,
+          "trainPositiveWeeks": 50,
+          "validationPositiveWeeks": 68.8,
+          "trainActiveDays": 42.9,
+          "validationActiveDays": 47.5
+        },
+        "stress": {
+          "entries": 61,
+          "validationEntries": 37,
+          "winRate": 50.8,
+          "tradesPerDay": 0.44,
+          "totalR": 2.642,
+          "returnPct": 2.64,
+          "profitFactor": 1.097,
+          "maxDrawdownR": 4.043,
+          "trainR": 2.407,
+          "validationR": 0.237,
+          "trainPositiveWeeks": 50,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 42.9,
+          "validationActiveDays": 46.3
+        }
+      }
+    ],
+    "overlap": [
+      {
+        "symbol": "AUDUSD",
+        "session": "overlap",
+        "config": {
+          "name": "AUDUSD-overlap-green-red-7380",
+          "profileKey": "AUDUSD:overlap",
+          "method": "custom",
+          "symbols": [
+            "AUDUSD"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 2,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.15,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-3atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 3,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 360,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 118,
+          "validationEntries": 69,
+          "winRate": 67.8,
+          "tradesPerDay": 0.84,
+          "totalR": 19.778,
+          "returnPct": 19.54,
+          "profitFactor": 1.526,
+          "maxDrawdownR": 3.102,
+          "trainR": 7.671,
+          "validationR": 12.106,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 68.8,
+          "trainActiveDays": 75,
+          "validationActiveDays": 71.3
+        },
+        "stress": {
+          "entries": 117,
+          "validationEntries": 68,
+          "winRate": 66.7,
+          "tradesPerDay": 0.84,
+          "totalR": 19.397,
+          "returnPct": 19.21,
+          "profitFactor": 1.502,
+          "maxDrawdownR": 3.102,
+          "trainR": 7.475,
+          "validationR": 11.92,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 62.5,
+          "trainActiveDays": 75,
+          "validationActiveDays": 71.3
+        }
+      },
+      {
+        "symbol": "GBPUSD",
+        "session": "overlap",
+        "config": {
+          "name": "GBPUSD-overlap-green-red-9089",
+          "profileKey": "GBPUSD:overlap",
+          "method": "custom",
+          "symbols": [
+            "GBPUSD"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 2,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 2,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0,
+          "minActivity4": 1,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 60,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.65r-trail-4atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 4,
+          "partialRunner": true,
+          "partialR": 0.65,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 120,
+          "trailTimeframe": "m15",
+          "cooldown": 45,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 46,
+          "validationEntries": 26,
+          "winRate": 60.9,
+          "tradesPerDay": 0.33,
+          "totalR": 5.069,
+          "returnPct": 5,
+          "profitFactor": 1.332,
+          "maxDrawdownR": 3.098,
+          "trainR": 2.759,
+          "validationR": 2.31,
+          "trainPositiveWeeks": 50,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 35.7,
+          "validationActiveDays": 32.5
+        },
+        "stress": {
+          "entries": 46,
+          "validationEntries": 26,
+          "winRate": 58.7,
+          "tradesPerDay": 0.33,
+          "totalR": 2.864,
+          "returnPct": 2.87,
+          "profitFactor": 1.176,
+          "maxDrawdownR": 3.117,
+          "trainR": 1.204,
+          "validationR": 1.661,
+          "trainPositiveWeeks": 41.7,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 35.7,
+          "validationActiveDays": 32.5
+        }
+      },
+      {
+        "symbol": "USDCAD",
+        "session": "overlap",
+        "config": {
+          "name": "USDCAD-overlap-green-red-9636",
+          "profileKey": "USDCAD:overlap",
+          "method": "custom",
+          "symbols": [
+            "USDCAD"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.15,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 75,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-0.75r",
+          "rewardRisk": 0.75,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 91,
+          "validationEntries": 56,
+          "winRate": 60.4,
+          "tradesPerDay": 0.65,
+          "totalR": 7.247,
+          "returnPct": 7.06,
+          "profitFactor": 1.234,
+          "maxDrawdownR": 4.559,
+          "trainR": 3.166,
+          "validationR": 4.082,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 56.3,
+          "trainActiveDays": 62.5,
+          "validationActiveDays": 70
+        },
+        "stress": {
+          "entries": 91,
+          "validationEntries": 56,
+          "winRate": 58.2,
+          "tradesPerDay": 0.65,
+          "totalR": 3.44,
+          "returnPct": 3.31,
+          "profitFactor": 1.106,
+          "maxDrawdownR": 4.589,
+          "trainR": 3.014,
+          "validationR": 0.427,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 62.5,
+          "validationActiveDays": 70
+        }
+      }
+    ],
+    "newYork": [
+      {
+        "symbol": "AUDUSD",
+        "session": "newYork",
+        "config": {
+          "name": "AUDUSD-newYork-green-red-6037",
+          "profileKey": "AUDUSD:newYork",
+          "method": "custom",
+          "symbols": [
+            "AUDUSD"
+          ],
+          "allowedSessions": [
+            "newYork"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0,
+          "minActivity4": 0.75,
+          "minSignalBodyRatio": 0.2,
+          "minVolumeRatio": 0.8,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.25r",
+          "rewardRisk": 1.25,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "nominal": {
+          "entries": 64,
+          "validationEntries": 32,
+          "winRate": 53.1,
+          "tradesPerDay": 0.46,
+          "totalR": 10.325,
+          "returnPct": 10.28,
+          "profitFactor": 1.461,
+          "maxDrawdownR": 4.559,
+          "trainR": 7.865,
+          "validationR": 2.462,
+          "trainPositiveWeeks": 66.7,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 51.8,
+          "validationActiveDays": 37.5
+        },
+        "stress": {
+          "entries": 63,
+          "validationEntries": 32,
+          "winRate": 50.8,
+          "tradesPerDay": 0.45,
+          "totalR": 8.283,
+          "returnPct": 8.27,
+          "profitFactor": 1.364,
+          "maxDrawdownR": 4.65,
+          "trainR": 6.063,
+          "validationR": 2.221,
+          "trainPositiveWeeks": 58.3,
+          "validationPositiveWeeks": 50,
+          "trainActiveDays": 51.8,
+          "validationActiveDays": 37.5
+        }
+      }
+    ]
+  },
+  "portfolio": {
+    "nominal": {
+      "entries": 402,
+      "validationEntries": 237,
+      "winRate": 54.5,
+      "tradesPerDay": 2.87,
+      "totalR": 15.231,
+      "returnPct": -0.59,
+      "profitFactor": 1.088,
+      "maxDrawdownR": 12.472,
+      "trainR": 3.53,
+      "validationR": 11.7,
+      "trainPositiveWeeks": 75,
+      "validationPositiveWeeks": 50,
+      "trainActiveDays": 100,
+      "validationActiveDays": 100
+    },
+    "stress": {
+      "entries": 402,
+      "validationEntries": 237,
+      "winRate": 53.2,
+      "tradesPerDay": 2.87,
+      "totalR": 3.943,
+      "returnPct": -4.06,
+      "profitFactor": 1.022,
+      "maxDrawdownR": 17.542,
+      "trainR": -0.053,
+      "validationR": 3.995,
+      "trainPositiveWeeks": 75,
+      "validationPositiveWeeks": 50,
+      "trainActiveDays": 100,
+      "validationActiveDays": 100
+    }
+  },
+  "portfolioConfig": {
+    "name": "session-green-red-quality-portfolio",
+    "profileKey": null,
+    "method": "custom",
+    "symbols": [
+      "AUDJPY",
+      "AUDUSD",
+      "EURJPY",
+      "EURUSD",
+      "GBPAUD",
+      "GBPUSD",
+      "USDCAD"
+    ],
+    "allowedSessions": [
+      "asia",
+      "london",
+      "overlap",
+      "newYork"
+    ],
+    "signalTimeframe": "M15",
+    "h1Bars": 0,
+    "minH1TrendAtr": 0,
+    "minimumM15IndicatorScore": 0,
+    "minAtrRank": 0,
+    "minEfficiency24": 0,
+    "minActivity4": 0,
+    "minSignalBodyRatio": 0,
+    "minVolumeRatio": 0,
+    "maxSpreadAtr": 1.5,
+    "entryMode": "signal-breakout",
+    "pendingOffsetAtr": 0,
+    "pendingExpiryMinutes": 60,
+    "stopMode": "signal-candle",
+    "stopBufferAtr": 0.03,
+    "stopATR": 1.5,
+    "rewardRisk": 1,
+    "runnerMode": "none",
+    "breakEvenR": 0,
+    "trailR": 0,
+    "trailATR": 0,
+    "hold": 240,
+    "cooldown": 45,
+    "maxDaily": 2,
+    "maxTotalDaily": 3,
+    "maxTotalPerSession": 2,
+    "maxPositions": 5,
+    "maxLossesPerSymbolDay": 2,
+    "maxLossesPerSymbolSession": 1,
+    "riskPct": 0.01,
+    "marginUtilization": 0.9,
+    "weekdaysOnly": true,
+    "dailyFlat": true,
+    "dailyCloseMinuteUtc": 1320,
+    "rankByScore": true,
+    "rankAtTimestampLimit": 1,
+    "pairSessionProfiles": {
+      "AUDUSD": {
+        "asia": {
+          "profileKey": "AUDUSD:asia",
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 1.1,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-3atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 3,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "london": {
+          "profileKey": "AUDUSD:london",
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.15,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0.4,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "overlap": {
+          "profileKey": "AUDUSD:overlap",
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 2,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.15,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-3atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 3,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 360,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "newYork": {
+          "profileKey": "AUDUSD:newYork",
+          "allowedSessions": [
+            "newYork"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0,
+          "minActivity4": 0.75,
+          "minSignalBodyRatio": 0.2,
+          "minVolumeRatio": 0.8,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.25r",
+          "rewardRisk": 1.25,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "EURUSD": {
+        "asia": {
+          "profileKey": "EURUSD:asia",
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.25,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "london": {
+          "profileKey": "EURUSD:london",
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0.8,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 75,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-0.75r",
+          "rewardRisk": 0.75,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "GBPAUD": {
+        "asia": {
+          "profileKey": "GBPAUD:asia",
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.4,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0.75,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.5,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 45,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.25r",
+          "rewardRisk": 1.25,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "AUDJPY": {
+        "asia": {
+          "profileKey": "AUDJPY:asia",
+          "allowedSessions": [
+            "asia"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0,
+          "minEfficiency24": 0.05,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.5,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 60,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.03,
+          "stopATR": 1.5,
+          "exitKey": "fixed-1.1r",
+          "rewardRisk": 1.1,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 360,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 2,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "london": {
+          "profileKey": "AUDJPY:london",
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 2,
+          "minH1TrendAtr": 0.05,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.25,
+          "minActivity4": 0,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-4atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 4,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 120,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "EURJPY": {
+        "london": {
+          "profileKey": "EURJPY:london",
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 0,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 90,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.65r-trail-2atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 2,
+          "partialRunner": true,
+          "partialR": 0.65,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 30,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "GBPUSD": {
+        "london": {
+          "profileKey": "GBPUSD:london",
+          "allowedSessions": [
+            "london"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 1,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0,
+          "minEfficiency24": 0.05,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.2,
+          "minVolumeRatio": 1,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.02,
+          "pendingExpiryMinutes": 30,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.75r-trail-2atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 2,
+          "partialRunner": true,
+          "partialR": 0.75,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 240,
+          "trailTimeframe": "m15",
+          "cooldown": 45,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 1,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        },
+        "overlap": {
+          "profileKey": "GBPUSD:overlap",
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 2,
+          "minH1TrendAtr": 0.1,
+          "minimumM15IndicatorScore": 2,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0,
+          "minActivity4": 1,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 1.25,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.01,
+          "pendingExpiryMinutes": 60,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "stopATR": 1.5,
+          "exitKey": "partial-60-at-0.65r-trail-4atr",
+          "rewardRisk": 3,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 4,
+          "partialRunner": true,
+          "partialR": 0.65,
+          "partialFraction": 0.6,
+          "moveStopOnPartial": true,
+          "hold": 120,
+          "trailTimeframe": "m15",
+          "cooldown": 45,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      },
+      "USDCAD": {
+        "overlap": {
+          "profileKey": "USDCAD:overlap",
+          "allowedSessions": [
+            "overlap"
+          ],
+          "signalTimeframe": "M15",
+          "h1Bars": 0,
+          "minH1TrendAtr": 0,
+          "minimumM15IndicatorScore": 1,
+          "minAtrRank": 0.1,
+          "minEfficiency24": 0.15,
+          "minActivity4": 1.25,
+          "minSignalBodyRatio": 0.3,
+          "minVolumeRatio": 0,
+          "maxSpreadAtr": 0.75,
+          "entryMode": "signal-breakout",
+          "pendingOffsetAtr": 0.03,
+          "pendingExpiryMinutes": 75,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.02,
+          "stopATR": 1.5,
+          "exitKey": "fixed-0.75r",
+          "rewardRisk": 0.75,
+          "runnerMode": "none",
+          "breakEvenR": 0,
+          "trailR": 0,
+          "trailATR": 0,
+          "hold": 180,
+          "trailTimeframe": "m15",
+          "cooldown": 60,
+          "maxDaily": 1,
+          "maxLossesPerSymbolDay": 2,
+          "maxLossesPerSymbolSession": 1,
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1320
+        }
+      }
+    }
+  },
+  "limitations": [
+    "The complete period is already-inspected development data, not a fresh holdout.",
+    "Five profiles per session is a capacity ceiling; no failing profile is added to fill a quota.",
+    "Candle replay uses conservative SL-first M1 ambiguity and does not model gaps, financing or broker minimum distances.",
+    "Partial runners are research proxies and require separate live execution work before implementation."
+  ]
+}

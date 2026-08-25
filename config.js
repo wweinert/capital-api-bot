@@ -28,10 +28,9 @@ export const RISK = {
 };
 
 export const PORTFOLIO = {
-    MAX_POSITIONS: 1,
-    MAX_POSITIONS_PER_SYMBOL: 1,
-    MAX_DAILY_LOSS_PCT: 0.1,
-    MAX_WEEKLY_LOSS_PCT: 0.2,
+    MAX_POSITIONS: 5,
+    MAX_DAILY_LOSS_PCT: 0.1, // need atention
+    MAX_WEEKLY_LOSS_PCT: 0.2, // need atention
     MARGIN_USAGE: 0.9,
 };
 
@@ -99,7 +98,7 @@ export const SESSIONS = {
     },
 };
 
-const profile = (signal, entry, stop, exit) => ({
+const profile = (signal, entry, stop, exit, risk = {}) => ({
     signal: {
         context: signal.timeframe.toLowerCase(),
         ...signal,
@@ -112,6 +111,12 @@ const profile = (signal, entry, stop, exit) => ({
 
     stop,
     exit,
+
+    risk: {
+        perTrade: RISK.PER_TRADE,
+        lastEntryMinute: RISK.DAILY_LAST_ENTRY_MINUTE_UTC,
+        ...risk,
+    },
 });
 
 export const PROFILES = {
@@ -134,6 +139,7 @@ export const PROFILES = {
         { bufferAtr: 0.05, expiryBars: 1 },
         { type: "signal", bufferAtr: 0.1 },
         { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     AUDJPY: profile(
@@ -155,6 +161,7 @@ export const PROFILES = {
         { bufferAtr: 0.1, expiryBars: 4 },
         { type: "signal", bufferAtr: 0 },
         { targetR: 2, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     AUDUSD: profile(
@@ -176,6 +183,7 @@ export const PROFILES = {
         { bufferAtr: 0.1, expiryBars: 1 },
         { type: "signal", bufferAtr: 0.1 },
         { targetR: 4, trailActivationR: 2, trailDistanceR: 0.75, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     EURCHF: profile(
@@ -197,6 +205,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 4 },
         { type: "signal", bufferAtr: 0.1 },
         { targetR: 5, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     EURGBP: profile(
@@ -218,6 +227,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 1 },
         { type: "signal", bufferAtr: 0 },
         { targetR: 4, trailActivationR: 2, trailDistanceR: 0.5, maxHoldMinutes: 720 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     EURJPY: profile(
@@ -344,6 +354,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 4 },
         { type: "signal", bufferAtr: 0 },
         { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1.5, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     NZDJPY: profile(
@@ -365,6 +376,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 2 },
         { type: "signal", bufferAtr: 0.1 },
         { targetR: 5, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     NZDUSD: profile(
@@ -386,6 +398,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 2 },
         { type: "signal", bufferAtr: 0.2 },
         { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
     AUDNZD: profile(
         {
@@ -406,6 +419,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 2 },
         { type: "signal", bufferAtr: 0.2 },
         { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     USDCAD: profile(
@@ -427,6 +441,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 3 },
         { type: "signal", bufferAtr: 0.1 },
         { targetR: 3, trailActivationR: 1.5, trailDistanceR: 0.5, maxHoldMinutes: 240 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     USDCHF: profile(
@@ -448,6 +463,7 @@ export const PROFILES = {
         { bufferAtr: 0, expiryBars: 2 },
         { type: "signal", bufferAtr: 0.2 },
         { targetR: 3, trailActivationR: 1, trailDistanceR: 0.5, maxHoldMinutes: 240 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 
     USDJPY: profile(
@@ -469,5 +485,6 @@ export const PROFILES = {
         { bufferAtr: 0.1, expiryBars: 1 },
         { type: "signal", bufferAtr: 0 },
         { targetR: 3, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 1440 },
+        { maxDailyTrades: 1, cooldownMinutes: 30 },
     ),
 };

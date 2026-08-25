@@ -1,0 +1,1078 @@
+{
+  "generatedAt": "2026-08-17T12:05:33.193Z",
+  "sourceReport": "sydney-five-pair-multi-pattern-20min-2026-08-17.json",
+  "sourceIteration": 4414,
+  "candidate": {
+    "name": "global-sydney-euraud-runner-be1-trail05-risk1-daily3-sydney-late-1100-1700-m15-breakout20-momentum-h1-macd",
+    "signalFamily": "intraday-multi-pattern",
+    "method": "custom",
+    "rankByScore": true,
+    "rankAtTimestampLimit": 1,
+    "symbols": [
+      "EURAUD"
+    ],
+    "signalKind": "combination",
+    "signalTimeframe": "M15",
+    "triggerVariant": "any",
+    "confirmationFrames": [
+      "H1"
+    ],
+    "filterMode": "macd",
+    "filterAgreement": "all",
+    "minTrendStrengthAtr": 0,
+    "minImpulseAtr": 0,
+    "minSwingGapAtr": 0,
+    "minSignalBodyAtr": 0,
+    "maxRetrace": 1,
+    "previousSessionMode": "none",
+    "previousSessionRoomAtr": 0,
+    "dayContext": "none",
+    "minDayMoveAtr": 0,
+    "minSessionAgeMinutes": 0,
+    "sessionWindows": [
+      [
+        0,
+        0
+      ]
+    ],
+    "allowedSessions": [
+      "offHours",
+      "asia"
+    ],
+    "fixedSessionLabel": "sydney",
+    "sydneyStartMinute": 660,
+    "sydneyEndMinute": 1020,
+    "minAtrPct": null,
+    "minBbWidthPct": null,
+    "minEmaDistPct": null,
+    "entryMode": "signal-breakout",
+    "riskPct": 0.01,
+    "marginUtilization": 0.9,
+    "stopATR": 1.5,
+    "stopMode": "signal-candle",
+    "stopBufferAtr": 0.05,
+    "rewardRisk": 2,
+    "hold": 480,
+    "breakEvenR": 1,
+    "trailATR": 0,
+    "trailR": 0.5,
+    "runnerMode": "always",
+    "cooldown": 30,
+    "maxDaily": 3,
+    "maxTotalDaily": 0,
+    "maxTotalPerSession": 3,
+    "maxPositions": 1,
+    "maxLossesPerSymbolDay": 2,
+    "maxLossesPerSymbolSession": 2,
+    "pendingOffsetAtr": 0,
+    "pendingExpiryMinutes": 60,
+    "weekdaysOnly": true,
+    "dailyFlat": true,
+    "dailyCloseMinuteUtc": 1320,
+    "key": "h1-macd",
+    "signalComponents": [
+      {
+        "signalKind": "event-signal",
+        "signalTimeframe": "M15",
+        "signalPattern": "Breakout20"
+      },
+      {
+        "signalKind": "event-signal",
+        "signalTimeframe": "M15",
+        "signalPattern": "Momentum"
+      }
+    ]
+  },
+  "note": "Post-search diagnostics on already-inspected development data; not independent confirmation.",
+  "variants": [
+    {
+      "name": "base-risk1",
+      "returnPct": 5.83,
+      "pnl": 29.16,
+      "profitFactor": 1.145,
+      "maxDrawdownR": 5.871,
+      "maxDDPct": 7.2,
+      "entries": 90,
+      "winRate": 53.3,
+      "activeDayPct": 61.5,
+      "trainR": 3.521,
+      "validationR": 2.45,
+      "trainPositiveWeeks": 53.8,
+      "validationPositiveWeeks": 61.5,
+      "trainPositiveActiveDays": 52.5,
+      "validationPositiveActiveDays": 52.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 8.66,
+        "profitFactor": 1.578,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 1.083
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 19.75,
+          "r": 4.024,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 11.77,
+          "r": 2.369,
+          "trades": 14,
+          "wins": 9,
+          "winRate": 64.3
+        },
+        "2026-04": {
+          "pnl": -13.3,
+          "r": -2.657,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 21.89,
+          "r": 4.406,
+          "trades": 16,
+          "wins": 9,
+          "winRate": 56.3
+        },
+        "2026-06": {
+          "pnl": -13.01,
+          "r": -2.618,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-07": {
+          "pnl": 3.97,
+          "r": 0.824,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -1.91,
+          "r": -0.376,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "fourSessionCoverage"
+      ]
+    },
+    {
+      "name": "risk3",
+      "returnPct": 7.05,
+      "pnl": 35.27,
+      "profitFactor": 1.145,
+      "maxDrawdownR": 5.871,
+      "maxDDPct": 15.9,
+      "entries": 90,
+      "winRate": 53.3,
+      "activeDayPct": 61.5,
+      "trainR": 3.521,
+      "validationR": 2.45,
+      "trainPositiveWeeks": 53.8,
+      "validationPositiveWeeks": 61.5,
+      "trainPositiveActiveDays": 52.5,
+      "validationPositiveActiveDays": 52.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 23.64,
+        "profitFactor": 2.179,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 2.955
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 22.86,
+          "r": 4.024,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 27.35,
+          "r": 2.369,
+          "trades": 14,
+          "wins": 9,
+          "winRate": 64.3
+        },
+        "2026-04": {
+          "pnl": -22.92,
+          "r": -2.657,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 26.52,
+          "r": 4.406,
+          "trades": 16,
+          "wins": 9,
+          "winRate": 56.3
+        },
+        "2026-06": {
+          "pnl": -41.27,
+          "r": -2.618,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-07": {
+          "pnl": 22.94,
+          "r": 0.824,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -0.2,
+          "r": -0.376,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "fourSessionCoverage"
+      ]
+    },
+    {
+      "name": "spread-x1.25",
+      "returnPct": 1,
+      "pnl": 5,
+      "profitFactor": 1.029,
+      "maxDrawdownR": 9.493,
+      "maxDDPct": 9.9,
+      "entries": 89,
+      "winRate": 50.6,
+      "activeDayPct": 61.5,
+      "trainR": -1.054,
+      "validationR": 2.303,
+      "trainPositiveWeeks": 38.5,
+      "validationPositiveWeeks": 61.5,
+      "trainPositiveActiveDays": 50,
+      "validationPositiveActiveDays": 50,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 8.8,
+        "profitFactor": 1.592,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 1.1
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 17.97,
+          "r": 3.655,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": -5.79,
+          "r": -1.18,
+          "trades": 14,
+          "wins": 7,
+          "winRate": 50
+        },
+        "2026-04": {
+          "pnl": -15.03,
+          "r": -3.039,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 8.66,
+          "r": 1.829,
+          "trades": 16,
+          "wins": 8,
+          "winRate": 50
+        },
+        "2026-06": {
+          "pnl": -0.95,
+          "r": -0.13,
+          "trades": 15,
+          "wins": 7,
+          "winRate": 46.7
+        },
+        "2026-07": {
+          "pnl": 2.2,
+          "r": 0.525,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -2.06,
+          "r": -0.412,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "trainProfitable",
+        "trainPositiveWeekPct",
+        "profitFactor",
+        "fourSessionCoverage",
+        "trainPositiveDayPct"
+      ]
+    },
+    {
+      "name": "slippage-0.02R",
+      "returnPct": 1.76,
+      "pnl": 8.82,
+      "profitFactor": 1.046,
+      "maxDrawdownR": 7.804,
+      "maxDDPct": 9,
+      "entries": 89,
+      "winRate": 52.8,
+      "activeDayPct": 61.5,
+      "trainR": 0.082,
+      "validationR": 1.867,
+      "trainPositiveWeeks": 46.2,
+      "validationPositiveWeeks": 61.5,
+      "trainPositiveActiveDays": 52.5,
+      "validationPositiveActiveDays": 52.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 7.42,
+        "profitFactor": 1.487,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 0.928
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 16.54,
+          "r": 3.318,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 1.34,
+          "r": 0.276,
+          "trades": 14,
+          "wins": 8,
+          "winRate": 57.1
+        },
+        "2026-04": {
+          "pnl": -15.45,
+          "r": -3.101,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 18.09,
+          "r": 3.706,
+          "trades": 16,
+          "wins": 9,
+          "winRate": 56.3
+        },
+        "2026-06": {
+          "pnl": -10.86,
+          "r": -2.153,
+          "trades": 15,
+          "wins": 7,
+          "winRate": 46.7
+        },
+        "2026-07": {
+          "pnl": 1.75,
+          "r": 0.426,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -2.6,
+          "r": -0.523,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "trainPositiveWeekPct",
+        "profitFactor",
+        "fourSessionCoverage"
+      ]
+    },
+    {
+      "name": "spread-x1.25-slippage-0.02R",
+      "returnPct": -3.16,
+      "pnl": -15.8,
+      "profitFactor": 0.93,
+      "maxDrawdownR": 12.123,
+      "maxDDPct": 12.4,
+      "entries": 88,
+      "winRate": 48.9,
+      "activeDayPct": 61.5,
+      "trainR": -2.374,
+      "validationR": -0.774,
+      "trainPositiveWeeks": 38.5,
+      "validationPositiveWeeks": 53.8,
+      "trainPositiveActiveDays": 50,
+      "validationPositiveActiveDays": 47.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 7.19,
+        "profitFactor": 1.487,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 0.899
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 15.73,
+          "r": 3.225,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": -6.7,
+          "r": -1.452,
+          "trades": 13,
+          "wins": 6,
+          "winRate": 46.2
+        },
+        "2026-04": {
+          "pnl": -17.01,
+          "r": -3.466,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": -1.87,
+          "r": -0.287,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-06": {
+          "pnl": -3.66,
+          "r": -0.748,
+          "trades": 15,
+          "wins": 7,
+          "winRate": 46.7
+        },
+        "2026-07": {
+          "pnl": 0.46,
+          "r": 0.137,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -2.75,
+          "r": -0.555,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "trainProfitable",
+        "validationProfitable",
+        "trainPositiveWeekPct",
+        "profitFactor",
+        "drawdown",
+        "fourSessionCoverage",
+        "trainPositiveDayPct",
+        "validationPositiveDayPct"
+      ]
+    },
+    {
+      "name": "risk3-spread-x1.25-slippage-0.02R",
+      "returnPct": -8.36,
+      "pnl": -41.78,
+      "profitFactor": 0.93,
+      "maxDrawdownR": 12.123,
+      "maxDDPct": 22.7,
+      "entries": 88,
+      "winRate": 48.9,
+      "activeDayPct": 61.5,
+      "trainR": -2.374,
+      "validationR": -0.774,
+      "trainPositiveWeeks": 38.5,
+      "validationPositiveWeeks": 53.8,
+      "trainPositiveActiveDays": 47.5,
+      "validationPositiveActiveDays": 47.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 19.67,
+        "profitFactor": 1.971,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 2.458
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 18.39,
+          "r": 3.225,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": -15.64,
+          "r": -1.452,
+          "trades": 13,
+          "wins": 6,
+          "winRate": 46.2
+        },
+        "2026-04": {
+          "pnl": -30.35,
+          "r": -3.466,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": -2.99,
+          "r": -0.287,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-06": {
+          "pnl": -24.07,
+          "r": -0.748,
+          "trades": 15,
+          "wins": 7,
+          "winRate": 46.7
+        },
+        "2026-07": {
+          "pnl": 14.32,
+          "r": 0.137,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -1.44,
+          "r": -0.555,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "trainProfitable",
+        "validationProfitable",
+        "trainPositiveWeekPct",
+        "profitFactor",
+        "drawdown",
+        "fourSessionCoverage",
+        "trainPositiveDayPct",
+        "validationPositiveDayPct"
+      ]
+    },
+    {
+      "name": "hold-60",
+      "returnPct": 5.02,
+      "pnl": 25.1,
+      "profitFactor": 1.173,
+      "maxDrawdownR": 5.96,
+      "maxDDPct": 5.6,
+      "entries": 99,
+      "winRate": 54.5,
+      "activeDayPct": 61.5,
+      "trainR": 5.797,
+      "validationR": -1.065,
+      "trainPositiveWeeks": 61.5,
+      "validationPositiveWeeks": 46.2,
+      "trainPositiveActiveDays": 55,
+      "validationPositiveActiveDays": 50,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 2.23,
+        "profitFactor": 1.16,
+        "trades": 9,
+        "positiveTrades": 6,
+        "winRate": 66.7,
+        "takeProfits": 1,
+        "tpRate": 11.1,
+        "stopLosses": 3,
+        "timeExits": 5,
+        "dailyExits": 0,
+        "tradesPerDay": 0.18,
+        "averagePnl": 0.248
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 19.34,
+          "r": 3.918,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 4.31,
+          "r": 0.866,
+          "trades": 15,
+          "wins": 7,
+          "winRate": 46.7
+        },
+        "2026-04": {
+          "pnl": -0.81,
+          "r": -0.184,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-05": {
+          "pnl": 25.71,
+          "r": 5.202,
+          "trades": 19,
+          "wins": 12,
+          "winRate": 63.2
+        },
+        "2026-06": {
+          "pnl": -12.12,
+          "r": -2.596,
+          "trades": 18,
+          "wins": 9,
+          "winRate": 50
+        },
+        "2026-07": {
+          "pnl": -0.65,
+          "r": -0.123,
+          "trades": 14,
+          "wins": 8,
+          "winRate": 57.1
+        },
+        "2026-08": {
+          "pnl": -10.68,
+          "r": -2.35,
+          "trades": 5,
+          "wins": 2,
+          "winRate": 40
+        }
+      },
+      "failedGates": [
+        "validationProfitable",
+        "validationPositiveWeekPct",
+        "fourSessionCoverage"
+      ]
+    },
+    {
+      "name": "hold-120",
+      "returnPct": 1.6,
+      "pnl": 8,
+      "profitFactor": 1.037,
+      "maxDrawdownR": 6.819,
+      "maxDDPct": 6.1,
+      "entries": 96,
+      "winRate": 50,
+      "activeDayPct": 61.5,
+      "trainR": 5.391,
+      "validationR": -4.067,
+      "trainPositiveWeeks": 53.8,
+      "validationPositiveWeeks": 38.5,
+      "trainPositiveActiveDays": 50,
+      "validationPositiveActiveDays": 42.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 0.1,
+        "profitFactor": 1.005,
+        "trades": 9,
+        "positiveTrades": 4,
+        "winRate": 44.4,
+        "takeProfits": 1,
+        "tpRate": 11.1,
+        "stopLosses": 4,
+        "timeExits": 4,
+        "dailyExits": 0,
+        "tradesPerDay": 0.18,
+        "averagePnl": 0.011
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 25.76,
+          "r": 5.227,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 0.25,
+          "r": 0.04,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-04": {
+          "pnl": -0.19,
+          "r": -0.011,
+          "trades": 12,
+          "wins": 6,
+          "winRate": 50
+        },
+        "2026-05": {
+          "pnl": 14.31,
+          "r": 2.887,
+          "trades": 17,
+          "wins": 10,
+          "winRate": 58.8
+        },
+        "2026-06": {
+          "pnl": -10.92,
+          "r": -2.359,
+          "trades": 18,
+          "wins": 7,
+          "winRate": 38.9
+        },
+        "2026-07": {
+          "pnl": -11.44,
+          "r": -2.294,
+          "trades": 14,
+          "wins": 6,
+          "winRate": 42.9
+        },
+        "2026-08": {
+          "pnl": -9.76,
+          "r": -2.166,
+          "trades": 5,
+          "wins": 1,
+          "winRate": 20
+        }
+      },
+      "failedGates": [
+        "validationProfitable",
+        "validationPositiveWeekPct",
+        "profitFactor",
+        "fourSessionCoverage",
+        "trainPositiveDayPct",
+        "validationPositiveDayPct"
+      ]
+    },
+    {
+      "name": "hold-180",
+      "returnPct": 2.3,
+      "pnl": 11.49,
+      "profitFactor": 1.061,
+      "maxDrawdownR": 6.85,
+      "maxDDPct": 7.2,
+      "entries": 93,
+      "winRate": 49.5,
+      "activeDayPct": 61.5,
+      "trainR": 4.16,
+      "validationR": -1.743,
+      "trainPositiveWeeks": 46.2,
+      "validationPositiveWeeks": 53.8,
+      "trainPositiveActiveDays": 50,
+      "validationPositiveActiveDays": 47.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 2.34,
+        "profitFactor": 1.141,
+        "trades": 8,
+        "positiveTrades": 4,
+        "winRate": 50,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 4,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 0.292
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 25.3,
+          "r": 5.149,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 1.6,
+          "r": 0.309,
+          "trades": 15,
+          "wins": 8,
+          "winRate": 53.3
+        },
+        "2026-04": {
+          "pnl": -5.53,
+          "r": -1.083,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 15.32,
+          "r": 3.085,
+          "trades": 17,
+          "wins": 9,
+          "winRate": 52.9
+        },
+        "2026-06": {
+          "pnl": -15.21,
+          "r": -3.057,
+          "trades": 17,
+          "wins": 7,
+          "winRate": 41.2
+        },
+        "2026-07": {
+          "pnl": -7.31,
+          "r": -1.453,
+          "trades": 13,
+          "wins": 6,
+          "winRate": 46.2
+        },
+        "2026-08": {
+          "pnl": -2.69,
+          "r": -0.533,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "validationProfitable",
+        "trainPositiveWeekPct",
+        "profitFactor",
+        "fourSessionCoverage",
+        "trainPositiveDayPct",
+        "validationPositiveDayPct"
+      ]
+    },
+    {
+      "name": "hold-240",
+      "returnPct": 5.52,
+      "pnl": 27.6,
+      "profitFactor": 1.142,
+      "maxDrawdownR": 6.707,
+      "maxDDPct": 7,
+      "entries": 90,
+      "winRate": 54.4,
+      "activeDayPct": 61.5,
+      "trainR": 4.329,
+      "validationR": 1.324,
+      "trainPositiveWeeks": 53.8,
+      "validationPositiveWeeks": 53.8,
+      "trainPositiveActiveDays": 55,
+      "validationPositiveActiveDays": 52.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 9.03,
+        "profitFactor": 1.603,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 3,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 1.129
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 20.97,
+          "r": 4.27,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 14.6,
+          "r": 2.93,
+          "trades": 14,
+          "wins": 10,
+          "winRate": 71.4
+        },
+        "2026-04": {
+          "pnl": -13.3,
+          "r": -2.657,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 22.35,
+          "r": 4.506,
+          "trades": 16,
+          "wins": 9,
+          "winRate": 56.3
+        },
+        "2026-06": {
+          "pnl": -13.01,
+          "r": -2.618,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-07": {
+          "pnl": -3.52,
+          "r": -0.687,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -0.5,
+          "r": -0.091,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "fourSessionCoverage"
+      ]
+    },
+    {
+      "name": "hold-480",
+      "returnPct": 5.83,
+      "pnl": 29.16,
+      "profitFactor": 1.145,
+      "maxDrawdownR": 5.871,
+      "maxDDPct": 7.2,
+      "entries": 90,
+      "winRate": 53.3,
+      "activeDayPct": 61.5,
+      "trainR": 3.521,
+      "validationR": 2.45,
+      "trainPositiveWeeks": 53.8,
+      "validationPositiveWeeks": 61.5,
+      "trainPositiveActiveDays": 52.5,
+      "validationPositiveActiveDays": 52.5,
+      "recent": {
+        "start": "2026-07-26T23:59:00.000Z",
+        "end": "2026-08-09T23:59:00.000Z",
+        "pnl": 8.66,
+        "profitFactor": 1.578,
+        "trades": 8,
+        "positiveTrades": 5,
+        "winRate": 62.5,
+        "takeProfits": 1,
+        "tpRate": 12.5,
+        "stopLosses": 3,
+        "timeExits": 1,
+        "dailyExits": 0,
+        "tradesPerDay": 0.16,
+        "averagePnl": 1.083
+      },
+      "monthly": {
+        "2026-02": {
+          "pnl": 19.75,
+          "r": 4.024,
+          "trades": 15,
+          "wins": 9,
+          "winRate": 60
+        },
+        "2026-03": {
+          "pnl": 11.77,
+          "r": 2.369,
+          "trades": 14,
+          "wins": 9,
+          "winRate": 64.3
+        },
+        "2026-04": {
+          "pnl": -13.3,
+          "r": -2.657,
+          "trades": 12,
+          "wins": 5,
+          "winRate": 41.7
+        },
+        "2026-05": {
+          "pnl": 21.89,
+          "r": 4.406,
+          "trades": 16,
+          "wins": 9,
+          "winRate": 56.3
+        },
+        "2026-06": {
+          "pnl": -13.01,
+          "r": -2.618,
+          "trades": 16,
+          "wins": 7,
+          "winRate": 43.8
+        },
+        "2026-07": {
+          "pnl": 3.97,
+          "r": 0.824,
+          "trades": 13,
+          "wins": 7,
+          "winRate": 53.8
+        },
+        "2026-08": {
+          "pnl": -1.91,
+          "r": -0.376,
+          "trades": 4,
+          "wins": 2,
+          "winRate": 50
+        }
+      },
+      "failedGates": [
+        "fourSessionCoverage"
+      ]
+    }
+  ]
+}

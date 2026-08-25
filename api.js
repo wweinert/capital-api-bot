@@ -198,6 +198,7 @@ export async function getHistorical(symbol, resolution, count) {
                     high: p.highPrice?.bid,
                     low: p.lowPrice?.bid,
                     open: p.openPrice?.bid,
+                    volume: p.lastTradedVolume,
                     timestamp: `${p.snapshotTimeUTC}Z`,
                 })),
             };

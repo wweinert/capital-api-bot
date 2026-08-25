@@ -1,0 +1,1751 @@
+{
+  "generatedAt": "2026-08-13T19:32:50.797Z",
+  "protocol": {
+    "schemaVersion": 17,
+    "train": {
+      "fromWeek": "2026-W07",
+      "toWeek": "2026-W19"
+    },
+    "validation": {
+      "fromWeek": "2026-W20",
+      "toWeek": "2026-W32"
+    },
+    "evaluationEndExclusive": "2026-08-10T00:00:00.000Z",
+    "minimumCoverageEnd": "2026-08-07T20:00:00.000Z",
+    "lockedTest": "none-available-entire-period-is-inspected-development-evidence",
+    "primaryMetric": "dailyObjective",
+    "startCapital": 500,
+    "leverage": {
+      "usdPairs": 30,
+      "crosses": 20
+    },
+    "risk": {
+      "maxPerPositionPct": 0.03,
+      "maxPortfolioPct": 0.15,
+      "marginUtilization": 0.9
+    },
+    "sizing": "EUR 500 fixed upside and balance-sensitive downside; <=3% position risk, <=15% open risk; 90% margin divided across five slots",
+    "execution": "closed-candle signals, next-M1 execution, historical bid/ask, conservative SL-first ambiguity, same-day flat"
+  },
+  "metadata": {
+    "evaluatorSha256": "1ba0aab1554bb485df9c676bf9362ceaa01b861c8e67e73f6836bb98103546af",
+    "strategyScriptSha256": "774fcbead7846c19aa412fdd0a6fef22e2ba5346c1240f07c25e70ebb35099bc",
+    "datasetFingerprint": "34a72a48884e0f00f6a6b49e8c34cd9caba0e2db1c97fc7822244e807d0d6817",
+    "coverage": {
+      "AUDJPY": {
+        "M1": {
+          "rows": 233589,
+          "first": "2025-12-21T22:01:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "a1338d11a7ac3bdc45e92a54a65cdb2df7f4b64a5fa16e8c5bd9eea7e6c33ce1"
+        },
+        "M5": {
+          "rows": 46798,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "3943a9a7e2df2259439c5afc09d60b204df7c6cb1854f4364c10e9641df4f102"
+        },
+        "M15": {
+          "rows": 17081,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "44d41e2e6d583e44163619936d042f693b92d376c65307aedc04d9d306680dd7"
+        },
+        "H1": {
+          "rows": 4272,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "ee6014491fbef7b9ee53d7a84b1002a17c4146bbcda6eb9a09c8207736595244"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "2ae6e6861c6dd5c60aed3cee111f709736ec6c783bbee3c78ac2b07ff3cc15eb"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "c0f4c4adc88aae27fceee98f593e25716acf763ebb4ef8fb85f017cb16469b64"
+        }
+      },
+      "EURJPY": {
+        "M1": {
+          "rows": 234079,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:59:00.000Z",
+          "sha256": "fb78b90fbe38d321d6e189e2dcef9e87c8511223a6065493c8dabcc24729250e"
+        },
+        "M5": {
+          "rows": 46836,
+          "first": "2025-12-21T22:00:00.000Z",
+          "last": "2026-08-09T23:55:00.000Z",
+          "sha256": "9dcb3ab7e2f1c52bb077bc1057876e4c3bf17ce285de099eab6a161b5b700248"
+        },
+        "M15": {
+          "rows": 17090,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:45:00.000Z",
+          "sha256": "799d99aa924308400de08b270fd04bd33a7da977bcbbe342d3db581f0f879f1f"
+        },
+        "H1": {
+          "rows": 4273,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T23:00:00.000Z",
+          "sha256": "506eaff04d2898f8203e54ced3756ab9bed73cefd3188b812d333c695d81d18a"
+        },
+        "H4": {
+          "rows": 1106,
+          "first": "2025-12-01T00:00:00.000Z",
+          "last": "2026-08-09T20:00:00.000Z",
+          "sha256": "9aa08a806831b3956b5a2d008835c155cda3c55a616d1e899612774adb97aeef"
+        },
+        "D1": {
+          "rows": 229,
+          "first": "2025-11-16T00:00:00.000Z",
+          "last": "2026-08-09T00:00:00.000Z",
+          "sha256": "6282e1d86bd20156eecf1a7ca04d370ffbd6932c4e8ab7378f73c480e8816f74"
+        }
+      }
+    }
+  },
+  "limitations": [
+    "The entire W07-W32 period is already inspected development evidence.",
+    "Historical bid/ask is stressed mechanically; gaps, financing and broker minimum distance/size are not modeled."
+  ],
+  "results": {
+    "executionStress": [
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5
+        },
+        "summary": {
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "evaluationSeconds": 0.037,
+          "qualified": false,
+          "finalBalance": 595.28,
+          "returnPct": 19.06,
+          "profitFactor": 1.303,
+          "entries": 118,
+          "winRate": 47.5,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 6,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 1.974,
+            "worstR": -4.202,
+            "totalR": 15.707,
+            "maxDrawdownR": 4.202,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 80.84
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 1.081,
+            "worstR": -4.996,
+            "totalR": 3.005,
+            "maxDrawdownR": 6.996,
+            "entries": 51,
+            "trades": 51,
+            "pnl": 14.44
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 22,
+              "positiveActiveDayPct": 51.2,
+              "positiveMarketDayPct": 33.8,
+              "medianDayR": 0.38,
+              "worstDayR": -3.374,
+              "averageDayPnl": 1.88
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.287,
+              "worstDayR": -2,
+              "averageDayPnl": 0.4
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -31.68,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.526
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 95.28,
+              "r": 18.71
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 56,
+                "winRate": 47.5,
+                "takeProfits": 24,
+                "tpRate": 20.3,
+                "stopLosses": 57,
+                "timeExits": 5,
+                "dailyExits": 4,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.807
+              },
+              "r": 18.71,
+              "pnl": 95.28
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      },
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "overlap-runner-entry-slip-002R",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5,
+          "entrySlippageR": 0.02
+        },
+        "summary": {
+          "name": "overlap-runner-entry-slip-002R",
+          "evaluationSeconds": 0.03,
+          "qualified": false,
+          "finalBalance": 579.48,
+          "returnPct": 15.9,
+          "profitFactor": 1.249,
+          "entries": 118,
+          "winRate": 46.6,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 6.1,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 1.886,
+            "worstR": -4.296,
+            "totalR": 14.879,
+            "maxDrawdownR": 4.296,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 76.3
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.81,
+            "worstR": -4.996,
+            "totalR": 0.719,
+            "maxDrawdownR": 6.996,
+            "entries": 51,
+            "trades": 51,
+            "pnl": 3.18
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 22,
+              "positiveActiveDayPct": 51.2,
+              "positiveMarketDayPct": 33.8,
+              "medianDayR": 0.324,
+              "worstDayR": -3.325,
+              "averageDayPnl": 1.77
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.228,
+              "worstDayR": -2,
+              "averageDayPnl": 0.09
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -32.14,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.591
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 79.48,
+              "r": 15.597
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 55,
+                "winRate": 46.6,
+                "takeProfits": 24,
+                "tpRate": 20.3,
+                "stopLosses": 58,
+                "timeExits": 5,
+                "dailyExits": 4,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.674
+              },
+              "r": 15.597,
+              "pnl": 79.48
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      },
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "overlap-runner-entry-slip-005R",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5,
+          "entrySlippageR": 0.05
+        },
+        "summary": {
+          "name": "overlap-runner-entry-slip-005R",
+          "evaluationSeconds": 0.027,
+          "qualified": false,
+          "finalBalance": 570.32,
+          "returnPct": 14.06,
+          "profitFactor": 1.224,
+          "entries": 116,
+          "winRate": 46.6,
+          "tradesPerDay": 0.89,
+          "maxDrawdownPct": 6.2,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 0.75,
+            "worstR": -3.429,
+            "totalR": 14.672,
+            "maxDrawdownR": 4.205,
+            "entries": 66,
+            "trades": 66,
+            "pnl": 75.28
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.705,
+            "worstR": -4.996,
+            "totalR": -0.859,
+            "maxDrawdownR": 6.996,
+            "entries": 50,
+            "trades": 50,
+            "pnl": -4.96
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 23,
+              "positiveActiveDayPct": 53.5,
+              "positiveMarketDayPct": 35.4,
+              "medianDayR": 0.337,
+              "worstDayR": -3.255,
+              "averageDayPnl": 1.75
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.145,
+              "worstDayR": -2,
+              "averageDayPnl": -0.14
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -32.37,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.624
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": false,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 116,
+              "pnl": 70.32,
+              "r": 13.813
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 116,
+                "positiveTrades": 54,
+                "winRate": 46.6,
+                "takeProfits": 23,
+                "tpRate": 19.8,
+                "stopLosses": 57,
+                "timeExits": 6,
+                "dailyExits": 4,
+                "tradesPerDay": 0.89,
+                "averagePnl": 0.606
+              },
+              "r": 13.813,
+              "pnl": 70.32
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      },
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "overlap-runner-entry-slip-010R",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5,
+          "entrySlippageR": 0.1
+        },
+        "summary": {
+          "name": "overlap-runner-entry-slip-010R",
+          "evaluationSeconds": 0.026,
+          "qualified": false,
+          "finalBalance": 541.15,
+          "returnPct": 8.23,
+          "profitFactor": 1.127,
+          "entries": 115,
+          "winRate": 45.2,
+          "tradesPerDay": 0.88,
+          "maxDrawdownPct": 8.1,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 0.471,
+            "worstR": -3.636,
+            "totalR": 12.231,
+            "maxDrawdownR": 4.316,
+            "entries": 66,
+            "trades": 66,
+            "pnl": 62.81
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.757,
+            "worstR": -4.996,
+            "totalR": -4.291,
+            "maxDrawdownR": 6.996,
+            "entries": 49,
+            "trades": 49,
+            "pnl": -21.66
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 23,
+              "positiveActiveDayPct": 53.5,
+              "positiveMarketDayPct": 35.4,
+              "medianDayR": 0.28,
+              "worstDayR": -3.147,
+              "averageDayPnl": 1.46
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 17,
+              "positiveActiveDayPct": 47.2,
+              "positiveMarketDayPct": 26.2,
+              "medianDayR": -0.212,
+              "worstDayR": -2,
+              "averageDayPnl": -0.6
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -32.93,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.704
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": false,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 115,
+              "pnl": 41.15,
+              "r": 7.941
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 115,
+                "positiveTrades": 52,
+                "winRate": 45.2,
+                "takeProfits": 22,
+                "tpRate": 19.1,
+                "stopLosses": 58,
+                "timeExits": 6,
+                "dailyExits": 5,
+                "tradesPerDay": 0.88,
+                "averagePnl": 0.358
+              },
+              "r": 7.941,
+              "pnl": 41.15
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      },
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "overlap-runner-stop-slip-005R",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5,
+          "stopSlippageR": 0.05
+        },
+        "summary": {
+          "name": "overlap-runner-stop-slip-005R",
+          "evaluationSeconds": 0.033,
+          "qualified": false,
+          "finalBalance": 574.72,
+          "returnPct": 14.94,
+          "profitFactor": 1.224,
+          "entries": 118,
+          "winRate": 47.5,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 6.6,
+          "maxDrawdownR": 7.346,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 1.874,
+            "worstR": -4.602,
+            "totalR": 13.557,
+            "maxDrawdownR": 4.684,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 70.3
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.981,
+            "worstR": -5.246,
+            "totalR": 0.905,
+            "maxDrawdownR": 7.346,
+            "entries": 51,
+            "trades": 51,
+            "pnl": 4.44
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 22,
+              "positiveActiveDayPct": 51.2,
+              "positiveMarketDayPct": 33.8,
+              "medianDayR": 0.33,
+              "worstDayR": -3.374,
+              "averageDayPnl": 1.63
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.187,
+              "worstDayR": -2.1,
+              "averageDayPnl": 0.12
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -33.26,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.752
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 74.72,
+              "r": 14.461
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 56,
+                "winRate": 47.5,
+                "takeProfits": 24,
+                "tpRate": 20.3,
+                "stopLosses": 57,
+                "timeExits": 5,
+                "dailyExits": 4,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.633
+              },
+              "r": 14.461,
+              "pnl": 74.72
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      },
+      {
+        "family": "audjpy-overlap-execution-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "overlap-runner-stop-slip-010R",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5,
+          "stopSlippageR": 0.1
+        },
+        "summary": {
+          "name": "overlap-runner-stop-slip-010R",
+          "evaluationSeconds": 0.029,
+          "qualified": false,
+          "finalBalance": 553.91,
+          "returnPct": 10.78,
+          "profitFactor": 1.151,
+          "entries": 118,
+          "winRate": 47.5,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 7.3,
+          "maxDrawdownR": 7.696,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 1.774,
+            "worstR": -5.002,
+            "totalR": 11.408,
+            "maxDrawdownR": 5.786,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 59.51
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.881,
+            "worstR": -5.496,
+            "totalR": -1.195,
+            "maxDrawdownR": 7.696,
+            "entries": 51,
+            "trades": 51,
+            "pnl": -5.59
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 22,
+              "positiveActiveDayPct": 51.2,
+              "positiveMarketDayPct": 33.8,
+              "medianDayR": 0.28,
+              "worstDayR": -3.374,
+              "averageDayPnl": 1.38
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.087,
+              "worstDayR": -2.199,
+              "averageDayPnl": -0.16
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -34.85,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.978
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": false,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 53.91,
+              "r": 10.211
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 56,
+                "winRate": 47.5,
+                "takeProfits": 24,
+                "tpRate": 20.3,
+                "stopLosses": 57,
+                "timeExits": 5,
+                "dailyExits": 4,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.457
+              },
+              "r": 10.211,
+              "pnl": 53.91
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        }
+      }
+    ],
+    "spreadStress": [
+      {
+        "family": "audjpy-overlap-spread-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5
+        },
+        "summary": {
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "evaluationSeconds": 0.037,
+          "qualified": false,
+          "finalBalance": 585.59,
+          "returnPct": 17.12,
+          "profitFactor": 1.27,
+          "entries": 118,
+          "winRate": 47.5,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 6.1,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 9,
+            "positiveWeekPct": 69.2,
+            "medianR": 1.928,
+            "worstR": -4.253,
+            "totalR": 14.647,
+            "maxDrawdownR": 4.253,
+            "entries": 67,
+            "trades": 67,
+            "pnl": 75.47
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.987,
+            "worstR": -4.996,
+            "totalR": 2.121,
+            "maxDrawdownR": 6.996,
+            "entries": 51,
+            "trades": 51,
+            "pnl": 10.12
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 23,
+              "positiveActiveDayPct": 53.5,
+              "positiveMarketDayPct": 35.4,
+              "medianDayR": 0.253,
+              "worstDayR": -3.313,
+              "averageDayPnl": 1.76
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.234,
+              "worstDayR": -2,
+              "averageDayPnl": 0.28
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -32.12,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.589
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": true,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 85.59,
+              "r": 16.768
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 56,
+                "winRate": 47.5,
+                "takeProfits": 24,
+                "tpRate": 20.3,
+                "stopLosses": 58,
+                "timeExits": 5,
+                "dailyExits": 3,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.725
+              },
+              "r": 16.768,
+              "pnl": 85.59
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        },
+        "spreadMultiplier": 1.25
+      },
+      {
+        "family": "audjpy-overlap-spread-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5
+        },
+        "summary": {
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "evaluationSeconds": 0.041,
+          "qualified": false,
+          "finalBalance": 555.17,
+          "returnPct": 11.03,
+          "profitFactor": 1.169,
+          "entries": 120,
+          "winRate": 45.8,
+          "tradesPerDay": 0.92,
+          "maxDrawdownPct": 6.6,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.894,
+            "worstR": -4.303,
+            "totalR": 10.924,
+            "maxDrawdownR": 4.642,
+            "entries": 69,
+            "trades": 69,
+            "pnl": 55.62
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 7,
+            "positiveWeekPct": 53.8,
+            "medianR": 0.776,
+            "worstR": -4.996,
+            "totalR": 0.198,
+            "maxDrawdownR": 6.996,
+            "entries": 51,
+            "trades": 51,
+            "pnl": -0.45
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 21,
+              "positiveActiveDayPct": 48.8,
+              "positiveMarketDayPct": 32.3,
+              "medianDayR": -0.001,
+              "worstDayR": -3.255,
+              "averageDayPnl": 1.29
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 18,
+              "positiveActiveDayPct": 50,
+              "positiveMarketDayPct": 27.7,
+              "medianDayR": 0.184,
+              "worstDayR": -2,
+              "averageDayPnl": -0.01
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -32.53,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.647
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": true,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": true,
+            "profitFactor": true,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": true,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 120,
+              "pnl": 55.17,
+              "r": 11.123
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 120,
+                "positiveTrades": 55,
+                "winRate": 45.8,
+                "takeProfits": 23,
+                "tpRate": 19.2,
+                "stopLosses": 62,
+                "timeExits": 5,
+                "dailyExits": 3,
+                "tradesPerDay": 0.92,
+                "averagePnl": 0.46
+              },
+              "r": 11.123,
+              "pnl": 55.17
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        },
+        "spreadMultiplier": 1.5
+      },
+      {
+        "family": "audjpy-overlap-spread-stress",
+        "candidate": {
+          "signalFamily": "deep-research-comparison",
+          "method": "custom",
+          "rankByScore": false,
+          "rankAtTimestampLimit": 1,
+          "signalTimeframe": "M15",
+          "sessionWindows": [
+            [
+              0,
+              0
+            ]
+          ],
+          "entryMode": "signal-breakout",
+          "riskPct": 0.01,
+          "marginUtilization": 0.9,
+          "stopATR": 1.5,
+          "stopMode": "signal-candle",
+          "stopBufferAtr": 0.05,
+          "rewardRisk": 2,
+          "hold": 480,
+          "breakEvenR": 1,
+          "trailATR": 0,
+          "trailR": 0.5,
+          "runnerMode": "signal-body",
+          "cooldown": 30,
+          "maxDaily": 3,
+          "maxPositions": 1,
+          "maxLossesPerSymbolDay": 3,
+          "maxLossesPerSymbolSession": 2,
+          "pendingOffsetAtr": 0,
+          "pendingExpiryMinutes": 60,
+          "weekdaysOnly": true,
+          "dailyFlat": true,
+          "dailyCloseMinuteUtc": 1440,
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "symbols": [
+            "AUDJPY"
+          ],
+          "allowedSessions": [
+            "overlap"
+          ],
+          "maxTotalPerSession": 5,
+          "runnerSignalBodyAtr": 0.5
+        },
+        "summary": {
+          "name": "AUDJPY_OVERLAP_M15_H1_EMA_MACD_BODY_RUNNER",
+          "evaluationSeconds": 0.033,
+          "qualified": false,
+          "finalBalance": 527.16,
+          "returnPct": 5.43,
+          "profitFactor": 1.08,
+          "entries": 118,
+          "winRate": 43.2,
+          "tradesPerDay": 0.91,
+          "maxDrawdownPct": 9.4,
+          "maxDrawdownR": 6.996,
+          "train": {
+            "weeks": 13,
+            "positiveWeeks": 8,
+            "positiveWeekPct": 61.5,
+            "medianR": 0.729,
+            "worstR": -3.399,
+            "totalR": 9.978,
+            "maxDrawdownR": 4.183,
+            "entries": 69,
+            "trades": 69,
+            "pnl": 51.06
+          },
+          "validation": {
+            "weeks": 13,
+            "positiveWeeks": 6,
+            "positiveWeekPct": 46.2,
+            "medianR": 0,
+            "worstR": -4.996,
+            "totalR": -4.557,
+            "maxDrawdownR": 6.996,
+            "entries": 49,
+            "trades": 49,
+            "pnl": -23.93
+          },
+          "dailyFolds": {
+            "train": {
+              "marketDays": 65,
+              "activeDays": 43,
+              "activeMarketDayPct": 66.2,
+              "profitableDays": 20,
+              "positiveActiveDayPct": 46.5,
+              "positiveMarketDayPct": 30.8,
+              "medianDayR": -0.124,
+              "worstDayR": -3.148,
+              "averageDayPnl": 1.19
+            },
+            "validation": {
+              "marketDays": 65,
+              "activeDays": 36,
+              "activeMarketDayPct": 55.4,
+              "profitableDays": 17,
+              "positiveActiveDayPct": 47.2,
+              "positiveMarketDayPct": 26.2,
+              "medianDayR": -0.196,
+              "worstDayR": -2,
+              "averageDayPnl": -0.66
+            }
+          },
+          "recent": {
+            "start": "2026-07-26T23:59:00.000Z",
+            "end": "2026-08-09T23:59:00.000Z",
+            "pnl": -33.04,
+            "profitFactor": 0,
+            "trades": 7,
+            "positiveTrades": 0,
+            "winRate": 0,
+            "takeProfits": 0,
+            "tpRate": 0,
+            "stopLosses": 7,
+            "timeExits": 0,
+            "dailyExits": 0,
+            "tradesPerDay": 0.14,
+            "averagePnl": -4.721
+          },
+          "gates": {
+            "trainProfitable": true,
+            "validationProfitable": false,
+            "trainPositiveWeekPct": true,
+            "validationPositiveWeekPct": false,
+            "profitFactor": false,
+            "sampleSize": true,
+            "drawdown": true,
+            "perPositionRisk": true,
+            "portfolioRisk": true,
+            "fourSessionCoverage": false,
+            "trainPositiveDayPct": false,
+            "validationPositiveDayPct": false,
+            "dailyActivity": true
+          },
+          "sessionStats": {
+            "overlap": {
+              "trades": 118,
+              "pnl": 27.16,
+              "r": 5.421
+            }
+          },
+          "symbolStats": {
+            "AUDJPY": {
+              "development": {
+                "trades": 118,
+                "positiveTrades": 51,
+                "winRate": 43.2,
+                "takeProfits": 23,
+                "tpRate": 19.5,
+                "stopLosses": 64,
+                "timeExits": 5,
+                "dailyExits": 2,
+                "tradesPerDay": 0.91,
+                "averagePnl": 0.23
+              },
+              "r": 5.421,
+              "pnl": 27.16
+            },
+            "EURJPY": {
+              "development": {
+                "trades": 0,
+                "positiveTrades": 0,
+                "winRate": 0,
+                "takeProfits": 0,
+                "tpRate": 0,
+                "stopLosses": 0,
+                "timeExits": 0,
+                "dailyExits": 0,
+                "tradesPerDay": 0,
+                "averagePnl": 0
+              },
+              "r": 0,
+              "pnl": 0
+            }
+          }
+        },
+        "spreadMultiplier": 2
+      }
+    ]
+  }
+}
