@@ -1,4 +1,4 @@
-# Trading research harness
+# Trading research harness - knowledge
 
 `lab/` is the control plane for offline strategy research. It is deliberately
 separate from the live bot: this platform may inspect explicit snapshots, but it
@@ -9,20 +9,24 @@ must never mutate live code, broker state, or server processes.
 ```text
 lab/
   AGENTS.md              permanent agent rules
-  autoresearch/          legacy research, retained at original paths
-  harness/knowledge/     durable decisions and known invalid assumptions
+  autoresearch/
+    reports/             research of profitable combinations and profiles
+  
 ```
+# Trading Data Availability
 
-## The experiment loop
+- Historical market data for the last 6+ months is available on the server.
+- Market data is available across multiple timeframes, including D1, H4, H1, M15, M5, and M1.
+- Coverage includes 15+ currency pairs, such as EURUSD.
+- Important: the server and attached SSD contain a large amount of historical data that is currently unstructured and inconsistent. We should identify the best/cleanest version of each dataset, do not create duplicates. There is only one single clear and reliable source of truth for all market data. If some historical data is missing for any timeframe i want you 
+to fetch that from the broker via API and add it to its JSONL file.
 
-```text
-idea -> specification -> implementation -> software checks -> 
-fixed evaluation -> evidence -> human review -> rejected | probation
-```
+## Server Access
 
-An experiment changes one declared variable (or one tightly coupled change), has
-a run budget, declares all mutable files, and identifies its dataset manifest and
-fixed evaluator in advance. The locked test is human-controlled. Agents work with
-development and validation data and do not inspect the locked result while
-generating candidates.
+- Server: waldemar-pi
+- Password is stored in the system.
 
+## References
+
+- Broker strategy information: https://capital.com/en-eu/learn/trading-strategies
+- Official broker API documentation: https://capital.com/en-eu/trading-platforms/api-development-guide 

@@ -1,1107 +1,1155 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { EMA, RSI, BollingerBands, MACD, ATR } from "technicalindicators";
+import { ATR, BollingerBands, RSI } from "technicalindicators";
 
-const DAY = 86_400_000;
 const MINUTE = 60_000;
-const TF = { M1: MINUTE, M5: 5 * MINUTE, M15: 15 * MINUTE, H1: 60 * MINUTE, H4: 240 * MINUTE, D1: DAY };
-export const DEFAULT_SYMBOLS = ["EURUSD", "GBPUSD", "EURGBP", "AUDUSD", "USDCAD", "EURJPY", "USDJPY", "AUDJPY", "NZDUSD", "NZDJPY"];
-export const RESEARCH_PROTOCOL = Object.freeze({
-  schemaVersion: 4,
-  train: Object.freeze({ fromWeek: "2026-W03", toWeek: "2026-W14" }),
-  validation: Object.freeze({ fromWeek: "2026-W15", toWeek: "2026-W22" }),
-  evaluationEndExclusive: "2026-06-01T00:00:00.000Z",
-  minimumCoverageEnd: "2026-05-29T00:00:00.000Z",
-  lockedTest: "external-human-controlled",
-  primaryMetric: "robustObjective",
-  startCapital: 500,
-  leverage: Object.freeze({ usdPairs: 30, crosses: 20 }),
-  risk: Object.freeze({ maxPerPositionPct: 0.03, maxPortfolioPct: 0.15, marginUtilization: 0.9 }),
-  sizing: "fixed EUR 500 upside, balance-sensitive downside; quote-currency conversion at entry/exit",
-  execution: "closed-candle signals, next-M1 entry, bid/ask prices, conservative SL-first OHLC ambiguity",
-});
+const DAY = 24 * 60 * MINUTE;
+const M15 = 15 * MINUTE;
+const H1 = 60 * MINUTE;
+const H1_DIRECTION_BARS = 1;
+const MIN_H1_TREND_ATR = 0;
+const FX_CURRENCIES = new Set(["AUD", "CAD", "CHF", "EUR", "GBP", "JPY", "NZD", "USD"]);
 const MAJOR_FX = new Set(["AUDUSD", "EURUSD", "GBPUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY"]);
-const SPREAD = {
-  EURUSD: 0.00007, GBPUSD: 0.00013, EURGBP: 0.00020, AUDUSD: 0.00006, USDCAD: 0.00020,
-  EURJPY: 0.015, USDJPY: 0.010, AUDJPY: 0.018, NZDUSD: 0.00015, NZDJPY: 0.020,
+const CONVERSION_SYMBOLS = ["EURAUD", "EURCHF", "EURGBP", "EURJPY", "EURUSD", "NZDUSD", "USDCAD"];
+
+export const RESEARCH_PROTOCOL = Object.freeze({
+    schemaVersion: 18,
+    name: "current-live-m15-h1-baseline",
+    startCapital: 500,
+    timeframes: Object.freeze(["M15", "H1"]),
+    maxPositions: 5,
+    risk: Object.freeze({ maxPerPositionPct: 0.03, maxPortfolioPct: 0.15, marginUtilization: 0.9 }),
+    leverage: Object.freeze({ majors: 30, crosses: 20 }),
+    execution: "closed M15 signal; M15 bid/ask pending replay; SL-first intrabar ambiguity; trailing updated at M15 close",
+    lockedTest: "none-full-period-baseline-is-inspected-after-this-run",
+});
+
+const number = (value) => {
+    if (value === undefined || value === null || value === "") return null;
+    const parsed = typeof value === "number" ? value : Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
 };
 
-const n = (value) => Number.isFinite(Number(value)) ? Number(value) : null;
-const px = (row, key, side = "bid") => n(row[side]?.[key]) ?? n(row[`${key}Price`]?.[side]) ?? n(row[key]?.[side]) ?? n(row[`${key}${side[0].toUpperCase()}${side.slice(1)}`]) ?? n(row[key]);
+const price = (row, key, side = "bid") =>
+    number(row?.[side]?.[key]) ??
+    number(row?.[`${key}Price`]?.[side]) ??
+    number(row?.[key]?.[side]) ??
+    number(row?.[`${key}${side[0].toUpperCase()}${side.slice(1)}`]) ??
+    (side === "bid" ? number(row?.[key]) : null);
+
 const timestampOf = (row) => {
-  if (row.timestamp != null) return Date.parse(row.timestamp);
-  if (row.snapshotTimeUTC != null) {
-    const value = String(row.snapshotTimeUTC);
-    return Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(value) ? value : `${value}Z`);
-  }
-  return Date.parse(row.snapshotTime);
+    if (row?.timestamp != null) return Date.parse(row.timestamp);
+    if (row?.snapshotTimeUTC != null) {
+        const value = String(row.snapshotTimeUTC);
+        return Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(value) ? value : `${value}Z`);
+    }
+    return Date.parse(row?.snapshotTime);
 };
 
-function load(file, symbol, endExclusive) {
-  const dedup = new Map();
-  const source = fs.readFileSync(file, "utf8");
-  for (const line of source.split("\n")) {
-    if (!line) continue;
-    try {
-      const raw = JSON.parse(line);
-      const t = timestampOf(raw);
-      if (!(t < endExclusive)) continue;
-      const open = px(raw, "open"), high = px(raw, "high"), low = px(raw, "low"), close = px(raw, "close");
-      const fallbackSpread = SPREAD[symbol];
-      const askOpen = px(raw, "open", "ask") ?? (Number.isFinite(open) && Number.isFinite(fallbackSpread) ? open + fallbackSpread : null);
-      const askHigh = px(raw, "high", "ask") ?? (Number.isFinite(high) && Number.isFinite(fallbackSpread) ? high + fallbackSpread : null);
-      const askLow = px(raw, "low", "ask") ?? (Number.isFinite(low) && Number.isFinite(fallbackSpread) ? low + fallbackSpread : null);
-      const askClose = px(raw, "close", "ask") ?? (Number.isFinite(close) && Number.isFinite(fallbackSpread) ? close + fallbackSpread : null);
-      if ([t, open, high, low, close, askOpen, askHigh, askLow, askClose].every(Number.isFinite)) {
-        dedup.set(t, { t, open, high, low, close, askOpen, askHigh, askLow, askClose, volume: n(raw.volume) ?? 0 });
-      }
-    } catch {}
-  }
-  return { rows: [...dedup.values()].sort((a, b) => a.t - b.t), sha256: crypto.createHash("sha256").update(source).digest("hex") };
+const sha256 = (value) => crypto.createHash("sha256").update(value).digest("hex");
+
+function isFxSymbol(symbol) {
+    return /^[A-Z]{6}$/.test(symbol) && FX_CURRENCIES.has(symbol.slice(0, 3)) && FX_CURRENCIES.has(symbol.slice(3, 6));
 }
 
 export function discoverSymbols(datasetDir) {
-  if (!fs.existsSync(datasetDir)) return [];
-  const available = new Set(fs.readdirSync(datasetDir).map((file) => file.match(/^(.+)_M1\.jsonl$/)?.[1]).filter(Boolean));
-  return [...available].filter((symbol) => Object.keys(TF).every((tf) => fs.existsSync(path.join(datasetDir, `${symbol}_${tf}.jsonl`)))).sort();
+    if (!datasetDir || !fs.existsSync(datasetDir)) return [];
+    const files = new Set(fs.readdirSync(datasetDir));
+    return [...files]
+        .map((file) => file.match(/^([A-Z]{6})_M15\.jsonl$/)?.[1])
+        .filter(Boolean)
+        .filter(isFxSymbol)
+        .filter((symbol) => files.has(`${symbol}_H1.jsonl`))
+        .sort();
 }
 
-function align(length, values) {
-  const out = Array(length).fill(null);
-  const offset = length - values.length;
-  for (let i = 0; i < values.length; i += 1) out[offset + i] = values[i];
-  return out;
-}
-
-function enrich(rows) {
-  const close = rows.map((r) => r.close), high = rows.map((r) => r.high), low = rows.map((r) => r.low), length = rows.length;
-  const e9 = align(length, EMA.calculate({ period: 9, values: close }));
-  const e21 = align(length, EMA.calculate({ period: 21, values: close }));
-  const e50 = align(length, EMA.calculate({ period: 50, values: close }));
-  const e200 = align(length, EMA.calculate({ period: 200, values: close }));
-  const rsi = align(length, RSI.calculate({ period: 14, values: close }));
-  const bb = align(length, BollingerBands.calculate({ period: 20, stdDev: 2, values: close }));
-  const macd = align(length, MACD.calculate({ fastPeriod: 12, slowPeriod: 26, signalPeriod: 9, values: close, SimpleMAOscillator: false, SimpleMASignal: false }));
-  const atr = align(length, ATR.calculate({ period: 21, high, low, close }));
-  return rows.map((row, i) => {
-    let hi20 = -Infinity, lo20 = Infinity;
-    for (let j = Math.max(0, i - 20); j < i; j += 1) { hi20 = Math.max(hi20, high[j]); lo20 = Math.min(lo20, low[j]); }
-    return { ...row, e9: e9[i], e21: e21[i], e50: e50[i], e200: e200[i], rsi: rsi[i], bb: bb[i], macd: macd[i], atr: atr[i],
-      bullCross: i > 0 && e9[i] > e21[i] && e9[i - 1] <= e21[i - 1],
-      bearCross: i > 0 && e9[i] < e21[i] && e9[i - 1] >= e21[i - 1],
-      bullReclaim: i > 0 && close[i - 1] <= e9[i - 1] && close[i] > e9[i],
-      bearReclaim: i > 0 && close[i - 1] >= e9[i - 1] && close[i] < e9[i],
-      bullBB: i > 0 && bb[i - 1] && bb[i] && close[i - 1] <= bb[i - 1].lower && close[i] > bb[i].lower,
-      bearBB: i > 0 && bb[i - 1] && bb[i] && close[i - 1] >= bb[i - 1].upper && close[i] < bb[i].upper,
-      bullRSI: i > 0 && rsi[i - 1] < 30 && rsi[i] >= 30,
-      bearRSI: i > 0 && rsi[i - 1] > 70 && rsi[i] <= 70,
-      bullBreakout: i >= 20 && close[i] > hi20,
-      bearBreakout: i >= 20 && close[i] < lo20,
+function loadRows(file, timeframe) {
+    const source = fs.readFileSync(file, "utf8");
+    const deduplicated = new Map();
+    let malformed = 0;
+    let sourceRows = 0;
+    for (const line of source.split("\n")) {
+        if (!line.trim()) continue;
+        sourceRows += 1;
+        try {
+            const raw = JSON.parse(line);
+            const t = timestampOf(raw);
+            const open = price(raw, "open");
+            const high = price(raw, "high");
+            const low = price(raw, "low");
+            const close = price(raw, "close");
+            const askOpen = price(raw, "open", "ask");
+            const askHigh = price(raw, "high", "ask");
+            const askLow = price(raw, "low", "ask");
+            const askClose = price(raw, "close", "ask");
+            const valid = [t, open, high, low, close, askOpen, askHigh, askLow, askClose].every(Number.isFinite);
+            if (!valid || high < low || askHigh < askLow || askOpen < open || askClose < close) {
+                malformed += 1;
+                continue;
+            }
+            deduplicated.set(t, {
+                t,
+                timestamp: new Date(t).toISOString(),
+                open,
+                high,
+                low,
+                close,
+                askOpen,
+                askHigh,
+                askLow,
+                askClose,
+                volume: number(raw.volume ?? raw.lastTradedVolume) ?? 0,
+            });
+        } catch {
+            malformed += 1;
+        }
+    }
+    const rows = [...deduplicated.values()].sort((left, right) => left.t - right.t);
+    if (!rows.length) throw new Error(`${path.basename(file)} contains no valid bid/ask candles.`);
+    const expectedStep = timeframe === "M15" ? M15 : H1;
+    let nonMonotonic = 0;
+    let unexpectedGaps = 0;
+    for (let index = 1; index < rows.length; index += 1) {
+        const delta = rows[index].t - rows[index - 1].t;
+        if (delta <= 0) nonMonotonic += 1;
+        if (delta > expectedStep && delta < 2 * DAY) unexpectedGaps += 1;
+    }
+    return {
+        rows,
+        audit: {
+            rows: rows.length,
+            malformed,
+            duplicates: Math.max(0, sourceRows - malformed - rows.length),
+            nonMonotonic,
+            unexpectedGaps,
+            first: new Date(rows[0].t).toISOString(),
+            last: new Date(rows.at(-1).t).toISOString(),
+            sha256: sha256(source),
+        },
     };
-  });
 }
 
 function atOrBefore(rows, timestamp) {
-  let lo = 0, hi = rows.length;
-  while (lo < hi) { const mid = (lo + hi) >> 1; if (rows[mid].t <= timestamp) lo = mid + 1; else hi = mid; }
-  return lo - 1;
+    let low = 0;
+    let high = rows.length;
+    while (low < high) {
+        const middle = (low + high) >> 1;
+        if (rows[middle].t <= timestamp) low = middle + 1;
+        else high = middle;
+    }
+    return low - 1;
 }
 
-function isoWeek(timestamp) {
-  const date = new Date(timestamp); date.setUTCHours(0, 0, 0, 0); date.setUTCDate(date.getUTCDate() + 3 - (date.getUTCDay() + 6) % 7);
-  const week1 = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
-  const week = 1 + Math.round(((date - week1) / DAY - 3 + (week1.getUTCDay() + 6) % 7) / 7);
-  return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+function latest(series) {
+    return series.length ? series[series.length - 1] : null;
 }
 
-function triggerPass(event, side, trigger) {
-  if (trigger === "any") return event[`${side}Trigger`] > 0;
-  return event[`${side}${trigger}`];
+function minuteUtc(timestamp) {
+    const date = new Date(timestamp);
+    return date.getUTCHours() * 60 + date.getUTCMinutes();
 }
 
-function inSessionWindows(timestamp, windows) {
-  if (!windows?.length) return true;
-  const date = new Date(timestamp);
-  const minute = date.getUTCHours() * 60 + date.getUTCMinutes();
-  return windows.some(([start, end]) => (
-    start === end ? true : start < end ? minute >= start && minute < end : minute >= start || minute < end
-  ));
+function sessionIsActive(session, timestamp) {
+    const minute = minuteUtc(timestamp);
+    return session.START < session.END
+        ? minute >= session.START && minute < session.END
+        : minute >= session.START || minute < session.END;
 }
 
-function fxTradingDayKey(timestamp) {
-  const date = new Date(timestamp);
-  // FX reopens late on Sunday UTC. Attribute that activity to Monday so a
-  // five-day trading-week denominator cannot exceed 100% at fold boundaries.
-  if (date.getUTCDay() === 0) date.setUTCDate(date.getUTCDate() + 1);
-  return date.toISOString().slice(0, 10);
+function activeSessions(symbol, sessions, timestamp) {
+    return Object.entries(sessions)
+        .filter(([, session]) => Array.isArray(session?.SYMBOLS) && session.SYMBOLS.includes(symbol) && sessionIsActive(session, timestamp))
+        .map(([name]) => name);
 }
 
-const SESSION_TIME_FORMATTERS = Object.freeze({
-  london: new Intl.DateTimeFormat("en-US", { timeZone: "Europe/London", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }),
-  newYork: new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23" }),
-});
-const SESSION_BOUNDARY_CACHE = new Map();
-
-function timeZoneOffsetMinutes(timestamp, formatter) {
-  const parts = Object.fromEntries(formatter.formatToParts(new Date(timestamp)).filter((part) => part.type !== "literal").map((part) => [part.type, Number(part.value)]));
-  const representedAsUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
-  return Math.round((representedAsUtc - timestamp) / MINUTE);
+const TIME_ZONE_FORMATTERS = new Map();
+function minuteIn(timestamp, timeZone) {
+    if (!TIME_ZONE_FORMATTERS.has(timeZone)) {
+        TIME_ZONE_FORMATTERS.set(timeZone, new Intl.DateTimeFormat("en-GB", {
+            timeZone,
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+        }));
+    }
+    const parts = Object.fromEntries(TIME_ZONE_FORMATTERS.get(timeZone).formatToParts(timestamp).map(({ type, value }) => [type, value]));
+    return Number(parts.hour) * 60 + Number(parts.minute);
 }
 
-function zonedClock(timestamp, formatter) {
-  return Object.fromEntries(formatter.formatToParts(new Date(timestamp))
-    .filter((part) => part.type !== "literal")
-    .map((part) => [part.type, Number(part.value)]));
+function patternSide(rows, index) {
+    const current = rows[index];
+    const follows = (side, candle) => (side === "BUY" ? candle.close > candle.open : candle.close < candle.open);
+    const correctionBars = (side) => {
+        if (!follows(side, current)) return 0;
+        let count = 0;
+        for (let cursor = index - 1; cursor >= 0; cursor -= 1) {
+            if (follows(side, rows[cursor])) return count;
+            count += 1;
+        }
+        return 0;
+    };
+    if (correctionBars("BUY") > 0) return "BUY";
+    if (correctionBars("SELL") > 0) return "SELL";
+    return null;
 }
 
-function sessionBoundaries(timestamp) {
-  const date = new Date(timestamp), key = date.toISOString().slice(0, 10);
-  if (SESSION_BOUNDARY_CACHE.has(key)) return SESSION_BOUNDARY_CACHE.get(key);
-  const anchor = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12);
-  const londonOffset = timeZoneOffsetMinutes(anchor, SESSION_TIME_FORMATTERS.london);
-  const newYorkOffset = timeZoneOffsetMinutes(anchor, SESSION_TIME_FORMATTERS.newYork);
-  const boundaries = {
-    londonOpen: 8 * 60 - londonOffset,
-    newYorkOpen: 8 * 60 - newYorkOffset,
-    londonClose: 17 * 60 - londonOffset,
-    newYorkClose: 17 * 60 - newYorkOffset,
-  };
-  SESSION_BOUNDARY_CACHE.set(key, boundaries);
-  return boundaries;
+function liveCandidate(symbol, profile, m15Rows, index, h1Rows, h1Index) {
+    if (index < 320) return { signal: null, reason: "not_enough_data" };
+    const signal = patternSide(m15Rows, index);
+    if (!signal) return { signal: null, reason: "pattern_failed" };
+    const rows = m15Rows.slice(Math.max(0, index - 321), index + 1);
+    if (rows.length < 321) return { signal: null, reason: "not_enough_data" };
+    const closes = rows.map((row) => row.close);
+    const atrValues = ATR.calculate({ period: 21, high: rows.map((row) => row.high), low: rows.map((row) => row.low), close: closes });
+    const atr = latest(atrValues);
+    const bb = latest(BollingerBands.calculate({ period: 20, stdDev: 2, values: closes }));
+    const rsi = latest(RSI.calculate({ period: 14, values: closes }));
+    const current = rows.at(-1);
+    const bidPrice = current.close;
+    const askPrice = current.askClose;
+    if (![atr, bidPrice, askPrice].every(Number.isFinite) || atr <= 0 || askPrice < bidPrice) return { signal: null, reason: "invalid_market_data" };
+
+    const londonMinute = minuteIn(current.t, "Europe/London");
+    const newYorkMinute = minuteIn(current.t, "America/New_York");
+    const session = newYorkMinute >= 8 * 60 && londonMinute < 17 * 60
+        ? "overlap"
+        : londonMinute >= 8 * 60 && newYorkMinute < 8 * 60 ? "london" : null;
+    if (profile.signal.sessions?.length && !profile.signal.sessions.includes(session)) return { signal: null, reason: "outside_session" };
+
+    const side = signal === "BUY" ? "buy" : "sell";
+    const spread = askPrice - bidPrice;
+    const spreadAtr = spread / atr;
+    const range = current.high - current.low;
+    const bodyRatio = Math.abs(current.close - current.open) / range;
+    const recent24 = rows.slice(-24);
+    const travelled = recent24.slice(1).reduce((sum, candle, cursor) => sum + Math.abs(candle.close - recent24[cursor].close), 0);
+    const efficiency = travelled > 0 ? Math.abs(recent24.at(-1).close - recent24[0].open) / travelled : 0;
+    const activity = rows.slice(-4).reduce((sum, candle) => sum + candle.high - candle.low, 0) / (4 * atr);
+    const rankedAtr = atrValues.slice(-300);
+    const atrPercentile = rankedAtr.filter((value) => value <= atr).length / rankedAtr.length;
+    const priorVolumes = rows.slice(-21, -1).map((candle) => candle.volume);
+    const averageVolume = priorVolumes.reduce((sum, value) => sum + value, 0) / priorVolumes.length;
+    const volumeRatio = averageVolume > 0 ? current.volume / averageVolume : 0;
+    const bollingerRejection = signal === "BUY"
+        ? current.low <= bb?.lower && current.close > bb?.lower
+        : current.high >= bb?.upper && current.close < bb?.upper;
+    const bollingerRoom = signal === "BUY" ? (bb?.upper - current.close - spread) / atr : (current.close - bb?.lower) / atr;
+    const rsiExtreme = signal === "BUY" ? rsi <= 30 : rsi >= 70;
+    const score = [bollingerRejection || bollingerRoom >= 1, rsiExtreme, volumeRatio >= 1].filter(Boolean).length;
+
+    if (
+        ![range, bodyRatio, efficiency, activity, atrPercentile, volumeRatio].every(Number.isFinite) ||
+        range <= 0 ||
+        spreadAtr > profile.signal.maxSpreadAtr ||
+        bodyRatio < Number(profile.signal.minBodyRatio ?? 0) ||
+        efficiency < Number(profile.signal.minEfficiency ?? 0) ||
+        activity < Number(profile.signal.minActivity ?? 0) ||
+        atrPercentile < Number(profile.signal.minAtrPercentile ?? 0) ||
+        volumeRatio < Number(profile.signal.minVolumeRatio ?? 0) ||
+        score < Number(profile.signal.minScore ?? 0)
+    ) return { signal: null, reason: "filters_failed" };
+
+    if (h1Index < H1_DIRECTION_BARS + 21) return { signal: null, reason: "h1_not_ready" };
+    const h1Window = h1Rows.slice(Math.max(0, h1Index - 321), h1Index + 1);
+    const h1Atr = latest(ATR.calculate({
+        period: 21,
+        high: h1Window.map((row) => row.high),
+        low: h1Window.map((row) => row.low),
+        close: h1Window.map((row) => row.close),
+    }));
+    const h1MoveAtr = (h1Rows[h1Index].close - h1Rows[h1Index - H1_DIRECTION_BARS].close) / h1Atr;
+    if (!Number.isFinite(h1MoveAtr) || (side === "buy" ? h1MoveAtr <= MIN_H1_TREND_ATR : h1MoveAtr >= -MIN_H1_TREND_ATR)) {
+        return { signal: null, reason: "h1_direction_failed" };
+    }
+
+    const entryBuffer = atr * Number(profile.entry.bufferAtr ?? 0);
+    const stopBuffer = atr * Number(profile.stop.bufferAtr ?? 0);
+    const entryPrice = signal === "BUY" ? current.high + spread + entryBuffer : current.low - entryBuffer;
+    const stopLoss = signal === "BUY" ? current.low - stopBuffer : current.high + spread + stopBuffer;
+    if (![entryPrice, stopLoss].every(Number.isFinite) || (signal === "BUY" ? stopLoss >= entryPrice : stopLoss <= entryPrice)) return { signal: null, reason: "invalid_entry_or_stop" };
+    return {
+        symbol,
+        signal,
+        entryType: profile.entry.type,
+        entryPrice,
+        stopLoss,
+        pendingInvalidationPrice: profile.entry.cancelIfStopTouchedBeforeEntry ? stopLoss : null,
+        atr,
+        quality: score + efficiency + volumeRatio - spreadAtr,
+        bodyRatio,
+        spreadAtr,
+        reason: "green_red_M15",
+    };
 }
 
-function passesResearchFilters(event, config) {
-  if (config.weekdaysOnly) { const day = new Date(`${fxTradingDayKey(event.t)}T00:00:00.000Z`).getUTCDay(); if (day === 0 || day === 6) return false; }
-  if (config.allowedSessions?.length && !config.allowedSessions.includes(event.session)) return false;
-  if (config.minAtrPct != null && event.atrPct < config.minAtrPct) return false;
-  if (config.maxAtrPct != null && event.atrPct > config.maxAtrPct) return false;
-  if (config.minBbWidthPct != null && event.bbWidthPct < config.minBbWidthPct) return false;
-  if (config.minEmaDistPct != null && event.emaDistPct < config.minEmaDistPct) return false;
-  return true;
+export function prepare(datasetDir, requestedSymbols, options = {}) {
+    if (!datasetDir) throw new Error("A dataset directory is required.");
+    const protocol = options.protocol ?? RESEARCH_PROTOCOL;
+    const candidate = options.candidate;
+    if (!candidate?.profiles || !candidate?.sessions) throw new Error("prepare requires the frozen live candidate profiles and sessions.");
+    const available = discoverSymbols(datasetDir);
+    const availableSet = new Set(available);
+    const requested = [...new Set((requestedSymbols ?? []).map((symbol) => String(symbol).toUpperCase()))];
+    const missingSymbols = requested.filter((symbol) => !availableSet.has(symbol));
+    const symbols = requested.filter((symbol) => availableSet.has(symbol) && candidate.profiles[symbol]);
+    if (!symbols.length) throw new Error("None of the requested live symbols has both M15 and H1 data.");
+    const from = options.from ? Date.parse(options.from) : -Infinity;
+    const toExclusive = options.to ? Date.parse(options.to) : Infinity;
+    if (Number.isNaN(from) || Number.isNaN(toExclusive) || from >= toExclusive) throw new Error("Invalid --from/--to range.");
+
+    const data = new Map();
+    const coverage = {};
+    for (const symbol of symbols) {
+        const m15 = loadRows(path.join(datasetDir, `${symbol}_M15.jsonl`), "M15");
+        const h1 = loadRows(path.join(datasetDir, `${symbol}_H1.jsonl`), "H1");
+        data.set(symbol, { M15: m15.rows, H1: h1.rows });
+        coverage[symbol] = { M15: m15.audit, H1: h1.audit };
+    }
+    const conversionData = new Map();
+    for (const symbol of CONVERSION_SYMBOLS) {
+        if (!availableSet.has(symbol)) continue;
+        if (data.has(symbol)) {
+            conversionData.set(symbol, data.get(symbol).M15);
+            continue;
+        }
+        const loaded = loadRows(path.join(datasetDir, `${symbol}_M15.jsonl`), "M15");
+        conversionData.set(symbol, loaded.rows);
+        coverage[symbol] ??= {};
+        coverage[symbol].M15 = { ...loaded.audit, conversionOnly: true };
+    }
+
+    const commonStart = Math.max(...symbols.map((symbol) => data.get(symbol).M15[0].t));
+    const commonEnd = Math.min(...symbols.map((symbol) => data.get(symbol).M15.at(-1).t + M15));
+    const evaluationStart = Math.max(from, commonStart);
+    const evaluationEndExclusive = Math.min(toExclusive, commonEnd);
+    const events = [];
+    const signalAudit = Object.fromEntries(symbols.map((symbol) => [symbol, { evaluatedCloses: 0, patternSignals: 0, candidates: 0 }]));
+    for (const symbol of symbols) {
+        const profile = candidate.profiles[symbol];
+        const { M15: m15Rows, H1: h1Rows } = data.get(symbol);
+        for (let index = 320; index < m15Rows.length; index += 1) {
+            const decision = m15Rows[index].t + M15;
+            if (decision < evaluationStart || decision >= evaluationEndExclusive) continue;
+            const sessions = activeSessions(symbol, candidate.sessions, decision);
+            if (!sessions.length) continue;
+            signalAudit[symbol].evaluatedCloses += 1;
+            if (!patternSide(m15Rows, index)) continue;
+            signalAudit[symbol].patternSignals += 1;
+            const h1Index = atOrBefore(h1Rows, decision - H1);
+            const result = liveCandidate(symbol, profile, m15Rows, index, h1Rows, h1Index);
+            if (!result.signal) continue;
+            signalAudit[symbol].candidates += 1;
+            events.push({ t: decision, symbol, sessions, profile, ...result });
+        }
+    }
+    events.sort((left, right) => left.t - right.t || right.quality - left.quality || left.symbol.localeCompare(right.symbol));
+    return {
+        protocol,
+        candidate,
+        data,
+        conversionData,
+        events,
+        symbols,
+        requestedSymbols: requested,
+        availableSymbols: available,
+        missingSymbols,
+        coverage,
+        datasetFingerprint: sha256(JSON.stringify(coverage)),
+        signalAudit,
+        start: evaluationStart,
+        endExclusive: evaluationEndExclusive,
+    };
+}
+
+export function validateCandidateConfig(candidate, protocol = RESEARCH_PROTOCOL) {
+    if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) throw new Error("Candidate must be an object.");
+    if (candidate.startCapital !== protocol.startCapital) throw new Error(`Starting capital is fixed at EUR ${protocol.startCapital}.`);
+    if (candidate.maxPositions !== protocol.maxPositions) throw new Error(`maxPositions must remain ${protocol.maxPositions}.`);
+    if (!(candidate.maxPortfolioRiskPct > 0 && candidate.maxPortfolioRiskPct <= protocol.risk.maxPortfolioPct)) throw new Error(`maxPortfolioRiskPct must be in (0, ${protocol.risk.maxPortfolioPct}].`);
+    if (!candidate.profiles || !candidate.sessions || !candidate.riskRules || !candidate.portfolioRules) throw new Error("Candidate is missing a live profiles/sessions/risk snapshot.");
+    return true;
+}
+
+function roundPrice(value, symbol) {
+    return Number(Number(value).toFixed(symbol.includes("JPY") ? 3 : 5));
+}
+
+function isoWeekStart(timestamp) {
+    const date = new Date(timestamp);
+    date.setUTCHours(0, 0, 0, 0);
+    date.setUTCDate(date.getUTCDate() - (date.getUTCDay() + 6) % 7);
+    return date.getTime();
+}
+
+function keyCount(map, key) {
+    return map.get(key) ?? 0;
+}
+
+function increment(map, key, amount = 1) {
+    map.set(key, keyCount(map, key) + amount);
+}
+
+function statsForTrades(trades) {
+    const wins = trades.filter((trade) => trade.pnl > 0);
+    const losses = trades.filter((trade) => trade.pnl < 0);
+    const grossProfit = wins.reduce((sum, trade) => sum + trade.pnl, 0);
+    const grossLoss = losses.reduce((sum, trade) => sum + trade.pnl, 0);
+    return {
+        trades: trades.length,
+        wins: wins.length,
+        losses: losses.length,
+        winRate: trades.length ? +(100 * wins.length / trades.length).toFixed(2) : 0,
+        pnl: +trades.reduce((sum, trade) => sum + trade.pnl, 0).toFixed(2),
+        r: +trades.reduce((sum, trade) => sum + trade.r, 0).toFixed(3),
+        profitFactor: grossLoss < 0 ? +(grossProfit / Math.abs(grossLoss)).toFixed(3) : grossProfit > 0 ? 10 : 0,
+    };
+}
+
+function align(length, values) {
+    const output = Array(length).fill(null);
+    const offset = length - values.length;
+    for (let index = 0; index < values.length; index += 1) output[index + offset] = values[index];
+    return output;
+}
+
+function enrichProfileRows(rows) {
+    const highs = rows.map((row) => row.high);
+    const lows = rows.map((row) => row.low);
+    const closes = rows.map((row) => row.close);
+    const atr = align(rows.length, ATR.calculate({ period: 21, high: highs, low: lows, close: closes }));
+    const bollinger = align(rows.length, BollingerBands.calculate({ period: 20, stdDev: 2, values: closes }));
+    const rsi = align(rows.length, RSI.calculate({ period: 14, values: closes }));
+    return rows.map((row, index) => {
+        const recentAtr = atr.slice(Math.max(0, index - 299), index + 1).filter(Number.isFinite);
+        const atrPercentile = recentAtr.length && Number.isFinite(atr[index])
+            ? recentAtr.filter((value) => value <= atr[index]).length / recentAtr.length
+            : null;
+        const recent24 = rows.slice(Math.max(0, index - 23), index + 1);
+        const travelled = recent24.slice(1).reduce((sum, candle, cursor) => sum + Math.abs(candle.close - recent24[cursor].close), 0);
+        const efficiency = recent24.length === 24 && travelled > 0 ? Math.abs(recent24.at(-1).close - recent24[0].open) / travelled : null;
+        const recent4 = rows.slice(Math.max(0, index - 3), index + 1);
+        const activity = recent4.length === 4 && atr[index] > 0
+            ? recent4.reduce((sum, candle) => sum + candle.high - candle.low, 0) / (4 * atr[index])
+            : null;
+        const priorVolumes = rows.slice(Math.max(0, index - 20), index).map((candle) => candle.volume);
+        const averageVolume = priorVolumes.length ? priorVolumes.reduce((sum, value) => sum + value, 0) / priorVolumes.length : 0;
+        const volumeRatio = averageVolume > 0 ? row.volume / averageVolume : null;
+        const range = row.high - row.low;
+        return {
+            ...row,
+            atr: atr[index],
+            bollinger: bollinger[index],
+            rsi: rsi[index],
+            atrPercentile,
+            efficiency,
+            activity,
+            volumeRatio,
+            bodyRatio: range > 0 ? Math.abs(row.close - row.open) / range : null,
+            bodyAtr: atr[index] > 0 ? Math.abs(row.close - row.open) / atr[index] : null,
+        };
+    });
 }
 
 function marketSession(timestamp) {
-  const date = new Date(timestamp);
-  const minute = date.getUTCHours() * 60 + date.getUTCMinutes();
-  const { londonOpen, newYorkOpen, londonClose, newYorkClose } = sessionBoundaries(timestamp);
-  if (minute < londonOpen) return "asia";
-  if (minute < newYorkOpen) return "london";
-  if (minute < londonClose) return "overlap";
-  if (minute < newYorkClose) return "newYork";
-  return "offHours";
+    const londonMinute = minuteIn(timestamp, "Europe/London");
+    const newYorkMinute = minuteIn(timestamp, "America/New_York");
+    if (londonMinute < 8 * 60) return "asia";
+    if (newYorkMinute < 8 * 60) return "london";
+    if (londonMinute < 17 * 60) return "overlap";
+    if (newYorkMinute < 17 * 60) return "newYork";
+    return "offHours";
 }
 
-function currencyGroup(symbol) {
-  if (["EURUSD", "GBPUSD", "EURGBP"].includes(symbol)) return "europe";
-  if (["USDJPY", "EURJPY", "AUDJPY", "NZDJPY"].includes(symbol)) return "jpy";
-  if (["AUDUSD", "NZDUSD"].includes(symbol)) return "commodity";
-  return "cad";
-}
-
-function entryConfigFor(event, config) {
-  // The event is labelled from the closed signal candle. Recomputing from
-  // the decision timestamp shifts exact session-boundary closes into the next
-  // session even though every causal feature belongs to the prior candle.
-  const session = event.session ?? marketSession(event.t);
-  let resolved = config;
-  const sessionProfile = config.sessionProfiles?.[session];
-  if (sessionProfile) resolved = { ...resolved, ...sessionProfile };
-
-  let regime = "base";
-  const thresholds = config.regimeThresholds;
-  if (thresholds) {
-    if (event.atrPct >= thresholds.highAtrPct && event.bbWidthPct >= thresholds.wideBbWidthPct && event.emaDistPct >= thresholds.trendEmaDistPct) regime = "trendExpansion";
-    else if (event.emaDistPct >= thresholds.trendEmaDistPct) regime = "trend";
-    else if (event.atrPct >= thresholds.highAtrPct) regime = "volatileRange";
-    else regime = "quietRange";
-    const regimeProfile = config.regimeProfiles?.[regime];
-    if (regimeProfile) {
-      const sessionEnabled = resolved.enabled !== false;
-      resolved = { ...resolved, ...regimeProfile, enabled: sessionEnabled && regimeProfile.enabled !== false };
-    }
-  }
-  const pairProfile = config.pairProfiles?.[event.symbol];
-  if (pairProfile) {
-    const enabled = resolved.enabled !== false && pairProfile.enabled !== false;
-    const weightMultipliers = pairProfile.componentWeightMultipliers;
-    const componentWeights = weightMultipliers ? resolved.componentWeights.map((weight, index) => weight * weightMultipliers[index]) : resolved.componentWeights;
-    const originalWeightTotal = resolved.componentWeights.reduce((sum, weight) => sum + weight, 0);
-    const adjustedWeightTotal = componentWeights.reduce((sum, weight) => sum + weight, 0);
-    resolved = {
-      ...resolved,
-      enabled,
-      tfMin: Math.max(0, resolved.tfMin * (originalWeightTotal ? adjustedWeightTotal / originalWeightTotal : 1) + (pairProfile.tfMinDelta ?? 0)),
-      rewardRisk: Math.max(2, resolved.rewardRisk + (pairProfile.rewardRiskDelta ?? 0)),
-      highRewardRisk: Math.max(2, resolved.highRewardRisk + (pairProfile.highRewardRiskDelta ?? 0)),
-      stopATR: resolved.stopATR * (pairProfile.stopAtrMultiplier ?? 1),
-      breakEvenR: pairProfile.breakEvenR ?? resolved.breakEvenR,
-      minAtrPct: resolved.minAtrPct == null ? resolved.minAtrPct : resolved.minAtrPct * (pairProfile.atrMultiplier ?? 1),
-      minBbWidthPct: resolved.minBbWidthPct == null ? resolved.minBbWidthPct : resolved.minBbWidthPct * (pairProfile.bbWidthMultiplier ?? 1),
-      componentWeights,
-    };
-  }
-  const pairSessionProfile = config.pairSessionProfiles?.[event.symbol]?.[session];
-  if (pairSessionProfile) {
-    resolved = { ...resolved, ...pairSessionProfile, enabled: resolved.enabled !== false && pairSessionProfile.enabled !== false };
-  }
-  const groupProfile = config.currencyProfiles?.[currencyGroup(event.symbol)];
-  if (groupProfile) {
-    const enabled = resolved.enabled !== false && groupProfile.enabled !== false;
-    const weightMultipliers = groupProfile.componentWeightMultipliers;
-    const componentWeights = weightMultipliers ? resolved.componentWeights.map((weight, index) => weight * weightMultipliers[index]) : resolved.componentWeights;
-    const originalWeightTotal = resolved.componentWeights.reduce((sum, weight) => sum + weight, 0);
-    const adjustedWeightTotal = componentWeights.reduce((sum, weight) => sum + weight, 0);
-    resolved = {
-      ...resolved,
-      enabled,
-      tfMin: Math.max(0, resolved.tfMin * (originalWeightTotal ? adjustedWeightTotal / originalWeightTotal : 1) + (groupProfile.tfMinDelta ?? 0)),
-      rewardRisk: Math.max(2, resolved.rewardRisk + (groupProfile.rewardRiskDelta ?? 0)),
-      highRewardRisk: Math.max(2, resolved.highRewardRisk + (groupProfile.highRewardRiskDelta ?? 0)),
-      stopATR: resolved.stopATR * (groupProfile.stopAtrMultiplier ?? 1),
-      breakEvenR: groupProfile.breakEvenR ?? resolved.breakEvenR,
-      minAtrPct: resolved.minAtrPct == null ? resolved.minAtrPct : resolved.minAtrPct * (groupProfile.atrMultiplier ?? 1),
-      minBbWidthPct: resolved.minBbWidthPct == null ? resolved.minBbWidthPct : resolved.minBbWidthPct * (groupProfile.bbWidthMultiplier ?? 1),
-      componentWeights,
-    };
-  }
-  return { config: resolved, session, regime };
-}
-
-function frameScore(rows, i, side) {
-  const row = rows[i], previous = rows[Math.max(0, i - 3)];
-  const buy = side === "buy";
-  return [
-    buy ? row.e9 > row.e21 : row.e9 < row.e21,
-    buy ? row.e50 > row.e200 : row.e50 < row.e200,
-    buy ? row.close > row.e50 : row.close < row.e50,
-    buy ? row.macd?.histogram > 0 : row.macd?.histogram < 0,
-    buy ? row.e50 > previous.e50 : row.e50 < previous.e50,
-    buy ? row.rsi >= 45 && row.rsi <= 70 : row.rsi >= 30 && row.rsi <= 55,
-  ].filter(Boolean).length;
-}
-
-function frameMask(rows, i, side) {
-  const row = rows[i], previous = rows[Math.max(0, i - 3)];
-  const buy = side === "buy";
-  const signals = [
-    buy ? row.e9 > row.e21 : row.e9 < row.e21,
-    buy ? row.e50 > row.e200 : row.e50 < row.e200,
-    buy ? row.close > row.e50 : row.close < row.e50,
-    buy ? row.macd?.histogram > 0 : row.macd?.histogram < 0,
-    buy ? row.e50 > previous.e50 : row.e50 < previous.e50,
-    buy ? row.rsi >= 45 && row.rsi <= 70 : row.rsi >= 30 && row.rsi <= 55,
-  ];
-  return signals.reduce((mask, enabled, bit) => enabled ? mask | (1 << bit) : mask, 0);
-}
-
-function weightedMask(mask, weights) {
-  return weights.reduce((score, weight, bit) => score + ((mask & (1 << bit)) ? weight : 0), 0);
-}
-
-function continuationCandle(rows, index, side, pullbackBars) {
-  if (index < pullbackBars + 1) return false;
-  const followsDirection = (row) => side === "buy" ? row.close > row.open : row.close < row.open;
-  const opposesDirection = (row) => side === "buy" ? row.close < row.open : row.close > row.open;
-  if (!followsDirection(rows[index]) || !followsDirection(rows[index - pullbackBars - 1])) return false;
-  for (let i = index - pullbackBars; i < index; i += 1) {
-    if (!opposesDirection(rows[i])) return false;
-  }
-  return true;
-}
-
-// Causal formalization of the discretionary sequence: directional impulse,
-// one to six opposite-colour pullback candles, then the first candle resuming
-// the impulse. The earlier impulse extreme supplies the lower-high/higher-low
-// comparison; no future candle participates.
 function priceActionContinuation(rows, index, side) {
-  const signal = rows[index];
-  if (!signal?.atr) return null;
-  const followsDirection = (row) => side === "buy" ? row.close > row.open : row.close < row.open;
-  const opposesDirection = (row) => side === "buy" ? row.close < row.open : row.close > row.open;
-  if (!followsDirection(signal)) return null;
-  let pullbackBars = 0;
-  for (let i = index - 1; i >= 0 && opposesDirection(rows[i]); i -= 1) pullbackBars += 1;
-  if (pullbackBars < 1 || pullbackBars > 6) return null;
-  const impulseEnd = index - pullbackBars - 1;
-  if (impulseEnd < 8 || !followsDirection(rows[impulseEnd])) return null;
-  let impulseStart = impulseEnd;
-  while (impulseStart > 0 && impulseEnd - impulseStart < 5 && followsDirection(rows[impulseStart - 1])) impulseStart -= 1;
-  // Six hours of M15 context is long enough to retain the prior visible swing
-  // that a discretionary trader compares with the new correction peak.
-  const impulseContext = rows.slice(Math.max(0, impulseStart - 24), impulseEnd + 1);
-  const impulseBars = rows.slice(impulseStart, impulseEnd + 1);
-  const pullback = rows.slice(impulseEnd + 1, index);
-  const atr = signal.atr;
-  if (side === "sell") {
-    const priorSwing = Math.max(...impulseContext.map((row) => row.high));
-    const impulseExtreme = Math.min(...impulseBars.map((row) => row.low));
-    const pullbackExtreme = Math.max(...pullback.map((row) => row.high));
-    const impulseAtr = (priorSwing - impulseExtreme) / atr;
-    return { pullbackBars, impulseAtr, swingGapAtr: (priorSwing - pullbackExtreme) / atr,
-      retrace: impulseAtr > 0 ? (pullbackExtreme - impulseExtreme) / (priorSwing - impulseExtreme) : null,
-      signalBodyAtr: Math.abs(signal.close - signal.open) / atr };
-  }
-  const priorSwing = Math.min(...impulseContext.map((row) => row.low));
-  const impulseExtreme = Math.max(...impulseBars.map((row) => row.high));
-  const pullbackExtreme = Math.min(...pullback.map((row) => row.low));
-  const impulseAtr = (impulseExtreme - priorSwing) / atr;
-  return { pullbackBars, impulseAtr, swingGapAtr: (pullbackExtreme - priorSwing) / atr,
-    retrace: impulseAtr > 0 ? (impulseExtreme - pullbackExtreme) / (impulseExtreme - priorSwing) : null,
-    signalBodyAtr: Math.abs(signal.close - signal.open) / atr };
-}
-
-function confirmedPivots(rows, index, kind, width = 2, lookback = 32) {
-  const values = [], field = kind === "high" ? "high" : "low";
-  for (let i = index - width; i >= Math.max(width, index - lookback) && values.length < 2; i -= 1) {
-    const value = rows[i][field];
-    let pivot = true;
-    for (let offset = 1; offset <= width; offset += 1) {
-      const invalid = kind === "high"
-        ? value < rows[i - offset][field] || value < rows[i + offset][field]
-        : value > rows[i - offset][field] || value > rows[i + offset][field];
-      if (invalid) { pivot = false; break; }
+    const signal = rows[index];
+    if (!signal?.atr) return null;
+    const follows = (row) => side === "BUY" ? row.close > row.open : row.close < row.open;
+    const opposes = (row) => side === "BUY" ? row.close < row.open : row.close > row.open;
+    if (!follows(signal)) return null;
+    let pullbackBars = 0;
+    for (let cursor = index - 1; cursor >= 0 && opposes(rows[cursor]); cursor -= 1) pullbackBars += 1;
+    if (pullbackBars < 1 || pullbackBars > 6) return null;
+    const impulseEnd = index - pullbackBars - 1;
+    if (impulseEnd < 8 || !follows(rows[impulseEnd])) return null;
+    let impulseStart = impulseEnd;
+    while (impulseStart > 0 && impulseEnd - impulseStart < 5 && follows(rows[impulseStart - 1])) impulseStart -= 1;
+    const context = rows.slice(Math.max(0, impulseStart - 72), impulseEnd + 1);
+    const impulse = rows.slice(impulseStart, impulseEnd + 1);
+    const pullback = rows.slice(impulseEnd + 1, index);
+    if (side === "SELL") {
+        const priorSwing = Math.max(...context.map((row) => row.high));
+        const impulseExtreme = Math.min(...impulse.map((row) => row.low));
+        const pullbackExtreme = Math.max(...pullback.map((row) => row.high));
+        const impulseAtr = (priorSwing - impulseExtreme) / signal.atr;
+        return { pullbackBars, impulseAtr, swingGapAtr: (priorSwing - pullbackExtreme) / signal.atr, retrace: impulseAtr > 0 ? (pullbackExtreme - impulseExtreme) / (priorSwing - impulseExtreme) : null };
     }
-    if (pivot) values.push({ index: i, value });
-  }
-  return values;
+    const priorSwing = Math.min(...context.map((row) => row.low));
+    const impulseExtreme = Math.max(...impulse.map((row) => row.high));
+    const pullbackExtreme = Math.min(...pullback.map((row) => row.low));
+    const impulseAtr = (impulseExtreme - priorSwing) / signal.atr;
+    return { pullbackBars, impulseAtr, swingGapAtr: (pullbackExtreme - priorSwing) / signal.atr, retrace: impulseAtr > 0 ? (impulseExtreme - pullbackExtreme) / (impulseExtreme - priorSwing) : null };
 }
 
-function h1PriceStructure(rows, index, side) {
-  const row = rows[index];
-  if (!row?.atr || index < 10) return { pullback: false, trend: false, gapAtr: null };
-  const highs = confirmedPivots(rows, index, "high"), lows = confirmedPivots(rows, index, "low");
-  const priceDirection = (side === "buy" ? 1 : -1) * closedPriceTrend(rows, index, 2) >= 0;
-  if (side === "sell") {
-    const lowerHigh = highs.length >= 2 && highs[0].value < highs[1].value;
-    const lowerLow = lows.length >= 2 && lows[0].value < lows[1].value;
-    return { pullback: lowerHigh && priceDirection, trend: lowerHigh && lowerLow && priceDirection,
-      gapAtr: highs.length >= 2 ? (highs[1].value - highs[0].value) / row.atr : null };
-  }
-  const higherLow = lows.length >= 2 && lows[0].value > lows[1].value;
-  const higherHigh = highs.length >= 2 && highs[0].value > highs[1].value;
-  return { pullback: higherLow && priceDirection, trend: higherLow && higherHigh && priceDirection,
-    gapAtr: lows.length >= 2 ? (lows[0].value - lows[1].value) / row.atr : null };
+function previousSessionContext(rows, index) {
+    const currentSession = marketSession(rows[index].t);
+    let cursor = index;
+    while (cursor >= 0 && marketSession(rows[cursor].t) === currentSession) cursor -= 1;
+    const sessionStart = cursor + 1;
+    while (cursor >= 0 && marketSession(rows[cursor].t) === "offHours") cursor -= 1;
+    if (cursor < 0) return null;
+    const previousName = marketSession(rows[cursor].t);
+    const previous = [];
+    while (cursor >= 0 && marketSession(rows[cursor].t) === previousName) previous.push(rows[cursor--]);
+    return {
+        ageMinutes: (rows[index].t - rows[sessionStart].t) / MINUTE,
+        high: Math.max(...previous.map((row) => row.high)),
+        low: Math.min(...previous.map((row) => row.low)),
+    };
 }
 
-function closedPriceTrend(rows, index, lookback) {
-  const row = rows[index], previous = rows[index - lookback];
-  if (!row || !previous || !(row.atr > 0)) return 0;
-  return (row.close - previous.close) / row.atr;
+function normalizeStoredProfile(symbol, stored) {
+    const controls = stored.controls ?? {};
+    const management = stored.management ?? {};
+    const entry = stored.entry ?? {};
+    const stop = stored.stop ?? entry;
+    return {
+        source: stored,
+        riskPct: Number(controls.researchRiskPct ?? controls.riskPct ?? 0.01),
+        entryOffsetAtr: Number(entry.pendingOffsetAtr ?? entry.offsetAtr ?? 0),
+        expiryMinutes: Number(entry.pendingExpiryMinutes ?? entry.expiryMinutes ?? 15 * (entry.signal?.pendingBars ?? 1)),
+        stopBufferAtr: Number(stop.bufferAtr ?? entry.stopBufferAtr ?? 0),
+        management: {
+            partialAtR: number(management.partialAtR),
+            partialFraction: Number(management.partialFraction ?? 0),
+            moveStopToBreakEvenAfterPartial: management.moveStopToBreakEvenAfterPartial === true,
+            runnerTrailAtr: number(management.runnerTrailAtr ?? management.trailAtr),
+            fixedFinalTargetR: number(management.fixedFinalTargetR ?? management.targetR),
+            breakEvenAtR: number(management.breakEvenAtR),
+            breakEvenDelayMinutes: Number(management.breakEvenDelayMinutes ?? 0),
+            maxHoldMinutes: Number(management.maxHoldMinutes ?? management.maximumHoldMinutes ?? 360),
+        },
+        symbol,
+    };
 }
 
-function closedBodyTrend(rows, index) {
-  const row = rows[index];
-  if (!row || !(row.atr > 0)) return 0;
-  return (row.close - row.open) / row.atr;
-}
+function storedProfileSignal(symbol, stored, rows, index, h1Rows, h1Index) {
+    const current = rows[index];
+    if (!(current?.atr > 0) || h1Index < 22) return null;
+    const side = patternSide(rows, index);
+    const priceActionBuy = priceActionContinuation(rows, index, "BUY");
+    const priceActionSell = priceActionContinuation(rows, index, "SELL");
+    const isPriceAction = symbol === "AUDUSD" || symbol === "EURUSD";
+    const signal = isPriceAction ? (priceActionBuy ? "BUY" : priceActionSell ? "SELL" : null) : side;
+    if (!signal) return null;
+    const h1Window = h1Rows.slice(Math.max(0, h1Index - 50), h1Index + 1);
+    const h1Atr = latest(ATR.calculate({ period: 21, high: h1Window.map((row) => row.high), low: h1Window.map((row) => row.low), close: h1Window.map((row) => row.close) }));
+    const h1Move = (h1Rows[h1Index].close - h1Rows[h1Index - 1].close) / h1Atr;
+    if (!Number.isFinite(h1Move) || (signal === "BUY" ? h1Move <= 0 : h1Move >= 0)) return null;
+    const session = marketSession(current.t);
+    const allowedSessions = stored.activeSessions ?? stored.allowedSessions;
+    if (allowedSessions?.length && !allowedSessions.includes(session)) return null;
+    const spreadAtr = (current.askClose - current.close) / current.atr;
+    const bollingerRoom = signal === "BUY"
+        ? (current.bollinger?.upper - current.askClose) / current.atr
+        : (current.close - current.bollinger?.lower) / current.atr;
+    const bollingerRejection = signal === "BUY"
+        ? current.low <= current.bollinger?.lower && current.close > current.bollinger?.lower
+        : current.high >= current.bollinger?.upper && current.close < current.bollinger?.upper;
+    const rsiExtreme = signal === "BUY" ? current.rsi <= 30 : current.rsi >= 70;
+    const score = [bollingerRejection || bollingerRoom >= 1, rsiExtreme, current.volumeRatio >= 1].filter(Boolean).length;
+    const setup = signal === "BUY" ? priceActionBuy : priceActionSell;
 
-export function prepare(datasetDir, requestedSymbols = DEFAULT_SYMBOLS, options = {}) {
-  if (!datasetDir) throw new Error("A dataset directory is required.");
-  const protocol = options.protocol ?? RESEARCH_PROTOCOL;
-  const symbols = [...new Set(requestedSymbols.map((symbol) => String(symbol).toUpperCase()))];
-  if (!symbols.length) throw new Error("At least one symbol is required.");
-  const available = new Set(discoverSymbols(datasetDir));
-  const missing = symbols.filter((symbol) => !available.has(symbol));
-  if (missing.length) throw new Error(`Incomplete OHLCV files for: ${missing.join(", ")}. Expected SYMBOL_{M1,M5,M15,H1,H4}.jsonl.`);
-  const endExclusive = Date.parse(protocol.evaluationEndExclusive);
-  const minimumCoverageEnd = Date.parse(protocol.minimumCoverageEnd);
-  const data = new Map();
-  const sourceHashes = new Map();
-  for (const symbol of symbols) {
-    const frames = {};
-    const hashes = {};
-    for (const tf of Object.keys(TF)) {
-      const loaded = load(path.join(datasetDir, `${symbol}_${tf}.jsonl`), symbol, endExclusive);
-      frames[tf] = enrich(loaded.rows);
-      hashes[tf] = loaded.sha256;
-      if (frames[tf].length < 202) throw new Error(`${symbol}_${tf}.jsonl has only ${frames[tf].length} usable rows before the fixed evaluation cutoff.`);
-      if (frames[tf].at(-1).t < minimumCoverageEnd) throw new Error(`${symbol}_${tf}.jsonl ends at ${new Date(frames[tf].at(-1).t).toISOString()}, before required validation coverage ${protocol.minimumCoverageEnd}.`);
-    }
-    data.set(symbol, frames);
-    sourceHashes.set(symbol, hashes);
-  }
-  const coverage = Object.fromEntries([...data].map(([symbol, frames]) => [symbol, Object.fromEntries(Object.entries(frames).map(([tf, rows]) => [tf, {
-    rows: rows.length,
-    first: new Date(rows[0].t).toISOString(),
-    last: new Date(rows.at(-1).t).toISOString(),
-    sha256: sourceHashes.get(symbol)[tf],
-  }]))]));
-  const start = Math.max(...[...data.values()].map((f) => f.M1[0].t));
-  const end = Math.min(...[...data.values()].map((f) => f.M1.at(-1).t));
-  const events = [];
-  for (const [symbol, f] of data) {
-    let dayKey = null, dayStart = 0, dayOpen = null, dayHigh = -Infinity, dayLow = Infinity, openingHigh = -Infinity, openingLow = Infinity;
-    let activeSession = null, sessionOpen = null, sessionHigh = -Infinity, sessionLow = Infinity, sessionLast = null, sessionStartedAt = null;
-    let lastCompletedSession = null, beforeLastCompletedSession = null;
-    // The video's intraday examples distinguish the pre-Frankfurt Asian
-    // range from Frankfurt's first hour. Keep those causal ranges in London
-    // local time so DST does not silently move the setup by one hour.
-    let londonTradingDate = null;
-    let asiaRange = null, frankfurtRange = null;
-    let asiaSweeps = { buy: null, sell: null }, frankfurtSweeps = { buy: null, sell: null };
-    for (let i = 200; i < f.M1.length - 1; i += 1) {
-      const m1 = f.M1[i], decision = m1.t + MINUTE;
-      const session = marketSession(m1.t);
-      const london = zonedClock(m1.t, SESSION_TIME_FORMATTERS.london);
-      const localDate = `${london.year}-${String(london.month).padStart(2, "0")}-${String(london.day).padStart(2, "0")}`;
-      const localMinute = london.hour * 60 + london.minute;
-      if (localDate !== londonTradingDate) {
-        londonTradingDate = localDate;
-        asiaRange = null; frankfurtRange = null;
-        asiaSweeps = { buy: null, sell: null }; frankfurtSweeps = { buy: null, sell: null };
-      }
-      const extendRange = (range) => range == null
-        ? { high: m1.high, askHigh: m1.askHigh, low: m1.low, askLow: m1.askLow }
-        : { high: Math.max(range.high, m1.high), askHigh: Math.max(range.askHigh, m1.askHigh),
-            low: Math.min(range.low, m1.low), askLow: Math.min(range.askLow, m1.askLow) };
-      // Asia 00:00-07:00 and Frankfurt 07:00-08:00 Europe/London. This is an
-      // explicit research convention, not a claim that every chart vendor
-      // uses identical labels.
-      if (localMinute < 7 * 60) asiaRange = extendRange(asiaRange);
-      else if (localMinute < 8 * 60) frankfurtRange = extendRange(frankfurtRange);
-      else if (localMinute < 12 * 60) {
-        const updateSweeps = (range, sweeps) => {
-          if (!range) return;
-          if (m1.low < range.low) {
-            const previous = sweeps.buy;
-            sweeps.buy = { t: m1.t, extreme: previous ? Math.min(previous.extreme, m1.low) : m1.low,
-              rejectedAt: m1.close > range.low ? m1.t : null };
-          } else if (sweeps.buy && sweeps.buy.rejectedAt == null && m1.close > range.low) sweeps.buy.rejectedAt = m1.t;
-          if (m1.askHigh > range.askHigh) {
-            const previous = sweeps.sell;
-            sweeps.sell = { t: m1.t, extreme: previous ? Math.max(previous.extreme, m1.askHigh) : m1.askHigh,
-              rejectedAt: m1.askClose < range.askHigh ? m1.t : null };
-          } else if (sweeps.sell && sweeps.sell.rejectedAt == null && m1.askClose < range.askHigh) sweeps.sell.rejectedAt = m1.t;
-        };
-        updateSweeps(asiaRange, asiaSweeps);
-        updateSweeps(frankfurtRange, frankfurtSweeps);
-      }
-      if (session === "offHours") {
-        if (activeSession) {
-          beforeLastCompletedSession = lastCompletedSession;
-          lastCompletedSession = { name: activeSession, open: sessionOpen, close: sessionLast.close, high: sessionHigh, low: sessionLow, endedAt: sessionLast.t };
-          activeSession = null;
-        }
-      } else if (session !== activeSession) {
-        if (activeSession) {
-          beforeLastCompletedSession = lastCompletedSession;
-          lastCompletedSession = { name: activeSession, open: sessionOpen, close: sessionLast.close, high: sessionHigh, low: sessionLow, endedAt: sessionLast.t };
-        }
-        activeSession = session; sessionOpen = m1.open; sessionHigh = m1.high; sessionLow = m1.low; sessionLast = m1; sessionStartedAt = m1.t;
-      } else {
-        sessionHigh = Math.max(sessionHigh, m1.high); sessionLow = Math.min(sessionLow, m1.low); sessionLast = m1;
-      }
-      const nextDayKey = new Date(m1.t).toISOString().slice(0, 10);
-      if (nextDayKey !== dayKey) {
-        dayKey = nextDayKey; dayStart = i; dayOpen = m1.open; dayHigh = m1.high; dayLow = m1.low; openingHigh = m1.high; openingLow = m1.low;
-      } else {
-        dayHigh = Math.max(dayHigh, m1.high); dayLow = Math.min(dayLow, m1.low);
-        if (i - dayStart < 60) { openingHigh = Math.max(openingHigh, m1.high); openingLow = Math.min(openingLow, m1.low); }
-      }
-      if (decision < start || decision > end || decision % TF.M15 !== 0) continue;
-      const frameIndexes = {
-        M1: i,
-        M5: atOrBefore(f.M5, decision - TF.M5),
-        M15: atOrBefore(f.M15, decision - TF.M15),
-        H1: atOrBefore(f.H1, decision - TF.H1),
-        H4: atOrBefore(f.H4, decision - TF.H4),
-        D1: atOrBefore(f.D1, decision - TF.D1),
-      };
-      const { M5: i5, M15: i15, H1: i60, H4: i240, D1: iD1 } = frameIndexes;
-      // D1 has only six-plus months of evaluation history. Requiring the
-      // 200-period D1 feature would erase the train fold; shorter causal D1
-      // components remain available after the established 50-bar warm-up.
-      if (i5 < 200 || i15 < 200 || i60 < 200 || i240 < 200 || iD1 < 50) continue;
-      const m5 = f.M5[i5], m15 = f.M15[i15], h1 = f.H1[i60], h4 = f.H4[i240], d1 = f.D1[iD1];
-      if (![m1.atr, m15.atr, h1.atr, h4.atr, d1.atr].every((x) => x != null)) continue;
-      const signalFields = {};
-      let hasSignal = false;
-      for (const tf of Object.keys(TF)) {
-        const index = frameIndexes[tf], row = f[tf][index];
-        const closedNow = decision === row.t + TF[tf];
-        const buy1 = closedNow && continuationCandle(f[tf], index, "buy", 1);
-        const sell1 = closedNow && continuationCandle(f[tf], index, "sell", 1);
-        const buy2 = closedNow && continuationCandle(f[tf], index, "buy", 2);
-        const sell2 = closedNow && continuationCandle(f[tf], index, "sell", 2);
-        signalFields[`buy${tf}GreenRed1`] = buy1;
-        signalFields[`sell${tf}GreenRed1`] = sell1;
-        signalFields[`buy${tf}GreenRed2`] = buy2;
-        signalFields[`sell${tf}GreenRed2`] = sell2;
-        signalFields[`buy${tf}GreenRed`] = buy1 || buy2;
-        signalFields[`sell${tf}GreenRed`] = sell1 || sell2;
-        signalFields[`${tf}SignalOpen`] = row.open;
-        signalFields[`${tf}SignalHigh`] = row.high;
-        signalFields[`${tf}SignalLow`] = row.low;
-        signalFields[`${tf}SignalClose`] = row.close;
-        signalFields[`${tf}SignalAskHigh`] = row.askHigh;
-        signalFields[`${tf}SignalAskLow`] = row.askLow;
-        signalFields[`${tf}SignalAskClose`] = row.askClose;
-        signalFields[`${tf}SignalAtr`] = row.atr;
-        signalFields[`${tf}BodyTrendAtr`] = closedBodyTrend(f[tf], index);
-        signalFields[`${tf}CloseTrend1Atr`] = closedPriceTrend(f[tf], index, 1);
-        signalFields[`${tf}CloseTrend2Atr`] = closedPriceTrend(f[tf], index, 2);
-        signalFields[`${tf}CloseTrend3Atr`] = closedPriceTrend(f[tf], index, 3);
-        signalFields[`buy${tf}Score`] = frameScore(f[tf], index, "buy");
-        signalFields[`sell${tf}Score`] = frameScore(f[tf], index, "sell");
-        signalFields[`buy${tf}Mask`] = frameMask(f[tf], index, "buy");
-        signalFields[`sell${tf}Mask`] = frameMask(f[tf], index, "sell");
-        hasSignal ||= buy1 || sell1 || buy2 || sell2;
-      }
-      const buyM15PriceAction = priceActionContinuation(f.M15, i15, "buy");
-      const sellM15PriceAction = priceActionContinuation(f.M15, i15, "sell");
-      const buyH1Structure = h1PriceStructure(f.H1, i60, "buy");
-      const sellH1Structure = h1PriceStructure(f.H1, i60, "sell");
-      for (const [side, setup] of [["buy", buyM15PriceAction], ["sell", sellM15PriceAction]]) {
-        signalFields[`${side}M15PriceAction`] = Boolean(setup);
-        signalFields[`${side}M15PullbackBars`] = setup?.pullbackBars ?? 0;
-        signalFields[`${side}M15ImpulseAtr`] = setup?.impulseAtr ?? null;
-        signalFields[`${side}M15SwingGapAtr`] = setup?.swingGapAtr ?? null;
-        signalFields[`${side}M15Retrace`] = setup?.retrace ?? null;
-        signalFields[`${side}M15SignalBodyAtr`] = setup?.signalBodyAtr ?? null;
-      }
-      for (const [side, structure] of [["buy", buyH1Structure], ["sell", sellH1Structure]]) {
-        signalFields[`${side}H1PullbackStructure`] = structure.pullback;
-        signalFields[`${side}H1TrendStructure`] = structure.trend;
-        signalFields[`${side}H1SwingGapAtr`] = structure.gapAtr;
-      }
-      signalFields.M15SpreadAtr = Math.max(0, m15.askClose - m15.close) / m15.atr;
-      for (const [prefix, range, sweeps] of [["Asia", asiaRange, asiaSweeps], ["Frankfurt", frankfurtRange, frankfurtSweeps]]) {
-        for (const side of ["buy", "sell"]) {
-          const sweep = sweeps[side];
-          signalFields[`${side}${prefix}Sweep`] = Boolean(sweep?.rejectedAt != null);
-          signalFields[`${side}${prefix}SweepAgeMinutes`] = sweep ? (decision - sweep.t) / MINUTE : null;
-          signalFields[`${side}${prefix}RejectionAgeMinutes`] = sweep?.rejectedAt != null ? (decision - sweep.rejectedAt) / MINUTE : null;
-          signalFields[`${side}${prefix}SweepDepthAtr`] = sweep && range
-            ? (side === "buy" ? range.low - sweep.extreme : sweep.extreme - range.askHigh) / m15.atr : null;
-          signalFields[`${side}${prefix}SweepStop`] = sweep?.extreme ?? null;
-          signalFields[`${side}${prefix}SweepTarget`] = range
-            ? (side === "buy" ? range.high : range.askLow) : null;
-        }
-      }
-      signalFields.londonLocalMinute = localMinute;
-      hasSignal ||= Boolean(buyM15PriceAction || sellM15PriceAction);
-      if (!hasSignal) continue;
-      const buyGreenRed1 = signalFields.buyM1GreenRed1, sellGreenRed1 = signalFields.sellM1GreenRed1;
-      const buyGreenRed2 = signalFields.buyM1GreenRed2, sellGreenRed2 = signalFields.sellM1GreenRed2;
-      const buyGreenRedAny = signalFields.buyM1GreenRed, sellGreenRedAny = signalFields.sellM1GreenRed;
-      events.push({ t: decision, symbol, next: i + 1, atr: m15.atr, m1Atr: m1.atr, signalClose: m1.close, signalAskClose: m1.askClose,
-        spread: Math.max(0, m1.askClose - m1.close),
-        session,
-        h1BodyTrendAtr: closedBodyTrend(f.H1, i60),
-        h4BodyTrendAtr: closedBodyTrend(f.H4, i240),
-        d1BodyTrendAtr: closedBodyTrend(f.D1, iD1),
-        h1CloseTrend1Atr: closedPriceTrend(f.H1, i60, 1), h1CloseTrend2Atr: closedPriceTrend(f.H1, i60, 2), h1CloseTrend3Atr: closedPriceTrend(f.H1, i60, 3),
-        h4CloseTrend1Atr: closedPriceTrend(f.H4, i240, 1), h4CloseTrend2Atr: closedPriceTrend(f.H4, i240, 2), h4CloseTrend3Atr: closedPriceTrend(f.H4, i240, 3),
-        d1CloseTrend1Atr: closedPriceTrend(f.D1, iD1, 1), d1CloseTrend2Atr: closedPriceTrend(f.D1, iD1, 2), d1CloseTrend3Atr: closedPriceTrend(f.D1, iD1, 3),
-        buyGreenRed1, sellGreenRed1, buyGreenRed2, sellGreenRed2, buyGreenRedAny, sellGreenRedAny,
-        ...signalFields,
-      });
-    }
-    f.M1 = f.M1.map(({ t, open, high, low, close, askOpen, askHigh, askLow, askClose }) => ({ t, open, high, low, close, askOpen, askHigh, askLow, askClose })); f.M5 = []; f.M15 = []; f.H1 = []; f.H4 = []; f.D1 = [];
-  }
-  events.sort((a, b) => a.t - b.t || symbols.indexOf(a.symbol) - symbols.indexOf(b.symbol));
-  if (!events.length) throw new Error("The fixed research window produced no causal signal events.");
-  return { data, events, start: events[0].t, end: Math.min(end, endExclusive - 1), symbols, coverage, protocol, strictWindow: options.strictWindow === true };
-}
-
-export function validateCandidateConfig(config) {
-  if (!config || typeof config !== "object" || Array.isArray(config)) throw new Error("Candidate config must be an object.");
-  const allowedMethods = new Set(["custom", "additive", "weighted", "gated", "scoring-gated", "scoring-weighted", "mtf-majority", "mtf-strict", "mtf-weighted"]);
-  if (!allowedMethods.has(config.method)) throw new Error(`Unsupported method: ${config.method}`);
-  const positive = ["hold", "stopATR", "cooldown", "maxDaily", "maxPositions"];
-  for (const key of positive) {
-    if (!Number.isFinite(config[key]) || config[key] < (key === "cooldown" ? 0 : 1)) throw new Error(`${key} must be a valid ${key === "cooldown" ? "non-negative" : "positive"} number.`);
-  }
-  const rewardRisk = config.rewardRisk ?? (Number.isFinite(config.tpATR) ? config.tpATR / config.stopATR : null);
-  if (!(rewardRisk > 0 && rewardRisk <= 20)) throw new Error("Set rewardRisk or tpATR to a valid positive exit multiple.");
-  if (config.maxPositions > 6) throw new Error("Autoresearch caps maxPositions at 6; portfolio policy belongs in the later harness stage.");
-  if (!Number.isFinite(config.riskPct) || config.riskPct <= 0 || config.riskPct > RESEARCH_PROTOCOL.risk.maxPerPositionPct) throw new Error(`riskPct must be in (0, ${RESEARCH_PROTOCOL.risk.maxPerPositionPct}].`);
-  if (config.marginUtilization != null && (!Number.isFinite(config.marginUtilization) || config.marginUtilization <= 0 || config.marginUtilization > RESEARCH_PROTOCOL.risk.marginUtilization)) throw new Error(`marginUtilization must be in (0, ${RESEARCH_PROTOCOL.risk.marginUtilization}].`);
-  if (config.startCapital != null && config.startCapital !== RESEARCH_PROTOCOL.startCapital) throw new Error(`startCapital is fixed at ${RESEARCH_PROTOCOL.startCapital} during candidate selection.`);
-  if (config.capitalMode === "compound") throw new Error("Compounding is disabled during candidate selection; compare signal quality at fixed sizing.");
-  if (config.sessionWindows && (!Array.isArray(config.sessionWindows) || config.sessionWindows.some((window) => !Array.isArray(window) || window.length !== 2 || window.some((value) => !Number.isFinite(value) || value < 0 || value > 1440)))) {
-    throw new Error("sessionWindows must contain [startMinuteUtc, endMinuteUtc] pairs in the 0..1440 range.");
-  }
-  if (config.dailyCloseMinuteUtc != null && (!Number.isFinite(config.dailyCloseMinuteUtc) || config.dailyCloseMinuteUtc < 0 || config.dailyCloseMinuteUtc > 1440)) throw new Error("dailyCloseMinuteUtc must be in the 0..1440 range.");
-  for (const key of ["maxLossesPerSymbolDay", "maxLossesPerSymbolSession"]) {
-    if (config[key] != null && (!Number.isInteger(config[key]) || config[key] < 1)) throw new Error(`${key} must be a positive integer when set.`);
-  }
-  if (config.maxTotalPerSession != null && (!Number.isInteger(config.maxTotalPerSession) || config.maxTotalPerSession < 1)) throw new Error("maxTotalPerSession must be a positive integer when set.");
-  if (["continuation", "pullback", "adaptive-pending", "signal-breakout"].includes(config.entryMode)) {
-    if (!(Number.isFinite(config.pendingOffsetAtr) && config.pendingOffsetAtr >= 0)) throw new Error("Pending entry modes require pendingOffsetAtr >= 0.");
-    if (!(Number.isFinite(config.pendingExpiryMinutes) && config.pendingExpiryMinutes > 0)) throw new Error("Pending entry modes require pendingExpiryMinutes > 0.");
-  }
-  const runnerModes = new Set(["none", "always", "fast-1r", "signal-body"]);
-  if (config.runnerMode != null && !runnerModes.has(config.runnerMode)) throw new Error(`Unsupported runnerMode: ${config.runnerMode}`);
-  if (config.trailR != null && (!Number.isFinite(config.trailR) || config.trailR < 0)) throw new Error("trailR must be a non-negative R multiple.");
-  if (config.runnerMode === "fast-1r" && (!Number.isFinite(config.runnerFastMinutes) || config.runnerFastMinutes <= 0)) throw new Error("fast-1r runners require runnerFastMinutes > 0.");
-  if (config.runnerMode === "signal-body" && (!Number.isFinite(config.runnerSignalBodyAtr) || config.runnerSignalBodyAtr <= 0)) throw new Error("signal-body runners require runnerSignalBodyAtr > 0.");
-  return { rewardRisk };
-}
-
-export function evaluate(prepared, c) {
-  validateCandidateConfig(c);
-  const { data, events, start, end, symbols } = prepared;
-  const protocol = prepared.protocol ?? RESEARCH_PROTOCOL;
-  const inProtocolWindow = (timestamp) => {
-    const week = isoWeek(timestamp);
-    return week >= protocol.train.fromWeek && week <= protocol.validation.toWeek;
-  };
-  const candidateSymbols = c.symbols?.length ? new Set(c.symbols) : null;
-  const staticSessionWindows = c.sessionWindows?.length && !c.sessionProfiles && !c.pairSessionProfiles ? c.sessionWindows : null;
-  const simulationEvents = (prepared.strictWindow || candidateSymbols || staticSessionWindows)
-    ? events.filter((event) => (!prepared.strictWindow || inProtocolWindow(event.t)) && (!candidateSymbols || candidateSymbols.has(event.symbol)) && (!staticSessionWindows || inSessionWindows(event.t, staticSessionWindows)))
-    : events;
-  if (!simulationEvents.length) throw new Error("The requested evaluation window produced no causal signal events.");
-  const simulationStart = prepared.strictWindow ? simulationEvents[0].t : start;
-  const startCapital = protocol.startCapital;
-  let balance = startCapital, peak = startCapital, maxDD = 0, maxDDPct = 0, maxOpenRiskPct = 0, maxPositionRiskPct = 0, maxMarginUsagePct = 0, maxPositionMarginPct = 0, entrySequence = 0; const positions = [], pendingOrders = [], trades = [], lastClose = new Map(), dayCount = new Map(), totalDayCount = new Map(), sessionDayCount = new Map(), symbolDayLosses = new Map(), symbolSessionLosses = new Map();
-  const midAt = (symbol, timestamp) => {
-    const rows = data.get(symbol)?.M1;
-    if (!rows?.length) return null;
-    const index = atOrBefore(rows, timestamp);
-    if (index < 0) return null;
-    const row = rows[index];
-    return (row.close + row.askClose) / 2;
-  };
-  const quotePerEurAt = (symbol, timestamp) => {
-    const quote = String(symbol).slice(3, 6);
-    if (quote === "EUR") return 1;
-    const direct = midAt(`EUR${quote}`, timestamp);
-    if (Number.isFinite(direct) && direct > 0) return direct;
-    if (quote === "CAD") {
-      const eurUsd = midAt("EURUSD", timestamp), usdCad = midAt("USDCAD", timestamp);
-      if (Number.isFinite(eurUsd) && eurUsd > 0 && Number.isFinite(usdCad) && usdCad > 0) return eurUsd * usdCad;
-    }
-    return null;
-  };
-  const recordOpenRisk = (openedPosition) => {
-    const riskCapital = Math.min(startCapital, Math.max(balance, 0));
-    const openRisk = positions.reduce((sum, position) => sum + position.risk, 0);
-    maxOpenRiskPct = Math.max(maxOpenRiskPct, riskCapital > 0 ? openRisk / riskCapital : 1);
-    maxPositionRiskPct = Math.max(maxPositionRiskPct, openedPosition.risk / openedPosition.riskCapitalAtEntry);
-    const openMargin = positions.reduce((sum, position) => sum + position.margin, 0);
-    maxMarginUsagePct = Math.max(maxMarginUsagePct, riskCapital > 0 ? openMargin / riskCapital : 1);
-    maxPositionMarginPct = Math.max(maxPositionMarginPct, openedPosition.margin / openedPosition.riskCapitalAtEntry);
-  };
-  const close = (p, t, price, reason, closeSize = p.size, final = true) => {
-    const quotePerEur = quotePerEurAt(p.symbol, t) ?? p.quotePerEur;
-    const pnlQuote = (p.side === "buy" ? price - p.entry : p.entry - price) * closeSize;
-    const pnl = pnlQuote / quotePerEur;
-    p.realizedPnl += pnl; balance += pnl; peak = Math.max(peak, balance);
-    maxDD = Math.max(maxDD, peak - balance); maxDDPct = Math.max(maxDDPct, 100 * (peak - balance) / Math.max(peak, 1));
-    trades.push({ t, opened: p.opened, symbol: p.symbol, side: p.side, pnl, r: pnl / p.initialRiskEur, reason, balanceAfter: balance, session: p.session, regime: p.regime, entryId: p.id });
-    if (final) {
-      if (p.realizedPnl < 0) {
-        const openedDay = new Date(p.opened).toISOString().slice(0, 10);
-        const dayLossKey = `${openedDay}:${p.symbol}`, sessionLossKey = `${openedDay}:${p.session}:${p.symbol}`;
-        symbolDayLosses.set(dayLossKey, (symbolDayLosses.get(dayLossKey) ?? 0) + 1);
-        symbolSessionLosses.set(sessionLossKey, (symbolSessionLosses.get(sessionLossKey) ?? 0) + 1);
-      }
-      positions.splice(positions.indexOf(p), 1); lastClose.set(p.symbol, t);
+    if (symbol === "EURUSD") {
+        const config = stored.entry.signal;
+        if (!setup || setup.pullbackBars < config.minPullbackBars || setup.pullbackBars > config.maxPullbackBars || setup.impulseAtr < config.minImpulseAtr || setup.swingGapAtr < config.minSwingGapAtr || setup.retrace > config.maxRetrace || current.bodyRatio < config.minBodyRatio || spreadAtr > config.maxSpreadAtr || bollingerRoom < stored.entry.scoring.minBandRoomAtr) return null;
+    } else if (symbol === "AUDUSD") {
+        const config = stored.signal;
+        const previous = previousSessionContext(rows, index);
+        const room = signal === "BUY" ? (previous?.high - current.askClose) / current.atr : (current.close - previous?.low) / current.atr;
+        if (!setup || setup.impulseAtr <= 0 || setup.swingGapAtr <= 0 || current.bodyAtr < config.minSignalBodyAtr || current.atrPercentile > config.maxAtrPercentile || !previous || previous.ageMinutes < config.minSessionAgeMinutes || room < config.previousSessionRoomAtr) return null;
     } else {
-      const originalSize = p.size; p.size -= closeSize; p.margin *= p.size / originalSize;
+        const filters = stored.filters ?? stored;
+        if (spreadAtr > filters.maximumSpreadAtr || current.bodyRatio < filters.minimumSignalBodyRatio || current.atrPercentile < filters.minimumM15AtrPercentile300 || current.efficiency < filters.minimumM15Efficiency24 || current.activity < filters.minimumM15Activity4 || (filters.minimumVolumeRatio20 != null && current.volumeRatio < filters.minimumVolumeRatio20) || score < filters.minimumM15IndicatorScore) return null;
     }
-  };
-  const buildPosition = ({ event, config, side, entry, opened, next, session, regime }) => {
-    const signalFrame = config.signalTimeframe ?? "M15";
-    const signalAtr = event[`${signalFrame}SignalAtr`] ?? event.atr;
-    const buffer = (config.stopBufferAtr ?? 0) * signalAtr;
-    const eventStop = config.stopEventPrefix ? event[`${side}${config.stopEventPrefix}Stop`] : null;
-    const candleStop = side === "buy" ? event[`${signalFrame}SignalLow`] - buffer : event[`${signalFrame}SignalAskHigh`] + buffer;
-    const atrStop = side === "buy" ? entry - config.stopATR * event.atr : entry + config.stopATR * event.atr;
-    const stop = config.stopMode === "event-level" && Number.isFinite(eventStop)
-      ? (side === "buy" ? eventStop - buffer : eventStop + buffer)
-      : config.stopMode === "signal-candle" ? candleStop : atrStop;
-    const dist = side === "buy" ? entry - stop : stop - entry;
-    if (!(Number.isFinite(dist) && dist > 0)) return null;
-    const rewardRisk = config.rewardRisk ?? config.tpATR / config.stopATR;
-    const eventTarget = config.targetEventPrefix ? event[`${side}${config.targetEventPrefix}Target`] : null;
-    const target = config.partialRunner ? (side === "buy" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY)
-      : config.targetMode === "event-level" && Number.isFinite(eventTarget) ? eventTarget
-      : side === "buy" ? entry + rewardRisk * dist : entry - rewardRisk * dist;
-    if (!(side === "buy" ? target > entry : target < entry)) return null;
-    const sizingCapital = Math.min(startCapital, Math.max(balance, 0));
-    const quotePerEur = quotePerEurAt(event.symbol, opened);
-    if (!(Number.isFinite(quotePerEur) && quotePerEur > 0)) return null;
-    const usedRisk = positions.reduce((sum, position) => sum + position.risk, 0);
-    const maxRisk = sizingCapital * Math.min(config.riskPct, protocol.risk.maxPerPositionPct);
-    const availableRisk = Math.max(0, sizingCapital * protocol.risk.maxPortfolioPct - usedRisk);
-    const riskBudget = Math.min(maxRisk, availableRisk);
-    if (!(riskBudget > 0)) return null;
-    const usedMargin = positions.reduce((sum, position) => sum + position.margin, 0);
-    const marginUtilization = Math.min(config.marginUtilization ?? protocol.risk.marginUtilization, protocol.risk.marginUtilization);
-    const availableMargin = Math.max(0, Math.min(balance, sizingCapital) * marginUtilization - usedMargin);
-    const perPositionMargin = Math.min(balance, sizingCapital) * marginUtilization / config.maxPositions;
-    const marginBudget = Math.min(availableMargin, perPositionMargin);
-    const leverage = MAJOR_FX.has(event.symbol) ? protocol.leverage.usdPairs : protocol.leverage.crosses;
-    const riskSizedUnits = (riskBudget * quotePerEur) / dist;
-    const marginSizedUnits = (marginBudget * leverage * quotePerEur) / entry;
-    const size = Math.floor(Math.min(riskSizedUnits, marginSizedUnits) / 100) * 100;
-    if (!(size >= 100)) return null;
-    const margin = (size * entry) / quotePerEur / leverage;
-    const risk = (dist * size) / quotePerEur;
-    if (!(risk > 0 && risk <= maxRisk + 1e-9 && usedRisk + risk <= sizingCapital * protocol.risk.maxPortfolioPct + 1e-9)) return null;
-    const openedDate = new Date(opened);
-    const forcedCloseAt = Date.UTC(openedDate.getUTCFullYear(), openedDate.getUTCMonth(), openedDate.getUTCDate()) + (config.dailyCloseMinuteUtc ?? 22 * 60) * MINUTE;
-    const signalBodyAtr = Math.abs((event[`${signalFrame}SignalClose`] ?? 0) - (event[`${signalFrame}SignalOpen`] ?? 0)) / Math.max(signalAtr, Number.EPSILON);
-    return { id: entrySequence++, symbol: event.symbol, side, opened, entry, stop, target, size, initialSize: size, risk, initialRiskEur: risk, riskCapitalAtEntry: sizingCapital, quotePerEur, next, atr: event.atr,
-      margin, trailBaseAtr: config.trailTimeframe === "m1" ? event.m1Atr : event.atr, stopDistance: dist,
-      breakEvenR: config.breakEvenR ?? 0, trailATR: config.trailATR ?? 0, trailR: config.trailR ?? 0, breakEvenMoved: false,
-      runnerMode: config.runnerMode ?? "none", runnerFastMinutes: config.runnerFastMinutes ?? 0,
-      runnerSignalBodyAtr: config.runnerSignalBodyAtr ?? 0, signalBodyAtr, runnerActivated: false,
-      partialR: config.partialR ?? 0, partialFraction: config.partialFraction ?? 0, moveStopOnPartial: config.moveStopOnPartial ?? false,
-      partialRunner: config.partialRunner === true, partialTaken: false, realizedPnl: 0, rewardRisk, hold: config.hold, dailyFlat: config.dailyFlat === true, forcedCloseAt, session, regime };
-  };
-  const activatePending = (to) => {
-    for (const order of [...pendingOrders]) {
-      const rows = data.get(order.event.symbol).M1;
-      let i = order.next;
-      while (i < rows.length && rows[i].t <= to) {
-        const bar = rows[i];
-        if (bar.t > order.expiresAt) { pendingOrders.splice(pendingOrders.indexOf(order), 1); break; }
-        const filled = order.kind === "continuation"
-          ? (order.side === "buy" ? bar.askHigh >= order.level : bar.low <= order.level)
-          : (order.side === "buy" ? bar.askLow <= order.level : bar.high >= order.level);
-        const invalidated = order.invalidatesAt != null && (order.side === "buy" ? bar.low <= order.invalidatesAt : bar.askHigh >= order.invalidatesAt);
-        // If invalidation happened on an earlier bar without an entry touch,
-        // the discretionary setup no longer exists and the pending order is
-        // cancelled. If both levels occur in one M1 bar, keep the fill and let
-        // the conservative SL-first position replay handle the ambiguity.
-        if (invalidated && !filled) { pendingOrders.splice(pendingOrders.indexOf(order), 1); break; }
-        if (filled) {
-          const day = new Date(bar.t).toISOString().slice(0, 10), key = `${day}:${order.event.symbol}`;
-          const dayLossKey = `${day}:${order.event.symbol}`, sessionLossKey = `${day}:${order.session}:${order.event.symbol}`;
-          const breakerOpen = (order.config.maxLossesPerSymbolDay && (symbolDayLosses.get(dayLossKey) ?? 0) >= order.config.maxLossesPerSymbolDay) ||
-            (order.config.maxLossesPerSymbolSession && (symbolSessionLosses.get(sessionLossKey) ?? 0) >= order.config.maxLossesPerSymbolSession);
-          const sessionDayKey = `${day}:${order.session}`;
-          if (!breakerOpen && positions.length < order.config.maxPositions && !positions.some((position) => position.symbol === order.event.symbol) &&
-              (dayCount.get(key) ?? 0) < order.config.maxDaily && (!order.config.maxTotalDaily || (totalDayCount.get(day) ?? 0) < order.config.maxTotalDaily) &&
-              (!order.config.maxTotalPerSession || (sessionDayCount.get(sessionDayKey) ?? 0) < order.config.maxTotalPerSession)) {
-            // The fill bar is evaluated conservatively as well. With OHLC data
-            // we cannot prove that a stop/target touch happened after entry.
-            const position = buildPosition({ event: order.event, config: order.config, side: order.side, entry: order.level, opened: bar.t, next: i, session: order.session, regime: order.regime });
-            if (position) { positions.push(position); recordOpenRisk(position); dayCount.set(key, (dayCount.get(key) ?? 0) + 1); totalDayCount.set(day, (totalDayCount.get(day) ?? 0) + 1); sessionDayCount.set(sessionDayKey, (sessionDayCount.get(sessionDayKey) ?? 0) + 1); }
-          }
-          pendingOrders.splice(pendingOrders.indexOf(order), 1);
-          break;
+
+    const normalized = normalizeStoredProfile(symbol, stored);
+    const entryBuffer = current.atr * normalized.entryOffsetAtr;
+    const stopBuffer = current.atr * normalized.stopBufferAtr;
+    const entryPrice = signal === "BUY" ? current.askHigh + entryBuffer : current.low - entryBuffer;
+    const stopLoss = signal === "BUY" ? current.low - stopBuffer : current.askHigh + stopBuffer;
+    if (!(signal === "BUY" ? stopLoss < entryPrice : stopLoss > entryPrice)) return null;
+    return { symbol, signal, entryPrice, stopLoss, atr: current.atr, quality: 100 * (setup?.impulseAtr ?? 0) + 10 * score + Math.abs(h1Move) - spreadAtr, session, normalized };
+}
+
+export function preparePairProfiles(datasetDir, profileDocuments, options = {}) {
+    const requestedSymbols = Object.keys(profileDocuments);
+    const activeSymbols = requestedSymbols.filter((symbol) => profileDocuments[symbol]?.profile);
+    const disabledSymbols = requestedSymbols.filter((symbol) => !profileDocuments[symbol]?.profile);
+    const available = discoverSymbols(datasetDir);
+    const missingSymbols = activeSymbols.filter((symbol) => !available.includes(symbol));
+    const symbols = activeSymbols.filter((symbol) => available.includes(symbol));
+    if (!symbols.length) throw new Error("No active pair profile has both M15 and H1 data.");
+    const from = options.from ? Date.parse(options.from) : -Infinity;
+    const toExclusive = options.to ? Date.parse(options.to) : Infinity;
+    if (Number.isNaN(from) || Number.isNaN(toExclusive) || from >= toExclusive) throw new Error("Invalid pair-profile --from/--to range.");
+    const data = new Map();
+    const coverage = {};
+    for (const symbol of symbols) {
+        const m15 = loadRows(path.join(datasetDir, `${symbol}_M15.jsonl`), "M15");
+        const h1 = loadRows(path.join(datasetDir, `${symbol}_H1.jsonl`), "H1");
+        data.set(symbol, { M15: enrichProfileRows(m15.rows), H1: h1.rows });
+        coverage[symbol] = { M15: m15.audit, H1: h1.audit };
+    }
+    const conversionData = new Map();
+    for (const symbol of CONVERSION_SYMBOLS) {
+        if (!available.includes(symbol)) continue;
+        const rows = data.get(symbol)?.M15 ?? loadRows(path.join(datasetDir, `${symbol}_M15.jsonl`), "M15").rows;
+        conversionData.set(symbol, rows);
+    }
+    const commonStart = Math.max(...symbols.map((symbol) => data.get(symbol).M15[0].t));
+    const commonEnd = Math.min(...symbols.map((symbol) => data.get(symbol).M15.at(-1).t + M15));
+    const start = Math.max(from, commonStart);
+    const endExclusive = Math.min(toExclusive, commonEnd);
+    const events = [];
+    const signalAudit = Object.fromEntries(requestedSymbols.map((symbol) => [symbol, { active: !disabledSymbols.includes(symbol), evaluatedCloses: 0, candidates: 0 }]));
+    for (const symbol of symbols) {
+        const { M15: rows, H1: h1Rows } = data.get(symbol);
+        const stored = profileDocuments[symbol].profile;
+        for (let index = 320; index < rows.length; index += 1) {
+            const decision = rows[index].t + M15;
+            if (decision < start || decision >= endExclusive) continue;
+            signalAudit[symbol].evaluatedCloses += 1;
+            const h1Index = atOrBefore(h1Rows, decision - H1);
+            const event = storedProfileSignal(symbol, stored, rows, index, h1Rows, h1Index);
+            if (!event) continue;
+            signalAudit[symbol].candidates += 1;
+            events.push({ t: decision, ...event });
         }
-        i += 1;
-      }
-      if (pendingOrders.includes(order)) order.next = i;
     }
-  };
-  const advance = (to) => { activatePending(to); for (const p of [...positions]) { const rows = data.get(p.symbol).M1; let i = p.next; while (i < rows.length && rows[i].t <= to) { const b = rows[i]; if (p.dailyFlat && b.t >= p.forcedCloseAt) { close(p, b.t, p.side === "buy" ? b.open : b.askOpen, "daily"); break; } const sl = p.side === "buy" ? b.low <= p.stop : b.askHigh >= p.stop; const tp = p.side === "buy" ? b.high >= p.target : b.askLow <= p.target; if (sl) { close(p, b.t, p.stop, p.runnerActivated ? "runner-trail" : p.breakEvenMoved ? "breakeven" : "sl"); break; } if (tp) { close(p, b.t, p.target, "tp"); break; }
-      // Exit adjustments become active only on the following minute. This is
-      // deliberately conservative: a single OHLC bar cannot tell which level
-      // was touched first.
-      const partialHit = !p.partialTaken && p.partialR > 0 && (p.side === "buy" ? b.high >= p.entry + p.partialR * p.stopDistance : b.askLow <= p.entry - p.partialR * p.stopDistance);
-      if (partialHit) {
-        const partialSize = Math.floor(p.size * p.partialFraction * 100) / 100;
-        if (partialSize > 0 && partialSize < p.size) {
-          const partialPrice = p.side === "buy" ? p.entry + p.partialR * p.stopDistance : p.entry - p.partialR * p.stopDistance;
-          close(p, b.t, partialPrice, "partial", partialSize, false);
-          p.partialTaken = true;
-          if (p.moveStopOnPartial) p.stop = p.side === "buy" ? Math.max(p.stop, p.entry) : Math.min(p.stop, p.entry);
-          if (p.partialRunner) { p.breakEvenMoved = true; p.runnerActivated = true; }
-          i += 1;
-          continue;
-        }
-        p.partialTaken = true;
-      }
-      const reachedBreakEven = !p.breakEvenMoved && p.breakEvenR > 0 && (p.side === "buy" ? b.high >= p.entry + p.breakEvenR * p.stopDistance : b.askLow <= p.entry - p.breakEvenR * p.stopDistance);
-      if (reachedBreakEven) {
-        const ageMinutes = (b.t + MINUTE - p.opened) / MINUTE;
-        const runnerEligible = p.runnerMode === "always" ||
-          (p.runnerMode === "fast-1r" && ageMinutes <= p.runnerFastMinutes) ||
-          (p.runnerMode === "signal-body" && p.signalBodyAtr >= p.runnerSignalBodyAtr);
-        if (runnerEligible) {
-          p.stop = p.side === "buy" ? Math.max(p.stop, p.entry) : Math.min(p.stop, p.entry);
-          p.target = p.side === "buy" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
-          p.breakEvenMoved = true;
-          p.runnerActivated = true;
-        }
-      }
-      if (p.runnerActivated && p.trailR > 0) p.stop = p.side === "buy" ? Math.max(p.stop, b.high - p.trailR * p.stopDistance) : Math.min(p.stop, b.askLow + p.trailR * p.stopDistance);
-      else if (p.breakEvenMoved && p.trailATR > 0) p.stop = p.side === "buy" ? Math.max(p.stop, b.high - p.trailATR * p.trailBaseAtr) : Math.min(p.stop, b.askLow + p.trailATR * p.trailBaseAtr);
-      if (b.t >= p.opened + p.hold * MINUTE) { close(p, b.t, p.side === "buy" ? b.close : b.askClose, "time"); break; } i += 1; } if (positions.includes(p)) p.next = i; } };
-  const pass = (e, side, config = c) => {
-    if (typeof config.decide === "function") return Boolean(config.decide(e, side, config));
-    if (config.mtf) {
-      const scores = config.frames.map((tf) => config.componentWeights ? weightedMask(e[`${side}${tf}Mask`], config.componentWeights) : e[`${side}${tf}Score`]);
-      const aligned = scores.filter((score) => score >= config.tfMin).length;
-      if (!triggerPass(e, side, config.trigger)) return false;
-      if (config.method === "mtf-majority") return aligned >= config.alignMin;
-      if (config.method === "mtf-strict") return aligned === scores.length;
-      if (config.method === "mtf-weighted") return aligned >= config.alignMin && scores.reduce((sum, score, i) => sum + score * config.weights[i], 0) >= config.threshold;
-      const high = scores.slice(-2), low = scores.slice(0, -2);
-      return high.every((score) => score >= config.highMin) && low.every((score) => score >= config.lowMin);
-    }
-    // The live-style model: first accumulate indicator points, then require
-    // independent agreement from the entry/setup and higher trend frames.
-    // No point from the raw score can bypass a failed trend gate.
-    if (config.method === "scoring-gated" || config.method === "scoring-weighted") {
-      const base = e[`${side}Current`];
-      const m15 = e[`${side}M15`];
-      const h1 = e[`${side}H1`];
-      const h4 = e[`${side}H4Score`];
-      const setup = e[`${side}Setup`];
-      const trigger = e[`${side}Trigger`];
-      const gatesPass =
-        base >= config.minSignalScore &&
-        (config.useM15Gate === false || m15 >= config.minM15Trend) &&
-        (config.useH1Gate === false || h1 >= config.minH1Trend) &&
-        (config.useH4Gate === false || h4 >= config.minH4Trend) &&
-        (config.useSetupGate === false || setup >= config.minSetupScore) &&
-        (config.useTriggerGate === false || triggerPass(e, side, config.trigger));
-      if (!gatesPass) return false;
-      if (config.method === "scoring-gated") return true;
-      const weighted =
-        base * config.wBase +
-        m15 * config.wM15 +
-        h1 * config.wH1 +
-        h4 * config.wH4 +
-        setup * config.wSetup +
-        trigger * config.wTrigger;
-      return weighted >= config.weightedThreshold;
-    }
-    if (config.method === "additive") return e[`${side}Current`] >= config.threshold;
-    const trend = config.context === "m15" ? e[`${side}M15`] : config.context === "h1" ? e[`${side}H1`] : Math.min(e[`${side}M15`], e[`${side}H1`]);
-    if (config.method === "weighted") return trend * config.wTrend + e[`${side}Setup`] * config.wSetup + e[`${side}Trigger`] * config.wTrigger >= config.threshold && triggerPass(e, side, config.trigger);
-    return trend >= config.trendMin && e[`${side}Setup`] >= config.setupMin && triggerPass(e, side, config.trigger);
-  };
-  // At one candle close several symbols can be eligible. Rank the configured
-  // number of strongest setups so portfolio selection is not determined by
-  // symbol iteration order.
-  const rankedSignalAt = new Map();
-  if (c.rankByScore) {
-    for (const e of simulationEvents) {
-      const entryPolicy = entryConfigFor(e, c), ec = entryPolicy.config;
-      if (ec.enabled === false || !inSessionWindows(e.t, ec.sessionWindows) || !passesResearchFilters(e, ec) || (ec.symbols && !ec.symbols.includes(e.symbol)) || !(e.atr > 0)) continue;
-      const buy = pass(e, "buy", ec), sell = pass(e, "sell", ec);
-      if (!buy && !sell) continue;
-      const rank = (side) => typeof ec.rank === "function"
-        ? Number(ec.rank(e, side, ec))
-        : e[`${side}Current`] * 100 +
-          (e[`${side}M15`] + e[`${side}H1`] + e[`${side}H4Score`]) * 10 +
-          e[`${side}Setup`] * 3 + e[`${side}Trigger`];
-      const side = buy && sell ? (rank("buy") >= rank("sell") ? "buy" : "sell") : buy ? "buy" : "sell";
-      const candidate = { event: e, side, rank: rank(side) };
-      const current = rankedSignalAt.get(e.t) ?? [];
-      current.push(candidate);
-      rankedSignalAt.set(e.t, current);
-    }
-    const limit = Math.max(1, Math.min(c.maxPositions, c.rankAtTimestampLimit ?? 1));
-    for (const [timestamp, candidates] of rankedSignalAt) {
-      candidates.sort((a, b) => b.rank - a.rank || a.event.symbol.localeCompare(b.event.symbol));
-      rankedSignalAt.set(timestamp, candidates.slice(0, limit));
-    }
-  }
-  for (const e of simulationEvents) {
-    advance(e.t); const entryPolicy = entryConfigFor(e, c), ec = entryPolicy.config;
-    if (ec.enabled === false || !inSessionWindows(e.t, ec.sessionWindows) || !passesResearchFilters(e, ec) || (ec.symbols && !ec.symbols.includes(e.symbol))) continue;
-    const ranked = c.rankByScore ? rankedSignalAt.get(e.t)?.find((candidate) => candidate.event === e) : null;
-    if (c.rankByScore && !ranked) continue;
-    if (positions.length + pendingOrders.length >= ec.maxPositions || positions.some((p) => p.symbol === e.symbol) || pendingOrders.some((order) => order.event.symbol === e.symbol)) continue;
-    if (e.t - (lastClose.get(e.symbol) ?? -Infinity) < ec.cooldown * MINUTE) continue;
-    const day = new Date(e.t).toISOString().slice(0, 10), key = `${day}:${e.symbol}`;
-    const sessionLossKey = `${day}:${entryPolicy.session}:${e.symbol}`;
-    if ((ec.maxLossesPerSymbolDay && (symbolDayLosses.get(key) ?? 0) >= ec.maxLossesPerSymbolDay) ||
-        (ec.maxLossesPerSymbolSession && (symbolSessionLosses.get(sessionLossKey) ?? 0) >= ec.maxLossesPerSymbolSession)) continue;
-    const sessionDayKey = `${day}:${entryPolicy.session}`;
-    if ((dayCount.get(key) ?? 0) >= ec.maxDaily || (ec.maxTotalDaily && (totalDayCount.get(day) ?? 0) >= ec.maxTotalDaily) ||
-        (ec.maxTotalPerSession && (sessionDayCount.get(sessionDayKey) ?? 0) >= ec.maxTotalPerSession)) continue;
-    const side = ranked?.side ?? (pass(e, "buy", ec) ? "buy" : pass(e, "sell", ec) ? "sell" : null); if (!side || !(e.atr > 0)) continue;
-    const pendingMode = ec.entryMode === "adaptive-pending" && e[`${side}Current`] < ec.pendingBelowScore ? ec.pendingKind : ec.entryMode;
-    if (pendingMode === "continuation" || pendingMode === "pullback" || pendingMode === "signal-breakout") {
-      const signalFrame = ec.signalTimeframe ?? "M15";
-      const signalAtr = e[`${signalFrame}SignalAtr`] ?? e.atr;
-      const offset = signalAtr * ec.pendingOffsetAtr;
-      const signalPrice = side === "buy" ? e[`${signalFrame}SignalAskClose`] : e[`${signalFrame}SignalClose`];
-      const breakoutPrice = side === "buy" ? e[`${signalFrame}SignalAskHigh`] : e[`${signalFrame}SignalLow`];
-      const level = pendingMode === "signal-breakout"
-        ? (side === "buy" ? breakoutPrice + offset : breakoutPrice - offset)
-        : pendingMode === "continuation"
-          ? (side === "buy" ? signalPrice + offset : signalPrice - offset)
-        : (side === "buy" ? signalPrice - offset : signalPrice + offset);
-      const stopBuffer = (ec.stopBufferAtr ?? 0) * signalAtr;
-      const invalidatesAt = ec.stopMode === "signal-candle"
-        ? (side === "buy" ? e[`${signalFrame}SignalLow`] - stopBuffer : e[`${signalFrame}SignalAskHigh`] + stopBuffer)
-        : null;
-      pendingOrders.push({ event: e, config: ec, side, kind: pendingMode === "signal-breakout" ? "continuation" : pendingMode, level, invalidatesAt, next: e.next, expiresAt: e.t + ec.pendingExpiryMinutes * MINUTE, session: entryPolicy.session, regime: entryPolicy.regime });
-      continue;
-    }
-    const bar = data.get(e.symbol).M1[e.next]; if (!bar || bar.t !== e.t) continue;
-    const position = buildPosition({ event: e, config: ec, side, entry: side === "buy" ? bar.askOpen : bar.open, opened: e.t, next: e.next, session: entryPolicy.session, regime: entryPolicy.regime });
-    if (!position) continue;
-    positions.push(position); recordOpenRisk(position); dayCount.set(key, (dayCount.get(key) ?? 0) + 1); totalDayCount.set(day, (totalDayCount.get(day) ?? 0) + 1); sessionDayCount.set(sessionDayKey, (sessionDayCount.get(sessionDayKey) ?? 0) + 1);
-  }
-  advance(end + 2 * DAY);
-  for (const position of [...positions]) {
-    const lastBar = data.get(position.symbol).M1.at(-1);
-    close(position, lastBar.t, position.side === "buy" ? lastBar.close : lastBar.askClose, "end_of_data");
-  }
-  const firstWeek = new Date(simulationStart), weeks = new Map(), weekPnl = new Map(); for (let t = firstWeek.getTime(); t <= end; t += 7 * DAY) { weeks.set(isoWeek(t), 0); weekPnl.set(isoWeek(t), 0); }
-  for (const tr of trades) { weeks.set(isoWeek(tr.t), (weeks.get(isoWeek(tr.t)) ?? 0) + tr.r); weekPnl.set(isoWeek(tr.t), (weekPnl.get(isoWeek(tr.t)) ?? 0) + tr.pnl); }
-  const inResearchWindow = (week) => week >= protocol.train.fromWeek && week <= protocol.validation.toWeek;
-  const selection = [...weeks].filter(([week]) => inResearchWindow(week)).map(([, r]) => r);
-  const stats = (values) => { const sorted = [...values].sort((a, b) => a - b), positive = values.filter((x) => x > 0).length; let curve = 0, curvePeak = 0, drawdown = 0; for (const value of values) { curve += value; curvePeak = Math.max(curvePeak, curve); drawdown = Math.max(drawdown, curvePeak - curve); } return { weeks: values.length, positiveWeeks: positive, positiveWeekPct: values.length ? +(100 * positive / values.length).toFixed(1) : 0, medianR: sorted.length ? +sorted[Math.floor(sorted.length / 2)].toFixed(3) : 0, worstR: sorted.length ? +sorted[0].toFixed(3) : 0, totalR: +values.reduce((a, b) => a + b, 0).toFixed(3), maxDrawdownR: +drawdown.toFixed(3) }; };
-  const selectionTrades = trades.filter((trade) => inResearchWindow(isoWeek(trade.t))), wins = selectionTrades.filter((trade) => trade.r > 0), losses = selectionTrades.filter((trade) => trade.r < 0), grossWinR = wins.reduce((sum, trade) => sum + trade.r, 0), grossLossR = losses.reduce((sum, trade) => sum + trade.r, 0);
-  const selectionEntries = new Set(selectionTrades.map((trade) => trade.entryId)).size;
-  const sel = stats(selection); const pf = grossLossR ? grossWinR / Math.abs(grossLossR) : grossWinR > 0 ? 10 : 0;
-  const selectionPnl = selectionTrades.reduce((sum, trade) => sum + trade.pnl, 0);
-  const selectionFinalBalance = startCapital + selectionPnl;
-  const selectionReturnPct = 100 * (selectionFinalBalance - startCapital) / startCapital;
-  const precisionStats = (values, weekCount) => {
-    const positive = values.filter((trade) => trade.pnl > 0).length, takeProfits = values.filter((trade) => trade.reason === "tp").length;
-    const stopLosses = values.filter((trade) => trade.reason === "sl").length, timeExits = values.filter((trade) => trade.reason === "time").length, dailyExits = values.filter((trade) => trade.reason === "daily").length;
-    return {
-      trades: values.length,
-      positiveTrades: positive,
-      winRate: values.length ? +(100 * positive / values.length).toFixed(1) : 0,
-      takeProfits,
-      tpRate: values.length ? +(100 * takeProfits / values.length).toFixed(1) : 0,
-      stopLosses,
-      timeExits,
-      dailyExits,
-      tradesPerDay: weekCount ? +(values.length / (weekCount * 5)).toFixed(2) : 0,
-      averagePnl: values.length ? +(values.reduce((sum, trade) => sum + trade.pnl, 0) / values.length).toFixed(3) : 0,
+    events.sort((left, right) => left.t - right.t || right.quality - left.quality || left.symbol.localeCompare(right.symbol));
+    return { protocol: RESEARCH_PROTOCOL, profileDocuments, data, conversionData, events, symbols, requestedSymbols, disabledSymbols, missingSymbols, coverage, signalAudit, start, endExclusive, datasetFingerprint: sha256(JSON.stringify(coverage)) };
+}
+
+export function evaluatePairProfiles(prepared, options = {}) {
+    const { data, conversionData, events, symbols, start, endExclusive } = prepared;
+    const maxPositions = Number(options.maxPositions ?? 5);
+    const maxPortfolioRiskPct = Number(options.maxPortfolioRiskPct ?? 0.15);
+    const startCapital = Number(options.startCapital ?? 500);
+    const groups = new Map();
+    for (const event of events) groups.set(event.t, [...(groups.get(event.t) ?? []), event]);
+    for (const group of groups.values()) group.sort((left, right) => right.quality - left.quality || left.symbol.localeCompare(right.symbol));
+    const barsBySymbol = new Map(symbols.map((symbol) => [symbol, new Map(data.get(symbol).M15.map((bar) => [bar.t, bar]))]));
+    const timeline = [...new Set(symbols.flatMap((symbol) => data.get(symbol).M15.map((bar) => bar.t).filter((time) => time >= start && time < endExclusive)))].sort((left, right) => left - right);
+    const positions = [];
+    const pending = [];
+    const trades = [];
+    const rejections = new Map();
+    const orders = { placed: 0, filled: 0, expired: 0, endCancelled: 0 };
+    let balance = startCapital;
+    let peak = balance;
+    let maxDrawdown = 0;
+    let maxDrawdownPct = 0;
+    let maxPortfolioRisk = 0;
+    let maxPositionRisk = 0;
+    let maxMargin = 0;
+    let sequence = 0;
+    const reservedRisk = () => [...positions, ...pending].reduce((sum, item) => sum + item.risk, 0);
+    const reservedMargin = () => [...positions, ...pending].reduce((sum, item) => sum + item.margin, 0);
+    const occupied = () => new Set([...positions, ...pending].map((item) => item.symbol));
+    const reject = (reason) => increment(rejections, reason);
+    const midAt = (symbol, timestamp) => {
+        const rows = conversionData.get(symbol) ?? data.get(symbol)?.M15;
+        const index = rows ? atOrBefore(rows, timestamp) : -1;
+        return index >= 0 ? (rows[index].close + rows[index].askClose) / 2 : null;
     };
-  };
-  const selectionPrecision = precisionStats(selectionTrades, sel.weeks);
-  const recentStart = end - 14 * DAY;
-  const recentTrades = trades.filter((trade) => trade.t >= recentStart);
-  const recentGrossWin = recentTrades.filter((trade) => trade.pnl > 0).reduce((sum, trade) => sum + trade.pnl, 0);
-  const recentGrossLoss = recentTrades.filter((trade) => trade.pnl < 0).reduce((sum, trade) => sum + trade.pnl, 0);
-  const recent = {
-    start: new Date(recentStart).toISOString(),
-    end: new Date(end).toISOString(),
-    pnl: +recentTrades.reduce((sum, trade) => sum + trade.pnl, 0).toFixed(2),
-    profitFactor: recentGrossLoss ? +(recentGrossWin / Math.abs(recentGrossLoss)).toFixed(3) : 0,
-    ...precisionStats(recentTrades, 10),
-  };
-  const symbolStats = Object.fromEntries(symbols.map((symbol) => {
-    const selected = selectionTrades.filter((trade) => trade.symbol === symbol);
-    return [symbol, {
-      development: precisionStats(selected, sel.weeks),
-      r: +selected.reduce((sum, trade) => sum + trade.r, 0).toFixed(3),
-      pnl: +selected.reduce((sum, trade) => sum + trade.pnl, 0).toFixed(2),
-    }];
-  }));
-  const contextStats = (key) => Object.fromEntries([...new Set(trades.map((trade) => trade[key]))].map((value) => {
-    const values = trades.filter((trade) => trade[key] === value);
-    return [value, { trades: values.length, pnl: +values.reduce((sum, trade) => sum + trade.pnl, 0).toFixed(2), r: +values.reduce((sum, trade) => sum + trade.r, 0).toFixed(3) }];
-  }));
-  const sessionStats = contextStats("session"), regimeStats = contextStats("regime");
-  const monthly = {};
-  for (const trade of trades) {
-    const month = new Date(trade.t).toISOString().slice(0, 7);
-    monthly[month] ??= { pnl: 0, r: 0, trades: 0, wins: 0 };
-    monthly[month].pnl += trade.pnl; monthly[month].r += trade.r; monthly[month].trades += 1;
-    if (trade.pnl > 0) monthly[month].wins += 1;
-  }
-  for (const value of Object.values(monthly)) {
-    value.pnl = +value.pnl.toFixed(2); value.r = +value.r.toFixed(3);
-    value.winRate = +(100 * value.wins / value.trades).toFixed(1);
-  }
-  const dailyMap = new Map();
-  for (let t = new Date(simulationStart).setUTCHours(0, 0, 0, 0); t <= end; t += DAY) {
-    const date = new Date(t), weekday = date.getUTCDay();
-    if (weekday > 0 && weekday < 6) dailyMap.set(date.toISOString().slice(0, 10), { day: date.toISOString().slice(0, 10), pnl: 0, r: 0, entries: 0, closes: 0 });
-  }
-  const seenEntries = new Set();
-  for (const trade of trades) {
-    const closeDay = new Date(trade.t).toISOString().slice(0, 10), closeStats = dailyMap.get(closeDay);
-    if (closeStats) { closeStats.pnl += trade.pnl; closeStats.r += trade.r; closeStats.closes += 1; }
-    if (!seenEntries.has(trade.entryId)) {
-      seenEntries.add(trade.entryId);
-      const entryDay = new Date(trade.opened).toISOString().slice(0, 10), entryStats = dailyMap.get(entryDay);
-      if (entryStats) entryStats.entries += 1;
-    }
-  }
-  const daily = [...dailyMap.values()].map((day) => ({ ...day, pnl: +day.pnl.toFixed(2), r: +day.r.toFixed(3) }));
-  const weekly = [...weeks].map(([week, r]) => ({ week, r: +r.toFixed(3), pnl: +(weekPnl.get(week) ?? 0).toFixed(2) }));
-  const fold = ({ fromWeek, toWeek }) => {
-    const values = weekly.filter(({ week }) => week >= fromWeek && week <= toWeek);
-    const foldTrades = selectionTrades.filter((trade) => { const week = isoWeek(trade.t); return week >= fromWeek && week <= toWeek; });
-    const pnl = values.reduce((sum, week) => sum + week.pnl, 0);
-    const foldStats = stats(values.map((week) => week.r));
-    return { ...foldStats, entries: new Set(foldTrades.map((trade) => trade.entryId)).size, trades: foldTrades.length, pnl: +pnl.toFixed(2) };
-  };
-  const folds = { train: fold(protocol.train), validation: fold(protocol.validation) };
-  const foldDaily = (range) => {
-    const values = selectionTrades.filter((trade) => { const week = isoWeek(Date.parse(`${fxTradingDayKey(trade.opened)}T12:00:00.000Z`)); return week >= range.fromWeek && week <= range.toWeek; });
-    const byDay = new Map();
-    for (const trade of values) {
-      const day = fxTradingDayKey(trade.opened);
-      const current = byDay.get(day) ?? { pnl: 0, r: 0, entries: new Set() };
-      current.pnl += trade.pnl; current.r += trade.r; current.entries.add(trade.entryId); byDay.set(day, current);
-    }
-    const days = [...byDay.values()], positive = days.filter((day) => day.pnl > 0).length;
-    const rValues = days.map((day) => day.r).sort((a, b) => a - b);
-    const marketDays = [...dailyMap.keys()].filter((day) => { const week = isoWeek(Date.parse(`${day}T12:00:00.000Z`)); return week >= range.fromWeek && week <= range.toWeek; }).length;
-    return {
-      marketDays,
-      activeDays: days.length,
-      activeMarketDayPct: marketDays ? +(100 * days.length / marketDays).toFixed(1) : 0,
-      profitableDays: positive,
-      positiveActiveDayPct: days.length ? +(100 * positive / days.length).toFixed(1) : 0,
-      positiveMarketDayPct: marketDays ? +(100 * positive / marketDays).toFixed(1) : 0,
-      medianDayR: rValues.length ? +rValues[Math.floor(rValues.length / 2)].toFixed(3) : 0,
-      worstDayR: rValues.length ? +rValues[0].toFixed(3) : 0,
-      averageDayPnl: days.length ? +(days.reduce((sum, day) => sum + day.pnl, 0) / days.length).toFixed(2) : 0,
+    const quotePerEurAt = (symbol, timestamp) => {
+        const quote = symbol.slice(3, 6);
+        if (quote === "EUR") return 1;
+        const direct = midAt(`EUR${quote}`, timestamp);
+        if (direct > 0) return direct;
+        const inverse = midAt(`${quote}EUR`, timestamp);
+        if (inverse > 0) return 1 / inverse;
+        const eurUsd = midAt("EURUSD", timestamp);
+        if (!(eurUsd > 0)) return null;
+        if (quote === "USD") return eurUsd;
+        const usdQuote = midAt(`USD${quote}`, timestamp);
+        if (usdQuote > 0) return eurUsd * usdQuote;
+        const quoteUsd = midAt(`${quote}USD`, timestamp);
+        return quoteUsd > 0 ? eurUsd / quoteUsd : null;
     };
-  };
-  const dailyFolds = { train: foldDaily(protocol.train), validation: foldDaily(protocol.validation) };
-  const totalMarketDays = dailyFolds.train.marketDays + dailyFolds.validation.marketDays;
-  const activeDayPct = totalMarketDays ? +(100 * (dailyFolds.train.activeDays + dailyFolds.validation.activeDays) / totalMarketDays).toFixed(1) : 0;
-  const bestWeek = weekly.reduce((best, week) => !best || week.pnl > best.pnl ? week : best, null);
-  const dailyMode = protocol.primaryMetric === "dailyObjective";
-  const gates = {
-    trainProfitable: folds.train.totalR > 0,
-    validationProfitable: folds.validation.totalR > 0,
-    trainPositiveWeekPct: folds.train.positiveWeekPct >= 50,
-    validationPositiveWeekPct: folds.validation.positiveWeekPct >= 50,
-    profitFactor: pf >= 1.1,
-    sampleSize: selectionEntries >= 80 && folds.validation.entries >= 20,
-    drawdown: sel.maxDrawdownR <= 12,
-    perPositionRisk: maxPositionRiskPct <= protocol.risk.maxPerPositionPct + 1e-9,
-    portfolioRisk: maxOpenRiskPct <= protocol.risk.maxPortfolioPct + 1e-9,
-    fourSessionCoverage: ["asia", "london", "overlap", "newYork"].every((session) => (sessionStats[session]?.trades ?? 0) >= 20),
-    ...(dailyMode ? {
-      trainPositiveDayPct: dailyFolds.train.positiveActiveDayPct >= 52,
-      validationPositiveDayPct: dailyFolds.validation.positiveActiveDayPct >= 50,
-      dailyActivity: dailyFolds.train.activeMarketDayPct >= 45 && dailyFolds.validation.activeMarketDayPct >= 45,
-    } : {}),
-  };
-  const qualified = Object.values(gates).every(Boolean);
-  const foldWeakness = Math.min(folds.train.totalR / Math.max(folds.train.weeks, 1), folds.validation.totalR / Math.max(folds.validation.weeks, 1));
-  const robustObjective =
-    0.35 * folds.train.positiveWeekPct +
-    0.65 * folds.validation.positiveWeekPct +
-    4 * Math.min(pf, 2) +
-    3 * Math.min(folds.train.medianR, folds.validation.medianR) +
-    2 * foldWeakness -
-    0.75 * sel.maxDrawdownR -
-    (gates.trainProfitable ? 0 : 35) -
-    (gates.validationProfitable ? 0 : 50) -
-    (gates.sampleSize ? 0 : Math.min(30, (80 - Math.min(selectionEntries, 80)) * 0.375)) -
-    (gates.profitFactor ? 0 : (1.1 - Math.min(pf, 1.1)) * 40);
-  const dailyObjective =
-    0.35 * dailyFolds.train.positiveActiveDayPct +
-    0.55 * dailyFolds.validation.positiveActiveDayPct +
-    0.1 * Math.min(dailyFolds.validation.activeMarketDayPct, 100) +
-    4 * Math.min(pf, 2) +
-    2 * Math.min(dailyFolds.train.medianDayR, dailyFolds.validation.medianDayR) +
-    2 * foldWeakness -
-    0.75 * sel.maxDrawdownR -
-    (gates.trainProfitable ? 0 : 35) -
-    (gates.validationProfitable ? 0 : 50) -
-    (gates.sampleSize ? 0 : Math.min(30, (80 - Math.min(selectionEntries, 80)) * 0.375)) -
-    (gates.profitFactor ? 0 : (1.1 - Math.min(pf, 1.1)) * 40) -
-    (dailyFolds.validation.positiveActiveDayPct >= 50 ? 0 : (50 - dailyFolds.validation.positiveActiveDayPct)) -
-    ["asia", "london", "overlap", "newYork"].reduce((penalty, session) => penalty + Math.max(0, 20 - (sessionStats[session]?.trades ?? 0)), 0);
-  const objective = dailyMode ? dailyObjective : robustObjective;
-  return { protocol, objective: +objective.toFixed(4), qualified, status: qualified ? "candidate" : "rejected", gates, startCapital, finalBalance: +selectionFinalBalance.toFixed(2), returnPct: +selectionReturnPct.toFixed(2), trades: selectionTrades.length, entries: selectionEntries, partialExits: selectionTrades.filter((trade) => trade.reason === "partial").length, pnl: +selectionPnl.toFixed(2), profitFactor: +pf.toFixed(3), maxDrawdownR: sel.maxDrawdownR, maxDDPct: +maxDDPct.toFixed(1), risk: { maxPositionPct: +(100 * maxPositionRiskPct).toFixed(3), maxPortfolioPct: +(100 * maxOpenRiskPct).toFixed(3), maxPositionMarginPct: +(100 * maxPositionMarginPct).toFixed(3), maxMarginUsagePct: +(100 * maxMarginUsagePct).toFixed(3) }, development: sel, folds, dailyFolds, precision: selectionPrecision, activeDayPct, recent, symbolStats, sessionStats, regimeStats, bestWeek, daily, weekly, monthly };
+    const auditExposure = () => {
+        const capital = Math.max(balance, Number.EPSILON);
+        maxPortfolioRisk = Math.max(maxPortfolioRisk, reservedRisk() / capital);
+        maxMargin = Math.max(maxMargin, reservedMargin() / capital);
+        for (const item of [...positions, ...pending]) maxPositionRisk = Math.max(maxPositionRisk, item.risk / capital);
+    };
+    const realize = (position, timestamp, exitPrice, closeSize) => {
+        const quotePerEur = quotePerEurAt(position.symbol, timestamp) ?? position.quotePerEur;
+        const pnl = (position.side === "BUY" ? exitPrice - position.entry : position.entry - exitPrice) * closeSize / quotePerEur;
+        balance += pnl;
+        position.realizedPnl += pnl;
+        peak = Math.max(peak, balance);
+        const drawdown = peak - balance;
+        maxDrawdown = Math.max(maxDrawdown, drawdown);
+        maxDrawdownPct = Math.max(maxDrawdownPct, 100 * drawdown / Math.max(peak, 1));
+        return pnl;
+    };
+    const closePosition = (position, timestamp, exitPrice, reason) => {
+        realize(position, timestamp, exitPrice, position.size);
+        trades.push({ id: position.id, symbol: position.symbol, side: position.side, signalAt: new Date(position.signalAt).toISOString(), opened: new Date(position.opened).toISOString(), closed: new Date(timestamp).toISOString(), entry: position.entry, initialStop: position.initialStop, exit: exitPrice, initialSize: position.initialSize, riskEur: position.initialRisk, pnl: position.realizedPnl, r: position.realizedPnl / position.initialRisk, reason, balanceAfter: balance, partialTaken: position.partialTaken });
+        positions.splice(positions.indexOf(position), 1);
+        auditExposure();
+    };
+    const sizeOrder = (event, timestamp) => {
+        const distance = Math.abs(event.entryPrice - event.stopLoss);
+        const quotePerEur = quotePerEurAt(event.symbol, timestamp);
+        if (!(distance > 0 && quotePerEur > 0 && balance > 0)) return null;
+        const requestedRisk = balance * Math.min(event.normalized.riskPct, 0.03);
+        const riskBudget = Math.min(requestedRisk, Math.max(0, balance * maxPortfolioRiskPct - reservedRisk()));
+        const leverage = MAJOR_FX.has(event.symbol) ? 30 : 20;
+        const marginBudget = Math.min(Math.max(0, balance * 0.9 - reservedMargin()), balance * 0.9 / maxPositions);
+        const riskSize = riskBudget * quotePerEur / distance;
+        const marginSize = marginBudget * leverage * quotePerEur / event.entryPrice;
+        const size = Math.floor(Math.min(riskSize, marginSize) / 100) * 100;
+        if (size < 100) return null;
+        return { size, quotePerEur, risk: size * distance / quotePerEur, margin: size * event.entryPrice / quotePerEur / leverage };
+    };
+    const place = (timestamp) => {
+        for (const event of groups.get(timestamp) ?? []) {
+            if (positions.length + pending.length >= maxPositions) { reject("portfolio_full"); break; }
+            if (occupied().has(event.symbol)) { reject("symbol_occupied"); continue; }
+            const sizing = sizeOrder(event, timestamp);
+            if (!sizing) { reject("position_sizing_failed"); continue; }
+            pending.push({ id: sequence++, signalAt: timestamp, symbol: event.symbol, side: event.signal, entry: roundPrice(event.entryPrice, event.symbol), stop: roundPrice(event.stopLoss, event.symbol), expiresAt: timestamp + event.normalized.expiryMinutes * MINUTE, normalized: event.normalized, signalAtr: event.atr, ...sizing });
+            orders.placed += 1;
+            auditExposure();
+        }
+    };
+    const fill = (timestamp) => {
+        for (const order of [...pending]) {
+            const bar = barsBySymbol.get(order.symbol).get(timestamp);
+            if (!bar) continue;
+            const touched = order.side === "BUY" ? bar.askHigh >= order.entry : bar.low <= order.entry;
+            if (!touched) continue;
+            pending.splice(pending.indexOf(order), 1);
+            const distance = Math.abs(order.entry - order.stop);
+            positions.push({ ...order, opened: timestamp, initialStop: order.stop, activeStop: order.stop, initialDistance: distance, initialRisk: order.risk, initialSize: order.size, realizedPnl: 0, partialTaken: false, breakEvenMoved: false });
+            orders.filled += 1;
+            auditExposure();
+        }
+    };
+    const replay = (timestamp) => {
+        for (const position of [...positions]) {
+            const bar = barsBySymbol.get(position.symbol).get(timestamp);
+            if (!bar) continue;
+            const stopTouched = position.side === "BUY" ? bar.low <= position.activeStop : bar.askHigh >= position.activeStop;
+            if (stopTouched) {
+                const fillPrice = position.side === "BUY" ? Math.min(position.activeStop, bar.open) : Math.max(position.activeStop, bar.askOpen);
+                closePosition(position, timestamp + M15, fillPrice, position.breakEvenMoved ? "managed_stop" : "stop_loss");
+                continue;
+            }
+            const management = position.normalized.management;
+            const targetR = management.fixedFinalTargetR;
+            const target = targetR == null ? null : position.side === "BUY" ? position.entry + targetR * position.initialDistance : position.entry - targetR * position.initialDistance;
+            if (target != null && (position.side === "BUY" ? bar.high >= target : bar.askLow <= target)) {
+                closePosition(position, timestamp + M15, target, "take_profit");
+                continue;
+            }
+            if (!position.partialTaken && management.partialAtR != null) {
+                const partialPrice = position.side === "BUY" ? position.entry + management.partialAtR * position.initialDistance : position.entry - management.partialAtR * position.initialDistance;
+                const hit = position.side === "BUY" ? bar.high >= partialPrice : bar.askLow <= partialPrice;
+                if (hit) {
+                    const closeSize = Math.floor(position.initialSize * management.partialFraction / 100) * 100;
+                    if (closeSize > 0 && closeSize < position.size) {
+                        realize(position, timestamp + M15, partialPrice, closeSize);
+                        position.size -= closeSize;
+                        position.margin *= position.size / (position.size + closeSize);
+                    }
+                    position.partialTaken = true;
+                    if (management.moveStopToBreakEvenAfterPartial) {
+                        position.activeStop = position.entry;
+                        position.breakEvenMoved = true;
+                    }
+                }
+            }
+            const ageMinutes = (timestamp + M15 - position.opened) / MINUTE;
+            if (!position.breakEvenMoved && management.breakEvenAtR != null && ageMinutes >= management.breakEvenDelayMinutes) {
+                const breakEvenPrice = position.side === "BUY" ? position.entry + management.breakEvenAtR * position.initialDistance : position.entry - management.breakEvenAtR * position.initialDistance;
+                if (position.side === "BUY" ? bar.high >= breakEvenPrice : bar.askLow <= breakEvenPrice) {
+                    position.activeStop = position.entry;
+                    position.breakEvenMoved = true;
+                }
+            }
+            if (position.partialTaken && management.runnerTrailAtr != null) {
+                const nextStop = position.side === "BUY" ? bar.high - management.runnerTrailAtr * bar.atr : bar.askLow + management.runnerTrailAtr * bar.atr;
+                position.activeStop = position.side === "BUY" ? Math.max(position.activeStop, nextStop) : Math.min(position.activeStop, nextStop);
+            }
+            if (ageMinutes >= management.maxHoldMinutes) closePosition(position, timestamp + M15, position.side === "BUY" ? bar.close : bar.askClose, "max_hold");
+        }
+    };
+    for (const timestamp of timeline) {
+        for (const order of [...pending]) {
+            if (order.expiresAt > timestamp) continue;
+            pending.splice(pending.indexOf(order), 1);
+            orders.expired += 1;
+        }
+        place(timestamp);
+        fill(timestamp);
+        replay(timestamp);
+    }
+    orders.endCancelled = pending.length;
+    pending.length = 0;
+    for (const position of [...positions]) {
+        const rows = data.get(position.symbol).M15;
+        const bar = rows[Math.max(0, atOrBefore(rows, endExclusive - 1))];
+        closePosition(position, bar.t + M15, position.side === "BUY" ? bar.close : bar.askClose, "end_of_data");
+    }
+    const baseStats = statsForTrades(trades);
+    const durationDays = Math.max(1, (endExclusive - start) / DAY);
+    return {
+        start: new Date(start).toISOString(), endExclusive: new Date(endExclusive).toISOString(), durationDays: +durationDays.toFixed(2), startCapital, finalBalance: +balance.toFixed(2), pnl: +(balance - startCapital).toFixed(2), returnPct: +(100 * (balance - startCapital) / startCapital).toFixed(2), entries: orders.filled, tradesPerDay: +(orders.filled / durationDays).toFixed(3), ...baseStats, maxDrawdownEur: +maxDrawdown.toFixed(2), maxDrawdownPct: +maxDrawdownPct.toFixed(2), risk: { maxPositionPct: +(100 * maxPositionRisk).toFixed(3), maxPortfolioPct: +(100 * maxPortfolioRisk).toFixed(3), maxMarginUsagePct: +(100 * maxMargin).toFixed(3) }, orders, rejections: Object.fromEntries([...rejections].sort(([left], [right]) => left.localeCompare(right))), symbolStats: Object.fromEntries(prepared.requestedSymbols.map((symbol) => [symbol, statsForTrades(trades.filter((trade) => trade.symbol === symbol))])), trades,
+    };
+}
+
+export function evaluate(prepared, candidate = prepared.candidate) {
+    validateCandidateConfig(candidate, prepared.protocol);
+    const { data, conversionData, events, symbols, start, endExclusive, protocol } = prepared;
+    const eventGroups = new Map();
+    for (const event of events) {
+        const group = eventGroups.get(event.t) ?? [];
+        group.push(event);
+        eventGroups.set(event.t, group);
+    }
+    for (const group of eventGroups.values()) group.sort((left, right) => right.quality - left.quality || left.symbol.localeCompare(right.symbol));
+    const timeline = [...new Set(symbols.flatMap((symbol) => data.get(symbol).M15.map((bar) => bar.t).filter((t) => t >= start && t < endExclusive)))].sort((a, b) => a - b);
+    const barsBySymbol = new Map(symbols.map((symbol) => [symbol, new Map(data.get(symbol).M15.map((bar) => [bar.t, bar]))]));
+    const positions = [];
+    const pending = [];
+    const trades = [];
+    const dailyPnl = new Map();
+    const weeklyPnl = new Map();
+    const rejections = new Map();
+    const orderAudit = { placed: 0, filled: 0, expired: 0, dailyCancelled: 0, weekendCancelled: 0, endCancelled: 0 };
+    let balance = candidate.startCapital;
+    let peakBalance = balance;
+    let maxDrawdown = 0;
+    let maxDrawdownPct = 0;
+    let maxOpenRiskPct = 0;
+    let maxPositionRiskPct = 0;
+    let maxMarginUsagePct = 0;
+    let sequence = 0;
+
+    const reservedMargin = () => [...positions, ...pending].reduce((sum, item) => sum + item.margin, 0);
+    const reservedRisk = () => [...positions, ...pending].reduce((sum, item) => sum + item.risk, 0);
+    const occupiedSymbols = () => new Set([...positions.map((item) => item.symbol), ...pending.map((item) => item.symbol)]);
+    const reject = (reason) => increment(rejections, reason);
+    const midAt = (symbol, timestamp) => {
+        const rows = conversionData.get(symbol) ?? data.get(symbol)?.M15;
+        if (!rows?.length) return null;
+        const index = atOrBefore(rows, timestamp);
+        if (index < 0) return null;
+        return (rows[index].close + rows[index].askClose) / 2;
+    };
+    const quotePerEurAt = (symbol, timestamp) => {
+        const quote = symbol.slice(3, 6);
+        if (quote === "EUR") return 1;
+        const direct = midAt(`EUR${quote}`, timestamp);
+        if (Number.isFinite(direct) && direct > 0) return direct;
+        const inverse = midAt(`${quote}EUR`, timestamp);
+        if (Number.isFinite(inverse) && inverse > 0) return 1 / inverse;
+        const eurUsd = midAt("EURUSD", timestamp);
+        if (!(Number.isFinite(eurUsd) && eurUsd > 0)) return null;
+        if (quote === "USD") return eurUsd;
+        const usdQuote = midAt(`USD${quote}`, timestamp);
+        if (Number.isFinite(usdQuote) && usdQuote > 0) return eurUsd * usdQuote;
+        const quoteUsd = midAt(`${quote}USD`, timestamp);
+        if (Number.isFinite(quoteUsd) && quoteUsd > 0) return eurUsd / quoteUsd;
+        return null;
+    };
+    const updateExposureAudit = () => {
+        const capital = Math.max(balance, Number.EPSILON);
+        maxOpenRiskPct = Math.max(maxOpenRiskPct, reservedRisk() / capital);
+        for (const item of [...positions, ...pending]) maxPositionRiskPct = Math.max(maxPositionRiskPct, item.risk / capital);
+        maxMarginUsagePct = Math.max(maxMarginUsagePct, reservedMargin() / capital);
+    };
+    const closePosition = (position, timestamp, exitPrice, reason) => {
+        const quotePerEur = quotePerEurAt(position.symbol, timestamp) ?? position.quotePerEur;
+        const pnlQuote = (position.side === "BUY" ? exitPrice - position.entry : position.entry - exitPrice) * position.size;
+        const pnl = pnlQuote / quotePerEur;
+        balance += pnl;
+        peakBalance = Math.max(peakBalance, balance);
+        const drawdown = peakBalance - balance;
+        maxDrawdown = Math.max(maxDrawdown, drawdown);
+        maxDrawdownPct = Math.max(maxDrawdownPct, 100 * drawdown / Math.max(peakBalance, 1));
+        const dayKey = new Date(timestamp).toISOString().slice(0, 10);
+        increment(dailyPnl, dayKey, pnl);
+        increment(weeklyPnl, isoWeekStart(timestamp), pnl);
+        trades.push({
+            id: position.id,
+            symbol: position.symbol,
+            side: position.side,
+            signalAt: new Date(position.signalAt).toISOString(),
+            opened: new Date(position.opened).toISOString(),
+            closed: new Date(timestamp).toISOString(),
+            entry: position.entry,
+            stop: position.initialStop,
+            target: position.target,
+            exit: exitPrice,
+            size: position.size,
+            riskEur: position.risk,
+            pnl,
+            r: pnl / position.risk,
+            reason,
+            balanceAfter: balance,
+        });
+        positions.splice(positions.indexOf(position), 1);
+        updateExposureAudit();
+    };
+    const cancelOrder = (order, reason) => {
+        const index = pending.indexOf(order);
+        if (index >= 0) pending.splice(index, 1);
+        orderAudit[reason] += 1;
+    };
+    const forceFlatAtOpen = (timestamp) => {
+        const date = new Date(timestamp);
+        const minute = minuteUtc(timestamp);
+        const fridayClose = date.getUTCDay() === 5 && minute >= candidate.riskRules.FRIDAY_CLOSE_HOUR_UTC * 60;
+        const dailyClose = candidate.riskRules.DAILY_FORCED_CLOSE_UTC && minute >= candidate.riskRules.DAILY_CLOSE_MINUTE_UTC;
+        if (!fridayClose && !dailyClose) return;
+        for (const order of [...pending]) cancelOrder(order, fridayClose ? "weekendCancelled" : "dailyCancelled");
+        for (const position of [...positions]) {
+            const bar = barsBySymbol.get(position.symbol).get(timestamp);
+            if (!bar) continue;
+            closePosition(position, timestamp, position.side === "BUY" ? bar.open : bar.askOpen, fridayClose ? "weekend_flat" : "daily_flat");
+        }
+    };
+    const sizeOrder = (event, timestamp, entry, stop) => {
+        const profileRisk = Number(event.profile.risk.perTrade);
+        const riskPct = Math.min(profileRisk, protocol.risk.maxPerPositionPct);
+        if (!(riskPct > 0) || !(balance > 0)) return null;
+        const distance = Math.abs(entry - stop);
+        const quotePerEur = quotePerEurAt(event.symbol, timestamp);
+        if (!(distance > 0) || !(quotePerEur > 0)) return null;
+        const requestedRisk = balance * riskPct;
+        const portfolioRiskAvailable = Math.max(0, balance * candidate.maxPortfolioRiskPct - reservedRisk());
+        const riskBudget = Math.min(requestedRisk, portfolioRiskAvailable);
+        if (!(riskBudget > 0)) return null;
+        const leverage = MAJOR_FX.has(event.symbol) ? protocol.leverage.majors : protocol.leverage.crosses;
+        const availableMargin = Math.max(0, balance - reservedMargin());
+        const maxMarginPerTrade = Math.min(availableMargin, balance / candidate.maxPositions) * candidate.portfolioRules.MARGIN_USAGE;
+        const riskSized = (riskBudget * quotePerEur) / distance;
+        const marginSized = (maxMarginPerTrade * leverage * quotePerEur) / entry;
+        const size = Math.floor(Math.min(riskSized, marginSized) / 100) * 100;
+        if (size < 100) return null;
+        const margin = (size * entry) / quotePerEur / leverage;
+        const risk = (size * distance) / quotePerEur;
+        if (reservedRisk() + risk > balance * candidate.maxPortfolioRiskPct + 1e-9) return null;
+        return { size, margin, risk, quotePerEur, leverage };
+    };
+    const placeCandidates = (timestamp) => {
+        const group = eventGroups.get(timestamp);
+        if (!group?.length) return;
+        const date = new Date(timestamp);
+        const dayKey = date.toISOString().slice(0, 10);
+        const weekKey = isoWeekStart(timestamp);
+        const dayProfit = keyCount(dailyPnl, dayKey);
+        const weekProfit = keyCount(weeklyPnl, weekKey);
+        const dayStartBalance = balance - dayProfit;
+        const weekStartBalance = balance - weekProfit;
+        if (dayProfit <= -dayStartBalance * candidate.portfolioRules.MAX_DAILY_LOSS_PCT) {
+            reject("daily_loss_limit");
+            return;
+        }
+        if (weekProfit <= -weekStartBalance * candidate.portfolioRules.MAX_WEEKLY_LOSS_PCT) {
+            reject("weekly_loss_limit");
+            return;
+        }
+        const minute = minuteUtc(timestamp);
+        if (date.getUTCDay() === 5 && date.getUTCHours() >= candidate.riskRules.FRIDAY_LAST_ENTRY_HOUR_UTC) {
+            reject("friday_entry_closed");
+            return;
+        }
+        for (const event of group) {
+            if (positions.length + pending.length >= candidate.maxPositions) {
+                reject("portfolio_full");
+                break;
+            }
+            if (occupiedSymbols().has(event.symbol)) {
+                reject("symbol_occupied");
+                continue;
+            }
+            const risk = event.profile.risk;
+            const lastEntryMinute = Math.min(risk.lastEntryMinute, candidate.riskRules.DAILY_LAST_ENTRY_MINUTE_UTC);
+            if (!(minute < lastEntryMinute)) {
+                reject("daily_entry_closed");
+                continue;
+            }
+            const entry = roundPrice(event.entryPrice, event.symbol);
+            const stop = roundPrice(event.stopLoss, event.symbol);
+            const signalBar = barsBySymbol.get(event.symbol).get(timestamp - M15);
+            const entryValid = event.signal === "BUY" ? entry > signalBar?.askClose : entry < signalBar?.close;
+            if (!entryValid) {
+                reject("pending_entry_behind_market");
+                continue;
+            }
+            const targetR = Number(event.profile.exit.targetR);
+            const distance = Math.abs(entry - stop);
+            const target = roundPrice(event.signal === "BUY" ? entry + distance * targetR : entry - distance * targetR, event.symbol);
+            if (!(event.signal === "BUY" ? stop < entry && target > entry : stop > entry && target < entry)) {
+                reject("invalid_protection");
+                continue;
+            }
+            const sizing = sizeOrder(event, timestamp, entry, stop);
+            if (!sizing) {
+                reject("position_sizing_failed");
+                continue;
+            }
+            const order = {
+                id: sequence++,
+                symbol: event.symbol,
+                side: event.signal,
+                signalAt: timestamp,
+                entry,
+                stop,
+                target,
+                expiresAt: timestamp + 15 * Number(event.profile.entry.expiryBars) * MINUTE,
+                profile: event.profile,
+                ...sizing,
+            };
+            pending.push(order);
+            orderAudit.placed += 1;
+            updateExposureAudit();
+        }
+    };
+    const fillPending = (timestamp) => {
+        for (const order of [...pending]) {
+            const bar = barsBySymbol.get(order.symbol).get(timestamp);
+            if (!bar) continue;
+            const touched = order.side === "BUY" ? bar.askHigh >= order.entry : bar.low <= order.entry;
+            if (!touched) continue;
+            const fill = order.side === "BUY" ? Math.max(order.entry, bar.askOpen) : Math.min(order.entry, bar.open);
+            const distance = order.side === "BUY" ? fill - order.stop : order.stop - fill;
+            if (!(distance > 0)) {
+                cancelOrder(order, "expired");
+                reject("gap_beyond_stop");
+                continue;
+            }
+            const position = {
+                ...order,
+                entry: fill,
+                initialStop: order.stop,
+                initialDistance: distance,
+                risk: (order.size * distance) / order.quotePerEur,
+                opened: timestamp,
+                trailingEnabled: false,
+                trailingDistance: null,
+                trailingStop: null,
+                bestPrice: fill,
+                lastBestAt: timestamp,
+                tightened: false,
+            };
+            pending.splice(pending.indexOf(order), 1);
+            positions.push(position);
+            updateExposureAudit();
+            orderAudit.filled += 1;
+        }
+    };
+    const replayPositions = (timestamp) => {
+        for (const position of [...positions]) {
+            const bar = barsBySymbol.get(position.symbol).get(timestamp);
+            if (!bar) continue;
+            const activeStop = position.side === "BUY"
+                ? Math.max(position.initialStop, position.trailingStop ?? -Infinity)
+                : Math.min(position.initialStop, position.trailingStop ?? Infinity);
+            const stopTouched = position.side === "BUY" ? bar.low <= activeStop : bar.askHigh >= activeStop;
+            const targetTouched = position.side === "BUY" ? bar.high >= position.target : bar.askLow <= position.target;
+            if (stopTouched) {
+                const stopFill = position.side === "BUY" ? Math.min(activeStop, bar.open) : Math.max(activeStop, bar.askOpen);
+                closePosition(position, timestamp + M15, stopFill, position.trailingEnabled ? "trailing_stop" : "stop_loss");
+                continue;
+            }
+            if (targetTouched) {
+                closePosition(position, timestamp + M15, position.target, "take_profit");
+                continue;
+            }
+            const closeTime = timestamp + M15;
+            const executableClose = position.side === "BUY" ? bar.close : bar.askClose;
+            const improved = position.side === "BUY" ? executableClose > position.bestPrice : executableClose < position.bestPrice;
+            if (improved) {
+                position.bestPrice = executableClose;
+                position.lastBestAt = closeTime;
+            }
+            const favorable = position.side === "BUY" ? executableClose - position.entry : position.entry - executableClose;
+            const exit = position.profile.exit;
+            if (!position.trailingEnabled && favorable >= position.initialDistance * Number(exit.trailActivationR)) {
+                position.trailingEnabled = true;
+                position.trailingDistance = position.initialDistance * Math.min(Number(exit.trailDistanceR), Number(exit.trailActivationR));
+            }
+            if (position.trailingEnabled) {
+                const stalled = closeTime - position.lastBestAt >= candidate.riskRules.DYNAMIC_TRAIL_STALL_MINUTES * MINUTE;
+                const canTighten = !position.tightened && favorable >= position.initialDistance * candidate.riskRules.DYNAMIC_TRAIL_MIN_R && stalled;
+                if (canTighten) {
+                    position.trailingDistance = position.initialDistance * candidate.riskRules.DYNAMIC_TRAIL_DISTANCE_R;
+                    position.tightened = true;
+                }
+                position.trailingStop = position.side === "BUY" ? position.bestPrice - position.trailingDistance : position.bestPrice + position.trailingDistance;
+                continue;
+            }
+            if (closeTime >= position.opened + Number(exit.maxHoldMinutes) * MINUTE) closePosition(position, closeTime, executableClose, "max_hold");
+        }
+    };
+
+    for (const timestamp of timeline) {
+        for (const order of [...pending]) if (order.expiresAt <= timestamp) cancelOrder(order, "expired");
+        forceFlatAtOpen(timestamp);
+        placeCandidates(timestamp);
+        fillPending(timestamp);
+        replayPositions(timestamp);
+    }
+    for (const order of [...pending]) cancelOrder(order, "endCancelled");
+    for (const position of [...positions]) {
+        const rows = data.get(position.symbol).M15;
+        const bar = rows[Math.min(rows.length - 1, Math.max(0, atOrBefore(rows, endExclusive - 1)))];
+        closePosition(position, bar.t + M15, position.side === "BUY" ? bar.close : bar.askClose, "end_of_data");
+    }
+
+    const tradeStats = statsForTrades(trades);
+    const symbolStats = Object.fromEntries(symbols.map((symbol) => [symbol, statsForTrades(trades.filter((trade) => trade.symbol === symbol))]));
+    const monthly = {};
+    for (const trade of trades) {
+        const month = trade.closed.slice(0, 7);
+        monthly[month] ??= [];
+        monthly[month].push(trade);
+    }
+    for (const month of Object.keys(monthly)) monthly[month] = statsForTrades(monthly[month]);
+    const exitReasons = Object.fromEntries([...new Set(trades.map((trade) => trade.reason))].sort().map((reason) => [reason, trades.filter((trade) => trade.reason === reason).length]));
+    const durationDays = Math.max(1, (endExclusive - start) / DAY);
+    return {
+        protocol,
+        candidate: candidate.name,
+        start: new Date(start).toISOString(),
+        endExclusive: new Date(endExclusive).toISOString(),
+        durationDays: +durationDays.toFixed(2),
+        startCapital: candidate.startCapital,
+        finalBalance: +balance.toFixed(2),
+        pnl: +(balance - candidate.startCapital).toFixed(2),
+        returnPct: +(100 * (balance - candidate.startCapital) / candidate.startCapital).toFixed(2),
+        entries: orderAudit.filled,
+        tradesPerDay: +(orderAudit.filled / durationDays).toFixed(3),
+        ...tradeStats,
+        maxDrawdownEur: +maxDrawdown.toFixed(2),
+        maxDrawdownPct: +maxDrawdownPct.toFixed(2),
+        risk: {
+            maxPositionPct: +(100 * maxPositionRiskPct).toFixed(3),
+            maxPortfolioPct: +(100 * maxOpenRiskPct).toFixed(3),
+            maxMarginUsagePct: +(100 * maxMarginUsagePct).toFixed(3),
+        },
+        orders: orderAudit,
+        rejections: Object.fromEntries([...rejections].sort(([left], [right]) => left.localeCompare(right))),
+        exitReasons,
+        symbolStats,
+        monthly,
+        trades,
+    };
 }
