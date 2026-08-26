@@ -2,7 +2,6 @@ import "dotenv/config";
 
 const ENV = process.env;
 
-// API Configuration
 export const API = {
     KEY: ENV.API_KEY,
     IDENTIFIER: ENV.API_IDENTIFIER,
@@ -21,7 +20,6 @@ export const RISK = {
     FRIDAY_CLOSE_HOUR_UTC: 20,
     REQUIRED_SCORE: 3,
     WEEKEND_FLAT: true,
-
     DYNAMIC_TRAIL_MIN_R: 0.7,
     DYNAMIC_TRAIL_DISTANCE_R: 0.35,
     DYNAMIC_TRAIL_STALL_MINUTES: 45,
@@ -29,89 +27,30 @@ export const RISK = {
 
 export const PORTFOLIO = {
     MAX_POSITIONS: 5,
-    MAX_DAILY_LOSS_PCT: 0.1, // need atention
-    MAX_WEEKLY_LOSS_PCT: 0.2, // need atention
+    MAX_DAILY_LOSS_PCT: 0.1,
+    MAX_WEEKLY_LOSS_PCT: 0.2,
     MARGIN_USAGE: 0.9,
 };
 
 export const TIMEFRAMES = {
-    D1: "DAY", // Daily trend direction
-    H4: "HOUR_4", // 4-hour trend direction
-    H1: "HOUR", // 1-hour entry timeframe
-    M15: "MINUTE_15", // 15-minute entry timeframe
-    M5: "MINUTE_5", // 5-minute entry timeframe
-    M1: "MINUTE", // 1-minute entry timeframe
+    D1: "DAY",
+    H4: "HOUR_4",
+    H1: "HOUR",
+    M15: "MINUTE_15",
+    M5: "MINUTE_5",
+    M1: "MINUTE",
 };
 
-// Development overrides for faster testing
 export const DEV = {
-    INTERVAL: 60 * 1000, // 60 seconds between analyses for live-safe HLLH polling
+    INTERVAL: 60 * 1000,
     MODE: false,
 };
 
-export const SESSIONS_ = {
-    all: {
-        START: 0,
-        END: 24 * 60,
-    },
-    asia: {
-        START: 0,
-        END: 8 * 60,
-    },
-    london: {
-        START: 7 * 60,
-        END: 17 * 60,
-    },
-    overlap: {
-        START: 12 * 60,
-        END: 16 * 60,
-    },
-    newYork: {
-        START: 13 * 60,
-        END: 21 * 60,
-    },
-};
-
-export const SESSIONS = {
-    LONDON: {
-        START: 7 * 60,
-        END: 17 * 60,
-        SYMBOLS: ["EURUSD", "GBPUSD", "GBPJPY", "USDCHF", "EURGBP"],
-    },
-
-    NY: {
-        START: 13 * 60,
-        END: 21 * 60,
-        SYMBOLS: ["EURUSD", "GBPUSD", "USDCAD", "USDJPY", "AUDUSD"],
-    },
-
-    SYDNEY: {
-        START: 22 * 60,
-        END: 7 * 60,
-        SYMBOLS: ["AUDUSD", "AUDJPY", "AUDNZD", "NZDUSD", "NZDJPY"],
-    },
-
-    TOKYO: {
-        START: 0 * 60,
-        END: 9 * 60,
-        SYMBOLS: ["USDJPY", "AUDJPY", "EURJPY", "GBPJPY", "AUDUSD"],
-    },
-};
-
 const profile = (signal, entry, stop, exit, risk = {}) => ({
-    signal: {
-        context: signal.timeframe.toLowerCase(),
-        ...signal,
-    },
-
-    entry: {
-        type: "stop",
-        ...entry,
-    },
-
+    signal: { context: signal.timeframe.toLowerCase(), ...signal },
+    entry: { type: "stop", ...entry },
     stop,
     exit,
-
     risk: {
         perTrade: RISK.PER_TRADE,
         lastEntryMinute: RISK.DAILY_LAST_ENTRY_MINUTE_UTC,
@@ -119,372 +58,119 @@ const profile = (signal, entry, stop, exit, risk = {}) => ({
     },
 });
 
-export const PROFILES = {
-    AUDCAD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 0.5,
-            structure: "both",
-            consolidationBars: 2,
-            maxPauseAtr: 1,
-            minBody: 0.2,
-            breakout: "close",
-            pressure: "rsi",
-            pressureLevel: 52,
-            flowLevel: 0.1,
-            location: "localLevel",
-            locationAtr: 0.1,
-        },
-        { bufferAtr: 0.05, expiryBars: 1 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+const p = (symbol, session, structure, filters, execution, exit, risk) => ({
+    symbol,
+    session,
+    structure,
+    filters,
+    execution,
+    exit,
+    risk,
+});
 
-    AUDJPY: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 1.5,
-            structure: "move",
-            consolidationBars: 2,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 52,
-            flowLevel: 0.1,
-            location: "bollingerRetest",
-            locationAtr: 0,
-        },
-        { bufferAtr: 0.1, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 2, trailActivationR: 0.7, trailDistanceR: 1, maxHoldMinutes: 240 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+// Causal post-search selection from the 2026-08-26 M15/H1 session replay.
+// Array positions are unpacked once in toProfile, keeping the 20 tuned profiles compact.
+const SESSION_PROFILE_SETTINGS = [
+    p("AUDUSD", "asia", ["greenred", 0.75, 0, 0.8], [0.25, 0.9, 0, 0.75, 0, 0, 0, 0.75, "none", 1, 0.75, 0, 0.1], [0.02, 45, 0.05], ["fixed", 2, null, null, null, 1, 0.5, 3, 180], [45, 1, 1]),
+    p("AUDJPY", "asia", ["greenred", 1, 0, 0.95], [0, 1, 0.15, 0.75, 0, 0, 0, 1.25, "none", 2, 0.75, 2, 0.25], [0, 60, 0.05], ["fixed", 2, 1.25, 1.25, null, 0.65, 0.5, 4, 120], [60, 1, 2]),
+    p("EURJPY", "asia", ["greenred", 1, 0, 0.8], [0.25, 0.9, 0.25, 0, 0.4, 0, 0, 0.5, "none", 1, 0.75, 0, 0.4], [0.01, 75, 0.03], ["partial", 1.25, null, null, null, 0.75, 0.5, 2, 180], [45, 1, 1]),
+    p("GBPJPY", "asia", ["continuation", 0.75, 0.1, 1.05], [0.1, 0.9, 0.05, 1, 0.3, 0.2, 0, 1.25, "bollinger", 1, 0.5, 0, 0.15], [0, 60, 0.02], ["partial", 2, null, null, null, 0.75, 0.5, 2, 360], [15, 1, 1]),
+    p("USDCHF", "asia", ["greenred", 1, 0.1, 1.2], [0.4, 0.75, 0.05, 1, 0, 0, 0, 1.5, "none", 1, 0.75, 0, 0.25], [0.05, 75, 0.05], ["fixed", 2, null, null, null, 1, 0.5, 2, 480], [45, 2, 2]),
 
-    AUDUSD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 2,
-            structure: "move",
-            consolidationBars: 3,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 58,
-            flowLevel: 0.05,
-            location: "localLevel",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0.1, expiryBars: 1 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 4, trailActivationR: 2, trailDistanceR: 0.75, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+    p("EURUSD", "london", ["greenred", 0.75, 0.05, 0.95], [0, 0.75, 0.05, 0, 0, 0, 1, 1, "none", 1, 0.5, 1, 0], [0, 75, 0.075], ["fixed", 2, null, null, 1, 0.65, 0.6, 4, 360], [60, 1, 1]),
+    p("AUDJPY", "london", ["continuation", 0.75, 0.1, 1.05], [0.25, 1, 0.15, 0.75, 0.3, 0, 0, 1.25, "none", 2, 1, 0, 0.25], [0, 45, 0.075], ["fixed", 1.5, null, 0.75, null, 1, 0.6, 2, 120], [30, 1, 2]),
+    p("AUDUSD", "london", ["greenred", 0.5, 0.2, 1.05], [0.4, 0.9, 0.05, 1, 0.2, 0, 0.8, 1.5, "none", 1, 1, 0, 0.4], [0.03, 15, 0.02], ["fixed", 1.25, null, null, null, 1, 0.5, 2, 480], [30, 1, 1]),
+    p("GBPUSD", "london", ["greenred", 0.5, 0.1, 1.05], [0.1, 0.75, 0.05, 0, 0.4, 0, 0.8, 0.5, "bollinger", 1, 1, 4, 0], [0, 15, 0], ["fixed", 2, null, null, null, 0.65, 0.5, 2, 480], [60, 2, 1]),
+    p("GBPCHF", "london", ["greenred", 0.75, 0.1, 1.05], [0.4, 0.9, 0.15, 1, 0, 0, 0, 1.25, "bollinger", 1, 0.5, 0, 0], [0.02, 60, 0.02], ["partial", 2, null, null, 0.5, 0.65, 0.5, 3, 240], [30, 1, 1]),
 
-    EURCHF: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 2,
-            structure: "halves",
-            consolidationBars: 2,
-            maxPauseAtr: 1,
-            minBody: 0.5,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 55,
-            flowLevel: 0.05,
-            location: "bollingerRoom",
-            locationAtr: 0.25,
-        },
-        { bufferAtr: 0, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 5, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+    p("USDJPY", "overlap", ["continuation", 0.75, 0.2, 0.95], [0.4, 1, 0, 0.75, 0.3, 0, 0, 0.75, "none", 1, 0.5, 0, 0], [0, 75, 0.03], ["fixed", 1.1, null, null, null, 0.75, 0.6, 3, 480], [30, 1, 1]),
+    p("AUDUSD", "overlap", ["greenred", 0.75, 0, 0.95], [0, 1, 0.15, 1, 0, 0, 0, 0.75, "bollinger", 1, 1, 0, 0], [0, 75, 0], ["fixed", 0.75, null, 1.25, 0.5, 1, 0.5, 3, 180], [30, 1, 1]),
+    p("AUDJPY", "overlap", ["greenred", 0.5, 0.1, 0.95], [0.25, 1, 0, 1.25, 0.3, 0.2, 0, 0.5, "none", 2, 1, 0, 0.25], [0.01, 30, 0.02], ["fixed", 2, null, 0.75, null, 0.75, 0.6, 3, 120], [60, 2, 2]),
+    p("EURUSD", "overlap", ["greenred", 0.75, 0.2, 1.2], [0.6, 0.75, 0, 0.75, 0.4, 0.2, 1, 1.25, "none", 2, 0.75, 2, 0.05], [0.02, 30, 0.03], ["fixed", 2, null, null, null, 1, 0.5, 3, 240], [60, 1, 1]),
+    p("GBPUSD", "overlap", ["greenred", 0.75, 0, 0.8], [0.25, 0.9, 0.25, 1, 0.2, 0, 0.8, 1, "none", 1, 0.75, 0, 0.4], [0.05, 30, 0.03], ["partial", 1.5, null, null, null, 0.75, 0.5, 3, 360], [15, 1, 1]),
 
-    EURGBP: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 8,
-            minTrendAtr: 1,
-            structure: "both",
-            consolidationBars: 3,
-            maxPauseAtr: 2.25,
-            minBody: 0.2,
-            breakout: "wick",
-            pressure: "rsi",
-            pressureLevel: 58,
-            flowLevel: 0.1,
-            location: "bollingerRoom",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0, expiryBars: 1 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 4, trailActivationR: 2, trailDistanceR: 0.5, maxHoldMinutes: 720 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+    p("USDJPY", "newYork", ["greenred", 0.5, 0, 0.8], [0.25, 1, 0, 1, 0, 0.2, 0, 1, "bollinger", 1, 0.75, 0, 0.05], [0.02, 75, 0.05], ["fixed", 2, null, null, null, 1, 0.5, 2, 120], [60, 1, 1]),
+    p("AUDUSD", "newYork", ["greenred", 0.5, 0.2, 1.2], [0.6, 1, 0.15, 1, 0, 0, 0, 0.5, "bollinger", 2, 0.5, 0, 0.1], [0.02, 90, 0.03], ["fixed", 2, null, 1, 0.75, 0.65, 0.6, 2, 120], [60, 2, 1]),
+    p("GBPUSD", "newYork", ["continuation", 0.5, 0.2, 0.8], [0.1, 1, 0, 1, 0.4, 0, 0.8, 1.25, "none", 2, 0.75, 0, 0.15], [0.03, 15, 0.02], ["fixed", 2, null, null, null, 1, 0.6, 2, 480], [15, 1, 2]),
+    p("EURUSD", "newYork", ["continuation", 1, 0, 1.05], [0.4, 1, 0.25, 1, 0, 0, 0, 0.75, "none", 2, 1, 2, 0.15], [0.02, 60, 0.03], ["fixed", 2, null, null, null, 0.75, 0.6, 2, 360], [30, 1, 2]),
+    p("AUDJPY", "newYork", ["greenred", 0.25, 0, 1.05], [0.4, 1, 0.05, 0.75, 0.4, 0.3, 0, 1, "none", 1, 0.5, 2, 0], [0, 60, 0.03], ["fixed", 2, null, null, null, 0.75, 0.6, 2, 120], [45, 1, 2]),
+];
 
-    EURJPY: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 0.5,
-            structure: "move",
-            consolidationBars: 2,
-            maxPauseAtr: 2.25,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 50,
-            flowLevel: 0.2,
-            location: "bollingerRetest",
-            locationAtr: 0.25,
-        },
-        { bufferAtr: 0.05, expiryBars: 3 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 0.75, maxHoldMinutes: 480 },
-    ),
+const toProfile = ({ session, structure, filters, execution, exit, risk }) => {
+    const [structureMode, minImpulseAtr, minSwingGapAtr, maxRetrace] = structure;
+    const [minAtrPercentile, maxAtrPercentile, minEfficiency, minActivity, minBodyRatio, minBodyAtr, minVolumeRatio, maxSpreadAtr,
+        indicatorMode, minIndicatorScore, minBollingerRoomAtr, h1DirectionBars, minH1TrendAtr] = filters;
+    const [bufferAtr, expiryMinutes, stopBufferAtr] = execution;
+    const [mode, targetR, breakEvenAtR, trailActivationR, trailDistanceR, partialAtR, partialFraction, trailAtr, maxHoldMinutes] = exit;
+    const [cooldownMinutes, maxDailyTrades, maxDailyLosses] = risk;
 
-    EURUSD: profile(
+    return profile(
         {
             timeframe: "M15",
-            trendLookback: 16,
-            minTrendAtr: 1.5,
-            structure: "both",
-            consolidationBars: 4,
-            maxPauseAtr: 2.25,
-            minBody: 0.5,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 52,
-            flowLevel: 0.3,
-            location: "bollingerRoom",
-            locationAtr: 0,
+            context: h1DirectionBars > 0 ? "h1" : "m15",
+            sessions: [session],
+            structureMode,
+            minImpulseAtr,
+            minSwingGapAtr,
+            maxRetrace,
+            minAtrPercentile,
+            maxAtrPercentile,
+            minEfficiency,
+            minActivity,
+            minBodyRatio,
+            minBodyAtr,
+            minVolumeRatio,
+            maxSpreadAtr,
+            indicatorMode,
+            minIndicatorScore,
+            minBollingerRoomAtr,
+            h1DirectionBars,
+            minH1TrendAtr,
         },
-        { bufferAtr: 0, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0.2 },
-        { targetR: 5, trailActivationR: 1.5, trailDistanceR: 0.75, maxHoldMinutes: 480 },
-    ),
-
-    GBPAUD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 1,
-            structure: "both",
-            consolidationBars: 4,
-            maxPauseAtr: 2.25,
-            minBody: 0.5,
-            breakout: "close",
-            pressure: "rsi",
-            pressureLevel: 50,
-            flowLevel: 0.05,
-            location: "bollingerRetest",
-            locationAtr: 0.25,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 2, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 240 },
-    ),
-
-    GBPCHF: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 16,
-            minTrendAtr: 1.5,
-            structure: "both",
-            consolidationBars: 2,
-            maxPauseAtr: 2.25,
-            minBody: 0.5,
-            breakout: "wick",
-            pressure: "rsi",
-            pressureLevel: 50,
-            flowLevel: 0.05,
-            location: "bollingerRoom",
-            locationAtr: 0,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 5, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 240 },
-    ),
-
-    GBPJPY: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 8,
-            minTrendAtr: 0.5,
-            structure: "both",
-            consolidationBars: 2,
-            maxPauseAtr: 1,
-            minBody: 0.5,
-            breakout: "wick",
-            pressure: "rsi",
-            pressureLevel: 55,
-            flowLevel: 0.05,
-            location: "bollingerRoom",
-            locationAtr: 0.25,
-        },
-        { bufferAtr: 0.1, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 5, trailActivationR: 2, trailDistanceR: 0.75, maxHoldMinutes: 480 },
-    ),
-
-    GBPUSD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 0.5,
-            structure: "move",
-            consolidationBars: 2,
-            maxPauseAtr: 2.25,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 55,
-            flowLevel: 0.1,
-            location: "localLevel",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0, expiryBars: 4 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 5, trailActivationR: 0.7, trailDistanceR: 1.5, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-
-    NZDJPY: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 1,
-            structure: "both",
-            consolidationBars: 4,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 52,
-            flowLevel: 0.1,
-            location: "bollingerRoom",
-            locationAtr: 0.1,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 5, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-
-    NZDUSD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 16,
-            minTrendAtr: 1.5,
-            structure: "both",
-            consolidationBars: 3,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 55,
-            flowLevel: 0.05,
-            location: "bollingerRetest",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.2 },
-        { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-    AUDNZD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 16,
-            minTrendAtr: 1.5,
-            structure: "both",
-            consolidationBars: 3,
-            maxPauseAtr: 1.5,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "rsi",
-            pressureLevel: 55,
-            flowLevel: 0.05,
-            location: "bollingerRetest",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.2 },
-        { targetR: 4, trailActivationR: 1, trailDistanceR: 1, maxHoldMinutes: 480 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-
-    USDCAD: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 24,
-            minTrendAtr: 0.5,
-            structure: "move",
-            consolidationBars: 2,
-            maxPauseAtr: 1,
-            minBody: 0.2,
-            breakout: "close",
-            pressure: "rsi",
-            pressureLevel: 52,
-            flowLevel: 0.05,
-            location: "localLevel",
-            locationAtr: 0.5,
-        },
-        { bufferAtr: 0, expiryBars: 3 },
-        { type: "signal", bufferAtr: 0.1 },
-        { targetR: 3, trailActivationR: 1.5, trailDistanceR: 0.5, maxHoldMinutes: 240 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-
-    USDCHF: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 0.5,
-            structure: "move",
-            consolidationBars: 6,
-            maxPauseAtr: 1.5,
-            minBody: 0.35,
-            breakout: "wick",
-            pressure: "flow",
-            pressureLevel: 55,
-            flowLevel: 0.2,
-            location: "bollingerRetest",
-            locationAtr: 0.1,
-        },
-        { bufferAtr: 0, expiryBars: 2 },
-        { type: "signal", bufferAtr: 0.2 },
-        { targetR: 3, trailActivationR: 1, trailDistanceR: 0.5, maxHoldMinutes: 240 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
-
-    USDJPY: profile(
-        {
-            timeframe: "M15",
-            trendLookback: 12,
-            minTrendAtr: 0.5,
-            structure: "halves",
-            consolidationBars: 3,
-            maxPauseAtr: 2.25,
-            minBody: 0.2,
-            breakout: "none",
-            pressure: "flow",
-            pressureLevel: 50,
-            flowLevel: 0.2,
-            location: "localLevel",
-            locationAtr: 0,
-        },
-        { bufferAtr: 0.1, expiryBars: 1 },
-        { type: "signal", bufferAtr: 0 },
-        { targetR: 3, trailActivationR: 2, trailDistanceR: 1.5, maxHoldMinutes: 1440 },
-        { maxDailyTrades: 1, cooldownMinutes: 30 },
-    ),
+        { bufferAtr, expiryBars: Math.max(1, Math.ceil(expiryMinutes / 15)), cancelIfStopTouchedBeforeEntry: true },
+        { type: "signal", bufferAtr: stopBufferAtr },
+        { mode, targetR, breakEvenAtR, trailActivationR, trailDistanceR, partialAtR, partialFraction, trailAtr, maxHoldMinutes },
+        { cooldownMinutes, maxDailyTrades, maxDailyLosses },
+    );
 };
+
+export const PROFILES = SESSION_PROFILE_SETTINGS.reduce((profiles, settings) => {
+    profiles[settings.symbol] ??= {};
+    profiles[settings.symbol][settings.session] = toProfile(settings);
+    return profiles;
+}, {});
+
+export const SESSIONS = Object.fromEntries(
+    ["asia", "london", "overlap", "newYork"].map((session) => [
+        session,
+        { SYMBOLS: SESSION_PROFILE_SETTINGS.filter((settings) => settings.session === session).map(({ symbol }) => symbol) },
+    ]),
+);
+
+const SESSION_CLOCKS = new Map();
+const minuteIn = (timestamp, timeZone) => {
+    if (!SESSION_CLOCKS.has(timeZone)) {
+        SESSION_CLOCKS.set(timeZone, new Intl.DateTimeFormat("en-GB", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }));
+    }
+    const parts = Object.fromEntries(SESSION_CLOCKS.get(timeZone).formatToParts(timestamp).map(({ type, value }) => [type, value]));
+    return Number(parts.hour) * 60 + Number(parts.minute);
+};
+
+const asUtcTimestamp = (value) => {
+    if (typeof value !== "string" || /[zZ]|[+\-]\d{2}:?\d{2}$/.test(value)) return new Date(value);
+    return new Date(`${value.replace(" ", "T")}Z`);
+};
+
+export function getMarketSession(timestamp = Date.now()) {
+    const date = timestamp instanceof Date ? timestamp : asUtcTimestamp(timestamp);
+    if (Number.isNaN(date.getTime())) return "offHours";
+    const londonMinute = minuteIn(date, "Europe/London");
+    const newYorkMinute = minuteIn(date, "America/New_York");
+    if (londonMinute < 8 * 60) return "asia";
+    if (newYorkMinute < 8 * 60) return "london";
+    if (londonMinute < 17 * 60) return "overlap";
+    if (newYorkMinute < 17 * 60) return "newYork";
+    return "offHours";
+}
+
+export const getProfile = (symbol, session = getMarketSession()) => PROFILES[symbol]?.[session] ?? null;

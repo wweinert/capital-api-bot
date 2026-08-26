@@ -2,6 +2,7 @@ import {
     placePosition,
     placeOrder,
     enableTrailingStop,
+    updatePositionProtection,
     getDealConfirmation,
     closePosition as apiClosePosition,
     getOpenPositions,
@@ -10,7 +11,7 @@ import {
     getAccountActivity,
     getAccountTransactions,
 } from "../api.js";
-import { RISK, PORTFOLIO, PROFILES } from "../config.js";
+import { RISK, PORTFOLIO, getMarketSession, getProfile } from "../config.js";
 import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
@@ -23,6 +24,7 @@ class TradingService {
 
         this.quotePerEurCache = new Map();
         this.trailingStates = new Map();
+        this.profileStates = new Map();
     }
 
     setAccountBalance(balance) {
@@ -88,6 +90,9 @@ class TradingService {
         const orderSymbols = orders.map((item) => item?.workingOrderData?.epic);
 
         this.openTrades = [...new Set([...positionSymbols, ...orderSymbols].filter(Boolean))];
+        for (const symbol of this.profileStates.keys()) {
+            if (!this.openTrades.includes(symbol)) this.profileStates.delete(symbol);
+        }
     }
 
     async getPositionContext(dealId) {
@@ -108,6 +113,13 @@ class TradingService {
             logger.warn(`[ClosePos] Could not fetch position context for ${dealId}: ${error.message}`);
             return null;
         }
+    }
+
+    getPositionProfile(item, symbol) {
+        const remembered = this.profileStates.get(symbol);
+        if (remembered?.profile) return remembered.profile;
+        const openedAt = item?.position?.openTime ?? item?.position?.createdDateUTC ?? item?.position?.createdDate ?? item?.openTime;
+        return getProfile(symbol, getMarketSession(openedAt));
     }
 
     async getAllowedCandidates(candidates) {
@@ -169,6 +181,9 @@ class TradingService {
             const risk = candidate.profile.risk;
 
             const symbolEntries = todayEntries.filter((entry) => entry.epic === candidate.symbol);
+            const symbolLosses = todayTransactions.filter(
+                (transaction) => transaction.instrumentName === candidate.symbol && Number(transaction.size) < 0,
+            );
 
             const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)));
 
@@ -176,7 +191,12 @@ class TradingService {
 
             const lastEntryMinute = Math.min(risk.lastEntryMinute, RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
 
-            return currentMinute < lastEntryMinute && symbolEntries.length < risk.maxDailyTrades && cooldownPassed;
+            return (
+                currentMinute < lastEntryMinute &&
+                symbolEntries.length < risk.maxDailyTrades &&
+                symbolLosses.length < risk.maxDailyLosses &&
+                cooldownPassed
+            );
         });
     }
 
@@ -404,130 +424,133 @@ class TradingService {
     // ============================================================
     async executeCandidate(candidate) {
         const { symbol, signal, entryType, entryPrice, stopLoss, profile } = candidate;
-
         const riskDistance = Math.abs(entryPrice - stopLoss);
-
-        const takeProfit = signal === "BUY" ? entryPrice + riskDistance * profile.exit.targetR : entryPrice - riskDistance * profile.exit.targetR;
         const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, profile.risk.perTrade);
+        if (!sizing.size) return false;
 
-        if (!sizing.size) {
-            return false;
-        }
-
-        let result;
-
-        if (entryType === "stop" || entryType === "limit") {
-            const timeframeMinutes = {
-                M5: 5,
-                M15: 15,
-                H1: 60,
-            };
-
-            const expiryMinutes = timeframeMinutes[profile.signal.timeframe] * profile.entry.expiryBars;
-
-            const goodTillDate = new Date(Date.now() + expiryMinutes * 60_000).toISOString().slice(0, 19);
-
-            result = await placeOrder({
-                symbol,
-                type: entryType.toUpperCase(),
-                direction: signal,
-                size: sizing.size,
-                level: entryPrice,
-                stopLevel: stopLoss,
-                profitLevel: takeProfit,
-                goodTillDate,
-            });
+        const targetAt = (multiple) => (signal === "BUY" ? entryPrice + riskDistance * multiple : entryPrice - riskDistance * multiple);
+        const legs = [];
+        if (profile.exit.mode === "partial") {
+            const partialSize = Math.floor((sizing.size * profile.exit.partialFraction) / 100) * 100;
+            const runnerSize = sizing.size - partialSize;
+            if (partialSize < 100 || runnerSize < 100) {
+                logger.warn(`[Trading] ${symbol}: size ${sizing.size} is too small for two partial-exit legs`);
+                return false;
+            }
+            legs.push(
+                { name: "runner", size: runnerSize, takeProfit: null },
+                { name: "partial", size: partialSize, takeProfit: targetAt(profile.exit.partialAtR) },
+            );
         } else {
-            result = await placePosition(symbol, signal, sizing.size, entryPrice, stopLoss, takeProfit);
+            legs.push({ name: "fixed", size: sizing.size, takeProfit: targetAt(profile.exit.targetR) });
         }
 
-        if (!result?.dealReference) {
-            logger.warn(`[Trading] ${symbol}: order was not created`);
+        const timeframeMinutes = { M5: 5, M15: 15, H1: 60 };
+        const expiryMinutes = timeframeMinutes[profile.signal.timeframe] * profile.entry.expiryBars;
+        const goodTillDate = new Date(Date.now() + expiryMinutes * 60_000).toISOString().slice(0, 19);
+        let acceptedSize = 0;
 
-            return false;
+        for (const leg of legs) {
+            try {
+                const result =
+                    entryType === "stop" || entryType === "limit"
+                        ? await placeOrder({
+                              symbol,
+                              type: entryType.toUpperCase(),
+                              direction: signal,
+                              size: leg.size,
+                              level: entryPrice,
+                              stopLevel: stopLoss,
+                              profitLevel: leg.takeProfit,
+                              goodTillDate,
+                          })
+                        : await placePosition(symbol, signal, leg.size, entryPrice, stopLoss, leg.takeProfit);
+
+                if (!result?.dealReference) {
+                    logger.warn(`[Trading] ${symbol}: ${leg.name} leg was not created`);
+                    continue;
+                }
+
+                const confirmation = await getDealConfirmation(result.dealReference);
+                const status = confirmation.dealStatus ?? confirmation.status;
+                if (!["ACCEPTED", "OPEN"].includes(status)) {
+                    logger.warn(`[Trading] ${symbol}: ${leg.name} leg rejected: ${confirmation.reason}`);
+                    continue;
+                }
+
+                acceptedSize += leg.size;
+                logger.info(`[Trading] ${symbol} ${signal} ${leg.name} leg accepted`);
+            } catch (error) {
+                logger.error(`[Trading] ${symbol}: ${leg.name} leg failed: ${error.message}`);
+            }
         }
 
-        const confirmation = await getDealConfirmation(result.dealReference);
-
-        if (!["ACCEPTED", "OPEN"].includes(confirmation.dealStatus)) {
-            logger.warn(`[Trading] ${symbol}: ${confirmation.reason}`);
-
-            return false;
-        }
-
-        this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired);
-
-        logger.info(`[Trading] ${symbol} ${signal} ${entryType} accepted`);
-
+        if (!acceptedSize) return false;
+        this.profileStates.set(symbol, { profile, atr: candidate.atr, riskDistance });
+        this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired * (acceptedSize / sizing.size));
+        if (acceptedSize !== sizing.size) logger.warn(`[Trading] ${symbol}: only ${acceptedSize}/${sizing.size} units were accepted`);
         return true;
     }
     // ============================================================
     //               Trailing Stop (Improved)
     // ============================================================
     async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, takeProfit, currentPrice, trailingStop } = position;
-
-        const profile = PROFILES[symbol];
+        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, trailingStop, profile } = position;
         const entry = Number(entryPrice);
-        const target = Number(takeProfit);
+        const target = this.toNumber(takeProfit);
         const price = Number(currentPrice);
-        const targetR = Number(profile?.exit?.targetR);
-        const activationR = Number(profile?.exit?.trailActivationR);
-        const configuredDistanceR = Number(profile?.exit?.trailDistanceR);
+        if (!profile || !dealId || ![entry, price].every(Number.isFinite)) return;
 
-        if (!profile || !dealId || ![entry, target, price, targetR, activationR, configuredDistanceR].every(Number.isFinite)) {
-            return;
-        }
-
-        const riskDistance = Math.abs(target - entry) / targetR;
-
+        const remembered = this.profileStates.get(symbol);
+        const stop = this.toNumber(stopLoss);
+        const targetR = this.toNumber(profile.exit.targetR);
+        const riskDistance =
+            remembered?.riskDistance ??
+            (target !== null && targetR ? Math.abs(target - entry) / targetR : stop !== null ? Math.abs(entry - stop) : null);
+        if (!(riskDistance > 0)) return;
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;
-
-        const now = Date.now();
-
         const state = this.trailingStates.get(dealId) ?? {
             bestPrice: price,
-            lastBestAt: now,
-            tightened: false,
+            breakEven: false,
         };
-
         const priceImproved = isBuy ? price > state.bestPrice : price < state.bestPrice;
-
-        if (priceImproved) {
-            state.bestPrice = price;
-            state.lastBestAt = now;
-        }
-
+        if (priceImproved) state.bestPrice = price;
         this.trailingStates.set(dealId, state);
 
-        if (trailingStop) {
-            const stalled = now - state.lastBestAt >= RISK.DYNAMIC_TRAIL_STALL_MINUTES * 60_000;
-
-            const canTighten = !state.tightened && favorableMove >= riskDistance * RISK.DYNAMIC_TRAIL_MIN_R && stalled;
-
-            if (canTighten) {
-                const stopDistance = this.roundPrice(riskDistance * RISK.DYNAMIC_TRAIL_DISTANCE_R, symbol);
-
-                await enableTrailingStop(dealId, stopDistance, target);
-
-                state.tightened = true;
-
-                logger.info(`[Trail] ${symbol}: distance tightened to ${stopDistance}`);
+        if (profile.exit.mode === "partial") {
+            if (target !== null) return; // The first leg closes at partialAtR; only the runner is managed.
+            if (favorableMove < riskDistance * profile.exit.partialAtR) return;
+            if (!state.breakEven) {
+                await updatePositionProtection(dealId, { stopLevel: this.roundPrice(entry, symbol) });
+                state.breakEven = true;
+                logger.info(`[Trail] ${symbol}: partial runner moved to break-even`);
             }
-
+            if (trailingStop) return;
+            const atr = Number(remembered?.atr) > 0 ? Number(remembered.atr) : riskDistance;
+            const stopDistance = this.roundPrice(atr * profile.exit.trailAtr, symbol);
+            if (favorableMove < stopDistance) return;
+            await enableTrailingStop(dealId, stopDistance);
+            logger.info(`[Trail] ${symbol}: partial runner trailing enabled, distance=${stopDistance}`);
             return;
         }
 
-        if (favorableMove < riskDistance * activationR) {
-            return;
+        const breakEvenAtR = this.toNumber(profile.exit.breakEvenAtR);
+        if (!state.breakEven && breakEvenAtR !== null && favorableMove >= riskDistance * breakEvenAtR) {
+            await updatePositionProtection(dealId, {
+                stopLevel: this.roundPrice(entry, symbol),
+                ...(target !== null ? { profitLevel: target } : {}),
+            });
+            state.breakEven = true;
+            logger.info(`[Trail] ${symbol}: stop moved to break-even`);
         }
 
-        const distanceR = Math.min(configuredDistanceR, activationR);
-        const stopDistance = this.roundPrice(riskDistance * distanceR, symbol);
-
+        if (trailingStop) return;
+        const activationR = this.toNumber(profile.exit.trailActivationR);
+        const distanceR = this.toNumber(profile.exit.trailDistanceR);
+        if (activationR === null || distanceR === null || favorableMove < riskDistance * activationR) return;
+        const stopDistance = this.roundPrice(riskDistance * Math.min(distanceR, activationR), symbol);
         await enableTrailingStop(dealId, stopDistance, target);
-
         logger.info(`[Trail] ${symbol}: broker trailing enabled, distance=${stopDistance}`);
     }
 

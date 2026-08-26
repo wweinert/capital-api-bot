@@ -1,6 +1,6 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
 import { pathToFileURL } from "url";
-import { DEV, TIMEFRAMES, SESSIONS, PROFILES } from "./config.js";
+import { DEV, TIMEFRAMES, SESSIONS, getMarketSession, getProfile } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
@@ -150,71 +150,19 @@ class TradingBot {
         }
     }
 
-    getActiveSymbfols() {
-        const now = new Date();
-        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-
-        const symbols = [];
-
-        for (const [symbol, profile] of Object.entries(PROFILES)) {
-            const session = SESSIONS[profile.signal?.session];
-
-            if (!session) {
-                logger.warn(`[Bot] Unknown session: ${profile.signal?.session}`);
-                continue;
-            }
-
-            let isActive;
-
-            if (session.START < session.END) {
-                isActive = currentMinutes >= session.START && currentMinutes < session.END;
-            } else {
-                isActive = currentMinutes >= session.START || currentMinutes < session.END;
-            }
-
-            if (isActive) {
-                symbols.push(symbol);
-            }
-        }
-
-        logger.info(`[Bot] Tradable symbols: ${symbols.join(", ") || "none"}`);
-
-        return symbols;
-    }
-    async getActiveSymbols() {
-        const now = new Date();
-        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
-
-        const sessionSymbols = Array.isArray(SESSIONS.SYMBOLS) ? SESSIONS.SYMBOLS : [];
-        const tradableSymbols = [];
-
-        for (const [sessionName, session] of Object.entries(SESSIONS)) {
-            if (session.SYMBOLS.length < 0) return console.warn("[Bot] No symbols defined in session:", session);
-
-            let isActive;
-            if (session.START < session.END) {
-                isActive = currentMinutes >= session.START && currentMinutes < session.END;
-            } else {
-                isActive = currentMinutes >= session.START || currentMinutes < session.END;
-            }
-
-            if (isActive) {
-                tradableSymbols.push(...session.SYMBOLS);
-            }
-        }
-
-        logger.info(`[Bot] Tradable symbols: ${tradableSymbols.length ? tradableSymbols.join(", ") : "none"}`);
-        return tradableSymbols;
+    getActiveSymbols(timestamp = Date.now()) {
+        const session = getMarketSession(timestamp);
+        const symbols = SESSIONS[session]?.SYMBOLS ?? [];
+        logger.info(`[Bot] ${session} symbols: ${symbols.join(", ") || "none"}`);
+        return { session, symbols };
     }
 
     async analyzeAllSymbols() {
-        this.activeSymbols = await this.getActiveSymbols();
-
-        console.log(this.activeSymbols);
-
-        const allCandles = await Promise.all(this.activeSymbols.map((symbol) => this.fetchAllCandles(symbol)));
-
-        const results = await Promise.all(this.activeSymbols.map((symbol, index) => this.analyzeSymbol(symbol, allCandles[index])));
+        const { session, symbols } = this.getActiveSymbols();
+        this.activeSymbols = symbols;
+        const work = symbols.map((symbol) => ({ symbol, profile: getProfile(symbol, session) })).filter(({ profile }) => profile);
+        const allCandles = await Promise.all(work.map(({ symbol, profile }) => this.fetchAllCandles(symbol, profile)));
+        const results = await Promise.all(work.map(({ symbol, profile }, index) => this.analyzeSymbol(symbol, allCandles[index], profile)));
 
         const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
 
@@ -229,9 +177,8 @@ class TradingBot {
         return tradingService.processCandidates(candidates);
     }
 
-    async fetchAllCandles(symbol) {
+    async fetchAllCandles(symbol, profile) {
         try {
-            const profile = PROFILES[symbol];
             const signalTimeframe = profile.signal.timeframe;
             const contextTimeframes = profile.signal.context === "majority" ? ["H1", "H4", "D1"] : [profile.signal.context.toUpperCase()];
 
@@ -278,10 +225,8 @@ class TradingBot {
     }
 
     // Analyzes a single symbol: fetches data, calculates indicators, and triggers trading logic.
-    async analyzeSymbol(symbol, candleData) {
+    async analyzeSymbol(symbol, candleData, profile) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
-
-        const profile = PROFILES[symbol];
         const candles = {};
 
         for (const [tf, prices] of Object.entries(candleData)) {

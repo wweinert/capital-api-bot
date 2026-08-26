@@ -1,5 +1,5 @@
 import { getOpenPositions, getWorkingOrders, cancelWorkingOrder } from "./api.js";
-import { RISK, PROFILES } from "./config.js";
+import { RISK } from "./config.js";
 
 import tradingService from "./services/trading.js";
 import webSocketService from "./services/websocket.js";
@@ -47,12 +47,15 @@ export async function trailingStopCheck() {
             const position = item.position;
             const market = item.market;
             const symbol = market?.epic ?? position?.epic;
+            const profile = tradingService.getPositionProfile(item, symbol);
 
             await tradingService.updateTrailingStopIfNeeded({
                 symbol,
+                profile,
                 dealId: position.dealId,
                 direction: position.direction,
                 entryPrice: position.level,
+                stopLoss: position.stopLevel,
                 takeProfit: position.profitLevel,
                 currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
                 trailingStop: position.trailingStop,
@@ -70,7 +73,7 @@ async function cancelOrders(shouldCancel) {
     for (const item of orders) {
         const order = item?.workingOrderData;
 
-        if (!order?.dealId || !shouldCancel(order.epic)) {
+        if (!order?.dealId || !shouldCancel(order)) {
             continue;
         }
 
@@ -79,7 +82,7 @@ async function cancelOrders(shouldCancel) {
     }
 }
 
-const getCloseMinute = (symbol) => Math.min(PROFILES[symbol]?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC, RISK.DAILY_CLOSE_MINUTE_UTC);
+const getCloseMinute = (profile) => Math.min(profile?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC, RISK.DAILY_CLOSE_MINUTE_UTC);
 
 export async function dailyFlatCheck(bot) {
     if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
@@ -88,8 +91,8 @@ export async function dailyFlatCheck(bot) {
     const currentMinute = now.getUTCHours() * 60 + now.getUTCMinutes();
 
     try {
-        await cancelOrders((symbol) => {
-            const closeMinute = getCloseMinute(symbol);
+        await cancelOrders((order) => {
+            const closeMinute = getCloseMinute(tradingService.getPositionProfile({ position: order }, order.epic));
 
             return closeMinute < 24 * 60 && currentMinute >= closeMinute;
         });
@@ -99,8 +102,7 @@ export async function dailyFlatCheck(bot) {
         for (const pos of positions.positions) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
-
-            const closeMinute = getCloseMinute(symbol);
+            const closeMinute = getCloseMinute(tradingService.getPositionProfile(pos, symbol));
 
             if (closeMinute >= 24 * 60 || currentMinute < closeMinute) {
                 continue;
@@ -177,7 +179,7 @@ export async function maxHoldCheck(bot) {
 
             logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${maxHoldMinutes}`);
 
-            if (minutesHeld >= maxHoldMinutes && !pos.position.trailingStop) {
+            if (minutesHeld >= maxHoldMinutes) {
                 if (!dealId) {
                     logger.error(`[Bot] Missing dealId for ${pos?.market?.epic}, cannot close.`);
                     continue;
@@ -192,7 +194,7 @@ export async function maxHoldCheck(bot) {
 }
 
 function resolveMaxHoldMinutes(pos, symbol) {
-    return PROFILES[symbol]?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
+    return tradingService.getPositionProfile(pos, symbol)?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
 }
 
 export function logDeals(bot) {

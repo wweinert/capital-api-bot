@@ -236,9 +236,9 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
 
     const entry = toRoundedNumber(level, decimals);
     const stop = toRoundedNumber(stopLevel, decimals);
-    const target = toRoundedNumber(profitLevel, decimals);
+    const target = profitLevel == null ? null : toRoundedNumber(profitLevel, decimals);
 
-    if (!Number.isFinite(entry) || !Number.isFinite(stop) || !Number.isFinite(target)) {
+    if (!Number.isFinite(entry) || !Number.isFinite(stop) || (target !== null && !Number.isFinite(target))) {
         throw new Error(`Invalid pending order prices for ${symbol}`);
     }
 
@@ -259,7 +259,7 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
         symbol,
         direction,
         stopLevel: stop,
-        profitLevel: target,
+        ...(target !== null ? { profitLevel: target } : {}),
         bid: entry,
         offer: entry,
         minSLDistancePrice: rules.minSLDistancePrice,
@@ -280,7 +280,7 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
         guaranteedStop: false,
         trailingStop: false,
         stopLevel: stop,
-        profitLevel: target,
+        ...(target !== null ? { profitLevel: target } : {}),
         goodTillDate,
     };
 
@@ -291,21 +291,24 @@ export async function placeOrder({ symbol, type = "STOP", direction, size, level
     return response.data;
 }
 
-export const enableTrailingStop = async (dealId, stopDistance, profitLevel) =>
+export const updatePositionProtection = async (dealId, protection) =>
     withSessionRetry(async () => {
         const response = await axios.put(
             `${API.BASE_URL}/positions/${dealId}`,
-            {
-                trailingStop: true,
-                stopDistance: Number(stopDistance),
-                profitLevel: Number(profitLevel),
-            },
+            protection,
             {
                 headers: getHeaders(true),
             },
         );
 
         return response.data;
+    });
+
+export const enableTrailingStop = (dealId, stopDistance, profitLevel) =>
+    updatePositionProtection(dealId, {
+        trailingStop: true,
+        stopDistance: Number(stopDistance),
+        ...(profitLevel != null && Number.isFinite(Number(profitLevel)) ? { profitLevel: Number(profitLevel) } : {}),
     });
 
 function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, bid, offer, minSLDistancePrice, minTPDistancePrice }) {
@@ -319,18 +322,19 @@ function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, b
     const reference = hasBid && hasOffer ? (bid + offer) / 2 : hasBid ? bid : offer;
     const minSL = Number.isFinite(minSLDistancePrice) ? minSLDistancePrice : 0;
     const minTP = Number.isFinite(minTPDistancePrice) ? minTPDistancePrice : 0;
+    const hasTarget = Number.isFinite(profitLevel);
     const skip = (reason, minDistance) => ({ skipped: true, reason, bid, offer, minDistance, symbol });
 
     if (isBuy) {
         if (stopLevel >= reference) return skip("stop loss not below market for BUY", minSL);
-        if (profitLevel <= reference) return skip("take profit not above market for BUY", minTP);
+        if (hasTarget && profitLevel <= reference) return skip("take profit not above market for BUY", minTP);
         if (reference - stopLevel < minSL) return skip("stop loss closer than minimum distance", minSL);
-        if (profitLevel - reference < minTP) return skip("take profit closer than minimum distance", minTP);
+        if (hasTarget && profitLevel - reference < minTP) return skip("take profit closer than minimum distance", minTP);
     } else {
         if (stopLevel <= reference) return skip("stop loss not above market for SELL", minSL);
-        if (profitLevel >= reference) return skip("take profit not below market for SELL", minTP);
+        if (hasTarget && profitLevel >= reference) return skip("take profit not below market for SELL", minTP);
         if (stopLevel - reference < minSL) return skip("stop loss closer than minimum distance", minSL);
-        if (reference - profitLevel < minTP) return skip("take profit closer than minimum distance", minTP);
+        if (hasTarget && reference - profitLevel < minTP) return skip("take profit closer than minimum distance", minTP);
     }
 
     return { skipped: false };
@@ -341,9 +345,9 @@ export async function placePosition(symbol, direction, size, price, SL, TP) {
         const range = await getAllowedTPRange(symbol);
         const decimals = Number.isInteger(range.decimals) ? range.decimals : symbol.includes("JPY") ? 3 : 5;
         const stopLevel = toRoundedNumber(SL, decimals);
-        const profitLevel = toRoundedNumber(TP, decimals);
+        const profitLevel = TP == null ? null : toRoundedNumber(TP, decimals);
 
-        if (!Number.isFinite(stopLevel) || !Number.isFinite(profitLevel)) {
+        if (!Number.isFinite(stopLevel) || (profitLevel !== null && !Number.isFinite(profitLevel))) {
             throw new Error(`Invalid stop/profit levels for ${symbol}. stop=${SL} profit=${TP}`);
         }
 
@@ -351,7 +355,7 @@ export async function placePosition(symbol, direction, size, price, SL, TP) {
             symbol,
             direction,
             stopLevel,
-            profitLevel,
+            ...(profitLevel !== null ? { profitLevel } : {}),
             bid: Number(range.market?.bid),
             offer: Number(range.market?.offer),
             minSLDistancePrice: range.minSLDistancePrice,
@@ -373,7 +377,7 @@ export async function placePosition(symbol, direction, size, price, SL, TP) {
             orderType: "MARKET",
             guaranteedStop: false,
             stopLevel,
-            profitLevel,
+            ...(profitLevel !== null ? { profitLevel } : {}),
         };
         logger.info(`[API] Sending position request: ${JSON.stringify(position)}`);
 
