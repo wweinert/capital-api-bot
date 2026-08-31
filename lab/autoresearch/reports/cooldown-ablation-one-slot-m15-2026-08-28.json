@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-28T11:06:15Z",
+  "question": "Compare no cooldown with a uniform 15-minute cooldown for the final one-slot M15 strategy.",
+  "protocol": {
+    "datasetFingerprint": "62e06dad79f3a653a315726eb6f38d724bc27ce31cdf9735aceb4609a1c32c9c",
+    "period": {
+      "start": "2025-12-21T22:00:00.000Z",
+      "endExclusive": "2026-08-27T10:22:00.000Z",
+      "marketDays": 179
+    },
+    "startCapitalEur": 500,
+    "maximumPositions": 1,
+    "targetRiskPct": 3,
+    "signalTimeframe": "M15",
+    "trailingCadence": "M15",
+    "spreadStressMultiplier": 1.25,
+    "profiles": "20 frozen pair/session profiles from the 2026-08-26 causal post-search report"
+  },
+  "results": {
+    "currentExecution": {
+      "cooldown0": {
+        "nominal": { "finalBalance": 1961.48, "returnPct": 292.3, "entries": 1221, "winRate": 45.37, "profitFactor": 1.083, "maxDrawdownPct": 31.12, "totalR": 63.324 },
+        "stress": { "finalBalance": 842.62, "returnPct": 68.52, "entries": 1209, "profitFactor": 1.029, "maxDrawdownPct": 51.16 }
+      },
+      "cooldown15": {
+        "nominal": { "finalBalance": 2144.84, "returnPct": 328.97, "entries": 1212, "winRate": 45.79, "profitFactor": 1.106, "maxDrawdownPct": 25.42, "totalR": 63.977 },
+        "stress": { "finalBalance": 948.61, "returnPct": 89.72, "entries": 1200, "profitFactor": 1.043, "maxDrawdownPct": 35.91 }
+      }
+    },
+    "finalExecutionWithPendingInvalidation": {
+      "cooldown0": {
+        "nominal": { "finalBalance": 4142.9, "returnPct": 728.58, "entries": 1230, "winRate": 47.15, "profitFactor": 1.137, "maxDrawdownPct": 25.51, "totalR": 104.512, "maximumLossStreak": 8, "positiveWeeks": 23, "negativeWeeks": 13 },
+        "stress": { "finalBalance": 1638.66, "returnPct": 227.73, "entries": 1212, "profitFactor": 1.073, "maxDrawdownPct": 30.48 }
+      },
+      "cooldown15": {
+        "nominal": { "finalBalance": 3112.04, "returnPct": 522.41, "entries": 1211, "winRate": 46.9, "profitFactor": 1.118, "maxDrawdownPct": 28.01, "totalR": 87.237, "maximumLossStreak": 7, "positiveWeeks": 24, "negativeWeeks": 12 },
+        "stress": { "finalBalance": 965.9, "returnPct": 93.18, "entries": 1195, "profitFactor": 1.044, "maxDrawdownPct": 38.21 }
+      }
+    },
+    "profileCooldownReferenceWithPendingInvalidation": {
+      "nominal": { "finalBalance": 5835.93, "returnPct": 1067.19, "entries": 1154, "winRate": 47.66, "profitFactor": 1.189, "maxDrawdownPct": 32.01, "totalR": 110.886 },
+      "stress": { "finalBalance": 2486.87, "returnPct": 397.37, "entries": 1141, "profitFactor": 1.116, "maxDrawdownPct": 33.29 }
+    }
+  },
+  "decision": {
+    "requestedChoice": "cooldown0",
+    "reason": "With pending invalidation enabled, no cooldown has higher nominal and stressed returns, higher profit factor, lower drawdown, and positive results in every chronological fold. A 15-minute cooldown has one additional positive week and a one-trade shorter maximum loss streak, but is materially weaker overall.",
+    "referenceFinding": "The original profile-specific cooldowns outperform both uniform choices, but are outside the requested zero-versus-fifteen simplification."
+  },
+  "fullReports": [
+    { "path": "/private/tmp/cooldown-0-current-execution.json", "sha256": "f3a7be0ce794aa31a15935f772654c6a117c9fe3b69fca04083660add223fb70" },
+    { "path": "/private/tmp/cooldown-15-current-execution.json", "sha256": "2e2f0f4049a1cb291409d275d6be9cf1356518532b0321feb0f1d658020fb5fe" },
+    { "path": "/private/tmp/cooldown-0-pending-invalidation.json", "sha256": "624ea3911c88733851a7663fbea0ad0a2370f39ca5781651dd46aa02644b7183" },
+    { "path": "/private/tmp/cooldown-15-pending-invalidation.json", "sha256": "35ff5b1d77f863e46f2a8fb6425e5f8415d7b5a6dd5324db18764bd19251a2c2" },
+    { "path": "/private/tmp/cooldown-profile-pending-invalidation.json", "sha256": "f509f12f19410f8c2faf317cab821fb4fdcd6c789065e7ca46422952adc91395" }
+  ]
+}

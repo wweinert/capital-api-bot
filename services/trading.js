@@ -8,7 +8,6 @@ import {
     getOpenPositions,
     getWorkingOrders,
     getMarketDetails,
-    getAccountActivity,
     getAccountTransactions,
 } from "../api.js";
 import { RISK, PORTFOLIO, getMarketSession, getProfile } from "../config.js";
@@ -123,6 +122,8 @@ class TradingService {
     }
 
     async getAllowedCandidates(candidates) {
+        if (!candidates.length) return [];
+
         const now = new Date();
 
         const dayStart = new Date(now);
@@ -139,18 +140,7 @@ class TradingService {
             return Date.parse(date.endsWith("Z") ? date : `${date}Z`);
         };
 
-        const [activities, weeklyTransactions] = await Promise.all([
-            getAccountActivity(formatDate(dayStart), formatDate(now)),
-            getAccountTransactions(formatDate(weekStart), formatDate(now)),
-        ]);
-
-        const todayEntries = [
-            ...new Map(
-                activities
-                    .filter((activity) => activity.type === "POSITION" && activity.status === "ACCEPTED" && activity.source === "USER")
-                    .map((activity) => [activity.dealId, activity]),
-            ).values(),
-        ];
+        const weeklyTransactions = await getAccountTransactions(formatDate(weekStart), formatDate(now));
 
         const todayTransactions = weeklyTransactions.filter((transaction) => getTime(transaction.dateUtc || transaction.dateUTC) >= dayStart.getTime());
 
@@ -178,25 +168,9 @@ class TradingService {
             return [];
         }
         return candidates.filter((candidate) => {
-            const risk = candidate.profile.risk;
+            const lastEntryMinute = Math.min(candidate.profile.risk.lastEntryMinute, RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
 
-            const symbolEntries = todayEntries.filter((entry) => entry.epic === candidate.symbol);
-            const symbolLosses = todayTransactions.filter(
-                (transaction) => transaction.instrumentName === candidate.symbol && Number(transaction.size) < 0,
-            );
-
-            const lastEntryTime = Math.max(0, ...symbolEntries.map((entry) => getTime(entry.dateUTC)));
-
-            const cooldownPassed = !lastEntryTime || now.getTime() - lastEntryTime >= risk.cooldownMinutes * 60_000;
-
-            const lastEntryMinute = Math.min(risk.lastEntryMinute, RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
-
-            return (
-                currentMinute < lastEntryMinute &&
-                symbolEntries.length < risk.maxDailyTrades &&
-                symbolLosses.length < risk.maxDailyLosses &&
-                cooldownPassed
-            );
+            return currentMinute < lastEntryMinute;
         });
     }
 
@@ -317,7 +291,7 @@ class TradingService {
     }
 
     async positionSize(balance, entryPrice, stopLossPrice, symbol, riskPct = PER_TRADE) {
-        const safeRiskPct = Math.min(Number(riskPct), 0.03);
+        const safeRiskPct = Math.min(Number(riskPct), RISK.PER_TRADE);
 
         if (!Number.isFinite(safeRiskPct) || safeRiskPct <= 0) {
             return this.emptyPositionSizing(symbol, "invalid_risk");
@@ -505,8 +479,7 @@ class TradingService {
         const stop = this.toNumber(stopLoss);
         const targetR = this.toNumber(profile.exit.targetR);
         const riskDistance =
-            remembered?.riskDistance ??
-            (target !== null && targetR ? Math.abs(target - entry) / targetR : stop !== null ? Math.abs(entry - stop) : null);
+            remembered?.riskDistance ?? (target !== null && targetR ? Math.abs(target - entry) / targetR : stop !== null ? Math.abs(entry - stop) : null);
         if (!(riskDistance > 0)) return;
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;

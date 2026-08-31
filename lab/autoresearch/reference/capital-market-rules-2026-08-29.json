@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-29T14:15:00.931Z",
+  "source": "Capital.com GET /markets/{epic} on the configured demo account",
+  "symbols": {
+    "AUDCAD": { "decimals": 5, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "AUDJPY": { "decimals": 3, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "AUDUSD": { "decimals": 5, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "EURAUD": { "decimals": 5, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "EURCHF": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "EURGBP": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "EURJPY": { "decimals": 3, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "EURUSD": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "GBPAUD": { "decimals": 5, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "GBPCHF": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "GBPJPY": { "decimals": 3, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "GBPUSD": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "NZDJPY": { "decimals": 3, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "NZDUSD": { "decimals": 5, "marginFactor": 5, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "USDCAD": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "USDCHF": { "decimals": 5, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 },
+    "USDJPY": { "decimals": 3, "marginFactor": 3.333333, "marginFactorUnit": "PERCENTAGE", "minDealSize": 100, "minDistancePct": 0.01 }
+  }
+}

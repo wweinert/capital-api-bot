@@ -1,4 +1,4 @@
-import { getOpenPositions, getWorkingOrders, cancelWorkingOrder } from "./api.js";
+import { getOpenPositions, getWorkingOrders, cancelWorkingOrder, getMarketDetails } from "./api.js";
 import { RISK } from "./config.js";
 
 import tradingService from "./services/trading.js";
@@ -18,7 +18,9 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
         }
 
         bot.monitorInProgress = true;
+
         try {
+            await pendingInvalidationCheck();
             await trailingStopCheck(bot);
             await bot.delay(3000);
             await weekendFlatCheck(bot);
@@ -27,6 +29,8 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
             await bot.delay(3000);
             await maxHoldCheck(bot);
             await bot.delay(3000);
+        } catch (error) {
+            logger.error(`[Monitoring] Monitor cycle failed: ${error.message}`);
         } finally {
             bot.monitorInProgress = false;
         }
@@ -72,16 +76,31 @@ async function cancelOrders(shouldCancel) {
 
     for (const item of orders) {
         const order = item?.workingOrderData;
-
-        if (!order?.dealId || !shouldCancel(order)) {
+        if (!order?.dealId || !(await shouldCancel(order))) {
             continue;
         }
-
         await cancelWorkingOrder(order.dealId);
         logger.info(`[Orders] Cancelled ${order.epic}`);
     }
 }
 
+export async function pendingInvalidationCheck() {
+    await cancelOrders(async (order) => {
+        const market = await getMarketDetails(order.epic);
+        const direction = String(order.direction).toUpperCase();
+        const stop = Number(order.stopLevel);
+        const bid = Number(market?.snapshot?.bid);
+        const ask = Number(market?.snapshot?.offer ?? market?.snapshot?.ask);
+
+        const invalidated = direction === "BUY" ? Number.isFinite(bid) && bid <= stop : Number.isFinite(ask) && ask >= stop;
+
+        if (invalidated) {
+            logger.info(`[Orders] ${order.epic} ${direction} ` + `invalidated before entry`);
+        }
+
+        return invalidated;
+    });
+}
 const getCloseMinute = (profile) => Math.min(profile?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC, RISK.DAILY_CLOSE_MINUTE_UTC);
 
 export async function dailyFlatCheck(bot) {

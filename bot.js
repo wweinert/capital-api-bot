@@ -7,8 +7,8 @@ import logger from "./utils/logger.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
 import Strategy from "./strategies/strategies.js";
 
-const ANALYSIS_REPEAT_MS = 5 * 60 * 1000;
-const ANALYSIS_DELAY_MS = 1 * 1000;
+const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
+const ANALYSIS_DELAY_MS = 2 * 1000;
 const TIMEFRAME_MINUTES = {
     m1: 1,
     m5: 5,
@@ -99,7 +99,6 @@ class TradingBot {
 
             this.analysisInProgress = true;
             try {
-                await this.updateAccountInfo();
                 await this.analyzeAllSymbols();
             } catch (error) {
                 logger.error("[bot.js] Analysis interval error:", error);
@@ -108,7 +107,7 @@ class TradingBot {
             }
         };
 
-        // First run: align to the next M5 candle close + 5 seconds
+        // First run: align to the next M15 candle close + 2 seconds
         const interval = this.getInitialIntervalMs();
 
         logger.info(`[${DEV.MODE ? "DEV" : "PROD"}] Setting up analysis interval: ${interval}ms`);
@@ -116,7 +115,7 @@ class TradingBot {
         this.analysisStartTimeout = setTimeout(() => {
             void runAnalysis();
 
-            // Repeat after every M5 candle
+            // Repeat after every M15 candle
             this.analysisInterval = setInterval(() => {
                 void runAnalysis();
             }, this.getRepeatIntervalMs());
@@ -161,9 +160,21 @@ class TradingBot {
         const { session, symbols } = this.getActiveSymbols();
         this.activeSymbols = symbols;
         const work = symbols.map((symbol) => ({ symbol, profile: getProfile(symbol, session) })).filter(({ profile }) => profile);
-        const allCandles = await Promise.all(work.map(({ symbol, profile }) => this.fetchAllCandles(symbol, profile)));
-        const results = await Promise.all(work.map(({ symbol, profile }, index) => this.analyzeSymbol(symbol, allCandles[index], profile)));
 
+        const pairAnalyses = Promise.all(
+            work.map(async ({ symbol, profile }) => {
+                try {
+                    const candles = await this.fetchAllCandles(symbol, profile);
+                    return await this.analyzeSymbol(symbol, candles, profile);
+                } catch (error) {
+                    logger.error(`[Bot] ${symbol} analysis failed: ${error.message}`);
+                    return null;
+                }
+            }),
+        );
+
+        const [results] = await Promise.all([pairAnalyses, this.updateAccountInfo()]);
+        
         const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
 
         logger.info(
@@ -241,9 +252,9 @@ class TradingBot {
             });
         }
 
-        // if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
-        //     return null;
-        // }
+        if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
+            return null;
+        }
 
         const indicators = {};
 

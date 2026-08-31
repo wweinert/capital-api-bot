@@ -12,14 +12,14 @@ const MAJOR_FX = new Set(["AUDUSD", "EURUSD", "GBPUSD", "NZDUSD", "USDCAD", "USD
 const CONVERSION_SYMBOLS = ["EURAUD", "EURCHF", "EURGBP", "EURJPY", "EURUSD", "NZDUSD", "USDCAD"];
 
 export const RESEARCH_PROTOCOL = Object.freeze({
-    schemaVersion: 18,
-    name: "current-live-m15-h1-baseline",
+    schemaVersion: 21,
+    name: "current-live-one-slot-m15-m1-broker-parity-baseline",
     startCapital: 500,
     timeframes: Object.freeze(["M15", "H1"]),
-    maxPositions: 5,
-    risk: Object.freeze({ maxPerPositionPct: 0.03, maxPortfolioPct: 0.15, marginUtilization: 0.9 }),
+    maxPositions: 1,
+    risk: Object.freeze({ maxPerPositionPct: 0.03, maxPortfolioPct: 0.03, marginUtilization: 0.9 }),
     leverage: Object.freeze({ majors: 30, crosses: 20 }),
-    execution: "closed M15 signal; M15 bid/ask pending replay; SL-first intrabar ambiguity; trailing updated at M15 close",
+    execution: "one decision per closed M15 candle; bid/ask pending replay; one occupied slot; no cooldown or entry-count limits",
     lockedTest: "none-full-period-baseline-is-inspected-after-this-run",
 });
 
@@ -980,6 +980,8 @@ export function prepareSessionProfileSearch(datasetDir, requestedSymbols, option
                 rsi,
                 volume,
                 indicatorScore: [bollinger || bollingerRoom >= 1, rsi, volume].filter(Boolean).length,
+                quality: [bollinger || bollingerRoom >= 1, rsi, volume].filter(Boolean).length
+                    + current.efficiency + current.volumeRatio - (current.askClose - current.close) / current.atr,
                 continuation,
                 h1Moves,
             };
@@ -989,10 +991,10 @@ export function prepareSessionProfileSearch(datasetDir, requestedSymbols, option
     }
     return {
         protocol: {
-            schemaVersion: 19,
-            name: "m15-h1-day-session-profile-search",
+            schemaVersion: 21,
+            name: "current-live-broker-feasible-profile-search",
             timeframes: ["M15", "H1"],
-            execution: "closed M15 price-action signal; next-M15 bid/ask pending replay; SL-first ambiguity; spread stress x1.25",
+            execution: "one decision per closed M15 candle; STOP or MARKET entry; no cooldown or entry-count caps; exact broker-feasible M1 replay required after selection",
             lockedTest: "none-all-available-history-is-inspected-development-evidence",
         },
         data,
@@ -1035,18 +1037,25 @@ function sessionCandidateAllows(event, candidate, spreadMultiplier) {
 function resolveSessionSearchEvent(prepared, event, candidate, spreadMultiplier) {
     const rows = prepared.data.get(event.symbol).M15;
     const signal = rows[event.rowIndex];
-    const signalAskHigh = adjustedAsk(signal, "high", spreadMultiplier);
+    const signalSpread = adjustedAsk(signal, "close", spreadMultiplier) - signal.close;
+    const signalHighWithSpread = signal.high + signalSpread;
     const entry = event.side === "BUY"
-        ? signalAskHigh + event.atr * candidate.entryOffsetAtr
+        ? signalHighWithSpread + event.atr * candidate.entryOffsetAtr
         : signal.low - event.atr * candidate.entryOffsetAtr;
     const stop = event.side === "BUY"
         ? signal.low - event.atr * candidate.stopBufferAtr
-        : signalAskHigh + event.atr * candidate.stopBufferAtr;
+        : signalHighWithSpread + event.atr * candidate.stopBufferAtr;
+    const entryMode = candidate.entryMode ?? "stop";
     const expiryBars = Math.max(1, Math.ceil(candidate.expiryMinutes / 15));
     let fillIndex = null;
     let fillPrice = null;
     for (let index = event.rowIndex + 1; index <= Math.min(rows.length - 1, event.rowIndex + expiryBars); index += 1) {
         const bar = rows[index];
+        if (entryMode === "market") {
+            fillIndex = index;
+            fillPrice = event.side === "BUY" ? adjustedAsk(bar, "open", spreadMultiplier) : bar.open;
+            break;
+        }
         const askHigh = adjustedAsk(bar, "high", spreadMultiplier);
         const invalidated = event.side === "BUY" ? bar.low <= stop : askHigh >= stop;
         const touched = event.side === "BUY" ? askHigh >= entry : bar.low <= entry;
@@ -1074,6 +1083,7 @@ function resolveSessionSearchEvent(prepared, event, candidate, spreadMultiplier)
         closedMs: rows[index].t + M15,
         day: event.day,
         fold: event.fold,
+        quality: event.quality,
         r: realizedR + remaining * signedR(priceValue),
         reason,
     });
@@ -1123,21 +1133,16 @@ export function evaluateSessionProfile(prepared, candidate, options = {}) {
     const spreadMultiplier = Number(options.spreadMultiplier ?? 1);
     const events = prepared.eventsByKey.get(`${candidate.symbol}:${candidate.session}`) ?? [];
     const trades = [];
-    const dailyEntries = new Map();
-    const dailyLosses = new Map();
     let occupiedUntil = -Infinity;
-    let cooldownUntil = -Infinity;
     for (const event of events) {
-        if (event.t < occupiedUntil || event.t < cooldownUntil) continue;
-        if (keyCount(dailyEntries, event.day) >= candidate.maxDailyEntries || keyCount(dailyLosses, event.day) >= candidate.maxDailyLosses) continue;
+        const date = new Date(event.t);
+        const minute = minuteUtc(event.t);
+        if (event.t < occupiedUntil || minute >= 22 * 60 || (date.getUTCDay() === 5 && date.getUTCHours() >= 18)) continue;
         if (!sessionCandidateAllows(event, candidate, spreadMultiplier)) continue;
         const trade = resolveSessionSearchEvent(prepared, event, candidate, spreadMultiplier);
         if (!trade) continue;
         trades.push(trade);
-        increment(dailyEntries, event.day);
-        if (trade.r <= 0) increment(dailyLosses, event.day);
         occupiedUntil = trade.closedMs;
-        cooldownUntil = trade.closedMs + candidate.cooldownMinutes * MINUTE;
     }
     return { summary: summarizeSessionSearchTrades(prepared, trades), trades };
 }

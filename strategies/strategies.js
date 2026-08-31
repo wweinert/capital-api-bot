@@ -165,7 +165,6 @@ class Strategy {
             entryType: profile.entry.type,
             entryPrice,
             stopLoss,
-            pendingInvalidationPrice: profile.entry.cancelIfStopTouchedBeforeEntry ? stopLoss : null,
             atr,
             quality: score + efficiency + volumeRatio - spreadAtr,
             bodyRatio,

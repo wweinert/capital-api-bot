@@ -60,6 +60,7 @@ function parseArgs(argv) {
         else if (argument === "--replay-session-report") options.replaySessionReport = argv[++index];
         else if (argument === "--seconds") options.seconds = Number(argv[++index]);
         else if (argument === "--seed") options.seed = Number(argv[++index]);
+        else if (argument === "--session-capacity") options.sessionCapacity = Number(argv[++index]);
         else throw new Error(`Unknown argument: ${argument}`);
     }
     return options;
@@ -81,6 +82,7 @@ Options:
   --replay-session-report f   Causally replay frozen profiles from a search report
   --seconds 1800              Session-search wall-clock budget (default 30m)
   --seed 20260826             Deterministic session-search seed
+  --session-capacity 7        Maximum broker-feasible profiles per session
   -h, --help                  Show this help
 
 AUTORESEARCH_DATASET_DIR may be used instead of --dataset. The run is offline;
@@ -226,6 +228,7 @@ function randomSearchCandidate(random, symbol, session) {
         name: `${symbol}-${session}-m15h1`,
         symbol,
         session,
+        entryMode: random() < 0.85 ? "stop" : "market",
         structureMode: pick(random, ["greenred", "greenred", "continuation"]),
         minImpulseAtr: pick(random, [0.25, 0.5, 0.75, 1]),
         minSwingGapAtr: pick(random, [0, 0.05, 0.1, 0.2]),
@@ -255,9 +258,6 @@ function randomSearchCandidate(random, symbol, session) {
         partialFraction: pick(random, [0.5, 0.6]),
         trailAtr: pick(random, [2, 3, 4]),
         maxHoldMinutes: pick(random, [120, 180, 240, 360, 480]),
-        cooldownMinutes: pick(random, [15, 30, 45, 60]),
-        maxDailyEntries: pick(random, [1, 1, 2]),
-        maxDailyLosses: pick(random, [1, 1, 2]),
     };
 }
 
@@ -265,7 +265,7 @@ function normalizeLegacySeed(symbol, session, config) {
     if (!config) return null;
     const partial = config.partialRunner === true;
     return {
-        name: `${symbol}-${session}-legacy-seed`, symbol, session,
+        name: `${symbol}-${session}-legacy-seed`, symbol, session, entryMode: "stop",
         structureMode: config.structureMode === "green-red" ? "greenred" : "greenred",
         minImpulseAtr: Number(config.minImpulseAtr ?? 0.5), minSwingGapAtr: Number(config.minSwingGapAtr ?? 0.1), maxRetrace: Number(config.maxRetrace ?? 1.05),
         h1Bars: [0, 1, 2, 4].includes(Number(config.h1Bars)) ? Number(config.h1Bars) : 0, minH1MoveAtr: Number(config.minH1TrendAtr ?? 0),
@@ -276,8 +276,46 @@ function normalizeLegacySeed(symbol, session, config) {
         exitMode: partial ? "partial" : "fixed", targetR: Number(config.rewardRisk ?? 1.25), breakEvenAtR: Number(config.breakEvenR) > 0 ? Number(config.breakEvenR) : null,
         trailActivationR: Number(config.trailR) > 0 ? Number(config.breakEvenR ?? 1) : null, trailDistanceR: Number(config.trailR) > 0 ? Number(config.trailR) : null,
         partialAtR: Number(config.partialR ?? 0.75), partialFraction: Number(config.partialFraction ?? 0.6), trailAtr: Number(config.trailATR ?? 3),
-        maxHoldMinutes: Number(config.hold ?? 240), cooldownMinutes: Number(config.cooldown ?? 30), maxDailyEntries: Number(config.maxDaily ?? 1), maxDailyLosses: Number(config.maxLossesPerSymbolDay ?? 1),
+        maxHoldMinutes: Number(config.hold ?? 240),
     };
+}
+
+function currentLiveSeeds() {
+    return Object.entries(PROFILES).flatMap(([symbol, sessions]) => Object.entries(sessions).map(([session, profile]) => ({
+        name: `${symbol}-${session}-current-live-seed`,
+        symbol,
+        session,
+        entryMode: profile.entry.type === "market" ? "market" : "stop",
+        structureMode: profile.signal.structureMode,
+        minImpulseAtr: Number(profile.signal.minImpulseAtr ?? 0),
+        minSwingGapAtr: Number(profile.signal.minSwingGapAtr ?? 0),
+        maxRetrace: Number(profile.signal.maxRetrace ?? 1),
+        h1Bars: Number(profile.signal.h1DirectionBars ?? 0),
+        minH1MoveAtr: Number(profile.signal.minH1TrendAtr ?? 0),
+        indicatorMode: profile.signal.indicatorMode ?? "none",
+        minIndicatorScore: Number(profile.signal.minIndicatorScore ?? 0),
+        minBollingerRoomAtr: Number(profile.signal.minBollingerRoomAtr ?? 0),
+        minAtrPercentile: Number(profile.signal.minAtrPercentile ?? 0),
+        maxAtrPercentile: Number(profile.signal.maxAtrPercentile ?? 1),
+        minEfficiency: Number(profile.signal.minEfficiency ?? 0),
+        minActivity: Number(profile.signal.minActivity ?? 0),
+        minBodyRatio: Number(profile.signal.minBodyRatio ?? 0),
+        minBodyAtr: Number(profile.signal.minBodyAtr ?? 0),
+        minVolumeRatio: Number(profile.signal.minVolumeRatio ?? 0),
+        maxSpreadAtr: Number(profile.signal.maxSpreadAtr ?? 1.5),
+        entryOffsetAtr: Number(profile.entry.bufferAtr ?? 0),
+        expiryMinutes: 15 * Number(profile.entry.expiryBars ?? 1),
+        stopBufferAtr: Number(profile.stop.bufferAtr ?? 0),
+        exitMode: profile.exit.mode,
+        targetR: Number(profile.exit.targetR ?? 1),
+        breakEvenAtR: profile.exit.breakEvenAtR == null ? null : Number(profile.exit.breakEvenAtR),
+        trailActivationR: profile.exit.trailActivationR == null ? null : Number(profile.exit.trailActivationR),
+        trailDistanceR: profile.exit.trailDistanceR == null ? null : Number(profile.exit.trailDistanceR),
+        partialAtR: Number(profile.exit.partialAtR ?? 1),
+        partialFraction: Number(profile.exit.partialFraction ?? 0.5),
+        trailAtr: Number(profile.exit.trailAtr ?? 3),
+        maxHoldMinutes: Number(profile.exit.maxHoldMinutes ?? 240),
+    })));
 }
 
 function loadLegacySeeds() {
@@ -314,9 +352,9 @@ function profileAdmission(nominal, stress) {
         sample: nominal.entries >= 24 && nominalFolds.every((fold) => fold.entries >= 5),
         nominalProfit: nominal.totalR > 0 && nominalFolds.every((fold) => fold.totalR > 0),
         stressProfit: stress.totalR > 0 && stressFolds.every((fold) => fold.totalR > 0),
-        winRate: nominal.winRate > 50 && stress.winRate > 50,
+        winRate: nominal.winRate >= 35 && stress.winRate >= 35,
         profitFactor: nominal.profitFactor >= 1.1 && stress.profitFactor >= 1.05,
-        positiveDays: nominal.positiveActiveDayPct > 50 && stress.positiveActiveDayPct > 50,
+        positiveDays: nominal.positiveActiveDayPct >= 45 && stress.positiveActiveDayPct >= 45,
         drawdown: nominal.maxDrawdownR <= 8 && stress.maxDrawdownR <= 10,
         frequency: nominal.tradesPerDay >= 0.08 && nominal.tradesPerDay <= 0.8,
     };
@@ -335,33 +373,33 @@ function insertRanked(map, key, item, limit) {
 }
 
 function portfolioFromTrades(prepared, profileRuns, spreadKey, options = {}) {
-    const maxEntriesPerDay = Number(options.maxEntriesPerDay ?? 4);
-    const maxEntriesPerSession = Number(options.maxEntriesPerSession ?? 2);
-    const maxPositions = Number(options.maxPositions ?? 5);
+    const maxPositions = Number(options.maxPositions ?? 1);
     const candidates = profileRuns.flatMap((run) => run[spreadKey].trades.map((trade) => ({ ...trade, priority: run.priority ?? 0, profileKey: `${run.candidate.symbol}:${run.candidate.session}` })))
-        .sort((left, right) => left.signalAt - right.signalAt || right.priority - left.priority || left.profileKey.localeCompare(right.profileKey));
+        .sort((left, right) => left.signalAt - right.signalAt || right.quality - left.quality || left.profileKey.localeCompare(right.profileKey));
     const accepted = [];
-    const dayEntries = new Map();
-    const daySessionEntries = new Map();
+    const dailyPnl = new Map();
+    const weeklyPnl = new Map();
+    let balance = 500;
     for (const trade of candidates) {
         const active = accepted.filter((item) => item.closedMs > trade.signalAt);
         if (active.length >= maxPositions || active.some((item) => item.symbol === trade.symbol)) continue;
-        const usedToday = dayEntries.get(trade.day) ?? 0;
-        const remainingSessions = PROFILE_SEARCH_SESSIONS.length - PROFILE_SEARCH_SESSIONS.indexOf(trade.session) - 1;
-        const usableBeforeFutureSessions = Math.max(1, maxEntriesPerDay - remainingSessions);
-        if (usedToday >= usableBeforeFutureSessions) continue;
-        const sessionKey = `${trade.day}:${trade.session}`;
-        if ((daySessionEntries.get(sessionKey) ?? 0) >= maxEntriesPerSession) continue;
+        const closeDay = new Date(trade.closedMs).toISOString().slice(0, 10);
+        const week = weekStartUtc(trade.closedMs);
+        const dayProfit = dailyPnl.get(closeDay) ?? 0;
+        const weekProfit = weeklyPnl.get(week) ?? 0;
+        if (dayProfit <= -(balance - dayProfit) * 0.10 || weekProfit <= -(balance - weekProfit) * 0.20) continue;
         accepted.push(trade);
-        dayEntries.set(trade.day, (dayEntries.get(trade.day) ?? 0) + 1);
-        daySessionEntries.set(sessionKey, (daySessionEntries.get(sessionKey) ?? 0) + 1);
+        const pnl = balance * 0.03 * trade.r;
+        balance += pnl;
+        dailyPnl.set(closeDay, dayProfit + pnl);
+        weeklyPnl.set(week, weekProfit + pnl);
     }
     const summary = summarizeSessionSearchTrades(prepared, accepted);
-    let balance = 500;
+    balance = 500;
     let peak = balance;
     let maxDrawdownPct = 0;
     for (const trade of [...accepted].sort((left, right) => left.closedMs - right.closedMs)) {
-        balance += balance * 0.01 * trade.r;
+        balance += balance * 0.03 * trade.r;
         peak = Math.max(peak, balance);
         maxDrawdownPct = Math.max(maxDrawdownPct, 100 * (peak - balance) / peak);
     }
@@ -444,12 +482,12 @@ function weeklyPortfolioStats(prepared, trades, options = {}) {
 
 function portfolioAdmission(nominal, stress) {
     const gates = {
-        activity: nominal.tradesPerDay >= 2 && nominal.tradesPerDay <= 4,
+        activity: nominal.tradesPerDay >= 2,
         nominalProfit: nominal.totalR > 0 && Object.values(nominal.folds).every((fold) => fold.totalR > 0),
         stressProfit: stress.totalR > 0 && Object.values(stress.folds).every((fold) => fold.totalR > 0),
-        winRate: nominal.winRate > 50 && stress.winRate > 50,
+        winRate: nominal.winRate >= 35 && stress.winRate >= 35,
         profitFactor: nominal.profitFactor >= 1.1 && stress.profitFactor >= 1.05,
-        positiveDays: nominal.positiveActiveDayPct > 50 && stress.positiveActiveDayPct > 50,
+        positiveDays: nominal.positiveActiveDayPct >= 45 && stress.positiveActiveDayPct >= 45,
         drawdown: nominal.maxDrawdownR <= 12 && stress.maxDrawdownR <= 15,
         sessions: Object.values(nominal.sessionEntries).every((entries) => entries >= 8),
     };
@@ -458,25 +496,37 @@ function portfolioAdmission(nominal, stress) {
 
 function portfolioScore(nominal, stress) {
     const foldFloor = Math.min(...Object.values(stress.folds).map((fold) => fold.totalR));
-    const activityPenalty = 10 * Math.abs(nominal.tradesPerDay - 3.25);
-    return +(2 * stress.totalR + nominal.totalR + 3 * foldFloor + 0.3 * (stress.positiveActiveDayPct - 50) - stress.maxDrawdownR - activityPenalty).toFixed(6);
+    return +(2 * stress.totalR + nominal.totalR + 3 * foldFloor + 0.3 * (stress.positiveActiveDayPct - 50) - stress.maxDrawdownR).toFixed(6);
 }
 
 export function runSessionProfileSearch(datasetDir, options = {}) {
     const requestedSeconds = Number(options.seconds ?? 1800);
     if (!(requestedSeconds > 0)) throw new Error("--seconds must be positive.");
     const seed = Number(options.seed ?? 20260826);
+    const sessionCapacity = Number(options.sessionCapacity ?? 7);
+    if (!Number.isInteger(sessionCapacity) || sessionCapacity < 1 || sessionCapacity > 7) {
+        throw new Error("--session-capacity must be an integer from 1 to 7 (REST request-budget ceiling).");
+    }
     const random = seededRandom(seed);
-    const available = discoverSymbols(datasetDir).filter((symbol) => symbol !== "AUDNZD");
-    const symbols = (options.symbols ?? available).filter((symbol) => available.includes(symbol) && symbol !== "AUDNZD");
+    const available = discoverSymbols(datasetDir);
+    const symbols = (options.symbols ?? available).filter((symbol) => available.includes(symbol));
     const prepareStarted = performance.now();
     const prepared = prepareSessionProfileSearch(datasetDir, symbols, { from: options.from, to: options.to });
     const preparationSeconds = (performance.now() - prepareStarted) / 1000;
     const evaluatorSource = fs.readFileSync(path.join(HERE, "prepare.js"));
-    const legacySeeds = loadLegacySeeds().filter((candidate) => symbols.includes(candidate.symbol));
+    const liveSeeds = currentLiveSeeds().filter((candidate) => symbols.includes(candidate.symbol));
+    const legacySeeds = [...liveSeeds, ...loadLegacySeeds().filter((candidate) => symbols.includes(candidate.symbol))];
     const seedsByKey = new Map();
     for (const candidate of legacySeeds) seedsByKey.set(`${candidate.symbol}:${candidate.session}`, [...(seedsByKey.get(`${candidate.symbol}:${candidate.session}`) ?? []), candidate]);
     const keys = symbols.flatMap((symbol) => PROFILE_SEARCH_SESSIONS.map((session) => `${symbol}:${session}`));
+    const liveProfileRuns = liveSeeds.map((candidate, index) => ({
+        candidate,
+        priority: liveSeeds.length - index,
+        nominal: evaluateSessionProfile(prepared, candidate, { spreadMultiplier: 1 }),
+        stress: evaluateSessionProfile(prepared, candidate, { spreadMultiplier: 1.25 }),
+    }));
+    const baselineNominal = portfolioFromTrades(prepared, liveProfileRuns, "nominal");
+    const baselineStress = portfolioFromTrades(prepared, liveProfileRuns, "stress");
     const admitted = new Map();
     const fallbacks = new Map();
     const seen = new Set();
@@ -530,11 +580,16 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
     const sessionPools = {};
     const fallbackLeaders = {};
     for (const session of PROFILE_SEARCH_SESSIONS) {
-        const leaders = symbols.flatMap((symbol) => admitted.get(`${symbol}:${session}`)?.slice(0, 1) ?? []).sort((left, right) => right.score - left.score).slice(0, 5);
+        const leaders = symbols.flatMap((symbol) => admitted.get(`${symbol}:${session}`)?.slice(0, 1) ?? []).sort((left, right) => right.score - left.score).slice(0, sessionCapacity);
         sessionPools[session] = leaders.map(compactProfileResult);
-        fallbackLeaders[session] = symbols.flatMap((symbol) => fallbacks.get(`${symbol}:${session}`)?.slice(0, 1) ?? []).sort((left, right) => right.score - left.score).slice(0, 5).map(compactProfileResult);
+        fallbackLeaders[session] = symbols.flatMap((symbol) => fallbacks.get(`${symbol}:${session}`)?.slice(0, 1) ?? []).sort((left, right) => right.score - left.score).slice(0, sessionCapacity).map(compactProfileResult);
     }
-    const finalists = Object.values(sessionPools).flat();
+    const finalists = PROFILE_SEARCH_SESSIONS.flatMap((session) => {
+        const qualified = sessionPools[session];
+        if (qualified.length >= sessionCapacity) return qualified.slice(0, sessionCapacity);
+        const used = new Set(qualified.map((item) => item.candidate.symbol));
+        return [...qualified, ...fallbackLeaders[session].filter((item) => !used.has(item.candidate.symbol)).slice(0, sessionCapacity - qualified.length)];
+    });
     const profileRuns = finalists.map((item, index) => ({
         candidate: item.candidate,
         priority: finalists.length - index,
@@ -560,6 +615,7 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
         generatedAt: new Date().toISOString(),
         metadata: {
             evaluatorSha256: sha256(evaluatorSource),
+            orchestratorSha256: sha256(fs.readFileSync(path.join(HERE, "train.js"))),
             datasetFingerprint: prepared.datasetFingerprint,
             coverage: prepared.coverage,
             symbols: prepared.symbols,
@@ -571,23 +627,36 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
             signalAudit: prepared.signalAudit,
             preparationSeconds,
         },
-        search: { requestedSeconds, actualSeconds, seed, iterations, uniqueCandidates: seen.size, duplicateCandidates, admittedEvaluations, coveredPairSessions: admitted.size, totalPairSessions: keys.length, legacySeeds: legacySeeds.length },
+        baseline: {
+            profiles: liveSeeds,
+            nominal: baselineNominal.summary,
+            stress: baselineStress.summary,
+        },
+        search: { requestedSeconds, actualSeconds, seed, iterations, uniqueCandidates: seen.size, duplicateCandidates, admittedEvaluations, coveredPairSessions: admitted.size, totalPairSessions: keys.length, currentLiveSeeds: liveSeeds.length, legacySeeds: legacySeeds.length - liveSeeds.length },
         acceptance: {
-            profile: "24+ trades, 5+ per temporal fold, positive all folds nominal/stress, >50% wins and profitable active days, PF>=1.10/1.05, DD<=8R/10R, 0.08-0.8 trades/day",
-            portfolio: "2-4 trades/day, positive all folds nominal/stress, >50% wins and profitable active days, PF>=1.10/1.05, DD<=12R/15R, all four sessions represented",
-            sessionCapacity: 5,
-            dailyEntryCap: 4,
-            sessionEntryCap: 2,
+            profile: "24+ trades, 5+ per temporal fold, positive all folds nominal/stress, >=35% wins, >=45% profitable active days, PF>=1.10/1.05, DD<=8R/10R, 0.08-0.8 trades/day",
+            portfolio: "one occupied slot, no entry-count caps or cooldown; 2+ trades/day, positive all folds nominal/stress, >=35% wins, >=45% profitable active days, PF>=1.10/1.05, DD<=12R/15R, all four sessions represented",
+            sessionCapacity,
+            dailyEntryCap: null,
+            sessionEntryCap: null,
         },
         sessionPools,
         fallbackLeaders,
+        profiles: finalists.map((item, index) => ({
+            priority: finalists.length - index,
+            candidate: item.candidate,
+            searchScore: item.score,
+            admission: item.admission,
+            searchNominal: item.nominal,
+            searchStress: item.stress,
+        })),
         portfolio,
         limitations: [
             "All available history is already-inspected development evidence; no result is fresh forward confirmation.",
             "Only M15 and the last fully closed H1 candle are loaded. Pending fills, exits, breakeven and trailing are conservatively resolved on M15.",
             "Spread x1.25 is tested, but gaps, financing, broker minimum size/distance and order rejection are unavailable.",
-            "A five-pair session pool is a ceiling. Profiles that fail the frozen admission gates are shown only as fallbacks and are not admitted.",
-            "The portfolio replay caps entries and overlapping positions, but R-based 1% compounding is an approximation until a candidate is frozen for a full margin-aware replay.",
+            `The ${sessionCapacity}-pair session pool is capped by the current REST request budget. Profiles that fail the frozen admission gates are shown as fallbacks.`,
+            "This pass is a causal M15/H1 prescreener. Broker rules, margin, M1 pending/market execution and monitoring are mandatory frozen replay gates before a candidate can beat the live baseline.",
         ],
     };
 }

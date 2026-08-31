@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-28T12:07:35Z",
+  "objective": "Optimize the current one-slot live strategy mechanics without cooldown or entry-count limits.",
+  "protocol": {
+    "startCapitalEur": 500,
+    "maximumPositions": 1,
+    "maximumMarginUsagePct": 90,
+    "maximumRiskPerTradePct": 3,
+    "signalCadence": "M15 closed candles",
+    "liveMonitorCadence": "M1",
+    "pendingInvalidation": "M1 close used as the REST snapshot proxy",
+    "dailyLossBreakerPct": 10,
+    "weeklyLossBreakerPct": 20,
+    "cooldownMinutes": 0,
+    "entryCountLimits": false,
+    "spreadStressMultiplier": 1.25
+  },
+  "dataset": {
+    "directory": "/private/tmp/capital-dataset-trailing-20260827",
+    "fingerprint": "62e06dad79f3a653a315726eb6f38d724bc27ce31cdf9735aceb4609a1c32c9c",
+    "start": "2025-12-21T22:00:00.000Z",
+    "endExclusiveM1": "2026-08-27T10:22:00.000Z",
+    "marketDays": 179
+  },
+  "sourceHashes": {
+    "prepareJs": "00c41e3c0cec66fe0e35713435fa87a3e5caee6f69a4fa58abdc02717da3769e",
+    "trainJs": "9f147b35361cf1603890938b7f13497bd913f0792d519d3bac586196cbe73f1a",
+    "trailingSlotsJs": "f3bea466f78bc60df5e34f2de927736fe07b209368546392e06bc4072d5dcb0f"
+  },
+  "search": {
+    "requestedSeconds": 1200,
+    "actualSeconds": 1200.079,
+    "seed": 20260828,
+    "iterations": 1379078,
+    "uniqueCandidates": 1320467,
+    "admittedEvaluations": 249661,
+    "coveredPairSessions": 33,
+    "totalPairSessions": 36,
+    "selectedProfiles": 20,
+    "selectedProfilesAdmitted": 20
+  },
+  "selectedPairSessions": [
+    "USDCHF:asia",
+    "AUDUSD:asia",
+    "EURJPY:asia",
+    "EURUSD:asia",
+    "AUDJPY:asia",
+    "EURUSD:london",
+    "GBPUSD:london",
+    "AUDUSD:london",
+    "GBPCHF:london",
+    "USDCHF:london",
+    "USDJPY:overlap",
+    "GBPUSD:overlap",
+    "AUDJPY:overlap",
+    "EURUSD:overlap",
+    "USDCHF:overlap",
+    "USDJPY:newYork",
+    "GBPUSD:newYork",
+    "AUDUSD:newYork",
+    "AUDJPY:newYork",
+    "EURJPY:newYork"
+  ],
+  "exactM1Replay": {
+    "currentBaseline": {
+      "nominal": { "finalBalanceEur": 5547.82, "returnPct": 1009.56, "trades": 1224, "tradesPerMarketDay": 6.84, "winRatePct": 48.2, "profitFactor": 1.162, "maxDrawdownPct": 35.85 },
+      "stress": { "finalBalanceEur": 1967.81, "returnPct": 293.56, "trades": 1202, "tradesPerMarketDay": 6.72, "winRatePct": 46.51, "profitFactor": 1.086, "maxDrawdownPct": 37.29 }
+    },
+    "optimizedM1": {
+      "nominal": { "finalBalanceEur": 13280.4, "returnPct": 2556.08, "trades": 890, "tradesPerMarketDay": 4.97, "winRatePct": 49.55, "profitFactor": 1.362, "maxDrawdownPct": 32.1, "positiveWeeks": 28, "negativeWeeks": 8, "medianWeeklyReturnPct": 12.81 },
+      "stress": { "finalBalanceEur": 10754.12, "returnPct": 2050.82, "trades": 875, "tradesPerMarketDay": 4.89, "winRatePct": 49.71, "profitFactor": 1.353, "maxDrawdownPct": 38.84, "positiveWeeks": 26, "negativeWeeks": 10, "medianWeeklyReturnPct": 10.64 }
+    },
+    "monitorCadenceAblation": {
+      "M1": { "nominalFinalBalanceEur": 13280.4, "stressFinalBalanceEur": 10754.12 },
+      "M5": { "nominalFinalBalanceEur": 11176.94, "stressFinalBalanceEur": 7934.08 },
+      "M15": { "nominalFinalBalanceEur": 11991.84, "stressFinalBalanceEur": 8083.23 }
+    }
+  },
+  "selection": "optimizedM1",
+  "selectionReason": "Highest nominal and stressed final balance; every selected profile passed the frozen gates; all three exact temporal folds remained profitable under spread stress."
+}
