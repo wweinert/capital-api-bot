@@ -175,7 +175,7 @@ class TradingBot {
 
         const [results] = await Promise.all([pairAnalyses, this.updateAccountInfo()]);
         
-        const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
+        const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality || a.symbol.localeCompare(b.symbol));
 
         logger.info(
             `[Bot] Candidates: ${

@@ -12,7 +12,7 @@ const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 const M15 = 15 * MINUTE;
 const CADENCES = [1, 5, 15];
-const SLOT_COUNTS = [1, 2, 3, 4, 5];
+const SLOT_COUNTS = [1, 2, 3, 4, 5, 6, 7];
 const DEFAULT_RULES_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), "reference", "capital-market-rules-2026-08-29.json");
 
 function parseArgs(values) {
@@ -163,6 +163,8 @@ function adjustedBar(row, spreadMultiplier) {
 
 function candidateAllows(event, candidate, spreadMultiplier) {
     if (event.symbol !== candidate.symbol || event.session !== candidate.session) return false;
+    if (candidate.directionMode === "buy" && event.side !== "BUY") return false;
+    if (candidate.directionMode === "sell" && event.side !== "SELL") return false;
     if (event.spreadAtr * spreadMultiplier > candidate.maxSpreadAtr) return false;
     if (event.atrPercentile < candidate.minAtrPercentile || event.atrPercentile > candidate.maxAtrPercentile) return false;
     if (event.efficiency < candidate.minEfficiency || event.activity < candidate.minActivity) return false;
@@ -194,9 +196,14 @@ function buildSignals(prepared, profiles, spreadMultiplier) {
             const signal = rows[event.rowIndex];
             const signalSpread = (signal.askClose - signal.close) * spreadMultiplier;
             const signalHighWithSpread = signal.high + signalSpread;
-            const entry = event.side === "BUY"
-                ? signalHighWithSpread + event.atr * candidate.entryOffsetAtr
-                : signal.low - event.atr * candidate.entryOffsetAtr;
+            const entryMode = candidate.entryMode ?? "stop";
+            const entry = entryMode === "limit"
+                ? event.side === "BUY"
+                    ? signal.askClose - event.atr * Number(candidate.limitRetraceAtr ?? 0)
+                    : signal.close + event.atr * Number(candidate.limitRetraceAtr ?? 0)
+                : event.side === "BUY"
+                    ? signalHighWithSpread + event.atr * candidate.entryOffsetAtr
+                    : signal.low - event.atr * candidate.entryOffsetAtr;
             const stop = event.side === "BUY"
                 ? signal.low - event.atr * candidate.stopBufferAtr
                 : signalHighWithSpread + event.atr * candidate.stopBufferAtr;
@@ -205,12 +212,13 @@ function buildSignals(prepared, profiles, spreadMultiplier) {
                 symbol: candidate.symbol,
                 session: candidate.session,
                 side: event.side,
-                t: event.t,
-                signalAt: event.t,
+                t: signal.t + M15,
+                signalAt: signal.t + M15,
                 signalCandle: signal.t,
                 entry: roundPrice(entry, candidate.symbol),
                 stop: roundPrice(stop, candidate.symbol),
                 signalAtr: event.atr,
+                activity: event.activity,
                 candidate,
                 priority: event.indicatorScore + event.efficiency + event.volumeRatio - event.spreadAtr * spreadMultiplier,
                 fold: event.fold,
@@ -325,7 +333,7 @@ function weeklyStatsForTrades(trades, startCapital) {
     });
 }
 
-function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules, slots, cadenceMinutes, spreadMultiplier, startCapital = 500, targetRiskPct = 0.03, cooldownMinutes = 0, pendingInvalidation = true }) {
+function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules, slots, cadenceMinutes, spreadMultiplier, startCapital = 500, targetRiskPct = 0.03, cooldownMinutes = 0, pendingInvalidation = true, placementBufferSpreads = 1, riskMode = "fixed", currencyExposureMode = "none" }) {
     let balance = startCapital;
     let peak = balance;
     let maxDrawdownPct = 0;
@@ -339,7 +347,7 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
     const dailyPnl = new Map();
     const weeklyPnl = new Map();
     const rejections = new Map();
-    const orders = { signals: signals.length, placed: 0, filled: 0, invalidated: 0, ambiguousInvalidation: 0, expired: 0, behindMarket: 0, sizing: 0, portfolioFull: 0, occupied: 0 };
+    const orders = { signals: signals.length, placed: 0, rebased: 0, filled: 0, invalidated: 0, ambiguousInvalidation: 0, expired: 0, behindMarket: 0, sizing: 0, portfolioFull: 0, occupied: 0, currencyExposure: 0 };
     const reasons = new Map();
     const foldBoundsValue = foldBounds(prepared.start, prepared.endExclusive);
     let signalIndex = 0;
@@ -418,7 +426,10 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
         const rules = marketRules.get(signal.symbol);
         const leverage = rules?.marginFactorUnit === "PERCENTAGE" && rules.marginFactor > 0 ? 100 / rules.marginFactor : null;
         if (!(leverage > 0)) return null;
-        const requestedRisk = balance * Math.min(0.03, targetRiskPct);
+        const volatilityScale = riskMode === "inverse-atr"
+            ? Math.max(0.5, Math.min(1, 1 / Math.max(1, Number(signal.activity ?? 1))))
+            : 1;
+        const requestedRisk = balance * Math.min(0.03, targetRiskPct) * volatilityScale;
         const riskSized = requestedRisk * conversion / distance;
         const availableMargin = Math.max(0, balance - reservedMargin());
         const maxMargin = Math.min(availableMargin, balance / slots) * 0.9;
@@ -464,6 +475,14 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
                 reject("portfolioFull");
                 continue;
             }
+            if (currencyExposureMode === "no-shared") {
+                const signalCurrencies = new Set([signal.symbol.slice(0, 3), signal.symbol.slice(3, 6)]);
+                const sharesCurrency = [...pending, ...positions].some((item) => signalCurrencies.has(item.symbol.slice(0, 3)) || signalCurrencies.has(item.symbol.slice(3, 6)));
+                if (sharesCurrency) {
+                    reject("currencyExposure");
+                    continue;
+                }
+            }
             if (timestamp < (cooldownUntil.get(signal.symbol) ?? -Infinity)) {
                 reject("cooldown");
                 continue;
@@ -475,35 +494,45 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
             }
             const bar = adjustedBar(market, spreadMultiplier);
             const entryMode = signal.candidate.entryMode ?? "stop";
-            const ahead = signal.side === "BUY" ? signal.entry > bar.askOpen : signal.entry < bar.open;
-            if (entryMode === "stop" && !ahead) {
+            const rules = marketRules.get(signal.symbol);
+            const tickSize = 10 ** -Number(rules?.decimals ?? (signal.symbol.includes("JPY") ? 3 : 5));
+            const placementGap = Math.max(tickSize, (bar.askOpen - bar.open) * placementBufferSpreads);
+            const entry = roundPrice(entryMode === "market"
+                ? signal.side === "BUY" ? bar.askOpen : bar.open
+                : entryMode === "limit"
+                    ? signal.side === "BUY" ? Math.min(signal.entry, bar.askOpen - placementGap) : Math.max(signal.entry, bar.open + placementGap)
+                    : signal.side === "BUY" ? Math.max(signal.entry, bar.askOpen + placementGap) : Math.min(signal.entry, bar.open - placementGap), signal.symbol);
+            const brokerSideValid = entryMode === "limit"
+                ? signal.side === "BUY" ? entry < bar.askOpen : entry > bar.open
+                : signal.side === "BUY" ? entry > bar.askOpen : entry < bar.open;
+            if (entryMode !== "market" && !brokerSideValid) {
                 reject("behindMarket");
                 continue;
             }
-            const rules = marketRules.get(signal.symbol);
-            const reference = entryMode === "market" ? (bar.open + bar.askOpen) / 2 : signal.entry;
+            if (entry !== signal.entry) orders.rebased += 1;
+            const placedSignal = { ...signal, entry };
+            const reference = entryMode === "market" ? entry : placedSignal.entry;
             const minimumDistance = reference * Number(rules?.minDistancePct ?? 0) / 100;
-            const plannedDistance = Math.abs(signal.entry - signal.stop);
+            const plannedDistance = Math.abs(placedSignal.entry - placedSignal.stop);
             const targetR = signal.candidate.exitMode === "fixed" ? signal.candidate.targetR : signal.candidate.partialAtR;
-            const target = roundPrice(signal.side === "BUY" ? signal.entry + plannedDistance * targetR : signal.entry - plannedDistance * targetR, signal.symbol);
+            const target = roundPrice(signal.side === "BUY" ? placedSignal.entry + plannedDistance * targetR : placedSignal.entry - plannedDistance * targetR, signal.symbol);
             const protectionValid = signal.side === "BUY"
-                ? signal.stop < reference && reference - signal.stop >= minimumDistance && target > reference && target - reference >= minimumDistance
-                : signal.stop > reference && signal.stop - reference >= minimumDistance && target < reference && reference - target >= minimumDistance;
+                ? placedSignal.stop < reference && reference - placedSignal.stop >= minimumDistance && target > reference && target - reference >= minimumDistance
+                : placedSignal.stop > reference && placedSignal.stop - reference >= minimumDistance && target < reference && reference - target >= minimumDistance;
             if (!protectionValid) {
                 reject("brokerProtection");
                 continue;
             }
-            const sizing = sizeSignal(signal);
+            const sizing = sizeSignal(placedSignal);
             if (!sizing) {
                 reject("sizing");
                 continue;
             }
-            const distance = Math.abs(signal.entry - signal.stop);
             const partialSize = signal.candidate.exitMode === "partial"
                 ? Math.floor(sizing.size * signal.candidate.partialFraction / 100) * 100
                 : 0;
             pending.push({
-                ...signal,
+                ...placedSignal,
                 id: sequence++,
                 initialSize: sizing.size,
                 remainingSize: sizing.size,
@@ -646,19 +675,24 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
             const source = barsAtTime.get(order.symbol);
             if (!source) continue;
             const bar = adjustedBar(source, spreadMultiplier);
-            const invalidated = order.side === "BUY" ? bar.close <= order.stop : bar.askClose >= order.stop;
-            const touched = order.entryMode === "market" || (order.side === "BUY" ? bar.askHigh >= order.entry : bar.low <= order.entry);
-            if (order.entryMode === "stop" && pendingInvalidation && invalidated && !touched) {
+            const invalidated = order.side === "BUY" ? bar.low <= order.stop : bar.askHigh >= order.stop;
+            const touched = order.entryMode === "market"
+                || (order.entryMode === "limit"
+                    ? order.side === "BUY" ? bar.askLow <= order.entry : bar.high >= order.entry
+                    : order.side === "BUY" ? bar.askHigh >= order.entry : bar.low <= order.entry);
+            if (order.entryMode !== "market" && pendingInvalidation && invalidated && !touched) {
                 pending.splice(pending.indexOf(order), 1);
                 orders.invalidated += 1;
                 increment(reasons, "pending_invalidated");
                 continue;
             }
-            if (order.entryMode === "stop" && pendingInvalidation && invalidated && touched) orders.ambiguousInvalidation += 1;
+            if (order.entryMode !== "market" && pendingInvalidation && invalidated && touched) orders.ambiguousInvalidation += 1;
             if (!touched) continue;
             const fill = order.entryMode === "market"
                 ? (order.side === "BUY" ? bar.askOpen : bar.open)
-                : (order.side === "BUY" ? Math.max(order.entry, bar.askOpen) : Math.min(order.entry, bar.open));
+                : order.entryMode === "limit"
+                    ? (order.side === "BUY" ? Math.min(order.entry, bar.askOpen) : Math.max(order.entry, bar.open))
+                    : (order.side === "BUY" ? Math.max(order.entry, bar.askOpen) : Math.min(order.entry, bar.open));
             pending.splice(pending.indexOf(order), 1);
             const initialDistance = Math.abs(fill - order.stop);
             const actualRiskEur = order.initialSize * initialDistance / order.quotePerEur;
@@ -710,6 +744,9 @@ function simulatePortfolio({ prepared, signals, minuteRows, symbols, marketRules
         cadenceMinutes,
         cooldownMinutes,
         pendingInvalidation,
+        placementBufferSpreads,
+        riskMode,
+        currencyExposureMode,
         spreadMultiplier,
         targetRiskPct: 100 * targetRiskPct,
         ...stats,
@@ -743,13 +780,20 @@ export async function runTrailingSlotsStudy(options) {
     const cooldownMinutes = options.cooldownMinutes == null ? 0 : Number(options.cooldownMinutes);
     if (cooldownMinutes !== null && !(cooldownMinutes >= 0)) throw new Error(`Invalid cooldown minutes: ${options.cooldownMinutes}`);
     const pendingInvalidation = options.pendingInvalidation !== false;
+    const placementBufferSpreads = Number(options.placementBufferSpreads ?? 1);
+    if (!(placementBufferSpreads > 0)) throw new Error(`Invalid placement buffer in spreads: ${options.placementBufferSpreads}`);
     const asNumbers = (value, defaults) => value == null
         ? defaults
         : String(value).split(",").map((item) => Number(item.trim())).filter(Number.isFinite);
     const slotCounts = asNumbers(options.slots, [1, 2, 3, 4, 5]);
     const cadences = asNumbers(options.cadenceMinutes, [1]);
+    const asStrings = (value, defaults) => value == null ? defaults : String(value).split(",").map((item) => item.trim()).filter(Boolean);
+    const riskModes = asStrings(options.riskModes, ["fixed"]);
+    const currencyExposureModes = asStrings(options.currencyExposureModes, ["none"]);
     if (slotCounts.some((value) => !SLOT_COUNTS.includes(value))) throw new Error(`Invalid slots: ${options.slots}`);
     if (cadences.some((value) => !CADENCES.includes(value))) throw new Error(`Invalid cadence: ${options.cadenceMinutes}`);
+    if (riskModes.some((value) => !["fixed", "inverse-atr"].includes(value))) throw new Error(`Invalid risk mode: ${options.riskModes}`);
+    if (currencyExposureModes.some((value) => !["none", "no-shared"].includes(value))) throw new Error(`Invalid currency exposure mode: ${options.currencyExposureModes}`);
     const source = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
     const sourceProfiles = source.profiles ?? Object.values(source.sessionPools ?? {}).flat();
     const profiles = sourceProfiles.filter((item) => item?.candidate);
@@ -788,17 +832,21 @@ export async function runTrailingSlotsStudy(options) {
     const variants = [];
     for (const slots of slotCounts) {
         for (const cadenceMinutes of cadences) {
-            for (const spreadMultiplier of [1, 1.25]) {
-                const result = simulatePortfolio({ prepared, signals: signalsBySpread.get(spreadMultiplier), minuteRows, symbols, marketRules, slots, cadenceMinutes, spreadMultiplier, startCapital, targetRiskPct, cooldownMinutes, pendingInvalidation });
-                variants.push(result);
-                console.log(`slots=${slots} cadence=M${cadenceMinutes} spread=x${spreadMultiplier}: balance=${result.finalBalance} DD=${result.maxDrawdownPct}% risk=${result.effectiveRiskPct.average}%`);
+            for (const riskMode of riskModes) {
+                for (const currencyExposureMode of currencyExposureModes) {
+                    for (const spreadMultiplier of [1, 1.25]) {
+                        const result = simulatePortfolio({ prepared, signals: signalsBySpread.get(spreadMultiplier), minuteRows, symbols, marketRules, slots, cadenceMinutes, spreadMultiplier, startCapital, targetRiskPct, cooldownMinutes, pendingInvalidation, placementBufferSpreads, riskMode, currencyExposureMode });
+                        variants.push(result);
+                        console.log(`slots=${slots} cadence=M${cadenceMinutes} risk=${riskMode} exposure=${currencyExposureMode} spread=x${spreadMultiplier}: balance=${result.finalBalance} DD=${result.maxDrawdownPct}% risk=${result.effectiveRiskPct.average}%`);
+                    }
+                }
             }
         }
     }
     const nominal = variants.filter((item) => item.spreadMultiplier === 1);
     const ranked = nominal.map((item) => {
-        const stress = variants.find((candidate) => candidate.slots === item.slots && candidate.cadenceMinutes === item.cadenceMinutes && candidate.spreadMultiplier === 1.25);
-        return { slots: item.slots, cadenceMinutes: item.cadenceMinutes, score: +robustRank(item, stress).toFixed(3), nominal: item, stress };
+        const stress = variants.find((candidate) => candidate.slots === item.slots && candidate.cadenceMinutes === item.cadenceMinutes && candidate.riskMode === item.riskMode && candidate.currencyExposureMode === item.currencyExposureMode && candidate.spreadMultiplier === 1.25);
+        return { slots: item.slots, cadenceMinutes: item.cadenceMinutes, riskMode: item.riskMode, currencyExposureMode: item.currencyExposureMode, score: +robustRank(item, stress).toFixed(3), nominal: item, stress };
     }).sort((left, right) => right.score - left.score);
 
     return {
@@ -811,12 +859,12 @@ export async function runTrailingSlotsStudy(options) {
         protocol: {
             profiles: `${profiles.length} frozen pair/session profiles across ${symbols.length} symbols`,
             signal: "one decision per fully closed M15 candle; no daily or session entry caps; same-timestamp quality ordering",
-            execution: "historical broker bid/ask M1; STOP or MARKET entry; broker minimum protection filter; SL-first intraminute ambiguity",
+            execution: `historical broker bid/ask M1; pending entry rebased at the first post-signal quote by at least ${placementBufferSpreads} current spread(s); broker minimum protection filter; SL-first intraminute ambiguity`,
             risk: `EUR ${startCapital} start; target ${100 * targetRiskPct}% per trade; actual risk constrained by 90% margin utilization, slot budget, leverage and 100-unit rounding`,
-            portfolio: `one occupied order/position per symbol; ${cooldownMinutes}-minute cooldown; global 10% daily and 20% weekly loss breakers; slots ${slotCounts.join(",")}`,
+            portfolio: `one occupied order/position per symbol; ${cooldownMinutes}-minute cooldown; global 10% daily and 20% weekly loss breakers; slots ${slotCounts.join(",")}; currency exposure ${currencyExposureModes.join(",")}`,
             trailing: "activation/BE checked at the selected monitor cadence; broker-native trailing then approximated continuously with M1 extremes",
             pendingInvalidation: pendingInvalidation
-                ? "enabled; one-minute close is used as the live REST snapshot proxy; a simultaneous entry touch resolves as fill before invalidation"
+                ? "enabled; M1 high/low cancels stop-only touches; simultaneous entry/stop touch resolves conservatively as fill then stop-loss"
                 : "disabled for an explicit ablation only",
             stress: "historical ask spread widened by 25%",
         },
@@ -831,9 +879,11 @@ export async function runTrailingSlotsStudy(options) {
             minuteCoverage: coverage,
         },
         signals: Object.fromEntries([...signalsBySpread].map(([spread, signals]) => [`x${spread}`, signals.length])),
-        ranking: ranked.map(({ slots, cadenceMinutes, score, nominal: item, stress }) => ({
+        ranking: ranked.map(({ slots, cadenceMinutes, riskMode, currencyExposureMode, score, nominal: item, stress }) => ({
             slots,
             cadenceMinutes,
+            riskMode,
+            currencyExposureMode,
             score,
             nominal: { finalBalance: item.finalBalance, returnPct: item.returnPct, maxDrawdownPct: item.maxDrawdownPct, entries: item.entries, profitFactor: item.profitFactor, effectiveRiskPct: item.effectiveRiskPct, folds: item.folds },
             stress: { finalBalance: stress.finalBalance, returnPct: stress.returnPct, maxDrawdownPct: stress.maxDrawdownPct, entries: stress.entries, profitFactor: stress.profitFactor, effectiveRiskPct: stress.effectiveRiskPct, folds: stress.folds },
@@ -842,6 +892,7 @@ export async function runTrailingSlotsStudy(options) {
         limitations: [
             "This is inspected development evidence, not a fresh holdout; slot/cadence selection is post-hoc and must be forward validated.",
             "Broker tick order inside each M1 candle is unavailable; ambiguous stop/target/trailing paths use a conservative stop-first rule.",
+            "The first post-signal M1 open proxies the live placement snapshot; exact sub-minute analysis and request latency are unavailable historically.",
             "Current account-specific broker margin factors, minimum size and minimum distance are enforced; their historical changes and transient rejections are unavailable.",
             "Financing, swaps and transient broker minimum-distance changes are not modeled.",
         ],
@@ -851,11 +902,11 @@ export async function runTrailingSlotsStudy(options) {
 async function main() {
     const args = parseArgs(process.argv.slice(2));
     if (!args.dataset || !args.source) {
-        console.log("Usage: node lab/autoresearch/trailing-slots.js --dataset <dir> --source <frozen-report.json> [--rules <broker-rules.json>] [--report <output.json>] [--capital <eur>] [--risk-pct <1..3>] [--slots <csv:1..5>] [--cadence <csv:1|5|15>] [--cooldown-minutes <minutes>] [--no-pending-invalidation] [--from <iso>] [--to <iso>]");
+        console.log("Usage: node lab/autoresearch/trailing-slots.js --dataset <dir> --source <frozen-report.json> [--rules <broker-rules.json>] [--report <output.json>] [--capital <eur>] [--risk-pct <1..3>] [--slots <csv:1..7>] [--cadence <csv:1|5|15>] [--risk-modes <fixed,inverse-atr>] [--currency-exposure <none,no-shared>] [--placement-buffer-spreads <number>] [--cooldown-minutes <minutes>] [--no-pending-invalidation] [--from <iso>] [--to <iso>]");
         process.exitCode = 1;
         return;
     }
-    const report = await runTrailingSlotsStudy({ datasetDir: args.dataset, sourcePath: args.source, rulesPath: args.rules, startCapital: args.capital, targetRiskPct: args["risk-pct"], slots: args.slots, cadenceMinutes: args.cadence, cooldownMinutes: args["cooldown-minutes"], pendingInvalidation: args["no-pending-invalidation"] ? false : true, from: args.from, to: args.to, includeTrades: Boolean(args["include-trades"]) });
+    const report = await runTrailingSlotsStudy({ datasetDir: args.dataset, sourcePath: args.source, rulesPath: args.rules, startCapital: args.capital, targetRiskPct: args["risk-pct"], slots: args.slots, cadenceMinutes: args.cadence, riskModes: args["risk-modes"], currencyExposureModes: args["currency-exposure"], placementBufferSpreads: args["placement-buffer-spreads"], cooldownMinutes: args["cooldown-minutes"], pendingInvalidation: args["no-pending-invalidation"] ? false : true, from: args.from, to: args.to, includeTrades: Boolean(args["include-trades"]) });
     const reportPath = path.resolve(args.report || path.join("lab", "autoresearch", "reports", `trailing-slots-${new Date().toISOString().slice(0, 10)}.json`));
     fs.mkdirSync(path.dirname(reportPath), { recursive: true });
     fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);

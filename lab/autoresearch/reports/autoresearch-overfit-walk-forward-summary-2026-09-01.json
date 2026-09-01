@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "decision": "do_not_integrate_full_candidate_yet",
+  "reason": "The fixed full-history winner is profitable in the inspected August slice, but an independently selected pre-August portfolio loses under August spread stress.",
+  "augustPeriod": {
+    "from": "2026-08-01T00:00:00.000Z",
+    "to": "2026-08-29T00:00:00.000Z",
+    "marketDays": 20
+  },
+  "inspectedFullHistoryWinnerAugustSlice": {
+    "status": "in_sample_descriptive_only",
+    "nominal": {
+      "finalBalance": 726.72,
+      "returnPct": 45.34,
+      "entries": 74,
+      "profitFactor": 1.677,
+      "maxDrawdownPct": 12.78
+    },
+    "stress": {
+      "finalBalance": 650.55,
+      "returnPct": 30.11,
+      "entries": 72,
+      "profitFactor": 1.46,
+      "maxDrawdownPct": 9.15
+    }
+  },
+  "currentSystemAugust": {
+    "nominal": {
+      "finalBalance": 503.46,
+      "returnPct": 0.69,
+      "entries": 95,
+      "profitFactor": 1.007,
+      "maxDrawdownPct": 18.42
+    },
+    "stress": {
+      "finalBalance": 496.92,
+      "returnPct": -0.62,
+      "entries": 92,
+      "profitFactor": 0.993,
+      "maxDrawdownPct": 20.33
+    }
+  },
+  "walkForward": {
+    "train": {
+      "from": "2025-12-24T09:45:00.000Z",
+      "to": "2026-08-01T00:00:00.000Z",
+      "seconds": 1200.25,
+      "iterations": 307531,
+      "uniqueCandidates": 299274,
+      "admittedEvaluations": 27024,
+      "portfolioIterations": 6272,
+      "frozenProfiles": 27,
+      "frozenSymbols": 13
+    },
+    "m1SelectionBeforeAugust": {
+      "slots": 2,
+      "riskMode": "fixed",
+      "currencyExposureMode": "none",
+      "nominalFinalBalance": 21765.84,
+      "stressFinalBalance": 18588.33,
+      "nominalProfitFactor": 1.796,
+      "stressProfitFactor": 1.709
+    },
+    "frozenAugustOutOfSample": {
+      "nominal": {
+        "finalBalance": 511.72,
+        "returnPct": 2.34,
+        "entries": 143,
+        "profitFactor": 1.038,
+        "maxDrawdownPct": 9.89
+      },
+      "stress": {
+        "finalBalance": 490.21,
+        "returnPct": -1.96,
+        "entries": 142,
+        "profitFactor": 0.969,
+        "maxDrawdownPct": 12.24
+      },
+      "passedRobustGate": false
+    }
+  },
+  "dayBlockBootstrap": {
+    "days": 20,
+    "nominalProbabilityPositive": 0.59663,
+    "nominalMeanDailyR": 0.14143,
+    "nominalMeanDailyR95": [-0.87098, 1.21238],
+    "stressProbabilityPositive": 0.38929,
+    "stressMeanDailyR": -0.14728,
+    "stressMeanDailyR95": [-1.21891, 0.99793]
+  },
+  "overfitAssessment": {
+    "classification": "high",
+    "engineeringEstimateRange": "70-90% risk that the headline historical performance is materially overfit or regime-dependent",
+    "note": "This range is a qualitative engineering estimate, not an identifiable statistical probability. The bootstrap estimates address short OOS expectancy instead."
+  },
+  "nextGate": "Require multiple chronological walk-forward windows or forward demo evidence before integrating the complete candidate.",
+  "reports": [
+    "winner-insample-august-m1-2026-08-31.json",
+    "current-august-m1-2026-08-31.json",
+    "autoresearch-preaug-train-20min-2026-09-01.json",
+    "autoresearch-preaug-m1-selection-2026-09-01.json",
+    "autoresearch-preaug-frozen-august-oos-2026-09-01.json"
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-31T01:55:00.000Z",
+  "decision": "accepted_research_winner_for_stepwise_live_integration_review",
+  "period": {
+    "from": "2025-12-24T09:45:00.000Z",
+    "to": "2026-08-28T21:00:00.000Z",
+    "marketDays": 178
+  },
+  "search": {
+    "seconds": 1200.215,
+    "seed": 2026083102,
+    "iterations": 269445,
+    "uniqueCandidates": 263182,
+    "admittedEvaluations": 20249,
+    "coveredPairSessions": "34/68",
+    "portfolioBankProfiles": 68,
+    "portfolioIterations": 5589,
+    "portfolioLeaders": 12
+  },
+  "currentMatchedBaseline": {
+    "profiles": 20,
+    "slots": 1,
+    "nominal": {
+      "finalBalance": 12251.67,
+      "returnPct": 2350.33,
+      "entries": 887,
+      "profitFactor": 1.34,
+      "maxDrawdownPct": 30.4
+    },
+    "stress": {
+      "finalBalance": 7772.62,
+      "returnPct": 1454.52,
+      "entries": 869,
+      "profitFactor": 1.294,
+      "maxDrawdownPct": 37.81
+    }
+  },
+  "winner": {
+    "profiles": 26,
+    "symbols": 11,
+    "slots": 1,
+    "cadenceMinutes": 1,
+    "riskMode": "fixed",
+    "targetRiskPct": 3,
+    "entryModes": {
+      "STOP": 22,
+      "LIMIT": 3,
+      "MARKET": 1
+    },
+    "directionModes": {
+      "both": 16,
+      "buy": 7,
+      "sell": 3
+    },
+    "sessionProfiles": {
+      "asia": 6,
+      "london": 7,
+      "overlap": 7,
+      "newYork": 6
+    },
+    "nominal": {
+      "finalBalance": 59476.47,
+      "returnPct": 11795.29,
+      "entries": 761,
+      "tradesPerMarketDay": 4.275,
+      "profitFactor": 1.769,
+      "maxDrawdownPct": 17.88,
+      "averageEffectiveRiskPct": 2.105
+    },
+    "stress": {
+      "finalBalance": 41479.84,
+      "returnPct": 8195.97,
+      "entries": 752,
+      "tradesPerMarketDay": 4.225,
+      "profitFactor": 1.683,
+      "maxDrawdownPct": 18.18,
+      "averageEffectiveRiskPct": 2.158
+    }
+  },
+  "comparison": {
+    "nominalFinalBalanceMultiple": 4.854,
+    "stressFinalBalanceMultiple": 5.337,
+    "nominalDrawdownImprovementPoints": 12.52,
+    "stressDrawdownImprovementPoints": 19.63,
+    "beatsBaselineNominal": true,
+    "beatsBaselineStress": true,
+    "allTemporalFoldsPositiveNominalAndStress": true
+  },
+  "ablations": {
+    "stopOnly": {
+      "profiles": 22,
+      "nominalFinalBalance": 45812.4,
+      "stressFinalBalance": 31998.8
+    },
+    "withoutLimit": {
+      "profiles": 23,
+      "nominalFinalBalance": 52809.76,
+      "stressFinalBalance": 37106.33
+    },
+    "withoutMarket": {
+      "profiles": 25,
+      "nominalFinalBalance": 51543.47,
+      "stressFinalBalance": 36082.69
+    },
+    "withoutUsdcad": {
+      "profiles": 25,
+      "nominalFinalBalance": 59751.25,
+      "stressFinalBalance": 36829.61,
+      "decision": "rejected_because_stress_is_lower"
+    }
+  },
+  "brokerFeasibility": {
+    "orderTypes": ["STOP", "LIMIT", "MARKET"],
+    "minimumDealSize": 100,
+    "minimumStopOrProfitDistancePct": 0.01,
+    "marginFactorsPct": [3.333333, 5],
+    "sizeStep": 100,
+    "spreadStressMultiplier": 1.25
+  },
+  "limitations": [
+    "All historical data in this period is inspected development evidence, not a new locked holdout.",
+    "M1 candles cannot reveal exact tick ordering; simultaneous entry and stop touches are modeled conservatively as fill followed by stop-loss.",
+    "Current account-specific broker rules are enforced, but historical rule changes, financing and transient broker rejections are unavailable."
+  ],
+  "reports": [
+    "autoresearch-scenarios-corrected-20min-2026-08-31.json",
+    "autoresearch-scenarios-corrected-m1-final-2026-08-31.json",
+    "current-live-matched-baseline-2026-08-31.json",
+    "autoresearch-scenarios-stop-only-m1-2026-08-31.json",
+    "autoresearch-scenarios-no-limit-m1-2026-08-31.json",
+    "autoresearch-scenarios-no-market-m1-2026-08-31.json",
+    "autoresearch-scenarios-no-usdcad-m1-2026-08-31.json"
+  ]
+}

@@ -57,6 +57,7 @@ function parseArgs(argv) {
         else if (argument === "--report") options.report = argv[++index];
         else if (argument === "--pair-profiles") options.pairProfiles = true;
         else if (argument === "--session-search") options.sessionSearch = true;
+        else if (argument === "--portfolio-search") options.portfolioSearch = true;
         else if (argument === "--replay-session-report") options.replaySessionReport = argv[++index];
         else if (argument === "--seconds") options.seconds = Number(argv[++index]);
         else if (argument === "--seed") options.seed = Number(argv[++index]);
@@ -79,6 +80,7 @@ Options:
   --report /tmp/baseline.json Write the complete result to a JSON file
   --pair-profiles             Replay the five JSON files in lab/pair-profiles
   --session-search            Search pair-by-session M15/H1 profiles
+  --portfolio-search          Reserve 30% of the session for joint portfolio search
   --replay-session-report f   Causally replay frozen profiles from a search report
   --seconds 1800              Session-search wall-clock budget (default 30m)
   --seed 20260826             Deterministic session-search seed
@@ -224,11 +226,14 @@ function randomSearchCandidate(random, symbol, session) {
     const maxAtrPercentile = pick(random, [0.75, 0.9, 1]);
     const exitMode = random() < 0.72 ? "fixed" : "partial";
     const trailing = exitMode === "fixed" && random() < 0.25;
+    const entryRoll = random();
+    const entryMode = entryRoll < 0.65 ? "stop" : entryRoll < 0.88 ? "limit" : "market";
     return {
         name: `${symbol}-${session}-m15h1`,
         symbol,
         session,
-        entryMode: random() < 0.85 ? "stop" : "market",
+        entryMode,
+        directionMode: pick(random, ["both", "both", "both", "buy", "sell"]),
         structureMode: pick(random, ["greenred", "greenred", "continuation"]),
         minImpulseAtr: pick(random, [0.25, 0.5, 0.75, 1]),
         minSwingGapAtr: pick(random, [0, 0.05, 0.1, 0.2]),
@@ -247,6 +252,7 @@ function randomSearchCandidate(random, symbol, session) {
         minVolumeRatio: pick(random, [0, 0, 0.8, 1, 1.2]),
         maxSpreadAtr: pick(random, [0.5, 0.75, 1, 1.25, 1.5]),
         entryOffsetAtr: pick(random, [0, 0.01, 0.02, 0.03, 0.05]),
+        limitRetraceAtr: entryMode === "limit" ? pick(random, [0.1, 0.2, 0.3, 0.4, 0.5, 0.75]) : 0,
         expiryMinutes: pick(random, [15, 30, 45, 60, 75, 90]),
         stopBufferAtr: pick(random, [0, 0.02, 0.03, 0.05, 0.075]),
         exitMode,
@@ -265,7 +271,7 @@ function normalizeLegacySeed(symbol, session, config) {
     if (!config) return null;
     const partial = config.partialRunner === true;
     return {
-        name: `${symbol}-${session}-legacy-seed`, symbol, session, entryMode: "stop",
+        name: `${symbol}-${session}-legacy-seed`, symbol, session, entryMode: "stop", directionMode: "both", limitRetraceAtr: 0,
         structureMode: config.structureMode === "green-red" ? "greenred" : "greenred",
         minImpulseAtr: Number(config.minImpulseAtr ?? 0.5), minSwingGapAtr: Number(config.minSwingGapAtr ?? 0.1), maxRetrace: Number(config.maxRetrace ?? 1.05),
         h1Bars: [0, 1, 2, 4].includes(Number(config.h1Bars)) ? Number(config.h1Bars) : 0, minH1MoveAtr: Number(config.minH1TrendAtr ?? 0),
@@ -286,6 +292,7 @@ function currentLiveSeeds() {
         symbol,
         session,
         entryMode: profile.entry.type === "market" ? "market" : "stop",
+        directionMode: "both",
         structureMode: profile.signal.structureMode,
         minImpulseAtr: Number(profile.signal.minImpulseAtr ?? 0),
         minSwingGapAtr: Number(profile.signal.minSwingGapAtr ?? 0),
@@ -304,6 +311,7 @@ function currentLiveSeeds() {
         minVolumeRatio: Number(profile.signal.minVolumeRatio ?? 0),
         maxSpreadAtr: Number(profile.signal.maxSpreadAtr ?? 1.5),
         entryOffsetAtr: Number(profile.entry.bufferAtr ?? 0),
+        limitRetraceAtr: 0,
         expiryMinutes: 15 * Number(profile.entry.expiryBars ?? 1),
         stopBufferAtr: Number(profile.stop.bufferAtr ?? 0),
         exitMode: profile.exit.mode,
@@ -532,11 +540,12 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
     const seen = new Set();
     const started = performance.now();
     const deadline = started + requestedSeconds * 1000;
+    const profileDeadline = options.portfolioSearch ? started + requestedSeconds * 700 : deadline;
     let iterations = 0;
     let duplicateCandidates = 0;
     let admittedEvaluations = 0;
     let lastProgress = started;
-    while (performance.now() < deadline) {
+    while (performance.now() < profileDeadline) {
         const scheduledKey = keys[iterations % keys.length];
         const [symbol, session] = scheduledKey.split(":");
         const seedCandidates = seedsByKey.get(scheduledKey) ?? [];
@@ -584,12 +593,70 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
         sessionPools[session] = leaders.map(compactProfileResult);
         fallbackLeaders[session] = symbols.flatMap((symbol) => fallbacks.get(`${symbol}:${session}`)?.slice(0, 1) ?? []).sort((left, right) => right.score - left.score).slice(0, sessionCapacity).map(compactProfileResult);
     }
-    const finalists = PROFILE_SEARCH_SESSIONS.flatMap((session) => {
+    let portfolioSearch = null;
+    if (options.portfolioSearch) {
+        const bankItems = [...admitted.values()].flatMap((items) => items.slice(0, 2));
+        const bankRuns = bankItems.map((item) => ({
+            candidate: item.candidate,
+            nominal: evaluateSessionProfile(prepared, item.candidate, { spreadMultiplier: 1 }),
+            stress: evaluateSessionProfile(prepared, item.candidate, { spreadMultiplier: 1.25 }),
+        }));
+        const bySession = new Map(PROFILE_SEARCH_SESSIONS.map((session) => [session, bankRuns.filter((run) => run.candidate.session === session)]));
+        const leaders = [];
+        let portfolioIterations = 0;
+        const insertPortfolio = (item) => {
+            leaders.push(item);
+            leaders.sort((left, right) => right.score - left.score);
+            leaders.splice(12);
+        };
+        while (performance.now() < deadline) {
+            const selected = [];
+            for (const session of PROFILE_SEARCH_SESSIONS) {
+                const candidates = [...(bySession.get(session) ?? [])];
+                for (let index = candidates.length - 1; index > 0; index -= 1) {
+                    const swap = Math.floor(random() * (index + 1));
+                    [candidates[index], candidates[swap]] = [candidates[swap], candidates[index]];
+                }
+                const target = Math.min(candidates.length, Math.max(3, sessionCapacity - Math.floor(random() * 3)));
+                const usedSymbols = new Set();
+                for (const run of candidates) {
+                    if (usedSymbols.has(run.candidate.symbol)) continue;
+                    selected.push(run);
+                    usedSymbols.add(run.candidate.symbol);
+                    if (usedSymbols.size >= target) break;
+                }
+            }
+            if (!selected.length) break;
+            const maxPositions = random() < 0.6 ? 1 : 2;
+            const nominal = portfolioFromTrades(prepared, selected, "nominal", { maxPositions });
+            const stress = portfolioFromTrades(prepared, selected, "stress", { maxPositions });
+            const admission = portfolioAdmission(nominal.summary, stress.summary);
+            if (admission.passed) insertPortfolio({
+                score: portfolioScore(nominal.summary, stress.summary),
+                maxPositions,
+                profiles: selected.map((run) => run.candidate),
+                admission,
+                nominal: nominal.summary,
+                stress: stress.summary,
+            });
+            portfolioIterations += 1;
+        }
+        portfolioSearch = {
+            bankProfiles: bankRuns.length,
+            iterations: portfolioIterations,
+            leaders,
+        };
+    }
+    const independentFinalists = PROFILE_SEARCH_SESSIONS.flatMap((session) => {
         const qualified = sessionPools[session];
         if (qualified.length >= sessionCapacity) return qualified.slice(0, sessionCapacity);
         const used = new Set(qualified.map((item) => item.candidate.symbol));
         return [...qualified, ...fallbackLeaders[session].filter((item) => !used.has(item.candidate.symbol)).slice(0, sessionCapacity - qualified.length)];
     });
+    const jointWinner = portfolioSearch?.leaders?.[0];
+    const finalists = jointWinner
+        ? jointWinner.profiles.map((candidate) => ({ candidate, score: null, admission: { passed: true, gates: {} }, nominal: null, stress: null }))
+        : independentFinalists;
     const profileRuns = finalists.map((item, index) => ({
         candidate: item.candidate,
         priority: finalists.length - index,
@@ -598,11 +665,12 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
     }));
     let portfolio = null;
     if (profileRuns.length) {
-        const nominal = portfolioFromTrades(prepared, profileRuns, "nominal");
-        const stress = portfolioFromTrades(prepared, profileRuns, "stress");
+        const nominal = portfolioFromTrades(prepared, profileRuns, "nominal", { maxPositions: jointWinner?.maxPositions ?? 1 });
+        const stress = portfolioFromTrades(prepared, profileRuns, "stress", { maxPositions: jointWinner?.maxPositions ?? 1 });
         const admission = portfolioAdmission(nominal.summary, stress.summary);
         portfolio = {
             profiles: profileRuns.map((run) => run.candidate),
+            maxPositions: jointWinner?.maxPositions ?? 1,
             score: portfolioScore(nominal.summary, stress.summary),
             admission,
             nominal: nominal.summary,
@@ -632,7 +700,7 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
             nominal: baselineNominal.summary,
             stress: baselineStress.summary,
         },
-        search: { requestedSeconds, actualSeconds, seed, iterations, uniqueCandidates: seen.size, duplicateCandidates, admittedEvaluations, coveredPairSessions: admitted.size, totalPairSessions: keys.length, currentLiveSeeds: liveSeeds.length, legacySeeds: legacySeeds.length - liveSeeds.length },
+        search: { requestedSeconds, actualSeconds, seed, iterations, uniqueCandidates: seen.size, duplicateCandidates, admittedEvaluations, coveredPairSessions: admitted.size, totalPairSessions: keys.length, currentLiveSeeds: liveSeeds.length, legacySeeds: legacySeeds.length - liveSeeds.length, portfolioSearchEnabled: Boolean(options.portfolioSearch) },
         acceptance: {
             profile: "24+ trades, 5+ per temporal fold, positive all folds nominal/stress, >=35% wins, >=45% profitable active days, PF>=1.10/1.05, DD<=8R/10R, 0.08-0.8 trades/day",
             portfolio: "one occupied slot, no entry-count caps or cooldown; 2+ trades/day, positive all folds nominal/stress, >=35% wins, >=45% profitable active days, PF>=1.10/1.05, DD<=12R/15R, all four sessions represented",
@@ -642,6 +710,7 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
         },
         sessionPools,
         fallbackLeaders,
+        portfolioSearch,
         profiles: finalists.map((item, index) => ({
             priority: finalists.length - index,
             candidate: item.candidate,

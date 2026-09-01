@@ -1,0 +1,1199 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T09:39:35.237Z",
+  "evaluator": {
+    "runnerSha256": "7432e83894499e203ebfa5848e0a384d315871f189e19cd29a06e4f7b2280c82",
+    "prepareSha256": "6254510416609f8b335b5bffb4e089198f80bcbe58dbd1916bca5c5359df230c"
+  },
+  "protocol": {
+    "profiles": "27 frozen pair/session profiles across 13 symbols",
+    "signal": "one decision per fully closed M15 candle; no daily or session entry caps; same-timestamp quality ordering",
+    "execution": "historical broker bid/ask M1; STOP, LIMIT or MARKET entry; broker minimum protection filter; SL-first intraminute ambiguity",
+    "risk": "EUR 500 start; target 3% per trade; actual risk constrained by 90% margin utilization, slot budget, leverage and 100-unit rounding",
+    "portfolio": "one occupied order/position per symbol; 0-minute cooldown; global 10% daily and 20% weekly loss breakers; slots 2; currency exposure none",
+    "trailing": "activation/BE checked at the selected monitor cadence; broker-native trailing then approximated continuously with M1 extremes",
+    "pendingInvalidation": "enabled; M1 high/low cancels stop-only touches; simultaneous entry/stop touch resolves conservatively as fill then stop-loss",
+    "stress": "historical ask spread widened by 25%"
+  },
+  "source": {
+    "path": "/tmp/autoresearch-preaug-train-20min-20260901.json",
+    "sha256": "21100a99aae1a2928d8b9c27b179738411124c77a00087f3c21de5b833d95b60"
+  },
+  "brokerRules": {
+    "path": "/tmp/capital-autoresearch-20260829/lab/autoresearch/reference/capital-market-rules-2026-08-29.json",
+    "sha256": "4c2e3dc8c4fbfe2f0232a9ed060dc08c18e7f1a244e46d1d5f84be1a4b2b31da",
+    "generatedAt": "2026-08-29T14:15:00.931Z"
+  },
+  "dataset": {
+    "directory": "/mnt/usb-ssd/trading/capital-dataset",
+    "fingerprint": "234581f8ef0175e2f84b0702b39aca166f29efb982f70f011520cd842f59da76",
+    "start": "2026-08-01T00:00:00.000Z",
+    "endExclusive": "2026-08-28T21:00:00.000Z",
+    "marketDays": 20,
+    "minuteCoverage": {
+      "AUDCAD": {
+        "sourceRows": 254709,
+        "rows": 28520,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 120,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "dd6d397da6d2cf45cc41d84006a55a514bf0c405bd153edbaf122ba917a2dd74"
+      },
+      "AUDJPY": {
+        "sourceRows": 254881,
+        "rows": 28616,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 66,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "b564df9c988f3aade5764bc1907b8d611e8c19fe9f9883e2273cb79c9f5ac75c"
+      },
+      "AUDUSD": {
+        "sourceRows": 253826,
+        "rows": 28347,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 216,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "e5a50825026035b6eb6fe1685eeb6d7ab7f853713f4eb503bb3217fb00cb4176"
+      },
+      "EURAUD": {
+        "sourceRows": 255110,
+        "rows": 28638,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 46,
+        "first": "2026-08-02T21:00:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "1583d1352c90c07e52c29fd67b920b5fc282a5bc27c78f494aa072f068a2b6e8"
+      },
+      "EURCHF": {
+        "sourceRows": 253353,
+        "rows": 27951,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 290,
+        "first": "2026-08-02T22:00:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "2fbb45b11e6c25853fe3151cf50ded179d771baf1e75bc266b086fab3160542c"
+      },
+      "EURJPY": {
+        "sourceRows": 255387,
+        "rows": 28651,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 53,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "be587b23eaf9e2f49e8695b772ddd2cc0a1d502e9ee1f06f2ed5bdff9ef83216"
+      },
+      "EURUSD": {
+        "sourceRows": 254198,
+        "rows": 28342,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 191,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "6ca1964b8dd3c6ca53150fa571f02e7d374ba2541f05b00e08b9c5c3965011fd"
+      },
+      "GBPAUD": {
+        "sourceRows": 251090,
+        "rows": 28095,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 65,
+        "first": "2026-08-02T21:01:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "f9a5648477704dcb9a7a7079c205a049776c028b91fe3bcf5fdcebc16c88f2dc"
+      },
+      "GBPCHF": {
+        "sourceRows": 254650,
+        "rows": 28351,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 130,
+        "first": "2026-08-02T22:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "157f8aa6fac3074f4e3c665eae0172c3b07681d131bf603a9e6f7fb87c3a5094"
+      },
+      "GBPJPY": {
+        "sourceRows": 255289,
+        "rows": 28633,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 52,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "d207e6bcb20bcc04f22da531ad15585ab10df329e8b10e085f492da2748ff88d"
+      },
+      "GBPUSD": {
+        "sourceRows": 254866,
+        "rows": 28642,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 87,
+        "first": "2026-08-02T21:00:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "133bc142525675ad98cfdceedcc0e8ac8a1eeaaba00e05f34dcdaa7b4b73dde4"
+      },
+      "USDCAD": {
+        "sourceRows": 249883,
+        "rows": 28285,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 271,
+        "first": "2026-08-02T21:05:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "8aca8652151f2be44af3b71a910091aee9e9e51d27b7609d0598cd06150baab4"
+      },
+      "USDCHF": {
+        "sourceRows": 251368,
+        "rows": 28645,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 77,
+        "first": "2026-08-02T21:00:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "0d8f8eda1f746a2939f0927ffd69bf175a477ffb35074818a97481f717d430a7"
+      },
+      "USDJPY": {
+        "sourceRows": 251061,
+        "rows": 28605,
+        "malformed": 0,
+        "duplicates": 0,
+        "unexpectedGaps": 100,
+        "first": "2026-08-02T21:00:00.000Z",
+        "last": "2026-08-28T20:59:00.000Z",
+        "sha256": "486d8f4c85a482505f0e956af8d76429aa6b956c714a5afee864228052c8ff0c"
+      }
+    }
+  },
+  "signals": {
+    "x1": 339,
+    "x1.25": 336
+  },
+  "ranking": [
+    {
+      "slots": 2,
+      "cadenceMinutes": 1,
+      "riskMode": "fixed",
+      "currencyExposureMode": "none",
+      "score": -29.163,
+      "nominal": {
+        "finalBalance": 511.72,
+        "returnPct": 2.34,
+        "maxDrawdownPct": 9.89,
+        "entries": 143,
+        "profitFactor": 1.038,
+        "effectiveRiskPct": {
+          "average": 0.874,
+          "median": 0.789,
+          "p90": 1.273,
+          "max": 2.989
+        },
+        "folds": {
+          "early": {
+            "entries": 28,
+            "pnl": 18.1,
+            "totalR": 2.064,
+            "profitFactor": 1.278
+          },
+          "middle": {
+            "entries": 66,
+            "pnl": 4.62,
+            "totalR": 3.183,
+            "profitFactor": 1.033
+          },
+          "recent": {
+            "entries": 49,
+            "pnl": -11,
+            "totalR": -2.418,
+            "profitFactor": 0.891
+          }
+        }
+      },
+      "stress": {
+        "finalBalance": 490.21,
+        "returnPct": -1.96,
+        "maxDrawdownPct": 12.24,
+        "entries": 142,
+        "profitFactor": 0.969,
+        "effectiveRiskPct": {
+          "average": 0.897,
+          "median": 0.794,
+          "p90": 1.313,
+          "max": 2.97
+        },
+        "folds": {
+          "early": {
+            "entries": 29,
+            "pnl": 1.98,
+            "totalR": -0.403,
+            "profitFactor": 1.025
+          },
+          "middle": {
+            "entries": 66,
+            "pnl": -4.86,
+            "totalR": 0.503,
+            "profitFactor": 0.967
+          },
+          "recent": {
+            "entries": 47,
+            "pnl": -6.91,
+            "totalR": -3.046,
+            "profitFactor": 0.924
+          }
+        }
+      }
+    }
+  ],
+  "variants": [
+    {
+      "slots": 2,
+      "cadenceMinutes": 1,
+      "cooldownMinutes": 0,
+      "pendingInvalidation": true,
+      "riskMode": "fixed",
+      "currencyExposureMode": "none",
+      "spreadMultiplier": 1,
+      "targetRiskPct": 3,
+      "entries": 143,
+      "wins": 63,
+      "losses": 80,
+      "breakeven": 0,
+      "winRate": 44.06,
+      "profitFactor": 1.038,
+      "totalR": 2.829,
+      "finalBalance": 511.72,
+      "pnl": 11.72,
+      "returnPct": 2.34,
+      "maxDrawdownPct": 9.89,
+      "effectiveRiskPct": {
+        "average": 0.874,
+        "median": 0.789,
+        "p90": 1.273,
+        "max": 2.989
+      },
+      "folds": {
+        "early": {
+          "entries": 28,
+          "pnl": 18.1,
+          "totalR": 2.064,
+          "profitFactor": 1.278
+        },
+        "middle": {
+          "entries": 66,
+          "pnl": 4.62,
+          "totalR": 3.183,
+          "profitFactor": 1.033
+        },
+        "recent": {
+          "entries": 49,
+          "pnl": -11,
+          "totalR": -2.418,
+          "profitFactor": 0.891
+        }
+      },
+      "maximumOccupied": 2,
+      "maximumMarginPct": 90.59,
+      "marginCapRatePct": 100,
+      "orders": {
+        "signals": 339,
+        "placed": 198,
+        "filled": 143,
+        "invalidated": 31,
+        "ambiguousInvalidation": 1,
+        "expired": 23,
+        "behindMarket": 9,
+        "sizing": 0,
+        "portfolioFull": 55,
+        "occupied": 77,
+        "currencyExposure": 0
+      },
+      "rejections": {
+        "behindMarket": 9,
+        "occupied": 77,
+        "portfolioFull": 55
+      },
+      "exitReasons": {
+        "break_even": 4,
+        "daily_flat": 3,
+        "daily_order_cancel": 1,
+        "max_hold": 48,
+        "pending_invalidated": 31,
+        "stop_loss": 65,
+        "take_profit": 19,
+        "trailing_stop": 3,
+        "weekend_flat": 1
+      },
+      "weeklyStats": [
+        {
+          "week": "2026-W32",
+          "startBalance": 500,
+          "endBalance": 519.92,
+          "pnl": 19.92,
+          "returnPct": 3.98,
+          "entries": 27,
+          "wins": 14,
+          "losses": 13,
+          "winRate": 51.85,
+          "profitFactor": 1.315,
+          "totalR": 3.064,
+          "maxDrawdownPct": 4.2,
+          "averageRiskPct": 1.137
+        },
+        {
+          "week": "2026-W33",
+          "startBalance": 519.92,
+          "endBalance": 492.99,
+          "pnl": -26.93,
+          "returnPct": -5.18,
+          "entries": 37,
+          "wins": 12,
+          "losses": 25,
+          "winRate": 32.43,
+          "profitFactor": 0.694,
+          "totalR": -6.466,
+          "maxDrawdownPct": 6.19,
+          "averageRiskPct": 0.9
+        },
+        {
+          "week": "2026-W34",
+          "startBalance": 492.99,
+          "endBalance": 512.89,
+          "pnl": 19.9,
+          "returnPct": 4.04,
+          "entries": 49,
+          "wins": 23,
+          "losses": 26,
+          "winRate": 46.94,
+          "profitFactor": 1.186,
+          "totalR": 6.052,
+          "maxDrawdownPct": 6.04,
+          "averageRiskPct": 0.841
+        },
+        {
+          "week": "2026-W35",
+          "startBalance": 512.89,
+          "endBalance": 511.72,
+          "pnl": -1.17,
+          "returnPct": -0.23,
+          "entries": 30,
+          "wins": 14,
+          "losses": 16,
+          "winRate": 46.67,
+          "profitFactor": 0.975,
+          "totalR": 0.179,
+          "maxDrawdownPct": 3.92,
+          "averageRiskPct": 0.66
+        }
+      ],
+      "sessionStats": {
+        "asia": {
+          "entries": 49,
+          "wins": 19,
+          "losses": 30,
+          "breakeven": 0,
+          "winRate": 38.78,
+          "profitFactor": 0.976,
+          "totalR": -1.593,
+          "finalBalance": 497.23,
+          "pnl": -2.77,
+          "returnPct": -0.55,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.852,
+            "median": 0.747,
+            "p90": 1.241,
+            "max": 2.989
+          }
+        },
+        "london": {
+          "entries": 33,
+          "wins": 17,
+          "losses": 16,
+          "breakeven": 0,
+          "winRate": 51.52,
+          "profitFactor": 1.278,
+          "totalR": 1.455,
+          "finalBalance": 517.93,
+          "pnl": 17.93,
+          "returnPct": 3.59,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.873,
+            "median": 0.898,
+            "p90": 1.117,
+            "max": 2.087
+          }
+        },
+        "overlap": {
+          "entries": 45,
+          "wins": 24,
+          "losses": 21,
+          "breakeven": 0,
+          "winRate": 53.33,
+          "profitFactor": 1.554,
+          "totalR": 13.943,
+          "finalBalance": 543.35,
+          "pnl": 43.35,
+          "returnPct": 8.67,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.912,
+            "median": 0.789,
+            "p90": 1.273,
+            "max": 2.244
+          }
+        },
+        "newYork": {
+          "entries": 16,
+          "wins": 3,
+          "losses": 13,
+          "breakeven": 0,
+          "winRate": 18.75,
+          "profitFactor": 0.057,
+          "totalR": -10.976,
+          "finalBalance": 453.21,
+          "pnl": -46.79,
+          "returnPct": -9.36,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.835,
+            "median": 0.771,
+            "p90": 1.159,
+            "max": 1.755
+          }
+        }
+      },
+      "symbolStats": {
+        "AUDCAD": {
+          "entries": 1,
+          "wins": 1,
+          "losses": 0,
+          "breakeven": 0,
+          "winRate": 100,
+          "profitFactor": 10,
+          "totalR": 0.176,
+          "finalBalance": 501.63,
+          "pnl": 1.63,
+          "returnPct": 0.33,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.86,
+            "median": 1.86,
+            "p90": 1.86,
+            "max": 1.86
+          }
+        },
+        "AUDJPY": {
+          "entries": 10,
+          "wins": 6,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 60,
+          "profitFactor": 1.818,
+          "totalR": 2.09,
+          "finalBalance": 510.13,
+          "pnl": 10.13,
+          "returnPct": 2.03,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.788,
+            "median": 0.662,
+            "p90": 0.97,
+            "max": 2.244
+          }
+        },
+        "AUDUSD": {
+          "entries": 26,
+          "wins": 10,
+          "losses": 16,
+          "breakeven": 0,
+          "winRate": 38.46,
+          "profitFactor": 0.764,
+          "totalR": -3.916,
+          "finalBalance": 488.66,
+          "pnl": -11.34,
+          "returnPct": -2.27,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.667,
+            "median": 0.632,
+            "p90": 0.943,
+            "max": 1.397
+          }
+        },
+        "EURAUD": {
+          "entries": 6,
+          "wins": 2,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 33.33,
+          "profitFactor": 0.345,
+          "totalR": -2.777,
+          "finalBalance": 492.52,
+          "pnl": -7.48,
+          "returnPct": -1.5,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.593,
+            "median": 0.521,
+            "p90": 0.747,
+            "max": 0.819
+          }
+        },
+        "EURJPY": {
+          "entries": 1,
+          "wins": 1,
+          "losses": 0,
+          "breakeven": 0,
+          "winRate": 100,
+          "profitFactor": 10,
+          "totalR": 0.175,
+          "finalBalance": 500.78,
+          "pnl": 0.78,
+          "returnPct": 0.16,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.834,
+            "median": 0.834,
+            "p90": 0.834,
+            "max": 0.834
+          }
+        },
+        "EURUSD": {
+          "entries": 27,
+          "wins": 12,
+          "losses": 15,
+          "breakeven": 0,
+          "winRate": 44.44,
+          "profitFactor": 1.114,
+          "totalR": 4.157,
+          "finalBalance": 506.2,
+          "pnl": 6.2,
+          "returnPct": 1.24,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.8,
+            "median": 0.665,
+            "p90": 1.133,
+            "max": 1.869
+          }
+        },
+        "GBPAUD": {
+          "entries": 10,
+          "wins": 5,
+          "losses": 5,
+          "breakeven": 0,
+          "winRate": 50,
+          "profitFactor": 1.56,
+          "totalR": 3.591,
+          "finalBalance": 510.86,
+          "pnl": 10.86,
+          "returnPct": 2.17,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.83,
+            "median": 0.756,
+            "p90": 1.242,
+            "max": 1.273
+          }
+        },
+        "GBPCHF": {
+          "entries": 5,
+          "wins": 3,
+          "losses": 2,
+          "breakeven": 0,
+          "winRate": 60,
+          "profitFactor": 2.709,
+          "totalR": 1.561,
+          "finalBalance": 515,
+          "pnl": 15,
+          "returnPct": 3,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.141,
+            "median": 1.311,
+            "p90": 1.317,
+            "max": 1.357
+          }
+        },
+        "GBPJPY": {
+          "entries": 17,
+          "wins": 9,
+          "losses": 8,
+          "breakeven": 0,
+          "winRate": 52.94,
+          "profitFactor": 1.723,
+          "totalR": 3.706,
+          "finalBalance": 518.75,
+          "pnl": 18.75,
+          "returnPct": 3.75,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.035,
+            "median": 1.01,
+            "p90": 1.201,
+            "max": 2.087
+          }
+        },
+        "GBPUSD": {
+          "entries": 7,
+          "wins": 4,
+          "losses": 3,
+          "breakeven": 0,
+          "winRate": 57.14,
+          "profitFactor": 1.606,
+          "totalR": 0.73,
+          "finalBalance": 506.51,
+          "pnl": 6.51,
+          "returnPct": 1.3,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.823,
+            "median": 0.898,
+            "p90": 0.93,
+            "max": 0.932
+          }
+        },
+        "USDCAD": {
+          "entries": 4,
+          "wins": 0,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 0,
+          "profitFactor": 0,
+          "totalR": -3.061,
+          "finalBalance": 481.94,
+          "pnl": -18.06,
+          "returnPct": -3.61,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.174,
+            "median": 1.162,
+            "p90": 1.272,
+            "max": 1.665
+          }
+        },
+        "USDCHF": {
+          "entries": 14,
+          "wins": 3,
+          "losses": 11,
+          "breakeven": 0,
+          "winRate": 21.43,
+          "profitFactor": 0.511,
+          "totalR": -4.919,
+          "finalBalance": 470.89,
+          "pnl": -29.11,
+          "returnPct": -5.82,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.086,
+            "median": 0.956,
+            "p90": 1.241,
+            "max": 2.989
+          }
+        },
+        "USDJPY": {
+          "entries": 15,
+          "wins": 7,
+          "losses": 8,
+          "breakeven": 0,
+          "winRate": 46.67,
+          "profitFactor": 1.211,
+          "totalR": 1.313,
+          "finalBalance": 507.84,
+          "pnl": 7.84,
+          "returnPct": 1.57,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.977,
+            "median": 0.906,
+            "p90": 1.159,
+            "max": 1.755
+          }
+        }
+      }
+    },
+    {
+      "slots": 2,
+      "cadenceMinutes": 1,
+      "cooldownMinutes": 0,
+      "pendingInvalidation": true,
+      "riskMode": "fixed",
+      "currencyExposureMode": "none",
+      "spreadMultiplier": 1.25,
+      "targetRiskPct": 3,
+      "entries": 142,
+      "wins": 59,
+      "losses": 83,
+      "breakeven": 0,
+      "winRate": 41.55,
+      "profitFactor": 0.969,
+      "totalR": -2.946,
+      "finalBalance": 490.21,
+      "pnl": -9.79,
+      "returnPct": -1.96,
+      "maxDrawdownPct": 12.24,
+      "effectiveRiskPct": {
+        "average": 0.897,
+        "median": 0.794,
+        "p90": 1.313,
+        "max": 2.97
+      },
+      "folds": {
+        "early": {
+          "entries": 29,
+          "pnl": 1.98,
+          "totalR": -0.403,
+          "profitFactor": 1.025
+        },
+        "middle": {
+          "entries": 66,
+          "pnl": -4.86,
+          "totalR": 0.503,
+          "profitFactor": 0.967
+        },
+        "recent": {
+          "entries": 47,
+          "pnl": -6.91,
+          "totalR": -3.046,
+          "profitFactor": 0.924
+        }
+      },
+      "maximumOccupied": 2,
+      "maximumMarginPct": 90.63,
+      "marginCapRatePct": 100,
+      "orders": {
+        "signals": 336,
+        "placed": 198,
+        "filled": 142,
+        "invalidated": 33,
+        "ambiguousInvalidation": 2,
+        "expired": 22,
+        "behindMarket": 8,
+        "sizing": 0,
+        "portfolioFull": 59,
+        "occupied": 71,
+        "currencyExposure": 0
+      },
+      "rejections": {
+        "behindMarket": 8,
+        "occupied": 71,
+        "portfolioFull": 59
+      },
+      "exitReasons": {
+        "break_even": 2,
+        "daily_flat": 3,
+        "daily_order_cancel": 1,
+        "max_hold": 47,
+        "pending_invalidated": 33,
+        "stop_loss": 68,
+        "take_profit": 18,
+        "trailing_stop": 3,
+        "weekend_flat": 1
+      },
+      "weeklyStats": [
+        {
+          "week": "2026-W32",
+          "startBalance": 500,
+          "endBalance": 503.86,
+          "pnl": 3.86,
+          "returnPct": 0.77,
+          "entries": 28,
+          "wins": 13,
+          "losses": 15,
+          "winRate": 46.43,
+          "profitFactor": 1.05,
+          "totalR": 0.597,
+          "maxDrawdownPct": 5.07,
+          "averageRiskPct": 1.174
+        },
+        {
+          "week": "2026-W33",
+          "startBalance": 503.86,
+          "endBalance": 469.86,
+          "pnl": -34,
+          "returnPct": -6.75,
+          "entries": 38,
+          "wins": 12,
+          "losses": 26,
+          "winRate": 31.58,
+          "profitFactor": 0.639,
+          "totalR": -7.853,
+          "maxDrawdownPct": 7.78,
+          "averageRiskPct": 0.88
+        },
+        {
+          "week": "2026-W34",
+          "startBalance": 469.86,
+          "endBalance": 487.25,
+          "pnl": 17.39,
+          "returnPct": 3.7,
+          "entries": 47,
+          "wins": 20,
+          "losses": 27,
+          "winRate": 42.55,
+          "profitFactor": 1.168,
+          "totalR": 3.488,
+          "maxDrawdownPct": 6.16,
+          "averageRiskPct": 0.888
+        },
+        {
+          "week": "2026-W35",
+          "startBalance": 487.25,
+          "endBalance": 490.21,
+          "pnl": 2.96,
+          "returnPct": 0.61,
+          "entries": 29,
+          "wins": 14,
+          "losses": 15,
+          "winRate": 48.28,
+          "profitFactor": 1.071,
+          "totalR": 0.823,
+          "maxDrawdownPct": 3.22,
+          "averageRiskPct": 0.667
+        }
+      ],
+      "sessionStats": {
+        "asia": {
+          "entries": 47,
+          "wins": 20,
+          "losses": 27,
+          "breakeven": 0,
+          "winRate": 42.55,
+          "profitFactor": 1.097,
+          "totalR": 1.729,
+          "finalBalance": 510.03,
+          "pnl": 10.03,
+          "returnPct": 2.01,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.846,
+            "median": 0.756,
+            "p90": 1.209,
+            "max": 2.97
+          }
+        },
+        "london": {
+          "entries": 34,
+          "wins": 14,
+          "losses": 20,
+          "breakeven": 0,
+          "winRate": 41.18,
+          "profitFactor": 1.038,
+          "totalR": -3.897,
+          "finalBalance": 502.83,
+          "pnl": 2.83,
+          "returnPct": 0.57,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.923,
+            "median": 0.921,
+            "p90": 1.257,
+            "max": 2.125
+          }
+        },
+        "overlap": {
+          "entries": 46,
+          "wins": 22,
+          "losses": 24,
+          "breakeven": 0,
+          "winRate": 47.83,
+          "profitFactor": 1.201,
+          "totalR": 9.685,
+          "finalBalance": 519.38,
+          "pnl": 19.38,
+          "returnPct": 3.88,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.95,
+            "median": 0.813,
+            "p90": 1.358,
+            "max": 2.268
+          }
+        },
+        "newYork": {
+          "entries": 15,
+          "wins": 3,
+          "losses": 12,
+          "breakeven": 0,
+          "winRate": 20,
+          "profitFactor": 0.023,
+          "totalR": -10.463,
+          "finalBalance": 457.97,
+          "pnl": -42.03,
+          "returnPct": -8.41,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.835,
+            "median": 0.791,
+            "p90": 1.066,
+            "max": 1.795
+          }
+        }
+      },
+      "symbolStats": {
+        "AUDCAD": {
+          "entries": 1,
+          "wins": 1,
+          "losses": 0,
+          "breakeven": 0,
+          "winRate": 100,
+          "profitFactor": 10,
+          "totalR": 0.142,
+          "finalBalance": 501.36,
+          "pnl": 1.36,
+          "returnPct": 0.27,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.914,
+            "median": 1.914,
+            "p90": 1.914,
+            "max": 1.914
+          }
+        },
+        "AUDJPY": {
+          "entries": 10,
+          "wins": 6,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 60,
+          "profitFactor": 1.819,
+          "totalR": 1.953,
+          "finalBalance": 509.87,
+          "pnl": 9.87,
+          "returnPct": 1.97,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.801,
+            "median": 0.684,
+            "p90": 0.98,
+            "max": 2.268
+          }
+        },
+        "AUDUSD": {
+          "entries": 24,
+          "wins": 8,
+          "losses": 16,
+          "breakeven": 0,
+          "winRate": 33.33,
+          "profitFactor": 0.625,
+          "totalR": -6.446,
+          "finalBalance": 482.35,
+          "pnl": -17.65,
+          "returnPct": -3.53,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.689,
+            "median": 0.64,
+            "p90": 0.964,
+            "max": 1.41
+          }
+        },
+        "EURAUD": {
+          "entries": 6,
+          "wins": 2,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 33.33,
+          "profitFactor": 0.311,
+          "totalR": -2.88,
+          "finalBalance": 492.03,
+          "pnl": -7.97,
+          "returnPct": -1.59,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.624,
+            "median": 0.556,
+            "p90": 0.772,
+            "max": 0.855
+          }
+        },
+        "EURJPY": {
+          "entries": 1,
+          "wins": 1,
+          "losses": 0,
+          "breakeven": 0,
+          "winRate": 100,
+          "profitFactor": 10,
+          "totalR": 0.128,
+          "finalBalance": 500.58,
+          "pnl": 0.58,
+          "returnPct": 0.12,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.871,
+            "median": 0.871,
+            "p90": 0.871,
+            "max": 0.871
+          }
+        },
+        "EURUSD": {
+          "entries": 28,
+          "wins": 13,
+          "losses": 15,
+          "breakeven": 0,
+          "winRate": 46.43,
+          "profitFactor": 1.16,
+          "totalR": 5.808,
+          "finalBalance": 508.63,
+          "pnl": 8.63,
+          "returnPct": 1.73,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.809,
+            "median": 0.682,
+            "p90": 1.157,
+            "max": 1.893
+          }
+        },
+        "GBPAUD": {
+          "entries": 10,
+          "wins": 4,
+          "losses": 6,
+          "breakeven": 0,
+          "winRate": 40,
+          "profitFactor": 1.122,
+          "totalR": 2.425,
+          "finalBalance": 503.19,
+          "pnl": 3.19,
+          "returnPct": 0.64,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.865,
+            "median": 0.775,
+            "p90": 1.298,
+            "max": 1.358
+          }
+        },
+        "GBPCHF": {
+          "entries": 6,
+          "wins": 4,
+          "losses": 2,
+          "breakeven": 0,
+          "winRate": 66.67,
+          "profitFactor": 3.316,
+          "totalR": 2.558,
+          "finalBalance": 520.96,
+          "pnl": 20.96,
+          "returnPct": 4.19,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.225,
+            "median": 1.257,
+            "p90": 1.411,
+            "max": 1.426
+          }
+        },
+        "GBPJPY": {
+          "entries": 15,
+          "wins": 8,
+          "losses": 7,
+          "breakeven": 0,
+          "winRate": 53.33,
+          "profitFactor": 1.646,
+          "totalR": 2.408,
+          "finalBalance": 515.7,
+          "pnl": 15.7,
+          "returnPct": 3.14,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.017,
+            "median": 0.993,
+            "p90": 1.14,
+            "max": 2.125
+          }
+        },
+        "GBPUSD": {
+          "entries": 9,
+          "wins": 3,
+          "losses": 6,
+          "breakeven": 0,
+          "winRate": 33.33,
+          "profitFactor": 0.916,
+          "totalR": -1.416,
+          "finalBalance": 498.49,
+          "pnl": -1.51,
+          "returnPct": -0.3,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 0.825,
+            "median": 0.896,
+            "p90": 0.952,
+            "max": 0.96
+          }
+        },
+        "USDCAD": {
+          "entries": 4,
+          "wins": 0,
+          "losses": 4,
+          "breakeven": 0,
+          "winRate": 0,
+          "profitFactor": 0,
+          "totalR": -3.095,
+          "finalBalance": 481.59,
+          "pnl": -18.41,
+          "returnPct": -3.68,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.219,
+            "median": 1.211,
+            "p90": 1.313,
+            "max": 1.703
+          }
+        },
+        "USDCHF": {
+          "entries": 13,
+          "wins": 3,
+          "losses": 10,
+          "breakeven": 0,
+          "winRate": 23.08,
+          "profitFactor": 0.556,
+          "totalR": -3.996,
+          "finalBalance": 475.58,
+          "pnl": -24.42,
+          "returnPct": -4.88,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.141,
+            "median": 1.011,
+            "p90": 1.306,
+            "max": 2.97
+          }
+        },
+        "USDJPY": {
+          "entries": 15,
+          "wins": 6,
+          "losses": 9,
+          "breakeven": 0,
+          "winRate": 40,
+          "profitFactor": 0.997,
+          "totalR": -0.535,
+          "finalBalance": 499.89,
+          "pnl": -0.11,
+          "returnPct": -0.02,
+          "maxDrawdownPct": 0,
+          "effectiveRiskPct": {
+            "average": 1.018,
+            "median": 0.932,
+            "p90": 1.197,
+            "max": 1.795
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "This is inspected development evidence, not a fresh holdout; slot/cadence selection is post-hoc and must be forward validated.",
+    "Broker tick order inside each M1 candle is unavailable; ambiguous stop/target/trailing paths use a conservative stop-first rule.",
+    "Current account-specific broker margin factors, minimum size and minimum distance are enforced; their historical changes and transient rejections are unavailable.",
+    "Financing, swaps and transient broker minimum-distance changes are not modeled."
+  ]
+}

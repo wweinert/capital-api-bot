@@ -7,19 +7,20 @@ const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 const M15 = 15 * MINUTE;
 const H1 = 60 * MINUTE;
+const PENDING_PLACEMENT_BUFFER_SPREADS = 1;
 const FX_CURRENCIES = new Set(["AUD", "CAD", "CHF", "EUR", "GBP", "JPY", "NZD", "USD"]);
 const MAJOR_FX = new Set(["AUDUSD", "EURUSD", "GBPUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY"]);
 const CONVERSION_SYMBOLS = ["EURAUD", "EURCHF", "EURGBP", "EURJPY", "EURUSD", "NZDUSD", "USDCAD"];
 
 export const RESEARCH_PROTOCOL = Object.freeze({
-    schemaVersion: 21,
+    schemaVersion: 23,
     name: "current-live-one-slot-m15-m1-broker-parity-baseline",
     startCapital: 500,
     timeframes: Object.freeze(["M15", "H1"]),
     maxPositions: 1,
     risk: Object.freeze({ maxPerPositionPct: 0.03, maxPortfolioPct: 0.03, marginUtilization: 0.9 }),
     leverage: Object.freeze({ majors: 30, crosses: 20 }),
-    execution: "one decision per closed M15 candle; bid/ask pending replay; one occupied slot; no cooldown or entry-count limits",
+    execution: "one decision per closed M15 candle; pending entry rebased one current spread beyond the first post-signal quote; one occupied slot; no cooldown or entry-count limits",
     lockedTest: "none-full-period-baseline-is-inspected-after-this-run",
 });
 
@@ -991,10 +992,10 @@ export function prepareSessionProfileSearch(datasetDir, requestedSymbols, option
     }
     return {
         protocol: {
-            schemaVersion: 21,
+            schemaVersion: 23,
             name: "current-live-broker-feasible-profile-search",
             timeframes: ["M15", "H1"],
-            execution: "one decision per closed M15 candle; STOP or MARKET entry; no cooldown or entry-count caps; exact broker-feasible M1 replay required after selection",
+            execution: "one decision per closed M15 candle; pending entry rebased one current spread beyond the first post-signal quote; no cooldown or entry-count caps; exact broker-feasible M1 replay required after selection",
             lockedTest: "none-all-available-history-is-inspected-development-evidence",
         },
         data,
@@ -1014,6 +1015,8 @@ export function prepareSessionProfileSearch(datasetDir, requestedSymbols, option
 
 function sessionCandidateAllows(event, candidate, spreadMultiplier) {
     if (event.symbol !== candidate.symbol || event.session !== candidate.session) return false;
+    if (candidate.directionMode === "buy" && event.side !== "BUY") return false;
+    if (candidate.directionMode === "sell" && event.side !== "SELL") return false;
     if (event.spreadAtr * spreadMultiplier > candidate.maxSpreadAtr) return false;
     if (event.atrPercentile < candidate.minAtrPercentile || event.atrPercentile > candidate.maxAtrPercentile) return false;
     if (event.efficiency < candidate.minEfficiency || event.activity < candidate.minActivity) return false;
@@ -1039,13 +1042,28 @@ function resolveSessionSearchEvent(prepared, event, candidate, spreadMultiplier)
     const signal = rows[event.rowIndex];
     const signalSpread = adjustedAsk(signal, "close", spreadMultiplier) - signal.close;
     const signalHighWithSpread = signal.high + signalSpread;
-    const entry = event.side === "BUY"
-        ? signalHighWithSpread + event.atr * candidate.entryOffsetAtr
-        : signal.low - event.atr * candidate.entryOffsetAtr;
+    const entryMode = candidate.entryMode ?? "stop";
+    const requestedEntry = entryMode === "limit"
+        ? event.side === "BUY"
+            ? adjustedAsk(signal, "close", spreadMultiplier) - event.atr * Number(candidate.limitRetraceAtr ?? 0)
+            : signal.close + event.atr * Number(candidate.limitRetraceAtr ?? 0)
+        : event.side === "BUY"
+            ? signalHighWithSpread + event.atr * candidate.entryOffsetAtr
+            : signal.low - event.atr * candidate.entryOffsetAtr;
     const stop = event.side === "BUY"
         ? signal.low - event.atr * candidate.stopBufferAtr
         : signalHighWithSpread + event.atr * candidate.stopBufferAtr;
-    const entryMode = candidate.entryMode ?? "stop";
+    const placementBar = rows[event.rowIndex + 1];
+    if (!placementBar) return null;
+    const placementBid = placementBar.open;
+    const placementAsk = adjustedAsk(placementBar, "open", spreadMultiplier);
+    const tickSize = 10 ** -(event.symbol.includes("JPY") ? 3 : 5);
+    const placementGap = Math.max(tickSize, (placementAsk - placementBid) * PENDING_PLACEMENT_BUFFER_SPREADS);
+    const entry = roundPrice(entryMode === "market"
+        ? event.side === "BUY" ? placementAsk : placementBid
+        : entryMode === "limit"
+            ? event.side === "BUY" ? Math.min(requestedEntry, placementAsk - placementGap) : Math.max(requestedEntry, placementBid + placementGap)
+            : event.side === "BUY" ? Math.max(requestedEntry, placementAsk + placementGap) : Math.min(requestedEntry, placementBid - placementGap), event.symbol);
     const expiryBars = Math.max(1, Math.ceil(candidate.expiryMinutes / 15));
     let fillIndex = null;
     let fillPrice = null;
@@ -1056,13 +1074,19 @@ function resolveSessionSearchEvent(prepared, event, candidate, spreadMultiplier)
             fillPrice = event.side === "BUY" ? adjustedAsk(bar, "open", spreadMultiplier) : bar.open;
             break;
         }
+        const askOpen = adjustedAsk(bar, "open", spreadMultiplier);
         const askHigh = adjustedAsk(bar, "high", spreadMultiplier);
+        const askLow = adjustedAsk(bar, "low", spreadMultiplier);
         const invalidated = event.side === "BUY" ? bar.low <= stop : askHigh >= stop;
-        const touched = event.side === "BUY" ? askHigh >= entry : bar.low <= entry;
-        if (invalidated) return null;
+        const touched = entryMode === "limit"
+            ? event.side === "BUY" ? askLow <= entry : bar.high >= entry
+            : event.side === "BUY" ? askHigh >= entry : bar.low <= entry;
+        if (invalidated && !touched) return null;
         if (!touched) continue;
         fillIndex = index;
-        fillPrice = event.side === "BUY" ? Math.max(entry, adjustedAsk(bar, "open", spreadMultiplier)) : Math.min(entry, bar.open);
+        fillPrice = entryMode === "limit"
+            ? event.side === "BUY" ? Math.min(entry, askOpen) : Math.max(entry, bar.open)
+            : event.side === "BUY" ? Math.max(entry, askOpen) : Math.min(entry, bar.open);
         break;
     }
     if (fillIndex == null) return null;
