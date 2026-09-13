@@ -1,7 +1,9 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { ATR, BollingerBands, RSI } from "technicalindicators";
+import { ADX, ATR, BollingerBands, EMA, MACD, RSI } from "technicalindicators";
+
+export { loadRows, enrichProfileRows, patternSide, atOrBefore, marketSession };
 
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
@@ -430,8 +432,21 @@ function enrichProfileRows(rows) {
     const lows = rows.map((row) => row.low);
     const closes = rows.map((row) => row.close);
     const atr = align(rows.length, ATR.calculate({ period: 21, high: highs, low: lows, close: closes }));
+    const atr14 = align(rows.length, ATR.calculate({ period: 14, high: highs, low: lows, close: closes }));
     const bollinger = align(rows.length, BollingerBands.calculate({ period: 20, stdDev: 2, values: closes }));
     const rsi = align(rows.length, RSI.calculate({ period: 14, values: closes }));
+    const adx = align(rows.length, ADX.calculate({ period: 14, high: highs, low: lows, close: closes }).map((value) => value.adx));
+    const ema16 = align(rows.length, EMA.calculate({ period: 16, values: closes }));
+    const ema9 = align(rows.length, EMA.calculate({ period: 9, values: closes }));
+    const ema20 = align(rows.length, EMA.calculate({ period: 20, values: closes }));
+    const ema21 = align(rows.length, EMA.calculate({ period: 21, values: closes }));
+    const ema32 = align(rows.length, EMA.calculate({ period: 32, values: closes }));
+    const ema50 = align(rows.length, EMA.calculate({ period: 50, values: closes }));
+    const ema64 = align(rows.length, EMA.calculate({ period: 64, values: closes }));
+    const ema128 = align(rows.length, EMA.calculate({ period: 128, values: closes }));
+    const ema200 = align(rows.length, EMA.calculate({ period: 200, values: closes }));
+    const macdHistogram = align(rows.length, MACD.calculate({ fastPeriod:12, slowPeriod:26, signalPeriod:9,
+        SimpleMAOscillator:false, SimpleMASignal:false, values:closes }).map(value=>value.histogram));
     return rows.map((row, index) => {
         const recentAtr = atr.slice(Math.max(0, index - 299), index + 1).filter(Number.isFinite);
         const atrPercentile = recentAtr.length && Number.isFinite(atr[index])
@@ -451,8 +466,20 @@ function enrichProfileRows(rows) {
         return {
             ...row,
             atr: atr[index],
+            atr14: atr14[index],
             bollinger: bollinger[index],
             rsi: rsi[index],
+            adx: adx[index],
+            ema16: ema16[index],
+            ema9: ema9[index],
+            ema20: ema20[index],
+            ema21: ema21[index],
+            ema32: ema32[index],
+            ema50: ema50[index],
+            ema64: ema64[index],
+            ema128: ema128[index],
+            ema200: ema200[index],
+            macdHistogram: macdHistogram[index],
             atrPercentile,
             efficiency,
             activity,

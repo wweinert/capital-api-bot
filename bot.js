@@ -1,11 +1,10 @@
 import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
-import { pathToFileURL } from "url";
-import { DEV, TIMEFRAMES, SESSIONS, getMarketSession, getProfile } from "./config.js";
-import tradingService from "./services/trading.js";
+import { DEV, TIMEFRAMES, SESSIONS } from "./config.js";
+import tradingService, { getProfile } from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
-import Strategy from "./strategies/strategies.js";
+import Strategy, { getMarketSession } from "./strategies/strategies.js";
 
 const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
 const ANALYSIS_DELAY_MS = 2 * 1000;

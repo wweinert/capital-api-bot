@@ -10,10 +10,13 @@ import {
     getMarketDetails,
     getAccountTransactions,
 } from "../api.js";
-import { RISK, PORTFOLIO, getMarketSession, getProfile } from "../config.js";
+import { RISK, PORTFOLIO, PROFILES } from "../config.js";
+import { getMarketSession } from "../strategies/strategies.js";
 import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
+
+export const getProfile = (symbol, session = getMarketSession()) => PROFILES[symbol]?.[session] ?? null;
 
 class TradingService {
     constructor() {
