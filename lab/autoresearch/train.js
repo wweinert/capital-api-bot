@@ -3,11 +3,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { performance } from "node:perf_hooks";
-import { PORTFOLIO, PROFILES, RISK, SESSIONS } from "../../config.js";
 import { discoverSymbols, evaluate, evaluatePairProfiles, evaluateSessionProfile, prepare, preparePairProfiles, prepareSessionProfileSearch, RESEARCH_PROTOCOL, summarizeSessionSearchTrades, validateCandidateConfig } from "./prepare.js";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPOSITORY_ROOT = path.resolve(HERE, "../..");
+const globalInvocation = path.resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url)
+    && (process.argv.includes("--global-search") || !process.argv.some((arg) => ["--session-search", "--pair-profiles", "--replay-session-report"].includes(arg)));
+const { PORTFOLIO, PROFILES, RISK, SESSIONS } = globalInvocation
+    ? { PORTFOLIO: {}, PROFILES: {}, RISK: {}, SESSIONS: {} }
+    : await import("../../config.js");
 
 export const SERIES_SYMBOLS = Object.freeze([
     ...new Set(Object.values(SESSIONS).flatMap((session) => session.SYMBOLS ?? [])),
@@ -61,6 +65,38 @@ function parseArgs(argv) {
         else if (argument === "--seconds") options.seconds = Number(argv[++index]);
         else if (argument === "--seed") options.seed = Number(argv[++index]);
         else if (argument === "--session-capacity") options.sessionCapacity = Number(argv[++index]);
+        else if (argument === "--fixed-2r") options.fixed2r = true;
+        else if (argument === "--global-search") options.globalSearch = true;
+        else if (argument === "--train-end") options.trainEnd = argv[++index];
+        else if (argument === "--validation-end") options.validationEnd = argv[++index];
+        else if (argument === "--split") options.split = argv[++index];
+        else if (argument === "--profit-timeframe") options.profitTimeframe = Number(argv[++index]);
+        else if (argument === "--evaluations") options.evaluations = Number(argv[++index]);
+        else if (argument === "--candidate") options.candidate = JSON.parse(argv[++index]);
+        else if (argument === "--candidate-report") options.candidateReport = argv[++index];
+        else if (argument === "--kronos-runtime") options.kronosRuntime = argv[++index];
+        else if (argument === "--kronos-model") options.kronosModel = argv[++index];
+        else if (argument === "--kronos-samples") options.kronosSamples = Number(argv[++index]);
+        else if (argument === "--kronos-cache") options.kronosCache = argv[++index];
+        else if (argument === "--kronos-plan") options.kronosPlan = true;
+        else if (argument === "--kronos-core") options.kronosCore = JSON.parse(argv[++index]);
+        else if (argument === "--daily-objective") options.dailyObjective = true;
+        else if (argument === "--daily-search") options.dailySearch = true;
+        else if (argument === "--daily-activity-search") options.dailyActivitySearch = true;
+        else if (argument === "--daily-activity-objective") options.dailyActivityObjective = true;
+        else if (argument === "--alternative-search") options.alternativeSearch = true;
+        else if (argument === "--alternative-objective") options.alternativeObjective = true;
+        else if (argument === "--report-candidates") options.reportCandidates = true;
+        else if (argument === "--dynamic-profiles") options.dynamicProfiles = true;
+        else if (argument === "--production-study") options.productionStudy = true;
+        else if (argument === "--institutional-study") options.institutionalStudy = true;
+        else if (argument === "--adaptive-pair-study") options.adaptivePairStudy = true;
+        else if (argument === "--m5-scalping") options.m5Scalping = true;
+        else if (argument === "--profit-tournament") options.profitTournament = true;
+        else if (argument === "--swing-continuation") options.swingContinuation = true;
+        else if (argument === "--human-wave-continuation") options.humanWaveContinuation = true;
+        else if (argument === "--quality-screen-study") options.qualityScreenStudy = true;
+        else if (argument === "--skip-risk-sweep") options.skipRiskSweep = true;
         else throw new Error(`Unknown argument: ${argument}`);
     }
     return options;
@@ -70,19 +106,51 @@ function printHelp() {
     console.log(`Usage: node lab/autoresearch/train.js --dataset <directory> [options]
 
 Options:
-  --symbols EURUSD,GBPUSD     Override the live session symbol universe
+  --global-search             Shared confirmed-swing strategy; default research mode
+  --train-end ISO             Exclusive training boundary for global research
+  --validation-end ISO        Exclusive validation boundary for global research
+  --evaluations N             Global: fixed evaluation count instead of time budget
+  --candidate JSON            Global: replay frozen configuration without search
+  --candidate-report PATH     Replay selected.c from a report inside lab/autoresearch/reports
+  --kronos-runtime PATH       Global: compare offline Kronos roles against accepted base
+  --kronos-model NAME         Offline model: small or base (default: small)
+  --kronos-samples N          Preserve N forecast paths, 1-10 (default: 6)
+  --kronos-cache lab/PATH     Reuse exact model forecasts; cache must stay in lab/
+  --kronos-plan               Global: count required model forecasts without inference
+  --kronos-core JSON          Daily: apply Kronos roles to one frozen core pattern
+  --daily-objective           Kronos: select one stateless pattern by daily P&L stability
+  --daily-search              20m universal daily-pattern search; no pair profiles/caps
+  --daily-activity-search     Search for >=3 trades/day and >=2/3 winning trades/day
+  --daily-activity-objective  Apply Kronos roles to the frozen daily-activity core
+  --alternative-search       Search direct-entry momentum/breakout/regime strategies
+  --alternative-objective    Apply Kronos roles to a frozen alternative core
+  --report-candidates        Deterministic grid from the supplied strategy report
+  --dynamic-profiles        Reciprocal 3+3 month dynamic Green/Red profile search
+  --production-study        Reproduce and improve commit Production scoring
+  --institutional-study     Session-state and H1/H4 directional benchmark
+  --adaptive-pair-study     Rolling 200-bar pair/timeframe Bollinger study
+  --m5-scalping             10m universal M5 Bollinger/RSI/Green-Red search
+  --profit-tournament       20m profit-first tournament: M1 through D1, 22 rule families
+  --swing-continuation      M15 higher-high/lower-low Green/Red continuation search
+  --human-wave-continuation Causal wave/correction continuation; no pivot or future window
+  --quality-screen-study    PA creates direction; indicators/Kronos only score quality
+  --profit-timeframe N      Pi shard for one of 1,5,15,60,240,1440 minutes
+  --skip-risk-sweep         Defer the 1-5 slot / 0.5-3% sweep until a winner is frozen
+  --symbols EURUSD,GBPUSD     Legacy modes: override the live symbol universe
   --from 2026-01-01          Optional inclusive UTC start
   --to 2026-08-19            Optional exclusive UTC end
-  --max-portfolio-risk 0.15  Hard cap; may be lowered to 0.10
-  --check                     Audit M15/H1 availability and prepare signals
+  --split 2026-06-01         Dynamic profiles: boundary between reciprocal halves
+  --max-portfolio-risk 0.15  Legacy modes: portfolio risk cap
+  --check                     Audit data availability and prepare signals
   --json                      Print the complete result, including trades
-  --report /tmp/baseline.json Write the complete result to a JSON file
+  --report PATH               Write report; global reports must remain under lab/autoresearch/reports
   --pair-profiles             Replay the five JSON files in lab/pair-profiles
   --session-search            Search pair-by-session M15/H1 profiles
   --replay-session-report f   Causally replay frozen profiles from a search report
-  --seconds 1800              Session-search wall-clock budget (default 30m)
-  --seed 20260826             Deterministic session-search seed
+  --seconds 1200              Global: 20m default; legacy session search: 30m
+  --seed 20260906             Global default seed; legacy: 20260826
   --session-capacity 7        Maximum broker-feasible profiles per session
+  --fixed-2r                  Global: initial TP 2R; legacy: M15 trail 1.5R/0.5R
   -h, --help                  Show this help
 
 AUTORESEARCH_DATASET_DIR may be used instead of --dataset. The run is offline;
@@ -340,6 +408,18 @@ function mutateCandidate(random, seed) {
     return result;
 }
 
+function applySearchConstraints(candidate, options) {
+    if (!options.fixed2r) return candidate;
+    return {
+        ...candidate,
+        exitMode: "fixed",
+        targetR: 2,
+        breakEvenAtR: null,
+        trailActivationR: 1.5,
+        trailDistanceR: 0.5,
+    };
+}
+
 function profileScore(nominal, stress) {
     const foldFloor = Math.min(...Object.values(stress.folds).map((fold) => fold.totalR));
     return +(2 * stress.totalR + nominal.totalR + 3 * foldFloor + 0.2 * (stress.positiveActiveDayPct - 50) - stress.maxDrawdownR).toFixed(6);
@@ -514,7 +594,9 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
     const prepared = prepareSessionProfileSearch(datasetDir, symbols, { from: options.from, to: options.to });
     const preparationSeconds = (performance.now() - prepareStarted) / 1000;
     const evaluatorSource = fs.readFileSync(path.join(HERE, "prepare.js"));
-    const liveSeeds = currentLiveSeeds().filter((candidate) => symbols.includes(candidate.symbol));
+    const liveSeeds = currentLiveSeeds()
+        .filter((candidate) => symbols.includes(candidate.symbol))
+        .map((candidate) => applySearchConstraints(candidate, options));
     const legacySeeds = [...liveSeeds, ...loadLegacySeeds().filter((candidate) => symbols.includes(candidate.symbol))];
     const seedsByKey = new Map();
     for (const candidate of legacySeeds) seedsByKey.set(`${candidate.symbol}:${candidate.session}`, [...(seedsByKey.get(`${candidate.symbol}:${candidate.session}`) ?? []), candidate]);
@@ -552,6 +634,7 @@ export function runSessionProfileSearch(datasetDir, options = {}) {
             candidate = randomSearchCandidate(random, symbol, session);
             source = "random-search";
         }
+        candidate = applySearchConstraints(candidate, options);
         const fingerprint = sha256(JSON.stringify(candidate));
         const candidateKey = `${candidate.symbol}:${candidate.session}`;
         iterations += 1;
@@ -771,6 +854,32 @@ async function main() {
     const datasetValue = options.dataset ?? process.env.AUTORESEARCH_DATASET_DIR;
     if (!datasetValue) throw new Error("Pass --dataset or set AUTORESEARCH_DATASET_DIR.");
     const datasetDir = path.resolve(datasetValue);
+    if (options.globalSearch || (!options.replaySessionReport && !options.sessionSearch && !options.pairProfiles)) {
+        if (options.symbols || options.maxPortfolioRiskPct !== undefined) {
+            throw new Error("Global mode uses all dataset FX pairs and fixed risk limits; omit legacy-only overrides.");
+        }
+        if(options.candidateReport){
+            if(options.candidate)throw new Error("Use either --candidate or --candidate-report, not both.");
+            const reportRoot=path.join(HERE,"reports"),candidatePath=path.resolve(options.candidateReport);
+            if(candidatePath!==reportRoot&&!candidatePath.startsWith(reportRoot+path.sep))
+                throw new Error("Candidate reports must stay inside lab/autoresearch/reports.");
+            const document=JSON.parse(fs.readFileSync(candidatePath,"utf8"));
+            options.candidate=document.selected?.c??document.config;
+            if(!options.candidate)throw new Error("Candidate report has neither selected.c nor config.");
+        }
+        const { runGlobalResearch } = await import("../replay.js");
+        const output = await runGlobalResearch({ ...options, trades: options.json, dataset: datasetDir });
+        if(options.report){
+            const reportRoot=path.join(HERE,"reports"),reportPath=path.resolve(options.report);
+            if(reportPath!==reportRoot&&!reportPath.startsWith(reportRoot+path.sep))
+                throw new Error("Global reports must stay inside lab/autoresearch/reports.");
+            fs.mkdirSync(path.dirname(reportPath),{recursive:true});
+            fs.writeFileSync(reportPath,`${JSON.stringify(output,null,2)}\n`);
+            console.log(`report: ${reportPath}`);
+        }
+        console.log("RESULT", JSON.stringify(output));
+        return;
+    }
     if (options.replaySessionReport) {
         const output = replayFrozenSessionSearch(datasetDir, options.replaySessionReport, options);
         if (options.report) {

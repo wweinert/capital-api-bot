@@ -18,8 +18,7 @@ lab/
 - Historical market data for the last 6+ months is available on the server.
 - Market data is available across multiple timeframes, including D1, H4, H1, M15, M5, and M1.
 - Coverage includes 15+ currency pairs, such as EURUSD.
-- Important: the server and attached SSD contain a large amount of historical data that is currently unstructured and inconsistent. We should identify the best/cleanest version of each dataset, do not create duplicates. There is only one single clear and reliable source of truth for all market data. If some historical data is missing for any timeframe i want you 
-to fetch that from the broker via API and add it to its JSONL file.
+- Important: the server and attached SSD contain a large amount of historical data that is currently unstructured and inconsistent. We should identify the best/cleanest version of each dataset, do not create duplicates. There is only one single clear and reliable source of truth for all market data. If some historical data is missing for any timeframe i want you to fetch that from the broker via API and add it to its JSONL file.
 
 ## Server Access
 
@@ -29,4 +28,5 @@ to fetch that from the broker via API and add it to its JSONL file.
 ## References
 
 - Broker strategy information: https://capital.com/en-eu/learn/trading-strategies
-- Official broker API documentation: https://capital.com/en-eu/trading-platforms/api-development-guide 
+- Official broker API documentation: https://capital.com/en-eu/trading-platforms/api-development-guide
+- Kronos AI https://github.com/shiyu-coder/Kronos.git

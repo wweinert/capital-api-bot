@@ -1,5 +1,42 @@
 import { ATR } from "technicalindicators";
-import { getMarketSession } from "../config.js";
+import { SESSIONS } from "../config.js";
+
+const SESSION_CLOCKS = new Map();
+
+export function getMarketSession(timestamp = Date.now()) {
+    const date =
+        timestamp instanceof Date
+            ? timestamp
+            : typeof timestamp === "string" && !/[zZ]|[+\-]\d{2}:?\d{2}$/.test(timestamp)
+              ? new Date(`${timestamp.replace(" ", "T")}Z`)
+              : new Date(timestamp);
+
+    if (Number.isNaN(date.getTime())) return "offHours";
+
+    for (const [name, session] of Object.entries(SESSIONS)) {
+        if (!SESSION_CLOCKS.has(session.TIME_ZONE)) {
+            SESSION_CLOCKS.set(
+                session.TIME_ZONE,
+                new Intl.DateTimeFormat("en-GB", {
+                    timeZone: session.TIME_ZONE,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hourCycle: "h23",
+                }),
+            );
+        }
+
+        const parts = Object.fromEntries(
+            SESSION_CLOCKS.get(session.TIME_ZONE)
+                .formatToParts(date)
+                .map(({ type, value }) => [type, value]),
+        );
+        const minute = Number(parts.hour) * 60 + Number(parts.minute);
+        if (minute < session.END_MINUTE) return name;
+    }
+
+    return "offHours";
+}
 
 function continuationSetup(rows, index, side, atr) {
     const follows = (row) => (side === "BUY" ? row.close > row.open : row.close < row.open);
