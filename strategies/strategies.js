@@ -113,10 +113,6 @@ class Strategy {
         };
         const signal = correctionBars("BUY") > 0 ? "BUY" : correctionBars("SELL") > 0 ? "SELL" : null;
         if (!signal) return { signal: null, reason: "pattern_failed" };
-        const directionMode = String(profile.signal.directionMode ?? "both").toUpperCase();
-        if (directionMode !== "BOTH" && directionMode !== signal) {
-            return { signal: null, reason: "direction_filtered" };
-        }
 
         const timestamp = Date.parse(current.timestamp) + 15 * 60_000;
         if (!Number.isFinite(timestamp)) return { signal: null, reason: "invalid_candle_time" };
@@ -192,25 +188,9 @@ class Strategy {
             }
         }
 
-        const entryType = String(profile.entry.type ?? "stop").toLowerCase();
         const entryBuffer = atr * Number(profile.entry.bufferAtr ?? 0);
-        const limitRetrace = atr * Number(profile.entry.limitRetraceAtr ?? 0);
         const stopBuffer = atr * Number(profile.stop.bufferAtr ?? 0);
-
-        let entryPrice;
-
-        if (entryType === "market") {
-            entryPrice = signal === "BUY" ? askPrice : bidPrice;
-        } else if (entryType === "limit") {
-            const limitEntry = signal === "BUY" ? Number(current.close) + spread - limitRetrace : Number(current.close) + limitRetrace;
-
-            entryPrice = signal === "BUY" ? Math.min(limitEntry, askPrice - spread) : Math.max(limitEntry, bidPrice + spread);
-        } else {
-            const stopEntry = signal === "BUY" ? Number(current.high) + spread + entryBuffer : Number(current.low) - entryBuffer;
-
-            entryPrice = signal === "BUY" ? Math.max(stopEntry, askPrice + spread) : Math.min(stopEntry, bidPrice - spread);
-        }
-
+        const entryPrice = signal === "BUY" ? Number(current.high) + spread + entryBuffer : Number(current.low) - entryBuffer;
         const stopLoss = signal === "BUY" ? Number(current.low) - stopBuffer : Number(current.high) + spread + stopBuffer;
         if (![entryPrice, stopLoss].every(Number.isFinite) || (signal === "BUY" ? stopLoss >= entryPrice : stopLoss <= entryPrice)) {
             return { signal: null, reason: "invalid_entry_or_stop" };
@@ -219,7 +199,7 @@ class Strategy {
         return {
             symbol,
             signal,
-            entryType,
+            entryType: profile.entry.type,
             entryPrice,
             stopLoss,
             atr,
