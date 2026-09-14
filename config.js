@@ -26,7 +26,7 @@ export const RISK = {
 };
 
 export const PORTFOLIO = {
-    MAX_POSITIONS: 1,
+    MAX_POSITIONS: 3,
     MARGIN_USAGE: 0.9,
     MAX_DAILY_LOSS_PCT: 0.1,
     MAX_WEEKLY_LOSS_PCT: 0.2,
