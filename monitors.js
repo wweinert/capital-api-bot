@@ -1,5 +1,5 @@
-import { getOpenPositions, getWorkingOrders, cancelWorkingOrder, getMarketDetails } from "./api.js";
-import { RISK } from "./config.js";
+import { getOpenPositions, getWorkingOrders, cancelWorkingOrder, getMarketDetails, getAccountActivity } from "./api.js";
+import { RISK, SESSION_PROTECTION } from "./config.js";
 
 import tradingService from "./services/trading.js";
 import webSocketService from "./services/websocket.js";
@@ -63,6 +63,7 @@ export async function trailingStopCheck() {
                 takeProfit: position.profitLevel,
                 currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
                 trailingStop: position.trailingStop,
+                openTime: position.openTime ?? position.createdDateUTC ?? position.createdDate,
             });
         }
     } catch (error) {
@@ -245,11 +246,57 @@ export function logDeals(bot) {
 
             const closedDealIds = bot.openedBrockerDealIds.filter((id) => !brokerDealIds.includes(id));
 
-            bot.openedBrockerDealIds = bot.openedBrockerDealIds.filter((id) => brokerDealIds.includes(id));
-
             if (closedDealIds.length) {
                 logger.info(`[DealID Monitor] Closed deals: ${closedDealIds.join(", ")}`);
+
+                const now = new Date();
+                const dayStart = new Date(now);
+                dayStart.setUTCHours(0, 0, 0, 0);
+                const from = dayStart.toISOString().slice(0, 19);
+                const to = now.toISOString().slice(0, 19);
+                const activities = await getAccountActivity(from, to);
+
+                for (const dealId of closedDealIds) {
+                    const dealActivities = activities
+                        .filter((item) => item.dealId === dealId && item.type === "POSITION")
+                        .sort((a, b) => parseOpenTimeMs(b.dateUTC ?? b.dateUtc) - parseOpenTimeMs(a.dateUTC ?? a.dateUtc));
+                    const activity = dealActivities[0];
+                    const state = tradingService.trailingStates.get(dealId);
+                    const reason = activity?.source ?? "UNKNOWN";
+                    const closeTime = activity?.dateUTC ?? activity?.dateUtc ?? now.toISOString();
+                    const firstActivity = dealActivities[dealActivities.length - 1];
+                    const openTime = state?.openTime ?? (dealActivities.length > 1 ? firstActivity?.dateUTC ?? firstActivity?.dateUtc : null);
+                    const openMs = parseOpenTimeMs(openTime);
+                    const closeMs = parseOpenTimeMs(closeTime);
+                    const heldMinutes = Number.isFinite(openMs) && Number.isFinite(closeMs) ? (closeMs - openMs) / 60000 : null;
+                    const favorableMove =
+                        state?.direction === "BUY" ? state.bestPrice - state.entryPrice : state?.direction === "SELL" ? state.entryPrice - state.bestPrice : null;
+                    const mfeR = Number.isFinite(favorableMove) && state?.riskDistance > 0 ? favorableMove / state.riskDistance : null;
+
+                    const failureDate = String(closeTime).slice(0, 10);
+                    if (tradingService.sessionState.date !== failureDate) {
+                        tradingService.sessionState = { date: failureDate, failedBreakouts: 0, lastFailureKey: "" };
+                    }
+                    const failureKey = `${state?.symbol ?? dealId}|${openTime ?? dealId}`;
+                    if (
+                        reason === "SL" &&
+                        heldMinutes !== null &&
+                        heldMinutes <= SESSION_PROTECTION.FAILED_BREAKOUT_MINUTES &&
+                        (mfeR === null || mfeR < SESSION_PROTECTION.FAILED_BREAKOUT_MAX_MFE_R) &&
+                        tradingService.sessionState.lastFailureKey !== failureKey
+                    ) {
+                        tradingService.sessionState.failedBreakouts += 1;
+                        tradingService.sessionState.lastFailureKey = failureKey;
+                        logger.info(
+                            `[Trading] Failed breakout ${tradingService.sessionState.failedBreakouts}/${SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT} ` +
+                                `(${heldMinutes.toFixed(1)}m, MFE=${mfeR === null ? "unknown" : `${mfeR.toFixed(2)}R`})`,
+                        );
+                    }
+
+                    tradingService.trailingStates.delete(dealId);
+                }
             }
+            bot.openedBrockerDealIds = bot.openedBrockerDealIds.filter((id) => brokerDealIds.includes(id));
             return [];
         } catch (error) {
             logger.error("[DealID Monitor] Error:", error);

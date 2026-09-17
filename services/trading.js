@@ -7,10 +7,11 @@ import {
     closePosition as apiClosePosition,
     getOpenPositions,
     getWorkingOrders,
+    cancelWorkingOrder,
     getMarketDetails,
     getAccountTransactions,
 } from "../api.js";
-import { RISK, PORTFOLIO, PROFILES } from "../config.js";
+import { RISK, PORTFOLIO, PROFILES, SESSION_PROTECTION } from "../config.js";
 import { getMarketSession } from "../strategies/strategies.js";
 import logger from "../utils/logger.js";
 
@@ -21,8 +22,11 @@ export const getProfile = (symbol, session = getMarketSession()) => PROFILES[sym
 class TradingService {
     constructor() {
         this.openTrades = [];
+        this.openPositions = [];
+        this.workingOrders = [];
         this.accountBalance = 0;
         this.availableMargin = 0;
+        this.sessionState = { date: "", failedBreakouts: 0, lastFailureKey: "" };
 
         this.quotePerEurCache = new Map();
         this.trailingStates = new Map();
@@ -86,6 +90,9 @@ class TradingService {
         const positions = positionsResult?.positions || [];
 
         const orders = ordersResult?.workingOrders || [];
+
+        this.openPositions = positions;
+        this.workingOrders = orders;
 
         const positionSymbols = positions.map((item) => item?.market?.epic || item?.position?.epic);
 
@@ -155,6 +162,16 @@ class TradingService {
         const dailyStartBalance = this.accountBalance - dailyProfit;
         const weeklyStartBalance = this.accountBalance - weeklyProfit;
 
+        const today = dayStart.toISOString().slice(0, 10);
+        if (this.sessionState.date !== today) {
+            this.sessionState = { date: today, failedBreakouts: 0, lastFailureKey: "" };
+        }
+
+        if (this.sessionState.failedBreakouts >= SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT) {
+            logger.info(`[Trading] ${this.sessionState.failedBreakouts} failed breakouts today; new entries blocked`);
+            return [];
+        }
+
         const tradingBlocked =
             dailyProfit <= -dailyStartBalance * PORTFOLIO.MAX_DAILY_LOSS_PCT || weeklyProfit <= -weeklyStartBalance * PORTFOLIO.MAX_WEEKLY_LOSS_PCT;
 
@@ -180,13 +197,36 @@ class TradingService {
     async processCandidates(candidates = []) {
         await this.syncOpenTradesFromBroker();
 
-        const freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
+        let freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
+
+        if (freePositions <= 0 && this.openPositions.length) {
+            logger.info("[Trading] No free positions");
+            return [];
+        }
+        const allowedCandidates = await this.getAllowedCandidates(candidates);
+
+        if (freePositions <= 0 && this.workingOrders.length && allowedCandidates.length) {
+            const candidate = allowedCandidates[0];
+            const order = this.workingOrders[0]?.workingOrderData;
+            const current = this.profileStates.get(order?.epic);
+            const oppositeSignal = order?.epic === candidate.symbol && String(order?.direction).toUpperCase() !== candidate.signal;
+            const betterSignal = current && candidate.quality >= current.quality + SESSION_PROTECTION.PENDING_REPLACE_SCORE_GAP;
+
+            if (oppositeSignal || betterSignal) {
+                for (const item of this.workingOrders) {
+                    const pending = item?.workingOrderData;
+                    if (pending?.dealId) await cancelWorkingOrder(pending.dealId);
+                }
+                logger.info(`[Trading] Pending ${order?.epic} replaced by ${candidate.symbol} (${candidate.quality.toFixed(2)})`);
+                await this.syncOpenTradesFromBroker();
+                freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
+            }
+        }
 
         if (freePositions <= 0) {
             logger.info("[Trading] No free positions");
             return [];
         }
-        const allowedCandidates = await this.getAllowedCandidates(candidates);
 
         const selected = allowedCandidates.filter((candidate) => !this.isSymbolTraded(candidate.symbol)).slice(0, freePositions);
 
@@ -463,7 +503,12 @@ class TradingService {
         }
 
         if (!acceptedSize) return false;
-        this.profileStates.set(symbol, { profile, atr: candidate.atr, riskDistance });
+        this.profileStates.set(symbol, {
+            profile,
+            atr: candidate.atr,
+            riskDistance,
+            quality: candidate.quality,
+        });
         this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired * (acceptedSize / sizing.size));
         if (acceptedSize !== sizing.size) logger.warn(`[Trading] ${symbol}: only ${acceptedSize}/${sizing.size} units were accepted`);
         return true;
@@ -472,7 +517,7 @@ class TradingService {
     //               Trailing Stop (Improved)
     // ============================================================
     async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, trailingStop, profile } = position;
+        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, currentPrice, trailingStop, profile, openTime } = position;
         const entry = Number(entryPrice);
         const target = this.toNumber(takeProfit);
         const price = Number(currentPrice);
@@ -489,6 +534,11 @@ class TradingService {
         const state = this.trailingStates.get(dealId) ?? {
             bestPrice: price,
             breakEven: false,
+            symbol,
+            direction,
+            entryPrice: entry,
+            riskDistance,
+            openTime,
         };
         const priceImproved = isBuy ? price > state.bestPrice : price < state.bestPrice;
         if (priceImproved) state.bestPrice = price;
