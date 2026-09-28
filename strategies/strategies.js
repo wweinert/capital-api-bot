@@ -136,6 +136,35 @@ class Strategy {
         const priorVolumes = rows.slice(-21, -1).map((candle) => Number(candle.volume));
         const averageVolume = priorVolumes.reduce((sum, value) => sum + value, 0) / priorVolumes.length;
         const volumeRatio = averageVolume > 0 ? Number(current.volume) / averageVolume : 0;
+        let sessionActivity = activity;
+        let sessionEfficiency = efficiency;
+        let sessionAtrPercentile = atrPercentile;
+
+        if (profile.exit.maxHoldSource === "session") {
+            let sessionStart = rows.length - 1;
+            while (sessionStart > 0 && getMarketSession(Date.parse(rows[sessionStart - 1].timestamp) + 15 * 60_000) === session) sessionStart -= 1;
+
+            const values = [];
+            const atrOffset = rows.length - atrValues.length;
+            for (let index = sessionStart; index < rows.length; index += 1) {
+                const rowAtr = atrValues[index - atrOffset];
+                const recent = rows.slice(index - 23, index + 1);
+                const distance = recent.slice(1).reduce((sum, candle, cursor) => sum + Math.abs(candle.close - recent[cursor].close), 0);
+                const recentAtr = atrValues.slice(Math.max(0, index - atrOffset - 299), index - atrOffset + 1);
+                if (recent.length === 24 && rowAtr > 0 && distance > 0 && recentAtr.length) {
+                    values.push({
+                        activity: rows.slice(index - 3, index + 1).reduce((sum, candle) => sum + candle.high - candle.low, 0) / (4 * rowAtr),
+                        efficiency: Math.abs(recent.at(-1).close - recent[0].open) / distance,
+                        atrPercentile: recentAtr.filter((value) => value <= rowAtr).length / recentAtr.length,
+                    });
+                }
+            }
+            if (values.length) {
+                sessionActivity = values.reduce((sum, value) => sum + value.activity, 0) / values.length;
+                sessionEfficiency = values.reduce((sum, value) => sum + value.efficiency, 0) / values.length;
+                sessionAtrPercentile = values.reduce((sum, value) => sum + value.atrPercentile, 0) / values.length;
+            }
+        }
 
         const bb = state.bb;
         const rsi = Number(state.rsi);
@@ -204,6 +233,12 @@ class Strategy {
             stopLoss,
             atr,
             quality: score + efficiency + volumeRatio - spreadAtr,
+            activity,
+            efficiency,
+            atrPercentile,
+            sessionActivity,
+            sessionEfficiency,
+            sessionAtrPercentile,
             bodyRatio,
             spreadAtr,
             reason: `${profile.signal.structureMode}_M15`,

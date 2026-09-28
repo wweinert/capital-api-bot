@@ -5,6 +5,7 @@ import {
     updatePositionProtection,
     getDealConfirmation,
     closePosition as apiClosePosition,
+    getAccountInfo,
     getOpenPositions,
     getWorkingOrders,
     cancelWorkingOrder,
@@ -219,6 +220,9 @@ class TradingService {
                 }
                 logger.info(`[Trading] Pending ${order?.epic} replaced by ${candidate.symbol} (${candidate.quality.toFixed(2)})`);
                 await this.syncOpenTradesFromBroker();
+                const balance = (await getAccountInfo())?.accounts?.[0]?.balance;
+                this.accountBalance = this.toNumber(balance?.balance) ?? this.accountBalance;
+                this.availableMargin = this.toNumber(balance?.available) ?? this.availableMargin;
                 freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
             }
         }
@@ -503,11 +507,35 @@ class TradingService {
         }
 
         if (!acceptedSize) return false;
+        const activity = profile.exit.maxHoldSource === "session" ? candidate.sessionActivity : candidate.activity;
+        const efficiency = profile.exit.maxHoldSource === "session" ? candidate.sessionEfficiency : candidate.efficiency;
+        const atrPercentile = profile.exit.maxHoldSource === "session" ? candidate.sessionAtrPercentile : candidate.atrPercentile;
+        let holdMultiplier = 1;
+        if (profile.exit.maxHoldMode === "volatility") {
+            holdMultiplier = atrPercentile >= 0.75 ? 0.65 : atrPercentile >= 0.5 ? 0.85 : atrPercentile < 0.25 ? 0.75 : 1;
+        }
+        if (profile.exit.maxHoldMode === "activity") {
+            holdMultiplier = activity >= 1.25 ? 0.65 : activity >= 1 ? 0.85 : activity < 0.75 ? 0.65 : 1;
+        }
+        if (profile.exit.maxHoldMode === "balanced") {
+            holdMultiplier =
+                efficiency >= 0.3 && activity >= 1
+                    ? 1
+                    : efficiency < 0.12 || activity < 0.65
+                      ? 0.5
+                      : atrPercentile >= 0.8 && efficiency < 0.25
+                        ? 0.65
+                        : activity >= 1.25
+                          ? 0.75
+                          : 1;
+        }
+        const maxHoldMinutes = Math.max(60, Math.min(480, Math.round((profile.exit.maxHoldMinutes * holdMultiplier) / 15) * 15));
         this.profileStates.set(symbol, {
             profile,
             atr: candidate.atr,
             riskDistance,
             quality: candidate.quality,
+            maxHoldMinutes,
         });
         this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired * (acceptedSize / sizing.size));
         if (acceptedSize !== sizing.size) logger.warn(`[Trading] ${symbol}: only ${acceptedSize}/${sizing.size} units were accepted`);
@@ -531,8 +559,10 @@ class TradingService {
         if (!(riskDistance > 0)) return;
         const isBuy = direction === "BUY";
         const favorableMove = isBuy ? price - entry : entry - price;
+        const now = Date.now();
         const state = this.trailingStates.get(dealId) ?? {
             bestPrice: price,
+            lastImprovedAt: now,
             breakEven: false,
             symbol,
             direction,
@@ -541,8 +571,36 @@ class TradingService {
             openTime,
         };
         const priceImproved = isBuy ? price > state.bestPrice : price < state.bestPrice;
-        if (priceImproved) state.bestPrice = price;
+        if (priceImproved) {
+            state.bestPrice = price;
+            state.lastImprovedAt = now;
+        }
         this.trailingStates.set(dealId, state);
+
+        const openValue = typeof openTime === "string" && !/[zZ]|[+\-]\d{2}:\d{2}$/.test(openTime) ? `${openTime.replace(" ", "T")}Z` : openTime;
+        const openMs = typeof openValue === "number" ? (openValue < 1e12 ? openValue * 1000 : openValue) : Date.parse(openValue);
+        const heldMinutes = Number.isFinite(openMs) ? (now - openMs) / 60_000 : 0;
+        const bestFavorable = isBuy ? state.bestPrice - entry : entry - state.bestPrice;
+        if (
+            remembered?.riskDistance > 0 &&
+            profile.exit.stallActivationR != null &&
+            bestFavorable >= riskDistance * profile.exit.stallActivationR &&
+            now - state.lastImprovedAt >= profile.exit.stallMinutes * 60_000 &&
+            favorableMove <= bestFavorable - riskDistance * profile.exit.stallGivebackR
+        ) {
+            await this.closePosition(dealId, "stalled_profit_exit");
+            return;
+        }
+        if (
+            remembered?.riskDistance > 0 &&
+            profile.exit.deadMinutes != null &&
+            heldMinutes >= profile.exit.deadMinutes &&
+            bestFavorable <= riskDistance * profile.exit.deadMaxMfeR &&
+            favorableMove <= riskDistance * profile.exit.deadCurrentR
+        ) {
+            await this.closePosition(dealId, "dead_position_exit");
+            return;
+        }
 
         if (profile.exit.mode === "partial") {
             if (target !== null) return; // The first leg closes at partialAtR; only the runner is managed.

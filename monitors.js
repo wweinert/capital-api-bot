@@ -214,7 +214,9 @@ export async function maxHoldCheck(bot) {
 }
 
 function resolveMaxHoldMinutes(pos, symbol) {
-    return tradingService.getPositionProfile(pos, symbol)?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
+    return (
+        tradingService.profileStates.get(symbol)?.maxHoldMinutes ?? tradingService.getPositionProfile(pos, symbol)?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME
+    );
 }
 
 export function logDeals(bot) {
