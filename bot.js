@@ -32,7 +32,7 @@ class TradingBot {
         this.monitorInProgress = false; // Prevent overlapping monitor runs
         this.priceMonitorInProgress = false;
         this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
-        this.maxCandleHistory = 322; // Rolling window size for indicators
+        this.maxCandleHistory = 500; // Warm-up plus the 300-candle ATR percentile window
         this.openedPositions = {}; // Track opened positions
         this.MONITOR_INTERVAL_MS = 60 * 1000; // 1 minute
         this.openedBrockerDealIds = [];

@@ -32,7 +32,7 @@ export const PORTFOLIO = {
 };
 
 export const SESSION_PROTECTION = {
-    FAILED_BREAKOUT_LIMIT: 2,
+    FAILED_BREAKOUT_LIMIT: 0,
     FAILED_BREAKOUT_MINUTES: 60,
     FAILED_BREAKOUT_MAX_MFE_R: 0.25,
     PENDING_REPLACE_SCORE_GAP: 1,
@@ -50,6 +50,46 @@ export const TIMEFRAMES = {
 export const DEV = {
     INTERVAL: 60 * 1000,
     MODE: false,
+};
+
+export const OPENING_MOMENTUM_PROFILE = {
+    symbols: ["EURUSD", "GBPUSD", "USDJPY"],
+    signal: {
+        strategy: "openingMomentum",
+        context: "m15",
+        timeframe: "M15",
+        historyBars: 500,
+        sessions: ["asia", "london", "overlap", "newYork"],
+        openingMinutes: 120,
+        minOpeningMoveAtr: 0.1,
+        minAtrPercentile: 0.15,
+        maxAtrPercentile: 1,
+        minActivity: 1.25,
+        minBodyAtr: 0.25,
+        maxSpreadAtr: 0.5,
+        rsiBuy: 55,
+        rsiSell: 45,
+    },
+    entry: {
+        type: "market",
+        expiryBars: 1,
+    },
+    stop: {
+        type: "atr",
+        distanceAtr: 3,
+    },
+    exit: {
+        mode: "fixed",
+        targetR: 4,
+        breakEvenAtR: null,
+        trailActivationR: null,
+        trailDistanceR: null,
+        maxHoldMinutes: 480,
+    },
+    risk: {
+        perTrade: 0.03,
+        lastEntryMinute: 1320,
+    },
 };
 
 export const PROFILES = {
@@ -1062,21 +1102,21 @@ export const SESSIONS = {
     asia: {
         TIME_ZONE: "Europe/London",
         END_MINUTE: 480,
-        SYMBOLS: ["USDCHF", "AUDUSD", "EURJPY", "EURUSD", "AUDJPY"],
+        SYMBOLS: ["EURUSD", "GBPUSD", "USDJPY"],
     },
     london: {
         TIME_ZONE: "America/New_York",
         END_MINUTE: 480,
-        SYMBOLS: ["EURUSD", "GBPUSD", "AUDUSD", "GBPCHF", "USDCHF"],
+        SYMBOLS: ["EURUSD", "GBPUSD", "USDJPY"],
     },
     overlap: {
         TIME_ZONE: "Europe/London",
         END_MINUTE: 1020,
-        SYMBOLS: ["USDJPY", "GBPUSD", "AUDJPY", "EURUSD", "USDCHF"],
+        SYMBOLS: ["EURUSD", "GBPUSD", "USDJPY"],
     },
     newYork: {
         TIME_ZONE: "America/New_York",
         END_MINUTE: 1020,
-        SYMBOLS: ["USDJPY", "GBPUSD", "AUDUSD", "AUDJPY", "EURJPY"],
+        SYMBOLS: ["EURUSD", "GBPUSD", "USDJPY"],
     },
 };

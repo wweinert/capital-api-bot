@@ -76,7 +76,110 @@ class Strategy {
             return { signal: null, reason: "missing_data" };
         }
 
+        if (context.profile.signal.strategy === "openingMomentum") {
+            return this.getOpeningMomentumSignal(context);
+        }
+
         return this.getGreenRedSignal(context);
+    }
+
+    getOpeningMomentumSignal({ symbol, profile, indicators, candles, bid, ask }) {
+        const timeframe = profile.signal.timeframe.toLowerCase();
+        const rows = candles[timeframe];
+        const state = indicators[timeframe];
+        if (!state || !Array.isArray(rows) || rows.length < profile.signal.historyBars) {
+            return { signal: null, reason: "not_enough_data" };
+        }
+
+        const atrValues = ATR.calculate({
+            period: 21,
+            high: rows.map(({ high }) => Number(high)),
+            low: rows.map(({ low }) => Number(low)),
+            close: rows.map(({ close }) => Number(close)),
+        });
+        const atr = atrValues.at(-1);
+        const current = rows.at(-1);
+        const bidPrice = Number(bid);
+        const askPrice = Number(ask);
+        const timestamp = Date.parse(current.timestamp) + 15 * 60_000;
+        if (![atr, bidPrice, askPrice, timestamp].every(Number.isFinite) || atr <= 0 || askPrice < bidPrice) {
+            return { signal: null, reason: "invalid_market_data" };
+        }
+
+        const session = getMarketSession(timestamp);
+        if (!profile.signal.sessions.includes(session)) return { signal: null, reason: "outside_session" };
+
+        const utcDay = Math.floor(timestamp / 86_400_000);
+        let sessionStart = rows.length - 1;
+        while (sessionStart > 0) {
+            const previousClose = Date.parse(rows[sessionStart - 1].timestamp) + 15 * 60_000;
+            if (Math.floor(previousClose / 86_400_000) !== utcDay || getMarketSession(previousClose) !== session) break;
+            sessionStart -= 1;
+        }
+
+        const sessionStartTime = Date.parse(rows[sessionStart].timestamp) + 15 * 60_000;
+        const sessionAgeMinutes = (timestamp - sessionStartTime) / 60_000;
+        if (sessionAgeMinutes !== profile.signal.openingMinutes) {
+            return { signal: null, reason: "outside_opening_signal" };
+        }
+
+        const sessionOpen = Number(rows[sessionStart].open);
+        const sessionMoveAtr = (Number(current.close) - sessionOpen) / atr;
+        if (!Number.isFinite(sessionMoveAtr) || Math.abs(sessionMoveAtr) < profile.signal.minOpeningMoveAtr) {
+            return { signal: null, reason: "opening_move_too_small" };
+        }
+
+        const signal = sessionMoveAtr > 0 ? "BUY" : "SELL";
+        const spreadAtr = (askPrice - bidPrice) / atr;
+        const bodyAtr = Math.abs(Number(current.close) - Number(current.open)) / atr;
+        const activity = rows.slice(-4).reduce((sum, candle) => sum + Number(candle.high) - Number(candle.low), 0) / (4 * atr);
+        const rankedAtr = atrValues.slice(-300);
+        const atrPercentile = rankedAtr.filter((value) => value <= atr).length / rankedAtr.length;
+        const recent24 = rows.slice(-24);
+        const travelled = recent24
+            .slice(1)
+            .reduce((sum, candle, index) => sum + Math.abs(Number(candle.close) - Number(recent24[index].close)), 0);
+        const efficiency = travelled > 0 ? Math.abs(Number(current.close) - Number(recent24[0].open)) / travelled : 0;
+        const priorVolumes = rows.slice(-21, -1).map((candle) => Number(candle.volume ?? 0));
+        const averageVolume = priorVolumes.reduce((sum, volume) => sum + volume, 0) / priorVolumes.length;
+        const volumeRatio = averageVolume > 0 ? Number(current.volume ?? 0) / averageVolume : 0;
+        const rsi = Number(state.rsi);
+        const rsiAligned = signal === "BUY" ? rsi >= profile.signal.rsiBuy : rsi <= profile.signal.rsiSell;
+
+        if (
+            ![spreadAtr, bodyAtr, activity, atrPercentile, efficiency, volumeRatio, rsi].every(Number.isFinite) ||
+            spreadAtr > profile.signal.maxSpreadAtr ||
+            bodyAtr < profile.signal.minBodyAtr ||
+            activity < profile.signal.minActivity ||
+            atrPercentile < profile.signal.minAtrPercentile ||
+            atrPercentile > profile.signal.maxAtrPercentile ||
+            !rsiAligned
+        ) {
+            return { signal: null, reason: "filters_failed" };
+        }
+
+        const entryPrice = signal === "BUY" ? askPrice : bidPrice;
+        const riskDistance = atr * profile.stop.distanceAtr;
+        const stopLoss = signal === "BUY" ? entryPrice - riskDistance : entryPrice + riskDistance;
+        const bollingerAligned = signal === "BUY" ? Number(current.close) >= state.bb?.middle : Number(current.close) <= state.bb?.middle;
+        const score = [bollingerAligned, rsiAligned, volumeRatio >= 1].filter(Boolean).length;
+
+        return {
+            symbol,
+            signal,
+            entryType: profile.entry.type,
+            entryPrice,
+            stopLoss,
+            atr,
+            quality: Math.abs(sessionMoveAtr) + score + efficiency + volumeRatio - spreadAtr,
+            activity,
+            efficiency,
+            atrPercentile,
+            bodyAtr,
+            spreadAtr,
+            sessionMoveAtr,
+            reason: "opening_momentum_M15",
+        };
     }
 
     getGreenRedSignal({ symbol, profile, indicators, candles, bid, ask }) {

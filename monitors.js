@@ -281,6 +281,7 @@ export function logDeals(bot) {
                     }
                     const failureKey = `${state?.symbol ?? dealId}|${openTime ?? dealId}`;
                     if (
+                        SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT > 0 &&
                         reason === "SL" &&
                         heldMinutes !== null &&
                         heldMinutes <= SESSION_PROTECTION.FAILED_BREAKOUT_MINUTES &&

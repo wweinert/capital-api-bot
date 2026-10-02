@@ -12,13 +12,16 @@ import {
     getMarketDetails,
     getAccountTransactions,
 } from "../api.js";
-import { RISK, PORTFOLIO, PROFILES, SESSION_PROTECTION } from "../config.js";
+import { RISK, PORTFOLIO, OPENING_MOMENTUM_PROFILE, SESSION_PROTECTION } from "../config.js";
 import { getMarketSession } from "../strategies/strategies.js";
 import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
 
-export const getProfile = (symbol, session = getMarketSession()) => PROFILES[symbol]?.[session] ?? null;
+export const getProfile = (symbol, session = getMarketSession()) =>
+    OPENING_MOMENTUM_PROFILE.symbols.includes(symbol) && OPENING_MOMENTUM_PROFILE.signal.sessions.includes(session)
+        ? OPENING_MOMENTUM_PROFILE
+        : null;
 
 class TradingService {
     constructor() {
@@ -168,7 +171,10 @@ class TradingService {
             this.sessionState = { date: today, failedBreakouts: 0, lastFailureKey: "" };
         }
 
-        if (this.sessionState.failedBreakouts >= SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT) {
+        if (
+            SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT > 0 &&
+            this.sessionState.failedBreakouts >= SESSION_PROTECTION.FAILED_BREAKOUT_LIMIT
+        ) {
             logger.info(`[Trading] ${this.sessionState.failedBreakouts} failed breakouts today; new entries blocked`);
             return [];
         }
