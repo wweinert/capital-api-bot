@@ -1,5 +1,9 @@
-import fs from "fs";
-import path from "path";
+function safeError(error) {
+    if (!error) return "";
+    if (!(error instanceof Error)) return String(error);
+
+    return error.response?.data?.errorCode ?? error.response?.data?.message ?? error.message;
+}
 
 const logger = {
     info: (message) => {
@@ -14,18 +18,18 @@ const logger = {
     error: (message, error) => {
         const timestamp = new Date().toISOString();
         if (typeof message === "object") {
-            console.error(`[ERROR] ${timestamp} |\n${JSON.stringify(message, null, 2)}\n`, error || "");
+            console.error(`[ERROR] ${timestamp} |\n${JSON.stringify(message, null, 2)}\n`, safeError(error));
         } else {
-            console.error(`[ERROR] ${timestamp} | ${message}`, error || "");
+            console.error(`[ERROR] ${timestamp} | ${message}`, safeError(error));
         }
     },
 
     warn: (message, error) => {
         const timestamp = new Date().toISOString();
         if (typeof message === "object") {
-            console.warn(`[WARN] ${timestamp} |\n${JSON.stringify(message, null, 2)}\n`, error || "");
+            console.warn(`[WARN] ${timestamp} |\n${JSON.stringify(message, null, 2)}\n`, safeError(error));
         } else {
-            console.warn(`[WARN] ${timestamp} | ${message}`, error || "");
+            console.warn(`[WARN] ${timestamp} | ${message}`, safeError(error));
         }
     },
 

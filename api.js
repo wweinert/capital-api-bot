@@ -3,7 +3,6 @@ import axios from "axios";
 import logger from "./utils/logger.js";
 
 let cst, xsecurity;
-let sessionStartTime = Date.now();
 
 const MAX_GET_REQUESTS_PER_SECOND = 8;
 const requestStarts = [];
@@ -90,10 +89,8 @@ export const startSession = async () => {
         cst = response.headers["cst"];
         xsecurity = response.headers["x-security-token"];
 
-        sessionStartTime = Date.now();
         if (!cst || !xsecurity) {
             logger.warn("Session tokens not received in response headers");
-            logger.info("Response headers:", response.headers);
         }
 
         return response.data;
@@ -101,7 +98,6 @@ export const startSession = async () => {
         logger.error("[api.js] Failed to start session:", error.response ? error.response.data : error.message);
         if (error.response) {
             logger.error("[api.js] Response status:", error.response.status);
-            logger.error("[api.js] Response headers:", error.response.headers);
         }
         throw error;
     }
@@ -191,7 +187,9 @@ export async function getHistorical(symbol, resolution, count) {
     const maxAttempts = 3;
     for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
         try {
-            const response = await apiGet(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) });
+            const response = await withSessionRetry(() =>
+                apiGet(`${API.BASE_URL}/prices/${symbol}?resolution=${resolution}&max=${count}`, { headers: getHeaders(true) }),
+            );
             return {
                 prices: response.data.prices.map((p) => ({
                     close: p.closePrice?.bid,
@@ -230,87 +228,6 @@ export const cancelWorkingOrder = async (dealId) =>
         return response.data;
     });
 
-export async function placeOrder({ symbol, type = "STOP", direction, size, level, stopLevel, profitLevel, goodTillDate }) {
-    const rules = await getAllowedTPRange(symbol);
-    const decimals = rules.decimals;
-
-    const entry = toRoundedNumber(level, decimals);
-    const stop = toRoundedNumber(stopLevel, decimals);
-    const target = profitLevel == null ? null : toRoundedNumber(profitLevel, decimals);
-
-    if (!Number.isFinite(entry) || !Number.isFinite(stop) || (target !== null && !Number.isFinite(target))) {
-        throw new Error(`Invalid pending order prices for ${symbol}`);
-    }
-
-    const isBuy = direction.toUpperCase() === "BUY";
-
-    const marketPrice = isBuy ? Number(rules.market.offer) : Number(rules.market.bid);
-
-    const orderType = type.toUpperCase();
-
-    const entryIsValid = orderType === "STOP" ? (isBuy ? entry > marketPrice : entry < marketPrice) : isBuy ? entry < marketPrice : entry > marketPrice;
-
-    if (!entryIsValid) {
-        logger.warn(`[API] ${symbol}: ${orderType} entry is behind market price`);
-        return { skipped: true };
-    }
-
-    const protection = validateMarketProtection({
-        symbol,
-        direction,
-        stopLevel: stop,
-        ...(target !== null ? { profitLevel: target } : {}),
-        bid: entry,
-        offer: entry,
-        minSLDistancePrice: rules.minSLDistancePrice,
-        minTPDistancePrice: rules.minTPDistancePrice,
-    });
-
-    if (protection.skipped) {
-        logger.warn(`[API] ${symbol}: pending order skipped — ${protection.reason}`);
-        return protection;
-    }
-
-    const order = {
-        epic: symbol,
-        direction: direction.toUpperCase(),
-        size: Number(size),
-        level: entry,
-        type: orderType,
-        guaranteedStop: false,
-        trailingStop: false,
-        stopLevel: stop,
-        ...(target !== null ? { profitLevel: target } : {}),
-        goodTillDate,
-    };
-
-    logger.info(`[API] Placing ${orderType} order for ${symbol} at ${entry}`);
-
-    const response = await apiPost("/workingorders", order);
-
-    return response.data;
-}
-
-export const updatePositionProtection = async (dealId, protection) =>
-    withSessionRetry(async () => {
-        const response = await axios.put(
-            `${API.BASE_URL}/positions/${dealId}`,
-            protection,
-            {
-                headers: getHeaders(true),
-            },
-        );
-
-        return response.data;
-    });
-
-export const enableTrailingStop = (dealId, stopDistance, profitLevel) =>
-    updatePositionProtection(dealId, {
-        trailingStop: true,
-        stopDistance: Number(stopDistance),
-        ...(profitLevel != null && Number.isFinite(Number(profitLevel)) ? { profitLevel: Number(profitLevel) } : {}),
-    });
-
 function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, bid, offer, minSLDistancePrice, minTPDistancePrice }) {
     const isBuy = String(direction).toUpperCase() === "BUY";
     const hasBid = Number.isFinite(bid);
@@ -340,100 +257,81 @@ function validateMarketProtection({ symbol, direction, stopLevel, profitLevel, b
     return { skipped: false };
 }
 
-export async function placePosition(symbol, direction, size, price, SL, TP) {
-    try {
-        const range = await getAllowedTPRange(symbol);
-        const decimals = Number.isInteger(range.decimals) ? range.decimals : symbol.includes("JPY") ? 3 : 5;
-        const stopLevel = toRoundedNumber(SL, decimals);
-        const profitLevel = TP == null ? null : toRoundedNumber(TP, decimals);
+export async function placeOrder({ symbol, direction, size, level, stopLevel, profitLevel, goodTillDate }) {
+    const rules = await getAllowedTPRange(symbol);
+    const decimals = rules.decimals;
+    const entry = toRoundedNumber(level, decimals);
+    const stop = toRoundedNumber(stopLevel, decimals);
+    const target = toRoundedNumber(profitLevel, decimals);
 
-        if (!Number.isFinite(stopLevel) || (profitLevel !== null && !Number.isFinite(profitLevel))) {
-            throw new Error(`Invalid stop/profit levels for ${symbol}. stop=${SL} profit=${TP}`);
-        }
-
-        const protectionSkip = validateMarketProtection({
-            symbol,
-            direction,
-            stopLevel,
-            ...(profitLevel !== null ? { profitLevel } : {}),
-            bid: Number(range.market?.bid),
-            offer: Number(range.market?.offer),
-            minSLDistancePrice: range.minSLDistancePrice,
-            minTPDistancePrice: range.minTPDistancePrice,
-        });
-        if (protectionSkip?.skipped) {
-            logger.warn(
-                `[API] Skip ${direction} ${symbol} position: ${protectionSkip.reason} ` +
-                    `(SL=${stopLevel} TP=${profitLevel} bid=${protectionSkip.bid} offer=${protectionSkip.offer} minDist=${protectionSkip.minDistance})`,
-            );
-            return protectionSkip;
-        }
-
-        logger.info(`[API] Placing ${direction} position for ${symbol} at market price. Size: ${size}, SL: ${stopLevel}, TP: ${profitLevel}`);
-        const position = {
-            epic: symbol,
-            direction: direction.toUpperCase(),
-            size: Number(size),
-            orderType: "MARKET",
-            guaranteedStop: false,
-            stopLevel,
-            ...(profitLevel !== null ? { profitLevel } : {}),
-        };
-        logger.info(`[API] Sending position request: ${JSON.stringify(position)}`);
-
-        const requestedAt = new Date().toISOString();
-        const response = await apiPost("/positions", position, { label: `placePosition ${symbol}` });
-
-        logger.info(`[API] Position created successfully: ${JSON.stringify(response.data)}`);
-        return {
-            ...response.data,
-            executionSnapshot: {
-                requestedAt,
-                symbol,
-                direction: direction.toUpperCase(),
-                requestedPrice: Number(price),
-                bid: Number(range.market?.bid),
-                offer: Number(range.market?.offer),
-                mid:
-                    Number.isFinite(Number(range.market?.bid)) && Number.isFinite(Number(range.market?.offer))
-                        ? (Number(range.market.bid) + Number(range.market.offer)) / 2
-                        : null,
-                spread:
-                    Number.isFinite(Number(range.market?.bid)) && Number.isFinite(Number(range.market?.offer))
-                        ? Math.abs(Number(range.market.offer) - Number(range.market.bid))
-                        : null,
-                minSLDistancePrice: range.minSLDistancePrice,
-                minTPDistancePrice: range.minTPDistancePrice,
-                decimals,
-                source: "pre_order_market_snapshot",
-            },
-        };
-    } catch (error) {
-        logger.error(`[API] Error placing position for ${symbol}:`, error.response ? JSON.stringify(error.response.data) : error.message);
-        if (error.response) {
-            logger.error(`[API] Response status:`, error.response.status);
-            logger.error(`[API] Response headers:`, JSON.stringify(error.response.headers));
-        }
-        throw error;
+    if (![entry, stop, target].every(Number.isFinite)) {
+        throw new Error(`Invalid pending order prices for ${symbol}`);
     }
+
+    const isBuy = direction.toUpperCase() === "BUY";
+    const marketPrice = isBuy ? Number(rules.market.offer) : Number(rules.market.bid);
+
+    if (isBuy ? entry <= marketPrice : entry >= marketPrice) {
+        logger.warn(`[API] ${symbol}: STOP entry is behind market price`);
+        return { skipped: true };
+    }
+
+    const protection = validateMarketProtection({
+        symbol,
+        direction,
+        stopLevel: stop,
+        profitLevel: target,
+        bid: entry,
+        offer: entry,
+        minSLDistancePrice: rules.minSLDistancePrice,
+        minTPDistancePrice: rules.minTPDistancePrice,
+    });
+
+    if (protection.skipped) {
+        logger.warn(`[API] ${symbol}: pending order skipped — ${protection.reason}`);
+        return protection;
+    }
+
+    const order = {
+        epic: symbol,
+        direction: direction.toUpperCase(),
+        size: Number(size),
+        level: entry,
+        type: "STOP",
+        guaranteedStop: false,
+        trailingStop: false,
+        stopLevel: stop,
+        profitLevel: target,
+        goodTillDate,
+    };
+
+    logger.info(`[API] Placing STOP order for ${symbol} at ${entry}`);
+
+    const response = await apiPost("/workingorders", order);
+    return response.data;
 }
 
-export async function gevtDealConfirmation(dealReference) {
-    return await withSessionRetry(async () => {
-        logger.info(`[API] Getting confirmation for deal: ${dealReference}`);
-        const response = await apiGet(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
-        logger.info("[API] DealConfirmation", response.data);
+export const enableTrailingStop = async (dealId, stopDistance, profitLevel) =>
+    withSessionRetry(async () => {
+        const response = await axios.put(
+            `${API.BASE_URL}/positions/${dealId}`,
+            {
+                trailingStop: true,
+                stopDistance: Number(stopDistance),
+                profitLevel: Number(profitLevel),
+            },
+            { headers: getHeaders(true) },
+        );
+
         return response.data;
     });
-}
 
-// In api.js, update getDealConfirmation method
 export async function getDealConfirmation(dealReference) {
     return await withSessionRetry(async () => {
         logger.info(`[API] Getting confirmation for deal: ${dealReference}`);
         const response = await apiGet(`${API.BASE_URL}/confirms/${dealReference}`, { headers: getHeaders() });
 
-        if (!response.data || !response.data.status) {
+        if (!response.data || (!response.data.dealStatus && !response.data.status)) {
             throw new Error("Invalid deal confirmation data received");
         }
 
@@ -444,9 +342,11 @@ export async function getDealConfirmation(dealReference) {
 
 export async function closePosition(dealId) {
     try {
-        const response = await axios.delete(`${API.BASE_URL}/positions/${dealId}`, {
-            headers: getHeaders(true),
-        });
+        const response = await withSessionRetry(() =>
+            axios.delete(`${API.BASE_URL}/positions/${dealId}`, {
+                headers: getHeaders(true),
+            }),
+        );
         logger.info(`[API] Position closed:`, response.data);
         return response.data;
     } catch (error) {

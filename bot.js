@@ -1,10 +1,10 @@
-import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession, getMarketDetails } from "./api.js";
+import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession } from "./api.js";
 import { DEV, TIMEFRAMES, SESSIONS } from "./config.js";
-import tradingService, { getProfile } from "./services/trading.js";
+import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
-import { startMonitorOpenTrades, trailingStopCheck, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
-import Strategy, { getMarketSession } from "./strategies/strategies.js";
+import { startMonitorOpenTrades, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
+import Strategy from "./strategies/strategies.js";
 
 const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
 const ANALYSIS_DELAY_MS = 2 * 1000;
@@ -149,22 +149,34 @@ class TradingBot {
     }
 
     getActiveSymbols(timestamp = Date.now()) {
-        const session = getMarketSession(timestamp);
-        const symbols = SESSIONS[session]?.SYMBOLS ?? [];
-        logger.info(`[Bot] ${session} symbols: ${symbols.join(", ") || "none"}`);
-        return { session, symbols };
+        const now = timestamp instanceof Date ? timestamp : new Date(timestamp);
+
+        if (Number.isNaN(now.getTime())) return [];
+
+        const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+        const activeSessions = Object.entries(SESSIONS).filter(([, session]) => {
+            const [startHour, startMinute] = session.START.split(":").map(Number);
+            const [endHour, endMinute] = session.END.split(":").map(Number);
+            const start = startHour * 60 + startMinute;
+            const end = endHour * 60 + endMinute;
+
+            return start < end ? currentMinutes >= start && currentMinutes < end : currentMinutes >= start || currentMinutes < end;
+        });
+        const symbols = [...new Set(activeSessions.flatMap(([, session]) => session.SYMBOLS))];
+
+        logger.info(`[Bot] ${activeSessions.map(([name]) => name).join(" + ") || "offHours"} symbols: ${symbols.join(", ") || "none"}`);
+        return symbols;
     }
 
     async analyzeAllSymbols() {
-        const { session, symbols } = this.getActiveSymbols();
+        const symbols = this.getActiveSymbols();
         this.activeSymbols = symbols;
-        const work = symbols.map((symbol) => ({ symbol, profile: getProfile(symbol, session) })).filter(({ profile }) => profile);
 
         const pairAnalyses = Promise.all(
-            work.map(async ({ symbol, profile }) => {
+            symbols.map(async (symbol) => {
                 try {
-                    const candles = await this.fetchAllCandles(symbol, profile);
-                    return await this.analyzeSymbol(symbol, candles, profile);
+                    const candles = await this.fetchAllCandles(symbol);
+                    return await this.analyzeSymbol(symbol, candles);
                 } catch (error) {
                     logger.error(`[Bot] ${symbol} analysis failed: ${error.message}`);
                     return null;
@@ -173,26 +185,17 @@ class TradingBot {
         );
 
         const [results] = await Promise.all([pairAnalyses, this.updateAccountInfo()]);
-        
-        const candidates = results.filter(Boolean).sort((a, b) => b.quality - a.quality);
 
-        logger.info(
-            `[Bot] Candidates: ${
-                candidates.length
-                    ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal} (${candidate.quality.toFixed(2)})`).join(", ")
-                    : "none"
-            }`,
-        );
+        const candidates = results.filter(Boolean);
+
+        logger.info(`[Bot] Candidates: ${candidates.length ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal}`).join(", ") : "none"}`);
 
         return tradingService.processCandidates(candidates);
     }
 
-    async fetchAllCandles(symbol, profile) {
+    async fetchAllCandles(symbol) {
         try {
-            const signalTimeframe = profile.signal.timeframe;
-            const contextTimeframes = profile.signal.context === "majority" ? ["H1", "H4", "D1"] : [profile.signal.context.toUpperCase()];
-
-            const timeframes = [...new Set([signalTimeframe, ...contextTimeframes])];
+            const timeframes = ["H1", "M15", "M5"];
             const candleData = {};
 
             await Promise.all(
@@ -210,18 +213,17 @@ class TradingBot {
         }
     }
 
-    shouldAnalyzeCandle(symbol, profile, candles) {
-        const timeframe = profile.signal.timeframe.toLowerCase();
-        const signalCandles = candles[timeframe];
+    shouldAnalyzeCandle(symbol, candles) {
+        const signalCandles = candles.h1;
 
         if (!Array.isArray(signalCandles) || signalCandles.length === 0) {
-            logger.warn(`[Bot] No ${profile.signal.timeframe} candles for ${symbol}`);
+            logger.warn(`[Bot] No H1 candles for ${symbol}`);
 
             return false;
         }
 
         const lastCandle = signalCandles[signalCandles.length - 1];
-        const candleId = `${profile.signal.timeframe}:${lastCandle.timestamp}`;
+        const candleId = `H1:${lastCandle.timestamp}`;
 
         if (this.lastAnalyzedCandles[symbol] === candleId) {
             logger.debug(`[Bot] ${symbol}: ${candleId} already analyzed`);
@@ -235,7 +237,7 @@ class TradingBot {
     }
 
     // Analyzes a single symbol: fetches data, calculates indicators, and triggers trading logic.
-    async analyzeSymbol(symbol, candleData, profile) {
+    async analyzeSymbol(symbol, candleData) {
         logger.info(`\n\n=== Processing ${symbol} ===`);
         const candles = {};
 
@@ -251,7 +253,7 @@ class TradingBot {
             });
         }
 
-        if (!this.shouldAnalyzeCandle(symbol, profile, candles)) {
+        if (!this.shouldAnalyzeCandle(symbol, candles)) {
             return null;
         }
 
@@ -263,47 +265,25 @@ class TradingBot {
             }),
         );
 
-        const { bid, ask } = await this.getBidAsk(symbol);
-
         const candidate = Strategy.getSignal({
             symbol,
-            profile,
             indicators,
             candles,
-            bid,
-            ask,
         });
 
-        if (!candidate.signal) {
-            logger.debug(`[Bot] ${symbol}: ${candidate.reason}`);
+        if (!candidate?.signal) {
             return null;
         }
 
         return {
             ...candidate,
-            profile,
             indicators,
             candles,
-            bid,
-            ask,
         };
-    }
-
-    async shutdown() {
-        this.isRunning = false;
-        clearTimeout(this.analysisStartTimeout);
-        clearInterval(this.analysisInterval);
-        clearInterval(this.sessionRefreshInterval);
-        clearInterval(this.sessionPingInterval);
-        clearInterval(this.monitorInterval);
     }
 
     async startMonitorOpenTrades() {
         return startMonitorOpenTrades(this, this.MONITOR_INTERVAL_MS);
-    }
-
-    async trailingStopCheck() {
-        return trailingStopCheck(this);
     }
 
     async maxHoldCheck() {
@@ -363,14 +343,6 @@ class TradingBot {
 
     getRepeatIntervalMs() {
         return DEV.MODE ? DEV.INTERVAL : ANALYSIS_REPEAT_MS;
-    }
-
-    async getBidAsk(symbol) {
-        const marketDetails = await getMarketDetails(symbol);
-        return {
-            bid: marketDetails?.snapshot?.bid,
-            ask: marketDetails?.snapshot?.offer,
-        };
     }
 
     delay(ms) {

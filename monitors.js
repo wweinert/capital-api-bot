@@ -1,4 +1,4 @@
-import { getOpenPositions, getWorkingOrders, cancelWorkingOrder, getMarketDetails } from "./api.js";
+import { getOpenPositions, getWorkingOrders, cancelWorkingOrder } from "./api.js";
 import { RISK } from "./config.js";
 
 import tradingService from "./services/trading.js";
@@ -20,15 +20,10 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
         bot.monitorInProgress = true;
 
         try {
-            await pendingInvalidationCheck();
-            await trailingStopCheck(bot);
-            await bot.delay(3000);
+            await trailingStopCheck();
             await weekendFlatCheck(bot);
-            await bot.delay(3000);
             await dailyFlatCheck(bot);
-            await bot.delay(3000);
             await maxHoldCheck(bot);
-            await bot.delay(3000);
         } catch (error) {
             logger.error(`[Monitoring] Monitor cycle failed: ${error.message}`);
         } finally {
@@ -39,34 +34,24 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
 
 export async function trailingStopCheck() {
     try {
-        logger.info(`[Monitoring] Trailing stop check at ${new Date().toISOString()}`);
-
         const positions = await getOpenPositions();
 
-        if (!positions?.positions?.length) {
-            return;
-        }
-
-        for (const item of positions.positions) {
+        for (const item of positions?.positions || []) {
             const position = item.position;
             const market = item.market;
-            const symbol = market?.epic ?? position?.epic;
-            const profile = tradingService.getPositionProfile(item, symbol);
 
             await tradingService.updateTrailingStopIfNeeded({
-                symbol,
-                profile,
-                dealId: position.dealId,
-                direction: position.direction,
-                entryPrice: position.level,
-                stopLoss: position.stopLevel,
-                takeProfit: position.profitLevel,
-                currentPrice: tradingService.resolveMarketPrice(position.direction, market.bid, market.offer ?? market.ask),
-                trailingStop: position.trailingStop,
+                symbol: market?.epic ?? position?.epic,
+                dealId: position?.dealId,
+                direction: position?.direction,
+                entryPrice: position?.level,
+                takeProfit: position?.profitLevel,
+                currentPrice: tradingService.resolveMarketPrice(position?.direction, market?.bid, market?.offer ?? market?.ask),
+                trailingStop: position?.trailingStop,
             });
         }
     } catch (error) {
-        logger.error("[Monitoring] Trailing stop error:", error);
+        logger.error(`[Monitoring] Trailing stop error: ${error.message}`);
     }
 }
 
@@ -84,24 +69,7 @@ async function cancelOrders(shouldCancel) {
     }
 }
 
-export async function pendingInvalidationCheck() {
-    await cancelOrders(async (order) => {
-        const market = await getMarketDetails(order.epic);
-        const direction = String(order.direction).toUpperCase();
-        const stop = Number(order.stopLevel);
-        const bid = Number(market?.snapshot?.bid);
-        const ask = Number(market?.snapshot?.offer ?? market?.snapshot?.ask);
-
-        const invalidated = direction === "BUY" ? Number.isFinite(bid) && bid <= stop : Number.isFinite(ask) && ask >= stop;
-
-        if (invalidated) {
-            logger.info(`[Orders] ${order.epic} ${direction} ` + `invalidated before entry`);
-        }
-
-        return invalidated;
-    });
-}
-const getCloseMinute = (profile) => Math.min(profile?.exit?.dailyCloseMinute ?? RISK.DAILY_CLOSE_MINUTE_UTC, RISK.DAILY_CLOSE_MINUTE_UTC);
+const getCloseMinute = () => RISK.DAILY_CLOSE_MINUTE_UTC;
 
 export async function dailyFlatCheck(bot) {
     if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
@@ -111,7 +79,7 @@ export async function dailyFlatCheck(bot) {
 
     try {
         await cancelOrders((order) => {
-            const closeMinute = getCloseMinute(tradingService.getPositionProfile({ position: order }, order.epic));
+            const closeMinute = getCloseMinute();
 
             return closeMinute < 24 * 60 && currentMinute >= closeMinute;
         });
@@ -121,7 +89,7 @@ export async function dailyFlatCheck(bot) {
         for (const pos of positions.positions) {
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
-            const closeMinute = getCloseMinute(tradingService.getPositionProfile(pos, symbol));
+            const closeMinute = getCloseMinute();
 
             if (closeMinute >= 24 * 60 || currentMinute < closeMinute) {
                 continue;
@@ -133,7 +101,7 @@ export async function dailyFlatCheck(bot) {
             }
 
             await tradingService.closePosition(dealId, "daily_forced_close_utc");
-            logger.info(`[DailyFlat] Closed ${symbol} before UTC day rollover at/after minute `);
+            logger.info(`[DailyFlat] Closed ${symbol} before UTC day rollover at/after minute ${closeMinute}`);
             await bot.delay(500);
         }
     } catch (error) {
@@ -194,7 +162,7 @@ export async function maxHoldCheck(bot) {
 
             const dealId = pos?.position?.dealId ?? pos?.dealId;
             const symbol = pos?.market?.epic ?? pos?.position?.epic ?? "unknown";
-            const maxHoldMinutes = resolveMaxHoldMinutes(pos, symbol);
+            const maxHoldMinutes = RISK.MAX_HOLD_TIME;
 
             logger.debug(`[Bot] Position ${pos?.market?.epic} held for ${minutesHeld.toFixed(2)} minutes of max ${maxHoldMinutes}`);
 
@@ -210,10 +178,6 @@ export async function maxHoldCheck(bot) {
     } catch (error) {
         logger.error("[Bot] Error in max hold monitor:", error);
     }
-}
-
-function resolveMaxHoldMinutes(pos, symbol) {
-    return tradingService.getPositionProfile(pos, symbol)?.exit?.maxHoldMinutes ?? RISK.MAX_HOLD_TIME;
 }
 
 export function logDeals(bot) {

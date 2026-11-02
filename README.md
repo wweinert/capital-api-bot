@@ -47,9 +47,7 @@ npm run start
 
 Backtesting:
 
-```bash
-npm run lab
-```
+See [`lab/README.md`](lab/README.md) for the offline research workflow and available datasets.
 
 Environment variables and API credentials are intentionally not included in the repository.
 
