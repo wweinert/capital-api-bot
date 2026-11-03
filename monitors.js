@@ -20,7 +20,7 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
         bot.monitorInProgress = true;
 
         try {
-            await trailingStopCheck();
+            await dynamicStopCheck();
             await weekendFlatCheck(bot);
             await dailyFlatCheck(bot);
             await maxHoldCheck(bot);
@@ -32,7 +32,7 @@ export async function startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
     }, intervalMs);
 }
 
-export async function trailingStopCheck() {
+export async function dynamicStopCheck() {
     try {
         const positions = await getOpenPositions();
 
@@ -40,18 +40,20 @@ export async function trailingStopCheck() {
             const position = item.position;
             const market = item.market;
 
-            await tradingService.updateTrailingStopIfNeeded({
+            await tradingService.updateDynamicStopIfNeeded({
                 symbol: market?.epic ?? position?.epic,
                 dealId: position?.dealId,
                 direction: position?.direction,
                 entryPrice: position?.level,
+                stopLoss: position?.stopLevel,
                 takeProfit: position?.profitLevel,
+                openedAt: parseOpenTimeMs(position?.openTime ?? position?.createdDateUTC ?? position?.createdDate),
                 currentPrice: tradingService.resolveMarketPrice(position?.direction, market?.bid, market?.offer ?? market?.ask),
                 trailingStop: position?.trailingStop,
             });
         }
     } catch (error) {
-        logger.error(`[Monitoring] Trailing stop error: ${error.message}`);
+        logger.error(`[Monitoring] Dynamic stop error: ${error.message}`);
     }
 }
 

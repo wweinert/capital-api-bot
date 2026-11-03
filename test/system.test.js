@@ -89,6 +89,12 @@ test("session overlap preserves configured symbol priority without duplicates", 
     assert.deepEqual(activeSymbols("21:30"), []);
 });
 
+test("daily limits keep the four-session strategy continuous", () => {
+    assert.equal(RISK.DAILY_FORCED_CLOSE_UTC, false);
+    assert.equal(RISK.DAILY_LAST_ENTRY_MINUTE_UTC, 24 * 60);
+    assert.equal(RISK.WEEKEND_FLAT, true);
+});
+
 test("indicators return finite ATR and EMA values", async () => {
     const bars = Array.from({ length: 60 }, (_, index) => ({
         close: 1 + index * 0.001,
@@ -99,7 +105,103 @@ test("indicators return finite ATR and EMA values", async () => {
 
     assert.ok(indicators.atr > 0);
     assert.ok(Number.isFinite(indicators.ema20));
+    assert.ok(Number.isFinite(indicators.ema20Previous3));
     assert.ok(Number.isFinite(indicators.ema50));
+});
+
+test("signal rating rejects incomplete data and prefers the stronger candidate", () => {
+    const candidate = (symbol, close, spread, overrides = {}, indicatorOverrides = {}) => {
+        const rows = Array.from({ length: 60 }, (_, index) => ({
+            open: 1.1 + index * 0.0001,
+            high: 1.101 + index * 0.0001,
+            low: 1.099 + index * 0.0001,
+            close: 1.1005 + index * 0.0001,
+            spread,
+        }));
+        Object.assign(rows.at(-1), { open: 1.105, high: 1.106, low: 1.1045, close, ...overrides });
+        return {
+            symbol,
+            signal: "bullish",
+            candles: { h1: rows },
+            indicators: { h1: {
+                atr: 0.002,
+                ema20: 1.1048,
+                ema50: 1.104,
+                ema20Previous3: 1.1045,
+                ...indicatorOverrides,
+            } },
+        };
+    };
+
+    const stronger = tradingService.rateCandidate(candidate(
+        "EURUSD",
+        1.1053,
+        0.00005,
+        { low: 1.104 },
+        { ema20: 1.105, ema50: 1.1035, ema20Previous3: 1.104 },
+    ));
+    const weaker = tradingService.rateCandidate(candidate("EURUSD", 1.1057, 0.0003));
+
+    assert.ok(Number.isFinite(stronger));
+    assert.ok(stronger > weaker);
+    assert.equal(tradingService.rateCandidate({ symbol: "EURUSD", signal: "bullish" }), null);
+});
+
+test("dynamic stop moves to break-even and follows only closed-candle extremes", () => {
+    const buyStop = tradingService.calculateDynamicStop({
+        direction: "BUY",
+        entryPrice: 1.1,
+        currentStop: 1.09,
+        currentPrice: 1.111,
+        riskDistance: 0.01,
+        candle: { low: 1.108 },
+        atr: 0.004,
+    });
+    const sellStop = tradingService.calculateDynamicStop({
+        direction: "SELL",
+        entryPrice: 1.1,
+        currentStop: 1.11,
+        currentPrice: 1.089,
+        riskDistance: 0.01,
+        candle: { high: 1.092 },
+        atr: 0.004,
+    });
+
+    assert.ok(Math.abs(buyStop - 1.1074) < 1e-10);
+    assert.ok(Math.abs(sellStop - 1.0926) < 1e-10);
+    assert.equal(tradingService.calculateDynamicStop({
+        direction: "BUY",
+        entryPrice: 1.1,
+        currentStop: 1.108,
+        currentPrice: 1.111,
+        riskDistance: 0.01,
+        candle: { low: 1.108 },
+        atr: 0.004,
+    }), null);
+    assert.equal(tradingService.calculateDynamicStop({
+        direction: "BUY",
+        entryPrice: 1.1,
+        currentStop: 1.09,
+        currentPrice: 1.109,
+        riskDistance: 0.01,
+    }), null);
+});
+
+test("dynamic manager ignores positions created with the previous 1.5R target", async () => {
+    const dealId = "legacy-position";
+
+    await tradingService.updateDynamicStopIfNeeded({
+        symbol: "EURUSD",
+        dealId,
+        direction: "BUY",
+        entryPrice: 1.1,
+        stopLoss: 1.09,
+        takeProfit: 1.115,
+        currentPrice: 1.112,
+        trailingStop: false,
+    });
+
+    assert.equal(tradingService.dynamicPlanByDeal.has(dealId), false);
 });
 
 test("position sizing respects risk and margin caps", async (context) => {

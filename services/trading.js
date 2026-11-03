@@ -6,15 +6,30 @@ import {
     getWorkingOrders,
     getMarketDetails,
     getAccountTransactions,
-    enableTrailingStop,
+    getHistorical,
+    updatePositionProtection,
 } from "../api.js";
-import { RISK, PORTFOLIO } from "../config.js";
+import { calcIndicators } from "../indicators/indicators.js";
+import { RISK, PORTFOLIO, TIMEFRAMES } from "../config.js";
 import logger from "../utils/logger.js";
 
 const { PER_TRADE } = RISK;
 const ORDER_BUFFER_PIPS = 3;
 const ORDER_EXPIRY_MINUTES = 45;
-const TARGET_R = 1.5;
+const TARGET_R = RISK.DYNAMIC_TARGET_R;
+const MIN_SIGNAL_RATING = -0.833014;
+const SIGNAL_RATING_WEIGHTS = {
+    strength: -0.984903,
+    risk: -0.199351,
+    spread: -3.289938,
+    entryGap: -0.74576,
+    trend: 0.539907,
+    priceEma: -0.432509,
+    emaSlope: 0.316831,
+    efficiency: 0.170911,
+    rejectionWick: 0.273558,
+    previousBody: 0.651536,
+};
 
 class TradingService {
     constructor() {
@@ -23,6 +38,7 @@ class TradingService {
         this.availableMargin = 0;
 
         this.quotePerEurCache = new Map();
+        this.dynamicPlanByDeal = new Map();
     }
 
     setAccountBalance(balance) {
@@ -69,6 +85,57 @@ class TradingService {
 
     isSymbolTraded(symbol) {
         return this.openTrades.includes(symbol);
+    }
+
+    rateCandidate(candidate) {
+        const { symbol, signal, candles, indicators } = candidate;
+        const rows = candles?.h1;
+        const current = rows?.at(-1);
+        const previous = rows?.at(-2);
+        const atr = Number(indicators?.h1?.atr);
+        const ema20 = Number(indicators?.h1?.ema20);
+        const ema50 = Number(indicators?.h1?.ema50);
+        const ema20Previous3 = Number(indicators?.h1?.ema20Previous3);
+        const direction = signal === "bullish" ? 1 : signal === "bearish" ? -1 : 0;
+
+        if (!Array.isArray(rows) || rows.length < 7 || !current || !previous || !(atr > 0) || !direction
+            || ![ema20, ema50, ema20Previous3].every(Number.isFinite)) return null;
+
+        const open = Number(current.open);
+        const high = Number(current.high);
+        const low = Number(current.low);
+        const close = Number(current.close);
+        const previousOpen = Number(previous.open);
+        const previousClose = Number(previous.close);
+        const spread = Number(current.spread);
+        const orderBuffer = this.getPipValue(symbol) * ORDER_BUFFER_PIPS;
+        const entry = direction > 0 ? high + orderBuffer : low - orderBuffer;
+        const range = high - low;
+
+        if (![open, high, low, close, previousOpen, previousClose, spread, entry].every(Number.isFinite) || range <= 0 || spread < 0) return null;
+
+        let path = 0;
+        for (let index = rows.length - 6; index < rows.length; index += 1) {
+            path += Math.abs(Number(rows[index].close) - Number(rows[index - 1].close));
+        }
+
+        const features = {
+            strength: Math.abs(close - open) / atr,
+            risk: (range + 2 * orderBuffer) / atr,
+            spread: spread / atr,
+            entryGap: (direction > 0 ? entry - (close + spread) : close - entry) / atr,
+            trend: direction * (ema20 - ema50) / atr,
+            priceEma: direction * (close - ema20) / atr,
+            emaSlope: direction * (ema20 - ema20Previous3) / atr,
+            efficiency: path > 0 ? Math.abs(close - Number(rows.at(-7).close)) / path : 0,
+            rejectionWick: direction > 0
+                ? (Math.min(open, close) - low) / range
+                : (high - Math.max(open, close)) / range,
+            previousBody: Math.abs(previousClose - previousOpen) / atr,
+        };
+
+        return Object.entries(SIGNAL_RATING_WEIGHTS)
+            .reduce((rating, [feature, weight]) => rating + features[feature] * weight, 0);
     }
 
     async syncOpenTradesFromBroker() {
@@ -168,10 +235,16 @@ class TradingService {
         }
         const allowedCandidates = await this.getAllowedCandidates(candidates);
 
-        const selected = allowedCandidates
+        const ratedCandidates = allowedCandidates
             .filter((candidate) => !this.isSymbolTraded(candidate.symbol))
-            .slice(0, freePositions);
+            .map((candidate) => ({ candidate, rating: this.rateCandidate(candidate) }))
+            .filter(({ rating }) => Number.isFinite(rating) && rating >= MIN_SIGNAL_RATING)
+            .sort((left, right) => right.rating - left.rating);
+        const selected = ratedCandidates.slice(0, freePositions).map(({ candidate }) => candidate);
 
+        logger.info(`[Trading] Rated: ${ratedCandidates.length
+            ? ratedCandidates.map(({ candidate, rating }) => `${candidate.symbol} ${rating.toFixed(3)}`).join(", ")
+            : "none"}`);
         logger.info(`[Trading] Selected: ${selected.length ? selected.map((candidate) => candidate.symbol).join(", ") : "none"}`);
 
         const executed = [];
@@ -444,26 +517,138 @@ class TradingService {
         }
     }
 
-    async updateTrailingStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, takeProfit, currentPrice, trailingStop } = position;
+    calculateDynamicStop({ direction, entryPrice, currentStop, currentPrice, riskDistance, candle, atr }) {
         const entry = Number(entryPrice);
+        const stop = Number(currentStop);
+        const price = Number(currentPrice);
+        const risk = Number(riskDistance);
+        const candleAtr = Number(atr);
+        const normalizedDirection = this.normalizeDirection(direction);
+
+        if (!["BUY", "SELL"].includes(normalizedDirection)
+            || ![entry, stop, price, risk].every(Number.isFinite) || !(risk > 0)) return null;
+
+        const favorableMove = normalizedDirection === "BUY" ? price - entry : entry - price;
+        if (favorableMove < risk * RISK.DYNAMIC_BREAK_EVEN_R) return null;
+
+        let candidate = entry;
+        const candleExtreme = normalizedDirection === "BUY" ? Number(candle?.low) : Number(candle?.high);
+
+        if (Number.isFinite(candleExtreme) && candleAtr > 0) {
+            const candleStop = normalizedDirection === "BUY"
+                ? candleExtreme - candleAtr * RISK.DYNAMIC_STEP_BUFFER_ATR
+                : candleExtreme + candleAtr * RISK.DYNAMIC_STEP_BUFFER_ATR;
+            candidate = normalizedDirection === "BUY" ? Math.max(candidate, candleStop) : Math.min(candidate, candleStop);
+        }
+
+        const improves = normalizedDirection === "BUY" ? candidate > stop : candidate < stop;
+        const remainsBehindMarket = normalizedDirection === "BUY" ? candidate < price : candidate > price;
+
+        return improves && remainsBehindMarket ? candidate : null;
+    }
+
+    async getDynamicStepTimeframe(symbol, direction, openedAt) {
+        const decisionTime = Math.floor(Number(openedAt) / 3_600_000) * 3_600_000;
+        if (!Number.isFinite(decisionTime)) return "M5";
+
+        const h1 = (await getHistorical(symbol, TIMEFRAMES.H1, 100)).prices.filter(({ timestamp }) =>
+            Date.parse(timestamp) + 3_600_000 <= decisionTime);
+        const indicators = await calcIndicators(h1);
+        const atr = Number(indicators.atr);
+        let path = 0;
+
+        for (let index = h1.length - 6; index < h1.length; index += 1) {
+            path += Math.abs(Number(h1[index]?.close) - Number(h1[index - 1]?.close));
+        }
+
+        const directionSign = this.normalizeDirection(direction) === "BUY" ? 1 : -1;
+        const trendScore = atr > 0
+            ? directionSign * (Number(indicators.ema20) - Number(indicators.ema50)) / atr
+            : 0;
+        const efficiency = path > 0 && h1.length >= 7
+            ? Math.abs(Number(h1.at(-1).close) - Number(h1.at(-7).close)) / path
+            : 0;
+
+        return trendScore >= RISK.DYNAMIC_TREND_SCORE && efficiency >= RISK.DYNAMIC_TREND_EFFICIENCY ? "M15" : "M5";
+    }
+
+    async updateDynamicStopIfNeeded(position) {
+        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, openedAt, currentPrice, trailingStop } = position;
+        const normalizedDirection = this.normalizeDirection(direction);
+        const entry = Number(entryPrice);
+        const stop = Number(stopLoss);
         const target = Number(takeProfit);
         const price = Number(currentPrice);
 
-        if (!symbol || !dealId || trailingStop || !["BUY", "SELL"].includes(direction) || ![entry, target, price].every(Number.isFinite)) return;
+        if (!symbol || !dealId || trailingStop || !["BUY", "SELL"].includes(normalizedDirection)
+            || ![entry, stop, target, price].every(Number.isFinite)) return;
 
-        const riskDistance = Math.abs(target - entry) / TARGET_R;
-        const favorableMove = direction === "BUY" ? price - entry : entry - price;
+        let plan = this.dynamicPlanByDeal.get(dealId);
 
-        if (!(riskDistance > 0) || favorableMove < riskDistance * RISK.DYNAMIC_TRAIL_MIN_R) return;
+        if (!plan) {
+            const riskDistance = Math.abs(target - entry) / TARGET_R;
+            const initialStopDistance = Math.abs(entry - stop);
+
+            if (!(riskDistance > 0) || Math.abs(initialStopDistance / riskDistance - 1) > 0.15) return;
+            let stepTimeframe = "M5";
+
+            try {
+                stepTimeframe = await this.getDynamicStepTimeframe(symbol, normalizedDirection, openedAt);
+            } catch (error) {
+                logger.warn(`[DynamicStop] ${symbol}: cannot restore entry regime, using M5: ${error.message}`);
+            }
+
+            plan = { riskDistance, stepTimeframe };
+            this.dynamicPlanByDeal.set(dealId, plan);
+        }
+
+        const { riskDistance, stepTimeframe } = plan;
+        const favorableMove = normalizedDirection === "BUY" ? price - entry : entry - price;
+        if (favorableMove < riskDistance * RISK.DYNAMIC_BREAK_EVEN_R) return;
+
+        let stepCandle;
+        let stepAtr;
+
+        try {
+            const now = Date.now();
+            const closed = (prices, minutes) => (prices || []).filter(({ timestamp }) =>
+                Date.parse(timestamp) + minutes * 60_000 <= now);
+            const minutes = stepTimeframe === "M15" ? 15 : 5;
+            const rows = closed((await getHistorical(symbol, TIMEFRAMES[stepTimeframe], 60)).prices, minutes);
+            const indicators = await calcIndicators(rows);
+
+            stepCandle = rows.at(-1);
+            stepAtr = indicators.atr;
+        } catch (error) {
+            logger.warn(`[DynamicStop] ${symbol}: candle step unavailable, applying break-even only: ${error.message}`);
+        }
+
+        const nextStop = this.calculateDynamicStop({
+            direction: normalizedDirection,
+            entryPrice: entry,
+            currentStop: stop,
+            currentPrice: price,
+            riskDistance,
+            candle: stepCandle,
+            atr: stepAtr,
+        });
+
+        if (!Number.isFinite(nextStop)) return;
 
         const decimals = symbol.includes("JPY") ? 3 : 5;
-        const stopDistance = Number((riskDistance * RISK.DYNAMIC_TRAIL_DISTANCE_R).toFixed(decimals));
+        const roundedStop = Number(nextStop.toFixed(decimals));
+        const improvesAfterRounding = normalizedDirection === "BUY" ? roundedStop > stop : roundedStop < stop;
+        if (!improvesAfterRounding) return;
 
-        if (!(stopDistance > 0)) return;
-
-        await enableTrailingStop(dealId, stopDistance, target);
-        logger.info(`[Trail] ${symbol}: enabled at ${(favorableMove / riskDistance).toFixed(2)}R, distance=${stopDistance}`);
+        const update = await updatePositionProtection(dealId, roundedStop, target);
+        if (update?.dealReference) {
+            const confirmation = await getDealConfirmation(update.dealReference);
+            const status = confirmation.dealStatus ?? confirmation.status;
+            if (!["ACCEPTED", "OPEN"].includes(status)) {
+                throw new Error(`protection update rejected: ${confirmation.reason ?? status}`);
+            }
+        }
+        logger.info(`[DynamicStop] ${symbol}: ${stepTimeframe} stop ${stop} -> ${roundedStop} at ${(favorableMove / riskDistance).toFixed(2)}R`);
     }
 
     // ============================================================

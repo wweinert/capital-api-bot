@@ -193,6 +193,7 @@ export async function getHistorical(symbol, resolution, count) {
             return {
                 prices: response.data.prices.map((p) => ({
                     close: p.closePrice?.bid,
+                    spread: Number(p.closePrice?.ask) - Number(p.closePrice?.bid),
                     high: p.highPrice?.bid,
                     low: p.lowPrice?.bid,
                     open: p.openPrice?.bid,
@@ -311,13 +312,14 @@ export async function placeOrder({ symbol, direction, size, level, stopLevel, pr
     return response.data;
 }
 
-export const enableTrailingStop = async (dealId, stopDistance, profitLevel) =>
+export const updatePositionProtection = async (dealId, stopLevel, profitLevel) =>
     withSessionRetry(async () => {
         const response = await axios.put(
             `${API.BASE_URL}/positions/${dealId}`,
             {
-                trailingStop: true,
-                stopDistance: Number(stopDistance),
+                guaranteedStop: false,
+                trailingStop: false,
+                stopLevel: Number(stopLevel),
                 profitLevel: Number(profitLevel),
             },
             { headers: getHeaders(true) },
