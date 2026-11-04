@@ -1,7 +1,7 @@
 import { startSession, pingSession, getHistorical, getSessionTokens, refreshSession } from "./api.js";
 import { DEV, TIMEFRAMES, SESSIONS } from "./config.js";
 import tradingService from "./services/trading.js";
-import { calcIndicators } from "./indicators/indicators.js";
+import { calcIndicators, aggregateM30 } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
 import tradeMonitor from "./monitors.js";
 import Strategy from "./strategies/strategies.js";
@@ -9,7 +9,7 @@ import Strategy from "./strategies/strategies.js";
 class TradingBot {
     #analysisRepeatMs = 15 * 60_000;
     #analysisDelayMs = 2_000;
-    #timeframeMinutes = { m1: 1, m5: 5, m15: 15, h1: 60, h4: 240, d1: 1440 };
+    #timeframeMinutes = { m1: 1, m5: 5, m15: 15, m30: 30, h1: 60, h4: 240, d1: 1440 };
     #monitorIntervalMs = 60_000;
 
     analysisInterval = null;
@@ -124,6 +124,7 @@ class TradingBot {
     }
 
     async analyzeAllSymbols() {
+        if (!Strategy.getTimeframe()) return [];
         const symbols = this.getActiveSymbols();
         const pairAnalyses = Promise.all(
             symbols.map(async (symbol) => {
@@ -141,9 +142,10 @@ class TradingBot {
 
         const candidates = results.filter(Boolean);
 
-        logger.info(`[Bot] Candidates: ${candidates.length ? candidates.map((candidate) => `${candidate.symbol} ${candidate.signal}`).join(", ") : "none"}`);
+        const signals = candidates.filter((candidate) => candidate.signal);
+        logger.info(`[Bot] Candidates: ${signals.length ? signals.map((candidate) => `${candidate.symbol} ${candidate.signal}`).join(", ") : "none"}`);
 
-        return tradingService.processCandidates(candidates);
+        return tradingService.processCandidates(candidates, symbols);
     }
 
     async fetchAllCandles(symbol) {
@@ -153,7 +155,8 @@ class TradingBot {
 
             await Promise.all(
                 timeframes.map(async (tf) => {
-                    const data = await getHistorical(symbol, TIMEFRAMES[tf], this.maxCandleHistory);
+                    const count = tf === "M15" ? this.maxCandleHistory * 2 : this.maxCandleHistory;
+                    const data = await getHistorical(symbol, TIMEFRAMES[tf], count);
 
                     candleData[tf.toLowerCase()] = data.prices;
                 }),
@@ -166,17 +169,17 @@ class TradingBot {
         }
     }
 
-    shouldAnalyzeCandle(symbol, candles) {
-        const signalCandles = candles.h1;
+    shouldAnalyzeCandle(symbol, candles, timeframe = "h1") {
+        const signalCandles = candles[timeframe];
 
         if (!Array.isArray(signalCandles) || signalCandles.length === 0) {
-            logger.warn(`[Bot] No H1 candles for ${symbol}`);
+            logger.warn(`[Bot] No ${timeframe} candles for ${symbol}`);
 
             return false;
         }
 
         const lastCandle = signalCandles[signalCandles.length - 1];
-        const candleId = `H1:${lastCandle.timestamp}`;
+        const candleId = `${timeframe}:${lastCandle.timestamp}`;
 
         if (this.lastAnalyzedCandles[symbol] === candleId) {
             logger.debug(`[Bot] ${symbol}: ${candleId} already analyzed`);
@@ -206,9 +209,13 @@ class TradingBot {
             });
         }
 
-        if (!this.shouldAnalyzeCandle(symbol, candles)) {
+        const timeframe = Strategy.getTimeframe();
+        if (timeframe === "m30") candles.m30 = aggregateM30(candles.m15);
+        if (!timeframe || !this.shouldAnalyzeCandle(symbol, candles, timeframe)) {
             return null;
         }
+        const decisionTime = Date.parse(candles[timeframe].at(-1).timestamp) + this.#timeframeMinutes[timeframe] * 60_000;
+        if (Strategy.getTimeframe(decisionTime) !== timeframe) return null;
 
         const indicators = {};
 
@@ -222,9 +229,10 @@ class TradingBot {
             symbol,
             indicators,
             candles,
+            timeframe,
         });
 
-        if (!candidate?.signal) {
+        if (!candidate || (!candidate.signal && timeframe !== "m30")) {
             return null;
         }
 
@@ -232,6 +240,8 @@ class TradingBot {
             ...candidate,
             indicators,
             candles,
+            timeframe,
+            decisionTime,
         };
     }
 

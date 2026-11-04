@@ -1,0 +1,4444 @@
+{
+  "protocol": "causal-signal-rating-development-search-v1",
+  "generatedAt": "2026-11-03T10:17:22.927Z",
+  "dataEnd": "2026-11-03T09:25:00.000Z",
+  "guardrails": {
+    "selection": "January-August only",
+    "diagnostic": "September-October and current day excluded from selection",
+    "search": "seeded monotonic linear quality weights plus development-score quantile rejection threshold",
+    "liveCodeChanged": false
+  },
+  "searched": 1200,
+  "acceptedDevelopment": 903,
+  "baseline": {
+    "janFeb": {
+      "returnPct": -5.372411,
+      "trades": 21,
+      "winRate": 47.619048,
+      "profitFactor": 0.832051,
+      "maxDrawdownPct": 11.194969,
+      "positiveDayPct": 47.368421
+    },
+    "marApr": {
+      "returnPct": 30.436688,
+      "trades": 38,
+      "winRate": 60.526316,
+      "profitFactor": 1.581905,
+      "maxDrawdownPct": 16.25394,
+      "positiveDayPct": 61.290323
+    },
+    "mayJun": {
+      "returnPct": 28.105801,
+      "trades": 22,
+      "winRate": 68.181818,
+      "profitFactor": 2.282886,
+      "maxDrawdownPct": 8.235637,
+      "positiveDayPct": 63.157895
+    },
+    "julAug": {
+      "returnPct": -4.720242,
+      "trades": 29,
+      "winRate": 51.724138,
+      "profitFactor": 0.874932,
+      "maxDrawdownPct": 9.560191,
+      "positiveDayPct": 51.851852
+    },
+    "train": {
+      "returnPct": 32.914742,
+      "trades": 73,
+      "winRate": 56.164384,
+      "profitFactor": 1.316344,
+      "maxDrawdownPct": 16.248158,
+      "positiveDayPct": 54.83871
+    },
+    "validation": {
+      "returnPct": 13.309567,
+      "trades": 37,
+      "winRate": 59.459459,
+      "profitFactor": 1.275386,
+      "maxDrawdownPct": 9.572635,
+      "positiveDayPct": 58.823529
+    },
+    "test": {
+      "returnPct": 17.949361,
+      "trades": 43,
+      "winRate": 53.488372,
+      "profitFactor": 1.291784,
+      "maxDrawdownPct": 9.857177,
+      "positiveDayPct": 57.575758
+    },
+    "currentDay": {
+      "returnPct": -0.94038,
+      "trades": 2,
+      "winRate": 50,
+      "profitFactor": 0.686368,
+      "maxDrawdownPct": 2.99835,
+      "positiveDayPct": 0,
+      "tradeLog": [
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:08:00.000Z",
+          "closed": "2026-11-03T02:18:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.983499,
+          "r": -1.000957,
+          "effectiveRiskPct": 2.995483,
+          "balanceAfter": 970.016501,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993969,
+          "balanceAfter": 990.596205,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "full": {
+      "returnPct": 83.926286,
+      "trades": 156,
+      "winRate": 56.410256,
+      "profitFactor": 1.314815,
+      "maxDrawdownPct": 16.248158,
+      "positiveDayPct": 56.48855
+    }
+  },
+  "rollingSearch": {
+    "evaluated": 300,
+    "stable": 75,
+    "top20": [
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.76204,
+            "riskAtr": -0.031207,
+            "spreadAtr": -4.768166,
+            "entryGapAtr": -0.433261,
+            "trend": 0.918484,
+            "priceEma": -0.395428,
+            "emaSlope": 0.171283,
+            "atrRegime": 0,
+            "efficiency": 0.297529,
+            "wick": 0.332178,
+            "previousBody": 0.967556
+          },
+          "minRatingScore": 0.334648
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 19.478434,
+          "trades": 51,
+          "winRate": 52.941176,
+          "profitFactor": 1.230551,
+          "maxDrawdownPct": 15.913618,
+          "positiveDayPct": 57.777778
+        },
+        "validation": {
+          "returnPct": 20.061102,
+          "trades": 27,
+          "winRate": 62.962963,
+          "profitFactor": 1.647984,
+          "maxDrawdownPct": 7.4995,
+          "positiveDayPct": 64
+        },
+        "accepted": true,
+        "score": 32.036214,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 10.710461,
+            "trades": 13,
+            "winRate": 61.538462,
+            "profitFactor": 1.714217,
+            "maxDrawdownPct": 8.780902,
+            "positiveDayPct": 66.666667
+          },
+          "marApr": {
+            "returnPct": 11.039702,
+            "trades": 31,
+            "winRate": 51.612903,
+            "profitFactor": 1.218016,
+            "maxDrawdownPct": 15.145902,
+            "positiveDayPct": 57.692308
+          },
+          "mayJun": {
+            "returnPct": 9.963414,
+            "trades": 13,
+            "winRate": 61.538462,
+            "profitFactor": 1.704205,
+            "maxDrawdownPct": 5.925421,
+            "positiveDayPct": 58.333333
+          },
+          "julAug": {
+            "returnPct": 6.102582,
+            "trades": 21,
+            "winRate": 57.142857,
+            "profitFactor": 1.250053,
+            "maxDrawdownPct": 7.501406,
+            "positiveDayPct": 60
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 61.115837
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.629819,
+            "riskAtr": -0.381929,
+            "spreadAtr": -3.045931,
+            "entryGapAtr": -0.580398,
+            "trend": 0.204661,
+            "priceEma": -0.263527,
+            "emaSlope": 0.101575,
+            "atrRegime": 0,
+            "efficiency": 1.202233,
+            "wick": 0.464938,
+            "previousBody": 0.925869
+          },
+          "minRatingScore": -0.387172
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 29.943573,
+          "trades": 56,
+          "winRate": 57.142857,
+          "profitFactor": 1.349745,
+          "maxDrawdownPct": 15.052943,
+          "positiveDayPct": 59.183673
+        },
+        "validation": {
+          "returnPct": 22.554867,
+          "trades": 31,
+          "winRate": 64.516129,
+          "profitFactor": 1.663335,
+          "maxDrawdownPct": 8.269602,
+          "positiveDayPct": 64.285714
+        },
+        "accepted": true,
+        "score": 40.150561,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 24.543161,
+            "trades": 30,
+            "winRate": 60,
+            "profitFactor": 1.568108,
+            "maxDrawdownPct": 15.049165,
+            "positiveDayPct": 64
+          },
+          "mayJun": {
+            "returnPct": 16.236818,
+            "trades": 17,
+            "winRate": 64.705882,
+            "profitFactor": 1.903223,
+            "maxDrawdownPct": 5.899267,
+            "positiveDayPct": 60
+          },
+          "julAug": {
+            "returnPct": 5.539075,
+            "trades": 24,
+            "winRate": 58.333333,
+            "profitFactor": 1.210495,
+            "maxDrawdownPct": 8.265063,
+            "positiveDayPct": 59.090909
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 59.863147
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.931281,
+            "riskAtr": -0.113499,
+            "spreadAtr": -0.248183,
+            "entryGapAtr": -0.478583,
+            "trend": 0.487653,
+            "priceEma": -0.253521,
+            "emaSlope": 0.382104,
+            "atrRegime": 0,
+            "efficiency": 0.428667,
+            "wick": 0.286994,
+            "previousBody": 0.387138
+          },
+          "minRatingScore": 0.06987
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 18.914508,
+          "trades": 49,
+          "winRate": 55.102041,
+          "profitFactor": 1.254871,
+          "maxDrawdownPct": 13.82275,
+          "positiveDayPct": 55.555556
+        },
+        "validation": {
+          "returnPct": 19.844685,
+          "trades": 29,
+          "winRate": 62.068966,
+          "profitFactor": 1.620586,
+          "maxDrawdownPct": 7.614721,
+          "positiveDayPct": 59.259259
+        },
+        "accepted": true,
+        "score": 30.888596,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 5.525542,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.28847,
+            "maxDrawdownPct": 9.50041,
+            "positiveDayPct": 57.142857
+          },
+          "marApr": {
+            "returnPct": 13.365382,
+            "trades": 25,
+            "winRate": 56,
+            "profitFactor": 1.374874,
+            "maxDrawdownPct": 13.801968,
+            "positiveDayPct": 59.090909
+          },
+          "mayJun": {
+            "returnPct": 12.482944,
+            "trades": 16,
+            "winRate": 62.5,
+            "profitFactor": 1.699306,
+            "maxDrawdownPct": 5.901183,
+            "positiveDayPct": 57.142857
+          },
+          "julAug": {
+            "returnPct": 5.891054,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.23283,
+            "maxDrawdownPct": 7.615696,
+            "positiveDayPct": 54.545455
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 59.697862
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.271372,
+            "riskAtr": -0.261255,
+            "spreadAtr": -1.804589,
+            "entryGapAtr": -0.709943,
+            "trend": 0.497634,
+            "priceEma": -0.395707,
+            "emaSlope": 0.161335,
+            "atrRegime": 0,
+            "efficiency": 0.212249,
+            "wick": 0.937136,
+            "previousBody": 0.327586
+          },
+          "minRatingScore": 0.040415
+        },
+        "quantile": 0.5,
+        "train": {
+          "returnPct": 19.888295,
+          "trades": 45,
+          "winRate": 55.555556,
+          "profitFactor": 1.291324,
+          "maxDrawdownPct": 16.308101,
+          "positiveDayPct": 59.52381
+        },
+        "validation": {
+          "returnPct": 24.709361,
+          "trades": 25,
+          "winRate": 68,
+          "profitFactor": 1.989547,
+          "maxDrawdownPct": 7.838259,
+          "positiveDayPct": 68.181818
+        },
+        "accepted": true,
+        "score": 35.234613,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.228988,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.219865,
+            "maxDrawdownPct": 10.623452,
+            "positiveDayPct": 57.142857
+          },
+          "marApr": {
+            "returnPct": 17.459393,
+            "trades": 26,
+            "winRate": 57.692308,
+            "profitFactor": 1.466727,
+            "maxDrawdownPct": 16.305585,
+            "positiveDayPct": 65.217391
+          },
+          "mayJun": {
+            "returnPct": 14.208402,
+            "trades": 10,
+            "winRate": 70,
+            "profitFactor": 2.731573,
+            "maxDrawdownPct": 5.231205,
+            "positiveDayPct": 66.666667
+          },
+          "julAug": {
+            "returnPct": 6.915931,
+            "trades": 20,
+            "winRate": 60,
+            "profitFactor": 1.323301,
+            "maxDrawdownPct": 7.829874,
+            "positiveDayPct": 61.111111
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 59.227594
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.984903,
+            "riskAtr": -0.199351,
+            "spreadAtr": -3.289938,
+            "entryGapAtr": -0.74576,
+            "trend": 0.539907,
+            "priceEma": -0.432509,
+            "emaSlope": 0.316831,
+            "atrRegime": 0,
+            "efficiency": 0.170911,
+            "wick": 0.273558,
+            "previousBody": 0.651536
+          },
+          "minRatingScore": -0.309211
+        },
+        "quantile": 0.5,
+        "train": {
+          "returnPct": 25.021877,
+          "trades": 48,
+          "winRate": 56.25,
+          "profitFactor": 1.348309,
+          "maxDrawdownPct": 16.319366,
+          "positiveDayPct": 59.090909
+        },
+        "validation": {
+          "returnPct": 17.782508,
+          "trades": 25,
+          "winRate": 64,
+          "profitFactor": 1.661275,
+          "maxDrawdownPct": 5.982184,
+          "positiveDayPct": 63.636364
+        },
+        "accepted": true,
+        "score": 33.930672,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.093013,
+            "trades": 12,
+            "winRate": 58.333333,
+            "profitFactor": 1.261257,
+            "maxDrawdownPct": 9.649432,
+            "positiveDayPct": 58.333333
+          },
+          "marApr": {
+            "returnPct": 16.388546,
+            "trades": 29,
+            "winRate": 55.172414,
+            "profitFactor": 1.371837,
+            "maxDrawdownPct": 16.334863,
+            "positiveDayPct": 60
+          },
+          "mayJun": {
+            "returnPct": 16.715924,
+            "trades": 13,
+            "winRate": 69.230769,
+            "profitFactor": 2.39898,
+            "maxDrawdownPct": 2.999444,
+            "positiveDayPct": 66.666667
+          },
+          "julAug": {
+            "returnPct": 4.07376,
+            "trades": 19,
+            "winRate": 57.894737,
+            "profitFactor": 1.195641,
+            "maxDrawdownPct": 5.989882,
+            "positiveDayPct": 58.823529
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 59.176579
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.984903,
+            "riskAtr": -0.199351,
+            "spreadAtr": -3.289938,
+            "entryGapAtr": -0.74576,
+            "trend": 0.539907,
+            "priceEma": -0.432509,
+            "emaSlope": 0.316831,
+            "atrRegime": 0,
+            "efficiency": 0.170911,
+            "wick": 0.273558,
+            "previousBody": 0.651536
+          },
+          "minRatingScore": -0.41873
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 30.489048,
+          "trades": 51,
+          "winRate": 56.862745,
+          "profitFactor": 1.398432,
+          "maxDrawdownPct": 12.558557,
+          "positiveDayPct": 59.574468
+        },
+        "validation": {
+          "returnPct": 17.550686,
+          "trades": 27,
+          "winRate": 62.962963,
+          "profitFactor": 1.575546,
+          "maxDrawdownPct": 8.287051,
+          "positiveDayPct": 62.5
+        },
+        "accepted": true,
+        "score": 35.844874,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.027167,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.215717,
+            "maxDrawdownPct": 10.626519,
+            "positiveDayPct": 57.142857
+          },
+          "marApr": {
+            "returnPct": 21.627257,
+            "trades": 30,
+            "winRate": 56.666667,
+            "profitFactor": 1.478086,
+            "maxDrawdownPct": 12.558724,
+            "positiveDayPct": 61.538462
+          },
+          "mayJun": {
+            "returnPct": 16.715924,
+            "trades": 13,
+            "winRate": 69.230769,
+            "profitFactor": 2.39898,
+            "maxDrawdownPct": 2.999444,
+            "positiveDayPct": 66.666667
+          },
+          "julAug": {
+            "returnPct": 3.891639,
+            "trades": 21,
+            "winRate": 57.142857,
+            "profitFactor": 1.162209,
+            "maxDrawdownPct": 8.282354,
+            "positiveDayPct": 57.894737
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 58.245824
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.855193,
+            "riskAtr": -0.115389,
+            "spreadAtr": -3.674323,
+            "entryGapAtr": -0.539164,
+            "trend": 0.270749,
+            "priceEma": -0.181743,
+            "emaSlope": 0.139042,
+            "atrRegime": 0,
+            "efficiency": 1.165745,
+            "wick": 1.421147,
+            "previousBody": 0.842187
+          },
+          "minRatingScore": 0.178308
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 23.517932,
+          "trades": 57,
+          "winRate": 56.140351,
+          "profitFactor": 1.276179,
+          "maxDrawdownPct": 14.268722,
+          "positiveDayPct": 58
+        },
+        "validation": {
+          "returnPct": 24.901043,
+          "trades": 30,
+          "winRate": 66.666667,
+          "profitFactor": 1.862855,
+          "maxDrawdownPct": 8.126852,
+          "positiveDayPct": 66.666667
+        },
+        "accepted": true,
+        "score": 38.512707,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 19.246758,
+            "trades": 29,
+            "winRate": 58.62069,
+            "profitFactor": 1.479475,
+            "maxDrawdownPct": 14.243083,
+            "positiveDayPct": 64
+          },
+          "mayJun": {
+            "returnPct": 12.477912,
+            "trades": 18,
+            "winRate": 61.111111,
+            "profitFactor": 1.602252,
+            "maxDrawdownPct": 5.90147,
+            "positiveDayPct": 53.333333
+          },
+          "julAug": {
+            "returnPct": 10.343618,
+            "trades": 24,
+            "winRate": 62.5,
+            "profitFactor": 1.458571,
+            "maxDrawdownPct": 8.132256,
+            "positiveDayPct": 63.636364
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 57.672925
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.195474,
+            "riskAtr": -0.079918,
+            "spreadAtr": -3.661001,
+            "entryGapAtr": -0.462143,
+            "trend": 0.412615,
+            "priceEma": -0.21462,
+            "emaSlope": 0.251304,
+            "atrRegime": 0,
+            "efficiency": 0.484482,
+            "wick": 0.00783,
+            "previousBody": 0.631312
+          },
+          "minRatingScore": -0.070411
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 22.674919,
+          "trades": 58,
+          "winRate": 53.448276,
+          "profitFactor": 1.233672,
+          "maxDrawdownPct": 17.520499,
+          "positiveDayPct": 58
+        },
+        "validation": {
+          "returnPct": 23.286469,
+          "trades": 30,
+          "winRate": 66.666667,
+          "profitFactor": 1.672909,
+          "maxDrawdownPct": 10.54076,
+          "positiveDayPct": 66.666667
+        },
+        "accepted": true,
+        "score": 35.997661,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 7.596756,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.358988,
+            "maxDrawdownPct": 9.610344,
+            "positiveDayPct": 64.285714
+          },
+          "marApr": {
+            "returnPct": 17.177798,
+            "trades": 33,
+            "winRate": 54.545455,
+            "profitFactor": 1.31761,
+            "maxDrawdownPct": 15.180488,
+            "positiveDayPct": 59.259259
+          },
+          "mayJun": {
+            "returnPct": 15.899044,
+            "trades": 17,
+            "winRate": 64.705882,
+            "profitFactor": 1.918679,
+            "maxDrawdownPct": 8.259942,
+            "positiveDayPct": 62.5
+          },
+          "julAug": {
+            "returnPct": 3.500357,
+            "trades": 22,
+            "winRate": 59.090909,
+            "profitFactor": 1.133689,
+            "maxDrawdownPct": 10.542616,
+            "positiveDayPct": 60
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 57.612456
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.805215,
+            "riskAtr": -0.454704,
+            "spreadAtr": -1.781975,
+            "entryGapAtr": -0.396818,
+            "trend": 0.367594,
+            "priceEma": -0.375248,
+            "emaSlope": 0.101967,
+            "atrRegime": 0,
+            "efficiency": 0.277604,
+            "wick": 1.172205,
+            "previousBody": 0.629362
+          },
+          "minRatingScore": -0.101052
+        },
+        "quantile": 0.5,
+        "train": {
+          "returnPct": 20.1237,
+          "trades": 45,
+          "winRate": 55.555556,
+          "profitFactor": 1.31849,
+          "maxDrawdownPct": 18.349055,
+          "positiveDayPct": 59.52381
+        },
+        "validation": {
+          "returnPct": 17.054458,
+          "trades": 25,
+          "winRate": 64,
+          "profitFactor": 1.626151,
+          "maxDrawdownPct": 8.434266,
+          "positiveDayPct": 63.636364
+        },
+        "accepted": true,
+        "score": 31.620212,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.038801,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.217091,
+            "maxDrawdownPct": 12.348151,
+            "positiveDayPct": 57.142857
+          },
+          "marApr": {
+            "returnPct": 6.078559,
+            "trades": 25,
+            "winRate": 52,
+            "profitFactor": 1.163323,
+            "maxDrawdownPct": 18.357277,
+            "positiveDayPct": 59.090909
+          },
+          "mayJun": {
+            "returnPct": 23.119933,
+            "trades": 12,
+            "winRate": 75,
+            "profitFactor": 3.584046,
+            "maxDrawdownPct": 2.995982,
+            "positiveDayPct": 72.727273
+          },
+          "julAug": {
+            "returnPct": 3.441431,
+            "trades": 19,
+            "winRate": 57.894737,
+            "profitFactor": 1.162988,
+            "maxDrawdownPct": 8.439596,
+            "positiveDayPct": 58.823529
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 57.023518
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.144329,
+            "riskAtr": -0.078313,
+            "spreadAtr": -0.750168,
+            "entryGapAtr": -0.693923,
+            "trend": 0.338999,
+            "priceEma": -0.44384,
+            "emaSlope": 0.372658,
+            "atrRegime": 0,
+            "efficiency": 0.008921,
+            "wick": 0.088918,
+            "previousBody": 0.60655
+          },
+          "minRatingScore": -0.097076
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 45.539372,
+          "trades": 50,
+          "winRate": 60,
+          "profitFactor": 1.66469,
+          "maxDrawdownPct": 15.096065,
+          "positiveDayPct": 64.444444
+        },
+        "validation": {
+          "returnPct": 19.488421,
+          "trades": 28,
+          "winRate": 67.857143,
+          "profitFactor": 1.61976,
+          "maxDrawdownPct": 10.667634,
+          "positiveDayPct": 68
+        },
+        "accepted": true,
+        "score": 46.798917,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 5.041526,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.284139,
+            "maxDrawdownPct": 9.74707,
+            "positiveDayPct": 61.538462
+          },
+          "marApr": {
+            "returnPct": 20.360793,
+            "trades": 30,
+            "winRate": 56.666667,
+            "profitFactor": 1.453529,
+            "maxDrawdownPct": 15.098885,
+            "positiveDayPct": 61.538462
+          },
+          "mayJun": {
+            "returnPct": 35.021224,
+            "trades": 11,
+            "winRate": 90.909091,
+            "profitFactor": 13.364152,
+            "maxDrawdownPct": 2.744423,
+            "positiveDayPct": 90
+          },
+          "julAug": {
+            "returnPct": 1.844318,
+            "trades": 23,
+            "winRate": 60.869565,
+            "profitFactor": 1.068889,
+            "maxDrawdownPct": 10.649429,
+            "positiveDayPct": 61.904762
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 56.706588
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.366448,
+            "riskAtr": -0.19164,
+            "spreadAtr": -2.057152,
+            "entryGapAtr": -0.432487,
+            "trend": 0.905657,
+            "priceEma": -0.453462,
+            "emaSlope": 0.209183,
+            "atrRegime": 0,
+            "efficiency": 0.072635,
+            "wick": 1.448146,
+            "previousBody": 0.170871
+          },
+          "minRatingScore": 0.399659
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 23.029488,
+          "trades": 52,
+          "winRate": 55.769231,
+          "profitFactor": 1.287273,
+          "maxDrawdownPct": 12.631773,
+          "positiveDayPct": 57.446809
+        },
+        "validation": {
+          "returnPct": 20.533609,
+          "trades": 28,
+          "winRate": 64.285714,
+          "profitFactor": 1.65554,
+          "maxDrawdownPct": 10.261605,
+          "positiveDayPct": 64
+        },
+        "accepted": true,
+        "score": 34.705467,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.228988,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.219865,
+            "maxDrawdownPct": 10.623452,
+            "positiveDayPct": 57.142857
+          },
+          "marApr": {
+            "returnPct": 22.265997,
+            "trades": 29,
+            "winRate": 58.62069,
+            "profitFactor": 1.537687,
+            "maxDrawdownPct": 12.641462,
+            "positiveDayPct": 64
+          },
+          "mayJun": {
+            "returnPct": 12.60119,
+            "trades": 14,
+            "winRate": 64.285714,
+            "profitFactor": 1.903274,
+            "maxDrawdownPct": 5.900027,
+            "positiveDayPct": 58.333333
+          },
+          "julAug": {
+            "returnPct": 3.320155,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.123706,
+            "maxDrawdownPct": 10.263323,
+            "positiveDayPct": 57.142857
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 56.590552
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.967651,
+            "riskAtr": -0.258627,
+            "spreadAtr": -4.93757,
+            "entryGapAtr": -0.065138,
+            "trend": 0.736618,
+            "priceEma": -0.387416,
+            "emaSlope": 0.466242,
+            "atrRegime": 0,
+            "efficiency": 1.226126,
+            "wick": 1.073194,
+            "previousBody": 0.207664
+          },
+          "minRatingScore": 0.256883
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 15.170088,
+          "trades": 52,
+          "winRate": 53.846154,
+          "profitFactor": 1.184357,
+          "maxDrawdownPct": 14.38973,
+          "positiveDayPct": 55.319149
+        },
+        "validation": {
+          "returnPct": 25.012555,
+          "trades": 25,
+          "winRate": 68,
+          "profitFactor": 2.035186,
+          "maxDrawdownPct": 5.062909,
+          "positiveDayPct": 66.666667
+        },
+        "accepted": true,
+        "score": 25.98798,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.405516,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.197469,
+            "maxDrawdownPct": 10.471459,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 17.869513,
+            "trades": 26,
+            "winRate": 57.692308,
+            "profitFactor": 1.472773,
+            "maxDrawdownPct": 14.244648,
+            "positiveDayPct": 60.869565
+          },
+          "mayJun": {
+            "returnPct": 5.945889,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.30058,
+            "maxDrawdownPct": 8.125171,
+            "positiveDayPct": 50
+          },
+          "julAug": {
+            "returnPct": 10.496252,
+            "trades": 19,
+            "winRate": 63.157895,
+            "profitFactor": 1.570705,
+            "maxDrawdownPct": 5.060041,
+            "positiveDayPct": 63.157895
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 56.37976
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.683289,
+            "riskAtr": -0.181612,
+            "spreadAtr": -2.269534,
+            "entryGapAtr": -0.328373,
+            "trend": 0.245469,
+            "priceEma": -0.430678,
+            "emaSlope": 0.36996,
+            "atrRegime": 0,
+            "efficiency": 0.747643,
+            "wick": 0.109031,
+            "previousBody": 0.46315
+          },
+          "minRatingScore": -0.381156
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 36.089496,
+          "trades": 55,
+          "winRate": 58.181818,
+          "profitFactor": 1.436325,
+          "maxDrawdownPct": 12.367638,
+          "positiveDayPct": 61.22449
+        },
+        "validation": {
+          "returnPct": 22.153211,
+          "trades": 31,
+          "winRate": 64.516129,
+          "profitFactor": 1.636139,
+          "maxDrawdownPct": 8.491881,
+          "positiveDayPct": 64.285714
+        },
+        "accepted": true,
+        "score": 43.559596,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 27.122938,
+            "trades": 30,
+            "winRate": 60,
+            "profitFactor": 1.626508,
+            "maxDrawdownPct": 12.367056,
+            "positiveDayPct": 64
+          },
+          "mayJun": {
+            "returnPct": 22.298569,
+            "trades": 17,
+            "winRate": 70.588235,
+            "profitFactor": 2.436655,
+            "maxDrawdownPct": 5.902669,
+            "positiveDayPct": 68.75
+          },
+          "julAug": {
+            "returnPct": 2.551568,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.096823,
+            "maxDrawdownPct": 8.476458,
+            "positiveDayPct": 57.142857
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 56.116127
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.629819,
+            "riskAtr": -0.381929,
+            "spreadAtr": -3.045931,
+            "entryGapAtr": -0.580398,
+            "trend": 0.204661,
+            "priceEma": -0.263527,
+            "emaSlope": 0.101575,
+            "atrRegime": 0,
+            "efficiency": 1.202233,
+            "wick": 0.464938,
+            "previousBody": 0.925869
+          },
+          "minRatingScore": -0.229871
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 27.914517,
+          "trades": 53,
+          "winRate": 56.603774,
+          "profitFactor": 1.348132,
+          "maxDrawdownPct": 15.052473,
+          "positiveDayPct": 59.574468
+        },
+        "validation": {
+          "returnPct": 17.018663,
+          "trades": 27,
+          "winRate": 62.962963,
+          "profitFactor": 1.574099,
+          "maxDrawdownPct": 7.586255,
+          "positiveDayPct": 60
+        },
+        "accepted": true,
+        "score": 33.697419,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.227118,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.19545,
+            "maxDrawdownPct": 10.455694,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 21.644045,
+            "trades": 29,
+            "winRate": 58.62069,
+            "profitFactor": 1.512653,
+            "maxDrawdownPct": 15.069401,
+            "positiveDayPct": 62.5
+          },
+          "mayJun": {
+            "returnPct": 14.675739,
+            "trades": 14,
+            "winRate": 64.285714,
+            "profitFactor": 1.989031,
+            "maxDrawdownPct": 5.65456,
+            "positiveDayPct": 61.538462
+          },
+          "julAug": {
+            "returnPct": 2.894825,
+            "trades": 21,
+            "winRate": 57.142857,
+            "profitFactor": 1.12507,
+            "maxDrawdownPct": 7.607265,
+            "positiveDayPct": 55
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 55.51669
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.255797,
+            "riskAtr": -0.282048,
+            "spreadAtr": -2.631174,
+            "entryGapAtr": -0.162399,
+            "trend": 0.259,
+            "priceEma": -0.312296,
+            "emaSlope": 0.367726,
+            "atrRegime": 0,
+            "efficiency": 0.777574,
+            "wick": 0.151068,
+            "previousBody": 0.600258
+          },
+          "minRatingScore": -0.159588
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 27.839052,
+          "trades": 59,
+          "winRate": 55.932203,
+          "profitFactor": 1.300256,
+          "maxDrawdownPct": 16.476709,
+          "positiveDayPct": 59.615385
+        },
+        "validation": {
+          "returnPct": 19.074041,
+          "trades": 30,
+          "winRate": 63.333333,
+          "profitFactor": 1.560044,
+          "maxDrawdownPct": 8.505149,
+          "positiveDayPct": 62.962963
+        },
+        "accepted": true,
+        "score": 34.925264,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 22.491843,
+            "trades": 33,
+            "winRate": 57.575758,
+            "profitFactor": 1.444314,
+            "maxDrawdownPct": 16.448923,
+            "positiveDayPct": 62.962963
+          },
+          "mayJun": {
+            "returnPct": 16.267679,
+            "trades": 17,
+            "winRate": 64.705882,
+            "profitFactor": 1.91743,
+            "maxDrawdownPct": 8.260054,
+            "positiveDayPct": 62.5
+          },
+          "julAug": {
+            "returnPct": 2.530972,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.095966,
+            "maxDrawdownPct": 8.495105,
+            "positiveDayPct": 57.142857
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 55.287669
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.178749,
+            "riskAtr": -0.383809,
+            "spreadAtr": -4.470707,
+            "entryGapAtr": -0.640633,
+            "trend": 0.440844,
+            "priceEma": -0.121749,
+            "emaSlope": 0.143945,
+            "atrRegime": 0,
+            "efficiency": 0.651969,
+            "wick": 0.875447,
+            "previousBody": 0.835648
+          },
+          "minRatingScore": -0.011715
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 13.91177,
+          "trades": 54,
+          "winRate": 51.851852,
+          "profitFactor": 1.153922,
+          "maxDrawdownPct": 15.832009,
+          "positiveDayPct": 54.166667
+        },
+        "validation": {
+          "returnPct": 17.777157,
+          "trades": 28,
+          "winRate": 60.714286,
+          "profitFactor": 1.548662,
+          "maxDrawdownPct": 8.084158,
+          "positiveDayPct": 60
+        },
+        "accepted": true,
+        "score": 21.913593,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 18.667002,
+            "trades": 31,
+            "winRate": 54.83871,
+            "profitFactor": 1.375826,
+            "maxDrawdownPct": 12.555438,
+            "positiveDayPct": 57.692308
+          },
+          "mayJun": {
+            "returnPct": 4.24824,
+            "trades": 13,
+            "winRate": 53.846154,
+            "profitFactor": 1.252474,
+            "maxDrawdownPct": 9.608629,
+            "positiveDayPct": 50
+          },
+          "julAug": {
+            "returnPct": 4.04975,
+            "trades": 22,
+            "winRate": 54.545455,
+            "profitFactor": 1.157696,
+            "maxDrawdownPct": 8.093576,
+            "positiveDayPct": 55
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 54.819167
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.044124,
+            "riskAtr": -0.190122,
+            "spreadAtr": -2.033289,
+            "entryGapAtr": -0.305724,
+            "trend": 0.333597,
+            "priceEma": -0.425178,
+            "emaSlope": 0.274452,
+            "atrRegime": 0,
+            "efficiency": 0.543471,
+            "wick": 0.475419,
+            "previousBody": 0.323825
+          },
+          "minRatingScore": 0.034314
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 28.955377,
+          "trades": 50,
+          "winRate": 56,
+          "profitFactor": 1.380291,
+          "maxDrawdownPct": 12.379231,
+          "positiveDayPct": 60
+        },
+        "validation": {
+          "returnPct": 21.541408,
+          "trades": 31,
+          "winRate": 64.516129,
+          "profitFactor": 1.61516,
+          "maxDrawdownPct": 10.666761,
+          "positiveDayPct": 64.285714
+        },
+        "accepted": true,
+        "score": 39.878067,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 2.157512,
+            "trades": 13,
+            "winRate": 53.846154,
+            "profitFactor": 1.124918,
+            "maxDrawdownPct": 9.746188,
+            "positiveDayPct": 58.333333
+          },
+          "marApr": {
+            "returnPct": 28.545455,
+            "trades": 28,
+            "winRate": 60.714286,
+            "profitFactor": 1.715461,
+            "maxDrawdownPct": 12.354054,
+            "positiveDayPct": 66.666667
+          },
+          "mayJun": {
+            "returnPct": 17.033295,
+            "trades": 17,
+            "winRate": 64.705882,
+            "profitFactor": 1.99571,
+            "maxDrawdownPct": 8.266194,
+            "positiveDayPct": 62.5
+          },
+          "julAug": {
+            "returnPct": 2.031264,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.076587,
+            "maxDrawdownPct": 10.653725,
+            "positiveDayPct": 57.142857
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 54.757393
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.558082,
+            "riskAtr": -0.383421,
+            "spreadAtr": -1.917719,
+            "entryGapAtr": -0.266349,
+            "trend": 0.304245,
+            "priceEma": -0.221104,
+            "emaSlope": 0.16513,
+            "atrRegime": 0,
+            "efficiency": 1.146488,
+            "wick": 0.328142,
+            "previousBody": 0.738917
+          },
+          "minRatingScore": -0.118053
+        },
+        "quantile": 0.3,
+        "train": {
+          "returnPct": 22.855839,
+          "trades": 56,
+          "winRate": 55.357143,
+          "profitFactor": 1.263039,
+          "maxDrawdownPct": 17.592946,
+          "positiveDayPct": 59.183673
+        },
+        "validation": {
+          "returnPct": 22.468523,
+          "trades": 31,
+          "winRate": 64.516129,
+          "profitFactor": 1.641059,
+          "maxDrawdownPct": 8.828966,
+          "positiveDayPct": 62.068966
+        },
+        "accepted": true,
+        "score": 37.006038,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 18.01728,
+            "trades": 30,
+            "winRate": 56.666667,
+            "profitFactor": 1.397976,
+            "maxDrawdownPct": 17.593934,
+            "positiveDayPct": 62.5
+          },
+          "mayJun": {
+            "returnPct": 18.962461,
+            "trades": 18,
+            "winRate": 66.666667,
+            "profitFactor": 2.049086,
+            "maxDrawdownPct": 7.237849,
+            "positiveDayPct": 64.705882
+          },
+          "julAug": {
+            "returnPct": 2.817866,
+            "trades": 23,
+            "winRate": 56.521739,
+            "profitFactor": 1.106191,
+            "maxDrawdownPct": 8.818894,
+            "positiveDayPct": 54.545455
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 54.75701
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.483553,
+            "riskAtr": -0.466314,
+            "spreadAtr": -2.029336,
+            "entryGapAtr": -0.230038,
+            "trend": 0.623813,
+            "priceEma": -0.243534,
+            "emaSlope": 0.280709,
+            "atrRegime": 0,
+            "efficiency": 0.845045,
+            "wick": 0.828121,
+            "previousBody": 0.7348
+          },
+          "minRatingScore": 0.268553
+        },
+        "quantile": 0.4,
+        "train": {
+          "returnPct": 13.026881,
+          "trades": 52,
+          "winRate": 53.846154,
+          "profitFactor": 1.162805,
+          "maxDrawdownPct": 16.300378,
+          "positiveDayPct": 57.446809
+        },
+        "validation": {
+          "returnPct": 17.177955,
+          "trades": 30,
+          "winRate": 60,
+          "profitFactor": 1.47322,
+          "maxDrawdownPct": 9.318595,
+          "positiveDayPct": 59.259259
+        },
+        "accepted": true,
+        "score": 22.4876,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.242572,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.193172,
+            "maxDrawdownPct": 13.122195,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 15.193836,
+            "trades": 28,
+            "winRate": 57.142857,
+            "profitFactor": 1.38377,
+            "maxDrawdownPct": 16.321247,
+            "positiveDayPct": 62.5
+          },
+          "mayJun": {
+            "returnPct": 6.436786,
+            "trades": 14,
+            "winRate": 57.142857,
+            "profitFactor": 1.37639,
+            "maxDrawdownPct": 7.715936,
+            "positiveDayPct": 53.846154
+          },
+          "julAug": {
+            "returnPct": 3.560415,
+            "trades": 24,
+            "winRate": 54.166667,
+            "profitFactor": 1.122328,
+            "maxDrawdownPct": 9.295791,
+            "positiveDayPct": 54.545455
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 54.721938
+      },
+      {
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "stopMode": "signal",
+          "stopBufferAtr": null,
+          "expiryMinutes": 45,
+          "targetR": 1.5,
+          "trailActivationR": 1,
+          "trailDistanceR": 0.35,
+          "ranking": "linear",
+          "minTrendScore": 0,
+          "maxStrength": 0.75,
+          "hours": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "weights": {
+            "strength": -0.737276,
+            "riskAtr": -0.070643,
+            "spreadAtr": -3.861908,
+            "entryGapAtr": -0.461199,
+            "trend": 0.221176,
+            "priceEma": -0.10059,
+            "emaSlope": 0.3018,
+            "atrRegime": 0,
+            "efficiency": 1.124651,
+            "wick": 1.000781,
+            "previousBody": 0.863533
+          },
+          "minRatingScore": 0.024885
+        },
+        "quantile": 0.2,
+        "train": {
+          "returnPct": 28.98782,
+          "trades": 63,
+          "winRate": 55.555556,
+          "profitFactor": 1.297779,
+          "maxDrawdownPct": 15.17784,
+          "positiveDayPct": 58.490566
+        },
+        "validation": {
+          "returnPct": 17.780885,
+          "trades": 34,
+          "winRate": 61.764706,
+          "profitFactor": 1.45989,
+          "maxDrawdownPct": 9.859901,
+          "positiveDayPct": 63.333333
+        },
+        "accepted": true,
+        "score": 32.994044,
+        "rolling": {
+          "janFeb": {
+            "returnPct": 4.224991,
+            "trades": 16,
+            "winRate": 56.25,
+            "profitFactor": 1.195332,
+            "maxDrawdownPct": 10.457648,
+            "positiveDayPct": 60
+          },
+          "marApr": {
+            "returnPct": 21.653808,
+            "trades": 34,
+            "winRate": 55.882353,
+            "profitFactor": 1.423875,
+            "maxDrawdownPct": 15.155339,
+            "positiveDayPct": 62.962963
+          },
+          "mayJun": {
+            "returnPct": 17.370736,
+            "trades": 20,
+            "winRate": 65,
+            "profitFactor": 1.821077,
+            "maxDrawdownPct": 6.089667,
+            "positiveDayPct": 58.823529
+          },
+          "julAug": {
+            "returnPct": 1.983926,
+            "trades": 27,
+            "winRate": 55.555556,
+            "profitFactor": 1.064964,
+            "maxDrawdownPct": 9.85848,
+            "positiveDayPct": 58.333333
+          }
+        },
+        "positiveWindows": 4,
+        "stabilityScore": 54.66917
+      }
+    ]
+  },
+  "winner": {
+    "experiment": {
+      "signalMode": "combined",
+      "detector": {
+        "mode": "requireBoth"
+      },
+      "bufferPips": 3,
+      "stopMode": "signal",
+      "stopBufferAtr": null,
+      "expiryMinutes": 45,
+      "targetR": 1.5,
+      "trailActivationR": 1,
+      "trailDistanceR": 0.35,
+      "ranking": "linear",
+      "minTrendScore": 0,
+      "maxStrength": 0.75,
+      "hours": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "weights": {
+        "strength": -0.76204,
+        "riskAtr": -0.031207,
+        "spreadAtr": -4.768166,
+        "entryGapAtr": -0.433261,
+        "trend": 0.918484,
+        "priceEma": -0.395428,
+        "emaSlope": 0.171283,
+        "atrRegime": 0,
+        "efficiency": 0.297529,
+        "wick": 0.332178,
+        "previousBody": 0.967556
+      },
+      "minRatingScore": 0.334648
+    },
+    "quantile": 0.4,
+    "train": {
+      "returnPct": 19.478434,
+      "trades": 51,
+      "winRate": 52.941176,
+      "profitFactor": 1.230551,
+      "maxDrawdownPct": 15.913618,
+      "positiveDayPct": 57.777778
+    },
+    "validation": {
+      "returnPct": 20.061102,
+      "trades": 27,
+      "winRate": 62.962963,
+      "profitFactor": 1.647984,
+      "maxDrawdownPct": 7.4995,
+      "positiveDayPct": 64
+    },
+    "accepted": true,
+    "score": 32.036214,
+    "rolling": {
+      "janFeb": {
+        "returnPct": 10.710461,
+        "trades": 13,
+        "winRate": 61.538462,
+        "profitFactor": 1.714217,
+        "maxDrawdownPct": 8.780902,
+        "positiveDayPct": 66.666667
+      },
+      "marApr": {
+        "returnPct": 11.039702,
+        "trades": 31,
+        "winRate": 51.612903,
+        "profitFactor": 1.218016,
+        "maxDrawdownPct": 15.145902,
+        "positiveDayPct": 57.692308
+      },
+      "mayJun": {
+        "returnPct": 9.963414,
+        "trades": 13,
+        "winRate": 61.538462,
+        "profitFactor": 1.704205,
+        "maxDrawdownPct": 5.925421,
+        "positiveDayPct": 58.333333
+      },
+      "julAug": {
+        "returnPct": 6.102582,
+        "trades": 21,
+        "winRate": 57.142857,
+        "profitFactor": 1.250053,
+        "maxDrawdownPct": 7.501406,
+        "positiveDayPct": 60
+      }
+    },
+    "positiveWindows": 4,
+    "stabilityScore": 61.115837,
+    "test": {
+      "returnPct": -9.248752,
+      "trades": 33,
+      "winRate": 42.424242,
+      "profitFactor": 0.836346,
+      "maxDrawdownPct": 25.370206,
+      "positiveDayPct": 42.307692
+    },
+    "currentDay": {
+      "returnPct": -0.930446,
+      "trades": 2,
+      "winRate": 50,
+      "profitFactor": 0.688649,
+      "maxDrawdownPct": 2.988417,
+      "positiveDayPct": 0,
+      "tradeLog": [
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:19:00.000Z",
+          "closed": "2026-11-03T00:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.884168,
+          "r": -1.000048,
+          "effectiveRiskPct": 2.988272,
+          "balanceAfter": 970.115832,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993663,
+          "balanceAfter": 990.695536,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "full": {
+      "returnPct": 29.003979,
+      "trades": 113,
+      "winRate": 52.212389,
+      "profitFactor": 1.140415,
+      "maxDrawdownPct": 25.610181,
+      "positiveDayPct": 54.639175
+    }
+  },
+  "top20": [
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.144329,
+          "riskAtr": -0.078313,
+          "spreadAtr": -0.750168,
+          "entryGapAtr": -0.693923,
+          "trend": 0.338999,
+          "priceEma": -0.44384,
+          "emaSlope": 0.372658,
+          "atrRegime": 0,
+          "efficiency": 0.008921,
+          "wick": 0.088918,
+          "previousBody": 0.60655
+        },
+        "minRatingScore": -0.005404
+      },
+      "quantile": 0.5,
+      "train": {
+        "returnPct": 54.999318,
+        "trades": 42,
+        "winRate": 64.285714,
+        "profitFactor": 2.024156,
+        "maxDrawdownPct": 8.767887,
+        "positiveDayPct": 68.421053
+      },
+      "validation": {
+        "returnPct": 22.055204,
+        "trades": 26,
+        "winRate": 69.230769,
+        "profitFactor": 1.778661,
+        "maxDrawdownPct": 8.068528,
+        "positiveDayPct": 69.565217
+      },
+      "accepted": false,
+      "score": 57.050208,
+      "test": {
+        "returnPct": -6.032683,
+        "trades": 31,
+        "winRate": 45.16129,
+        "profitFactor": 0.8756,
+        "maxDrawdownPct": 20.196731,
+        "positiveDayPct": 48
+      },
+      "currentDay": {
+        "returnPct": -0.881895,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.700022,
+        "maxDrawdownPct": 2.939866,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURJPY",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:03:00.000Z",
+            "closed": "2026-11-03T02:08:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.398657,
+            "r": -1.00081,
+            "effectiveRiskPct": 2.937487,
+            "balanceAfter": 970.601343,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.992165,
+            "balanceAfter": 991.181046,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.683289,
+          "riskAtr": -0.181612,
+          "spreadAtr": -2.269534,
+          "entryGapAtr": -0.328373,
+          "trend": 0.245469,
+          "priceEma": -0.430678,
+          "emaSlope": 0.36996,
+          "atrRegime": 0,
+          "efficiency": 0.747643,
+          "wick": 0.109031,
+          "previousBody": 0.46315
+        },
+        "minRatingScore": -0.258487
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 32.051382,
+        "trades": 50,
+        "winRate": 58,
+        "profitFactor": 1.459171,
+        "maxDrawdownPct": 15.06562,
+        "positiveDayPct": 62.222222
+      },
+      "validation": {
+        "returnPct": 26.531181,
+        "trades": 28,
+        "winRate": 67.857143,
+        "profitFactor": 1.975535,
+        "maxDrawdownPct": 7.389412,
+        "positiveDayPct": 65.384615
+      },
+      "accepted": true,
+      "score": 48.816686,
+      "test": {
+        "returnPct": -2.547861,
+        "trades": 28,
+        "winRate": 46.428571,
+        "profitFactor": 0.94466,
+        "maxDrawdownPct": 24.059904,
+        "positiveDayPct": 47.826087
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.459973,
+          "riskAtr": -0.317102,
+          "spreadAtr": -4.113398,
+          "entryGapAtr": -0.090059,
+          "trend": 0.284276,
+          "priceEma": -0.430114,
+          "emaSlope": 0.281153,
+          "atrRegime": 0,
+          "efficiency": 0.161364,
+          "wick": 0.624556,
+          "previousBody": 0.254017
+        },
+        "minRatingScore": -0.500993
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 42.906612,
+        "trades": 56,
+        "winRate": 58.928571,
+        "profitFactor": 1.570584,
+        "maxDrawdownPct": 15.705387,
+        "positiveDayPct": 59.183673
+      },
+      "validation": {
+        "returnPct": 23.080183,
+        "trades": 26,
+        "winRate": 65.384615,
+        "profitFactor": 1.844976,
+        "maxDrawdownPct": 7.493009,
+        "positiveDayPct": 65.217391
+      },
+      "accepted": true,
+      "score": 47.125852,
+      "test": {
+        "returnPct": -3.744062,
+        "trades": 26,
+        "winRate": 46.153846,
+        "profitFactor": 0.908575,
+        "maxDrawdownPct": 20.420055,
+        "positiveDayPct": 50
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.144329,
+          "riskAtr": -0.078313,
+          "spreadAtr": -0.750168,
+          "entryGapAtr": -0.693923,
+          "trend": 0.338999,
+          "priceEma": -0.44384,
+          "emaSlope": 0.372658,
+          "atrRegime": 0,
+          "efficiency": 0.008921,
+          "wick": 0.088918,
+          "previousBody": 0.60655
+        },
+        "minRatingScore": -0.097076
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 45.539372,
+        "trades": 50,
+        "winRate": 60,
+        "profitFactor": 1.66469,
+        "maxDrawdownPct": 15.096065,
+        "positiveDayPct": 64.444444
+      },
+      "validation": {
+        "returnPct": 19.488421,
+        "trades": 28,
+        "winRate": 67.857143,
+        "profitFactor": 1.61976,
+        "maxDrawdownPct": 10.667634,
+        "positiveDayPct": 68
+      },
+      "accepted": true,
+      "score": 46.798917,
+      "test": {
+        "returnPct": -0.187355,
+        "trades": 35,
+        "winRate": 48.571429,
+        "profitFactor": 0.996413,
+        "maxDrawdownPct": 17.73713,
+        "positiveDayPct": 53.571429
+      },
+      "currentDay": {
+        "returnPct": -0.881895,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.700022,
+        "maxDrawdownPct": 2.939866,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURJPY",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:03:00.000Z",
+            "closed": "2026-11-03T02:08:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.398657,
+            "r": -1.00081,
+            "effectiveRiskPct": 2.937487,
+            "balanceAfter": 970.601343,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.992165,
+            "balanceAfter": 991.181046,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.683289,
+          "riskAtr": -0.181612,
+          "spreadAtr": -2.269534,
+          "entryGapAtr": -0.328373,
+          "trend": 0.245469,
+          "priceEma": -0.430678,
+          "emaSlope": 0.36996,
+          "atrRegime": 0,
+          "efficiency": 0.747643,
+          "wick": 0.109031,
+          "previousBody": 0.46315
+        },
+        "minRatingScore": -0.381156
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 36.089496,
+        "trades": 55,
+        "winRate": 58.181818,
+        "profitFactor": 1.436325,
+        "maxDrawdownPct": 12.367638,
+        "positiveDayPct": 61.22449
+      },
+      "validation": {
+        "returnPct": 22.153211,
+        "trades": 31,
+        "winRate": 64.516129,
+        "profitFactor": 1.636139,
+        "maxDrawdownPct": 8.491881,
+        "positiveDayPct": 64.285714
+      },
+      "accepted": true,
+      "score": 43.559596,
+      "test": {
+        "returnPct": -4.732394,
+        "trades": 31,
+        "winRate": 45.16129,
+        "profitFactor": 0.904547,
+        "maxDrawdownPct": 21.115071,
+        "positiveDayPct": 46.153846
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.113943,
+          "riskAtr": -0.246573,
+          "spreadAtr": -4.390968,
+          "entryGapAtr": -0.290342,
+          "trend": 0.224628,
+          "priceEma": -0.418715,
+          "emaSlope": 0.117102,
+          "atrRegime": 0,
+          "efficiency": 1.119134,
+          "wick": 0.176946,
+          "previousBody": 0.619675
+        },
+        "minRatingScore": -0.309785
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 46.425304,
+        "trades": 58,
+        "winRate": 60.344828,
+        "profitFactor": 1.560627,
+        "maxDrawdownPct": 14.997273,
+        "positiveDayPct": 62
+      },
+      "validation": {
+        "returnPct": 18.744047,
+        "trades": 31,
+        "winRate": 64.516129,
+        "profitFactor": 1.531856,
+        "maxDrawdownPct": 9.428567,
+        "positiveDayPct": 64.285714
+      },
+      "accepted": true,
+      "score": 43.202494,
+      "test": {
+        "returnPct": -2.692149,
+        "trades": 38,
+        "winRate": 47.368421,
+        "profitFactor": 0.95475,
+        "maxDrawdownPct": 19.22836,
+        "positiveDayPct": 46.666667
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.512046,
+          "riskAtr": -0.199729,
+          "spreadAtr": -2.82402,
+          "entryGapAtr": -0.551706,
+          "trend": 0.490731,
+          "priceEma": -0.274515,
+          "emaSlope": 0.076035,
+          "atrRegime": 0,
+          "efficiency": 0.166517,
+          "wick": 0.169055,
+          "previousBody": 0.282615
+        },
+        "minRatingScore": -0.366196
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 29.954088,
+        "trades": 55,
+        "winRate": 56.363636,
+        "profitFactor": 1.374241,
+        "maxDrawdownPct": 15.165563,
+        "positiveDayPct": 59.574468
+      },
+      "validation": {
+        "returnPct": 23.780934,
+        "trades": 28,
+        "winRate": 64.285714,
+        "profitFactor": 1.749262,
+        "maxDrawdownPct": 7.732172,
+        "positiveDayPct": 65.384615
+      },
+      "accepted": true,
+      "score": 42.281428,
+      "test": {
+        "returnPct": -11.123352,
+        "trades": 29,
+        "winRate": 41.37931,
+        "profitFactor": 0.775187,
+        "maxDrawdownPct": 23.635092,
+        "positiveDayPct": 41.666667
+      },
+      "currentDay": {
+        "returnPct": -0.930446,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.688649,
+        "maxDrawdownPct": 2.988417,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993663,
+            "balanceAfter": 990.695536,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.213404,
+          "riskAtr": -0.262872,
+          "spreadAtr": -4.014831,
+          "entryGapAtr": -0.378063,
+          "trend": 0.330024,
+          "priceEma": -0.481991,
+          "emaSlope": 0.325815,
+          "atrRegime": 0,
+          "efficiency": 0.648613,
+          "wick": 0.980888,
+          "previousBody": 0.009827
+        },
+        "minRatingScore": -0.300357
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 35.287302,
+        "trades": 55,
+        "winRate": 58.181818,
+        "profitFactor": 1.442476,
+        "maxDrawdownPct": 13.095626,
+        "positiveDayPct": 59.183673
+      },
+      "validation": {
+        "returnPct": 21.293138,
+        "trades": 28,
+        "winRate": 64.285714,
+        "profitFactor": 1.739005,
+        "maxDrawdownPct": 7.835475,
+        "positiveDayPct": 64
+      },
+      "accepted": true,
+      "score": 41.547078,
+      "test": {
+        "returnPct": 0.963775,
+        "trades": 26,
+        "winRate": 50,
+        "profitFactor": 1.024415,
+        "maxDrawdownPct": 22.34992,
+        "positiveDayPct": 52.173913
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.717901,
+          "riskAtr": -0.444219,
+          "spreadAtr": -4.146435,
+          "entryGapAtr": -0.253399,
+          "trend": 0.388979,
+          "priceEma": -0.375365,
+          "emaSlope": 0.175433,
+          "atrRegime": 0,
+          "efficiency": 0.158528,
+          "wick": 0.594449,
+          "previousBody": 0.778377
+        },
+        "minRatingScore": -0.870692
+      },
+      "quantile": 0.2,
+      "train": {
+        "returnPct": 40.2191,
+        "trades": 64,
+        "winRate": 57.8125,
+        "profitFactor": 1.42325,
+        "maxDrawdownPct": 16.262383,
+        "positiveDayPct": 59.259259
+      },
+      "validation": {
+        "returnPct": 20.886957,
+        "trades": 31,
+        "winRate": 64.516129,
+        "profitFactor": 1.579079,
+        "maxDrawdownPct": 9.437888,
+        "positiveDayPct": 64.285714
+      },
+      "accepted": true,
+      "score": 41.091478,
+      "test": {
+        "returnPct": 7.013102,
+        "trades": 35,
+        "winRate": 51.428571,
+        "profitFactor": 1.137611,
+        "maxDrawdownPct": 13.902314,
+        "positiveDayPct": 51.724138
+      },
+      "currentDay": {
+        "returnPct": -0.930446,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.688649,
+        "maxDrawdownPct": 2.988417,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993663,
+            "balanceAfter": 990.695536,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.68288,
+          "riskAtr": -0.331132,
+          "spreadAtr": -2.268682,
+          "entryGapAtr": -0.735908,
+          "trend": 0.313271,
+          "priceEma": -0.430775,
+          "emaSlope": 0.447931,
+          "atrRegime": 0,
+          "efficiency": 1.055314,
+          "wick": 1.273618,
+          "previousBody": 0.115667
+        },
+        "minRatingScore": -0.418773
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 27.117617,
+        "trades": 61,
+        "winRate": 55.737705,
+        "profitFactor": 1.292291,
+        "maxDrawdownPct": 11.069092,
+        "positiveDayPct": 55.555556
+      },
+      "validation": {
+        "returnPct": 26.009883,
+        "trades": 32,
+        "winRate": 65.625,
+        "profitFactor": 1.755892,
+        "maxDrawdownPct": 7.832839,
+        "positiveDayPct": 65.517241
+      },
+      "accepted": true,
+      "score": 41.090446,
+      "test": {
+        "returnPct": -8.840414,
+        "trades": 30,
+        "winRate": 43.333333,
+        "profitFactor": 0.81067,
+        "maxDrawdownPct": 21.677607,
+        "positiveDayPct": 40
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.93361,
+          "riskAtr": -0.244527,
+          "spreadAtr": -2.084758,
+          "entryGapAtr": -0.445051,
+          "trend": 0.200041,
+          "priceEma": -0.25971,
+          "emaSlope": 0.0853,
+          "atrRegime": 0,
+          "efficiency": 0.544711,
+          "wick": 1.258589,
+          "previousBody": 0.799952
+        },
+        "minRatingScore": 0.154497
+      },
+      "quantile": 0.5,
+      "train": {
+        "returnPct": 31.803565,
+        "trades": 44,
+        "winRate": 59.090909,
+        "profitFactor": 1.537229,
+        "maxDrawdownPct": 15.834743,
+        "positiveDayPct": 63.414634
+      },
+      "validation": {
+        "returnPct": 18.713449,
+        "trades": 25,
+        "winRate": 64,
+        "profitFactor": 1.712521,
+        "maxDrawdownPct": 8.118478,
+        "positiveDayPct": 60.869565
+      },
+      "accepted": false,
+      "score": 40.554114,
+      "test": {
+        "returnPct": -7.897182,
+        "trades": 21,
+        "winRate": 42.857143,
+        "profitFactor": 0.758472,
+        "maxDrawdownPct": 17.936815,
+        "positiveDayPct": 42.105263
+      },
+      "currentDay": {
+        "returnPct": -0.930446,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.688649,
+        "maxDrawdownPct": 2.988417,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993663,
+            "balanceAfter": 990.695536,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.300016,
+          "riskAtr": -0.343852,
+          "spreadAtr": -3.043242,
+          "entryGapAtr": -0.542894,
+          "trend": 0.363524,
+          "priceEma": -0.440167,
+          "emaSlope": 0.06409,
+          "atrRegime": 0,
+          "efficiency": 0.172836,
+          "wick": 0.823031,
+          "previousBody": 0.486044
+        },
+        "minRatingScore": -0.374753
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 44.376987,
+        "trades": 53,
+        "winRate": 60.377358,
+        "profitFactor": 1.583712,
+        "maxDrawdownPct": 12.429473,
+        "positiveDayPct": 59.574468
+      },
+      "validation": {
+        "returnPct": 17.825616,
+        "trades": 30,
+        "winRate": 63.333333,
+        "profitFactor": 1.521882,
+        "maxDrawdownPct": 10.668487,
+        "positiveDayPct": 62.962963
+      },
+      "accepted": true,
+      "score": 40.533039,
+      "test": {
+        "returnPct": -3.380319,
+        "trades": 28,
+        "winRate": 46.428571,
+        "profitFactor": 0.922637,
+        "maxDrawdownPct": 21.292157,
+        "positiveDayPct": 50
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.629819,
+          "riskAtr": -0.381929,
+          "spreadAtr": -3.045931,
+          "entryGapAtr": -0.580398,
+          "trend": 0.204661,
+          "priceEma": -0.263527,
+          "emaSlope": 0.101575,
+          "atrRegime": 0,
+          "efficiency": 1.202233,
+          "wick": 0.464938,
+          "previousBody": 0.925869
+        },
+        "minRatingScore": -0.387172
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 29.943573,
+        "trades": 56,
+        "winRate": 57.142857,
+        "profitFactor": 1.349745,
+        "maxDrawdownPct": 15.052943,
+        "positiveDayPct": 59.183673
+      },
+      "validation": {
+        "returnPct": 22.554867,
+        "trades": 31,
+        "winRate": 64.516129,
+        "profitFactor": 1.663335,
+        "maxDrawdownPct": 8.269602,
+        "positiveDayPct": 64.285714
+      },
+      "accepted": true,
+      "score": 40.150561,
+      "test": {
+        "returnPct": -2.403476,
+        "trades": 36,
+        "winRate": 47.222222,
+        "profitFactor": 0.956587,
+        "maxDrawdownPct": 16.696064,
+        "positiveDayPct": 46.428571
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.044124,
+          "riskAtr": -0.190122,
+          "spreadAtr": -2.033289,
+          "entryGapAtr": -0.305724,
+          "trend": 0.333597,
+          "priceEma": -0.425178,
+          "emaSlope": 0.274452,
+          "atrRegime": 0,
+          "efficiency": 0.543471,
+          "wick": 0.475419,
+          "previousBody": 0.323825
+        },
+        "minRatingScore": 0.034314
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 28.955377,
+        "trades": 50,
+        "winRate": 56,
+        "profitFactor": 1.380291,
+        "maxDrawdownPct": 12.379231,
+        "positiveDayPct": 60
+      },
+      "validation": {
+        "returnPct": 21.541408,
+        "trades": 31,
+        "winRate": 64.516129,
+        "profitFactor": 1.61516,
+        "maxDrawdownPct": 10.666761,
+        "positiveDayPct": 64.285714
+      },
+      "accepted": true,
+      "score": 39.878067,
+      "test": {
+        "returnPct": -9.020513,
+        "trades": 28,
+        "winRate": 42.857143,
+        "profitFactor": 0.802358,
+        "maxDrawdownPct": 23.630889,
+        "positiveDayPct": 48
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014
+      },
+      "quantile": 0.2,
+      "train": {
+        "returnPct": 39.830801,
+        "trades": 65,
+        "winRate": 58.461538,
+        "profitFactor": 1.402064,
+        "maxDrawdownPct": 16.242203,
+        "positiveDayPct": 58.928571
+      },
+      "validation": {
+        "returnPct": 20.08818,
+        "trades": 32,
+        "winRate": 62.5,
+        "profitFactor": 1.521503,
+        "maxDrawdownPct": 8.28914,
+        "positiveDayPct": 62.068966
+      },
+      "accepted": true,
+      "score": 39.619079,
+      "test": {
+        "returnPct": 15.106392,
+        "trades": 37,
+        "winRate": 54.054054,
+        "profitFactor": 1.283067,
+        "maxDrawdownPct": 8.855146,
+        "positiveDayPct": 56.666667
+      },
+      "currentDay": {
+        "returnPct": -0.930446,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.688649,
+        "maxDrawdownPct": 2.988417,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993663,
+            "balanceAfter": 990.695536,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.144329,
+          "riskAtr": -0.078313,
+          "spreadAtr": -0.750168,
+          "entryGapAtr": -0.693923,
+          "trend": 0.338999,
+          "priceEma": -0.44384,
+          "emaSlope": 0.372658,
+          "atrRegime": 0,
+          "efficiency": 0.008921,
+          "wick": 0.088918,
+          "previousBody": 0.60655
+        },
+        "minRatingScore": -0.332366
+      },
+      "quantile": 0.2,
+      "train": {
+        "returnPct": 45.884672,
+        "trades": 60,
+        "winRate": 60,
+        "profitFactor": 1.54367,
+        "maxDrawdownPct": 16.241923,
+        "positiveDayPct": 60.784314
+      },
+      "validation": {
+        "returnPct": 18.27858,
+        "trades": 37,
+        "winRate": 62.162162,
+        "profitFactor": 1.395327,
+        "maxDrawdownPct": 10.663847,
+        "positiveDayPct": 61.764706
+      },
+      "accepted": true,
+      "score": 39.049297,
+      "test": {
+        "returnPct": 16.972364,
+        "trades": 40,
+        "winRate": 55,
+        "profitFactor": 1.293707,
+        "maxDrawdownPct": 9.947255,
+        "positiveDayPct": 58.064516
+      },
+      "currentDay": {
+        "returnPct": -0.881895,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.700022,
+        "maxDrawdownPct": 2.939866,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURJPY",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:03:00.000Z",
+            "closed": "2026-11-03T02:08:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.398657,
+            "r": -1.00081,
+            "effectiveRiskPct": 2.937487,
+            "balanceAfter": 970.601343,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.992165,
+            "balanceAfter": 991.181046,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.113943,
+          "riskAtr": -0.246573,
+          "spreadAtr": -4.390968,
+          "entryGapAtr": -0.290342,
+          "trend": 0.224628,
+          "priceEma": -0.418715,
+          "emaSlope": 0.117102,
+          "atrRegime": 0,
+          "efficiency": 1.119134,
+          "wick": 0.176946,
+          "previousBody": 0.619675
+        },
+        "minRatingScore": -0.078762
+      },
+      "quantile": 0.5,
+      "train": {
+        "returnPct": 34.044078,
+        "trades": 45,
+        "winRate": 60,
+        "profitFactor": 1.558504,
+        "maxDrawdownPct": 13.11178,
+        "positiveDayPct": 60.97561
+      },
+      "validation": {
+        "returnPct": 16.246884,
+        "trades": 23,
+        "winRate": 65.217391,
+        "profitFactor": 1.700934,
+        "maxDrawdownPct": 5.981769,
+        "positiveDayPct": 63.636364
+      },
+      "accepted": false,
+      "score": 38.920927,
+      "test": {
+        "returnPct": 0.757351,
+        "trades": 26,
+        "winRate": 50,
+        "profitFactor": 1.019618,
+        "maxDrawdownPct": 17.607294,
+        "positiveDayPct": 54.545455
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.855193,
+          "riskAtr": -0.115389,
+          "spreadAtr": -3.674323,
+          "entryGapAtr": -0.539164,
+          "trend": 0.270749,
+          "priceEma": -0.181743,
+          "emaSlope": 0.139042,
+          "atrRegime": 0,
+          "efficiency": 1.165745,
+          "wick": 1.421147,
+          "previousBody": 0.842187
+        },
+        "minRatingScore": 0.178308
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 23.517932,
+        "trades": 57,
+        "winRate": 56.140351,
+        "profitFactor": 1.276179,
+        "maxDrawdownPct": 14.268722,
+        "positiveDayPct": 58
+      },
+      "validation": {
+        "returnPct": 24.901043,
+        "trades": 30,
+        "winRate": 66.666667,
+        "profitFactor": 1.862855,
+        "maxDrawdownPct": 8.126852,
+        "positiveDayPct": 66.666667
+      },
+      "accepted": true,
+      "score": 38.512707,
+      "test": {
+        "returnPct": -3.703481,
+        "trades": 35,
+        "winRate": 48.571429,
+        "profitFactor": 0.928789,
+        "maxDrawdownPct": 21.223785,
+        "positiveDayPct": 46.428571
+      },
+      "currentDay": {
+        "returnPct": -0.94038,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.686368,
+        "maxDrawdownPct": 2.99835,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993969,
+            "balanceAfter": 990.596205,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.144329,
+          "riskAtr": -0.078313,
+          "spreadAtr": -0.750168,
+          "entryGapAtr": -0.693923,
+          "trend": 0.338999,
+          "priceEma": -0.44384,
+          "emaSlope": 0.372658,
+          "atrRegime": 0,
+          "efficiency": 0.008921,
+          "wick": 0.088918,
+          "previousBody": 0.60655
+        },
+        "minRatingScore": -0.194541
+      },
+      "quantile": 0.3,
+      "train": {
+        "returnPct": 50.440501,
+        "trades": 54,
+        "winRate": 61.111111,
+        "profitFactor": 1.697485,
+        "maxDrawdownPct": 13.655854,
+        "positiveDayPct": 62.5
+      },
+      "validation": {
+        "returnPct": 16.047224,
+        "trades": 33,
+        "winRate": 63.636364,
+        "profitFactor": 1.40143,
+        "maxDrawdownPct": 10.658589,
+        "positiveDayPct": 63.333333
+      },
+      "accepted": true,
+      "score": 38.353837,
+      "test": {
+        "returnPct": 2.117022,
+        "trades": 36,
+        "winRate": 50,
+        "profitFactor": 1.03941,
+        "maxDrawdownPct": 16.901296,
+        "positiveDayPct": 53.571429
+      },
+      "currentDay": {
+        "returnPct": -0.881895,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.700022,
+        "maxDrawdownPct": 2.939866,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "EURJPY",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:03:00.000Z",
+            "closed": "2026-11-03T02:08:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.398657,
+            "r": -1.00081,
+            "effectiveRiskPct": 2.937487,
+            "balanceAfter": 970.601343,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.992165,
+            "balanceAfter": 991.181046,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.479128,
+          "riskAtr": -0.214438,
+          "spreadAtr": -0.189885,
+          "entryGapAtr": -0.668065,
+          "trend": 0.46794,
+          "priceEma": -0.388606,
+          "emaSlope": 0.019261,
+          "atrRegime": 0,
+          "efficiency": 0.458081,
+          "wick": 0.420699,
+          "previousBody": 0.540558
+        },
+        "minRatingScore": 0.022698
+      },
+      "quantile": 0.4,
+      "train": {
+        "returnPct": 31.952219,
+        "trades": 48,
+        "winRate": 58.333333,
+        "profitFactor": 1.455703,
+        "maxDrawdownPct": 13.747309,
+        "positiveDayPct": 61.363636
+      },
+      "validation": {
+        "returnPct": 17.788658,
+        "trades": 30,
+        "winRate": 63.333333,
+        "profitFactor": 1.520237,
+        "maxDrawdownPct": 10.668487,
+        "positiveDayPct": 62.962963
+      },
+      "accepted": true,
+      "score": 38.092403,
+      "test": {
+        "returnPct": -1.832767,
+        "trades": 30,
+        "winRate": 46.666667,
+        "profitFactor": 0.960899,
+        "maxDrawdownPct": 21.27844,
+        "positiveDayPct": 51.851852
+      },
+      "currentDay": {
+        "returnPct": -0.930446,
+        "trades": 2,
+        "winRate": 50,
+        "profitFactor": 0.688649,
+        "maxDrawdownPct": 2.988417,
+        "positiveDayPct": 0,
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          },
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 20.579704,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.993663,
+            "balanceAfter": 990.695536,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

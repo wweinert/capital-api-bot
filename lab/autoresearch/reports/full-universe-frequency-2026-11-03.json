@@ -1,0 +1,1220 @@
+{
+  "protocol": "one-slot-rated-frequency-diagnostic-v1",
+  "generatedAt": "2026-11-03T12:43:15.055Z",
+  "dataEnd": "2026-11-03T09:25:00.000Z",
+  "marketDays": {
+    "train": 129,
+    "validation": 79,
+    "test": 52,
+    "full": 260
+  },
+  "guardrails": {
+    "selection": "January-August only",
+    "diagnostic": "September-October excluded from selection",
+    "target": "at least 1.5 trades per market day with one slot",
+    "pairProfiles": false
+  },
+  "searched": 25,
+  "developmentPasses": 0,
+  "diagnosticPasses": 0,
+  "winner": {
+    "mode": "m15_all_hours",
+    "quantile": 0.2,
+    "experiment": {
+      "signalMode": "combined",
+      "detector": {
+        "mode": "m15"
+      },
+      "bufferPips": 3,
+      "stopMode": "signal",
+      "stopBufferAtr": null,
+      "expiryMinutes": 45,
+      "targetR": 1.5,
+      "trailActivationR": 1,
+      "trailDistanceR": 0.35,
+      "ranking": "linear",
+      "minTrendScore": 0,
+      "maxStrength": 0.75,
+      "weights": {
+        "strength": -0.984903,
+        "riskAtr": -0.199351,
+        "spreadAtr": -3.289938,
+        "entryGapAtr": -0.74576,
+        "trend": 0.539907,
+        "priceEma": -0.432509,
+        "emaSlope": 0.316831,
+        "atrRegime": 0,
+        "efficiency": 0.170911,
+        "wick": 0.273558,
+        "previousBody": 0.651536
+      },
+      "minRatingScore": -1.377049
+    },
+    "train": {
+      "returnPct": -17.182356,
+      "trades": 207,
+      "tradesPerMarketDay": 1.604651,
+      "winRate": 46.376812,
+      "profitFactor": 0.930032,
+      "maxDrawdownPct": 38.505325,
+      "positiveDayPct": 43.564356
+    },
+    "validation": {
+      "returnPct": -18.900082,
+      "trades": 131,
+      "tradesPerMarketDay": 1.658228,
+      "winRate": 47.328244,
+      "profitFactor": 0.884239,
+      "maxDrawdownPct": 31.739072,
+      "positiveDayPct": 42.592593
+    },
+    "frequencyPass": true,
+    "qualityPass": false,
+    "score": 34.388223,
+    "test": {
+      "returnPct": -48.849851,
+      "trades": 137,
+      "tradesPerMarketDay": 2.634615,
+      "winRate": 39.416058,
+      "profitFactor": 0.691395,
+      "maxDrawdownPct": 55.257989,
+      "positiveDayPct": 36.363636
+    },
+    "full": {
+      "returnPct": -65.568735,
+      "trades": 475,
+      "tradesPerMarketDay": 1.826923,
+      "winRate": 44.631579,
+      "profitFactor": 0.865375,
+      "maxDrawdownPct": 69.16821,
+      "positiveDayPct": 41.708543
+    }
+  },
+  "diagnostics": [
+    {
+      "mode": "m15_all_hours",
+      "quantile": 0.2,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.377049
+      },
+      "train": {
+        "returnPct": -17.182356,
+        "trades": 207,
+        "tradesPerMarketDay": 1.604651,
+        "winRate": 46.376812,
+        "profitFactor": 0.930032,
+        "maxDrawdownPct": 38.505325,
+        "positiveDayPct": 43.564356
+      },
+      "validation": {
+        "returnPct": -18.900082,
+        "trades": 131,
+        "tradesPerMarketDay": 1.658228,
+        "winRate": 47.328244,
+        "profitFactor": 0.884239,
+        "maxDrawdownPct": 31.739072,
+        "positiveDayPct": 42.592593
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 34.388223,
+      "test": {
+        "returnPct": -48.849851,
+        "trades": 137,
+        "tradesPerMarketDay": 2.634615,
+        "winRate": 39.416058,
+        "profitFactor": 0.691395,
+        "maxDrawdownPct": 55.257989,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -65.568735,
+        "trades": 475,
+        "tradesPerMarketDay": 1.826923,
+        "winRate": 44.631579,
+        "profitFactor": 0.865375,
+        "maxDrawdownPct": 69.16821,
+        "positiveDayPct": 41.708543
+      }
+    },
+    {
+      "mode": "strict_00_07",
+      "quantile": 0.4,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.721628
+      },
+      "train": {
+        "returnPct": 22.946147,
+        "trades": 79,
+        "tradesPerMarketDay": 0.612403,
+        "winRate": 54.43038,
+        "profitFactor": 1.198443,
+        "maxDrawdownPct": 17.411107,
+        "positiveDayPct": 57.352941
+      },
+      "validation": {
+        "returnPct": 7.796001,
+        "trades": 47,
+        "tradesPerMarketDay": 0.594937,
+        "winRate": 55.319149,
+        "profitFactor": 1.140131,
+        "maxDrawdownPct": 10.598885,
+        "positiveDayPct": 51.282051
+      },
+      "frequencyPass": false,
+      "qualityPass": true,
+      "score": 32.668119,
+      "test": {
+        "returnPct": 15.19031,
+        "trades": 45,
+        "tradesPerMarketDay": 0.865385,
+        "winRate": 51.111111,
+        "profitFactor": 1.246116,
+        "maxDrawdownPct": 12.804891,
+        "positiveDayPct": 51.351351
+      },
+      "full": {
+        "returnPct": 52.61254,
+        "trades": 171,
+        "tradesPerMarketDay": 0.657692,
+        "winRate": 53.80117,
+        "profitFactor": 1.19785,
+        "maxDrawdownPct": 17.411107,
+        "positiveDayPct": 54.166667
+      }
+    },
+    {
+      "mode": "m15_all_hours",
+      "quantile": 0.3,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.109617
+      },
+      "train": {
+        "returnPct": -6.109353,
+        "trades": 201,
+        "tradesPerMarketDay": 1.55814,
+        "winRate": 47.263682,
+        "profitFactor": 0.97505,
+        "maxDrawdownPct": 31.143111,
+        "positiveDayPct": 42.424242
+      },
+      "validation": {
+        "returnPct": -28.644917,
+        "trades": 129,
+        "tradesPerMarketDay": 1.632911,
+        "winRate": 44.96124,
+        "profitFactor": 0.818918,
+        "maxDrawdownPct": 42.223761,
+        "positiveDayPct": 40.740741
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 20.485974,
+      "test": {
+        "returnPct": -45.85047,
+        "trades": 131,
+        "tradesPerMarketDay": 2.519231,
+        "winRate": 38.931298,
+        "profitFactor": 0.691617,
+        "maxDrawdownPct": 51.447687,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -63.709283,
+        "trades": 461,
+        "tradesPerMarketDay": 1.773077,
+        "winRate": 44.251627,
+        "profitFactor": 0.870712,
+        "maxDrawdownPct": 69.701883,
+        "positiveDayPct": 40.609137
+      }
+    },
+    {
+      "mode": "strict_00_07",
+      "quantile": 0.3,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.94951
+      },
+      "train": {
+        "returnPct": 17.255929,
+        "trades": 84,
+        "tradesPerMarketDay": 0.651163,
+        "winRate": 52.380952,
+        "profitFactor": 1.142454,
+        "maxDrawdownPct": 18.844823,
+        "positiveDayPct": 53.521127
+      },
+      "validation": {
+        "returnPct": -2.107499,
+        "trades": 51,
+        "tradesPerMarketDay": 0.64557,
+        "winRate": 50.980392,
+        "profitFactor": 0.966872,
+        "maxDrawdownPct": 15.035778,
+        "positiveDayPct": 47.5
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 19.342269,
+      "test": {
+        "returnPct": 22.420766,
+        "trades": 50,
+        "tradesPerMarketDay": 0.961538,
+        "winRate": 52,
+        "profitFactor": 1.316331,
+        "maxDrawdownPct": 14.024893,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": 40.403184,
+        "trades": 185,
+        "tradesPerMarketDay": 0.711538,
+        "winRate": 51.891892,
+        "profitFactor": 1.145812,
+        "maxDrawdownPct": 18.844823,
+        "positiveDayPct": 50.993377
+      }
+    },
+    {
+      "mode": "strict_00_07",
+      "quantile": 0.2,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.209982
+      },
+      "train": {
+        "returnPct": 33.417152,
+        "trades": 88,
+        "tradesPerMarketDay": 0.682171,
+        "winRate": 54.545455,
+        "profitFactor": 1.272525,
+        "maxDrawdownPct": 18.844823,
+        "positiveDayPct": 55.405405
+      },
+      "validation": {
+        "returnPct": -4.313636,
+        "trades": 53,
+        "tradesPerMarketDay": 0.670886,
+        "winRate": 50.943396,
+        "profitFactor": 0.936557,
+        "maxDrawdownPct": 16.63883,
+        "positiveDayPct": 47.619048
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 17.461867,
+      "test": {
+        "returnPct": 9.439308,
+        "trades": 52,
+        "tradesPerMarketDay": 1,
+        "winRate": 48.076923,
+        "profitFactor": 1.134284,
+        "maxDrawdownPct": 14.041954,
+        "positiveDayPct": 47.5
+      },
+      "full": {
+        "returnPct": 39.498129,
+        "trades": 193,
+        "tradesPerMarketDay": 0.742308,
+        "winRate": 51.813472,
+        "profitFactor": 1.130312,
+        "maxDrawdownPct": 22.806032,
+        "positiveDayPct": 51.282051
+      }
+    },
+    {
+      "mode": "m15_all_hours",
+      "quantile": 0.1,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.814151
+      },
+      "train": {
+        "returnPct": -19.642189,
+        "trades": 216,
+        "tradesPerMarketDay": 1.674419,
+        "winRate": 46.759259,
+        "profitFactor": 0.922689,
+        "maxDrawdownPct": 36.099774,
+        "positiveDayPct": 45.098039
+      },
+      "validation": {
+        "returnPct": -35.599066,
+        "trades": 132,
+        "tradesPerMarketDay": 1.670886,
+        "winRate": 44.69697,
+        "profitFactor": 0.770154,
+        "maxDrawdownPct": 39.301398,
+        "positiveDayPct": 40.740741
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 16.903652,
+      "test": {
+        "returnPct": -56.437837,
+        "trades": 138,
+        "tradesPerMarketDay": 2.653846,
+        "winRate": 36.956522,
+        "profitFactor": 0.629764,
+        "maxDrawdownPct": 57.846119,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -77.368245,
+        "trades": 486,
+        "tradesPerMarketDay": 1.869231,
+        "winRate": 43.415638,
+        "profitFactor": 0.830763,
+        "maxDrawdownPct": 79.199159,
+        "positiveDayPct": 42
+      }
+    },
+    {
+      "mode": "fresh_m15_all_hours",
+      "quantile": 0.4,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "freshM15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.677405
+      },
+      "train": {
+        "returnPct": -45.978968,
+        "trades": 252,
+        "tradesPerMarketDay": 1.953488,
+        "winRate": 41.666667,
+        "profitFactor": 0.855961,
+        "maxDrawdownPct": 59.005422,
+        "positiveDayPct": 48.571429
+      },
+      "validation": {
+        "returnPct": -37.493523,
+        "trades": 146,
+        "tradesPerMarketDay": 1.848101,
+        "winRate": 43.150685,
+        "profitFactor": 0.772973,
+        "maxDrawdownPct": 44.177113,
+        "positiveDayPct": 42.1875
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 12.024938,
+      "test": {
+        "returnPct": -48.243753,
+        "trades": 128,
+        "tradesPerMarketDay": 2.461538,
+        "winRate": 39.84375,
+        "profitFactor": 0.655122,
+        "maxDrawdownPct": 52.072647,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -82.398921,
+        "trades": 526,
+        "tradesPerMarketDay": 2.023077,
+        "winRate": 41.634981,
+        "profitFactor": 0.819068,
+        "maxDrawdownPct": 86.65222,
+        "positiveDayPct": 44.131455
+      }
+    },
+    {
+      "mode": "m5_all_hours",
+      "quantile": 0.4,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m5"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.654208
+      },
+      "train": {
+        "returnPct": -37.958103,
+        "trades": 244,
+        "tradesPerMarketDay": 1.891473,
+        "winRate": 42.213115,
+        "profitFactor": 0.887103,
+        "maxDrawdownPct": 52.71162,
+        "positiveDayPct": 49.52381
+      },
+      "validation": {
+        "returnPct": -46.179502,
+        "trades": 144,
+        "tradesPerMarketDay": 1.822785,
+        "winRate": 41.666667,
+        "profitFactor": 0.711618,
+        "maxDrawdownPct": 49.685263,
+        "positiveDayPct": 41.269841
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 9.280426,
+      "test": {
+        "returnPct": -51.427632,
+        "trades": 122,
+        "tradesPerMarketDay": 2.346154,
+        "winRate": 38.52459,
+        "profitFactor": 0.615258,
+        "maxDrawdownPct": 55.017406,
+        "positiveDayPct": 34.090909
+      },
+      "full": {
+        "returnPct": -83.668958,
+        "trades": 510,
+        "tradesPerMarketDay": 1.961538,
+        "winRate": 41.176471,
+        "profitFactor": 0.825684,
+        "maxDrawdownPct": 87.562733,
+        "positiveDayPct": 43.867925
+      }
+    },
+    {
+      "mode": "m15_all_hours",
+      "quantile": 0,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -9.931941
+      },
+      "train": {
+        "returnPct": -30.026769,
+        "trades": 221,
+        "tradesPerMarketDay": 1.713178,
+        "winRate": 46.153846,
+        "profitFactor": 0.878351,
+        "maxDrawdownPct": 42.492782,
+        "positiveDayPct": 43.68932
+      },
+      "validation": {
+        "returnPct": -42.547364,
+        "trades": 133,
+        "tradesPerMarketDay": 1.683544,
+        "winRate": 42.857143,
+        "profitFactor": 0.709115,
+        "maxDrawdownPct": 45.787652,
+        "positiveDayPct": 38.888889
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 7.469826,
+      "test": {
+        "returnPct": -55.480151,
+        "trades": 140,
+        "tradesPerMarketDay": 2.692308,
+        "winRate": 37.142857,
+        "profitFactor": 0.634858,
+        "maxDrawdownPct": 58.113523,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -82.005134,
+        "trades": 494,
+        "tradesPerMarketDay": 1.9,
+        "winRate": 42.712551,
+        "profitFactor": 0.799999,
+        "maxDrawdownPct": 84.322049,
+        "positiveDayPct": 40.79602
+      }
+    },
+    {
+      "mode": "m15_all_hours",
+      "quantile": 0.4,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.891534
+      },
+      "train": {
+        "returnPct": -13.131878,
+        "trades": 192,
+        "tradesPerMarketDay": 1.488372,
+        "winRate": 46.354167,
+        "profitFactor": 0.948793,
+        "maxDrawdownPct": 28.821381,
+        "positiveDayPct": 43.877551
+      },
+      "validation": {
+        "returnPct": -36.802297,
+        "trades": 124,
+        "tradesPerMarketDay": 1.56962,
+        "winRate": 42.741935,
+        "profitFactor": 0.754356,
+        "maxDrawdownPct": 48.768093,
+        "positiveDayPct": 38.888889
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 7.168096,
+      "test": {
+        "returnPct": -42.775402,
+        "trades": 124,
+        "tradesPerMarketDay": 2.384615,
+        "winRate": 38.709677,
+        "profitFactor": 0.711722,
+        "maxDrawdownPct": 51.721205,
+        "positiveDayPct": 38.095238
+      },
+      "full": {
+        "returnPct": -68.498937,
+        "trades": 440,
+        "tradesPerMarketDay": 1.692308,
+        "winRate": 43.181818,
+        "profitFactor": 0.853599,
+        "maxDrawdownPct": 73.759407,
+        "positiveDayPct": 41.237113
+      }
+    },
+    {
+      "mode": "fresh_m15_all_hours",
+      "quantile": 0.2,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "freshM15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.176107
+      },
+      "train": {
+        "returnPct": -49.478858,
+        "trades": 269,
+        "tradesPerMarketDay": 2.085271,
+        "winRate": 42.007435,
+        "profitFactor": 0.837679,
+        "maxDrawdownPct": 58.487995,
+        "positiveDayPct": 49.056604
+      },
+      "validation": {
+        "returnPct": -53.212689,
+        "trades": 156,
+        "tradesPerMarketDay": 1.974684,
+        "winRate": 39.74359,
+        "profitFactor": 0.689497,
+        "maxDrawdownPct": 56.260321,
+        "positiveDayPct": 39.0625
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 6.009736,
+      "test": {
+        "returnPct": -44.770743,
+        "trades": 133,
+        "tradesPerMarketDay": 2.557692,
+        "winRate": 39.849624,
+        "profitFactor": 0.692457,
+        "maxDrawdownPct": 47.697554,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -86.854935,
+        "trades": 558,
+        "tradesPerMarketDay": 2.146154,
+        "winRate": 40.860215,
+        "profitFactor": 0.795825,
+        "maxDrawdownPct": 88.814913,
+        "positiveDayPct": 43.457944
+      }
+    },
+    {
+      "mode": "strict_all_hours",
+      "quantile": 0.2,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -1.273099
+      },
+      "train": {
+        "returnPct": -23.543988,
+        "trades": 187,
+        "tradesPerMarketDay": 1.449612,
+        "winRate": 45.989305,
+        "profitFactor": 0.891967,
+        "maxDrawdownPct": 40.296073,
+        "positiveDayPct": 46.938776
+      },
+      "validation": {
+        "returnPct": -38.817796,
+        "trades": 117,
+        "tradesPerMarketDay": 1.481013,
+        "winRate": 42.735043,
+        "profitFactor": 0.704314,
+        "maxDrawdownPct": 45.035344,
+        "positiveDayPct": 43.396226
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 3.78496,
+      "test": {
+        "returnPct": -47.140723,
+        "trades": 120,
+        "tradesPerMarketDay": 2.307692,
+        "winRate": 38.333333,
+        "profitFactor": 0.634258,
+        "maxDrawdownPct": 48.850178,
+        "positiveDayPct": 36.363636
+      },
+      "full": {
+        "returnPct": -75.199498,
+        "trades": 424,
+        "tradesPerMarketDay": 1.630769,
+        "winRate": 42.924528,
+        "profitFactor": 0.8013,
+        "maxDrawdownPct": 76.635262,
+        "positiveDayPct": 43.589744
+      }
+    },
+    {
+      "mode": "strict_all_hours",
+      "quantile": 0.4,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.77408
+      },
+      "train": {
+        "returnPct": -33.170881,
+        "trades": 166,
+        "tradesPerMarketDay": 1.286822,
+        "winRate": 43.373494,
+        "profitFactor": 0.840937,
+        "maxDrawdownPct": 38.331558,
+        "positiveDayPct": 42.391304
+      },
+      "validation": {
+        "returnPct": -33.30143,
+        "trades": 104,
+        "tradesPerMarketDay": 1.316456,
+        "winRate": 43.269231,
+        "profitFactor": 0.724397,
+        "maxDrawdownPct": 41.757381,
+        "positiveDayPct": 45.283019
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 3.208779,
+      "test": {
+        "returnPct": -47.64996,
+        "trades": 113,
+        "tradesPerMarketDay": 2.173077,
+        "winRate": 38.053097,
+        "profitFactor": 0.624385,
+        "maxDrawdownPct": 51.518268,
+        "positiveDayPct": 34.883721
+      },
+      "full": {
+        "returnPct": -76.565236,
+        "trades": 383,
+        "tradesPerMarketDay": 1.473077,
+        "winRate": 41.775457,
+        "profitFactor": 0.778501,
+        "maxDrawdownPct": 78.212487,
+        "positiveDayPct": 41.489362
+      }
+    },
+    {
+      "mode": "fresh_m15_all_hours",
+      "quantile": 0.3,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "freshM15"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.891534
+      },
+      "train": {
+        "returnPct": -54.677221,
+        "trades": 263,
+        "tradesPerMarketDay": 2.03876,
+        "winRate": 41.064639,
+        "profitFactor": 0.825022,
+        "maxDrawdownPct": 64.37218,
+        "positiveDayPct": 48.571429
+      },
+      "validation": {
+        "returnPct": -48.654434,
+        "trades": 152,
+        "tradesPerMarketDay": 1.924051,
+        "winRate": 40.789474,
+        "profitFactor": 0.706728,
+        "maxDrawdownPct": 51.998983,
+        "positiveDayPct": 39.0625
+      },
+      "frequencyPass": true,
+      "qualityPass": false,
+      "score": 2.734677,
+      "test": {
+        "returnPct": -29.641473,
+        "trades": 126,
+        "tradesPerMarketDay": 2.423077,
+        "winRate": 42.857143,
+        "profitFactor": 0.805214,
+        "maxDrawdownPct": 44.087067,
+        "positiveDayPct": 41.860465
+      },
+      "full": {
+        "returnPct": -83.530089,
+        "trades": 541,
+        "tradesPerMarketDay": 2.080769,
+        "winRate": 41.404806,
+        "profitFactor": 0.802384,
+        "maxDrawdownPct": 87.058367,
+        "positiveDayPct": 44.339623
+      }
+    },
+    {
+      "mode": "strict_all_hours",
+      "quantile": 0.3,
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "minTrendScore": 0,
+        "maxStrength": 0.75,
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.99228
+      },
+      "train": {
+        "returnPct": -30.478455,
+        "trades": 176,
+        "tradesPerMarketDay": 1.364341,
+        "winRate": 44.318182,
+        "profitFactor": 0.853458,
+        "maxDrawdownPct": 39.320644,
+        "positiveDayPct": 43.010753
+      },
+      "validation": {
+        "returnPct": -37.541574,
+        "trades": 114,
+        "tradesPerMarketDay": 1.443038,
+        "winRate": 42.105263,
+        "profitFactor": 0.713687,
+        "maxDrawdownPct": 43.888817,
+        "positiveDayPct": 43.396226
+      },
+      "frequencyPass": false,
+      "qualityPass": false,
+      "score": 1.85336,
+      "test": {
+        "returnPct": -34.605576,
+        "trades": 115,
+        "tradesPerMarketDay": 2.211538,
+        "winRate": 40.869565,
+        "profitFactor": 0.750336,
+        "maxDrawdownPct": 44.403659,
+        "positiveDayPct": 41.860465
+      },
+      "full": {
+        "returnPct": -71.542644,
+        "trades": 405,
+        "tradesPerMarketDay": 1.557692,
+        "winRate": 42.716049,
+        "profitFactor": 0.800753,
+        "maxDrawdownPct": 73.176784,
+        "positiveDayPct": 42.328042
+      }
+    }
+  ]
+}

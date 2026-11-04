@@ -1,0 +1,2202 @@
+{
+  "protocol": "core-plus-independent-session-setup-search-v1",
+  "generatedAt": "2026-11-03T12:57:51.356Z",
+  "seed": "0xa11ad1",
+  "dataEnd": "2026-11-03T09:25:00.000Z",
+  "marketDays": {
+    "train": 129,
+    "validation": 79,
+    "test": 52,
+    "full": 260
+  },
+  "guardrails": {
+    "core": "frozen strict rated setup",
+    "addon": "London/New York only",
+    "selection": "January-August only",
+    "diagnostic": "September-October excluded from selection",
+    "slots": 1,
+    "pairProfiles": false,
+    "minimumDevelopmentTradesPerDay": 0.8
+  },
+  "baseline": {
+    "train": {
+      "returnPct": 36.733743,
+      "trades": 64,
+      "tradesPerMarketDay": 0.496124,
+      "winRate": 57.8125,
+      "profitFactor": 1.371568,
+      "maxDrawdownPct": 16.242203,
+      "positiveDayPct": 58.928571,
+      "longestLosingDayStreak": 3,
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 59,
+          "pnl": 315.386651,
+          "wins": 34
+        },
+        "tokyo": {
+          "trades": 5,
+          "pnl": 51.950776,
+          "wins": 3
+        }
+      },
+      "bySymbol": {
+        "AUDUSD": {
+          "trades": 25,
+          "pnl": 48.984399,
+          "wins": 13
+        },
+        "EURUSD": {
+          "trades": 18,
+          "pnl": 81.990434,
+          "wins": 10
+        },
+        "GBPUSD": {
+          "trades": 21,
+          "pnl": 236.362594,
+          "wins": 14
+        }
+      }
+    },
+    "validation": {
+      "returnPct": 20.088146,
+      "trades": 32,
+      "tradesPerMarketDay": 0.405063,
+      "winRate": 62.5,
+      "profitFactor": 1.521501,
+      "maxDrawdownPct": 8.289137,
+      "positiveDayPct": 62.068966,
+      "longestLosingDayStreak": 3,
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 28,
+          "pnl": 87.659773,
+          "wins": 16
+        },
+        "tokyo": {
+          "trades": 4,
+          "pnl": 113.221686,
+          "wins": 4
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 5,
+          "pnl": -39.865144,
+          "wins": 2
+        },
+        "AUDUSD": {
+          "trades": 6,
+          "pnl": 25.383832,
+          "wins": 3
+        },
+        "EURJPY": {
+          "trades": 5,
+          "pnl": 63.115377,
+          "wins": 4
+        },
+        "EURUSD": {
+          "trades": 4,
+          "pnl": 35.713875,
+          "wins": 3
+        },
+        "GBPUSD": {
+          "trades": 6,
+          "pnl": 148.978651,
+          "wins": 5
+        },
+        "USDCHF": {
+          "trades": 2,
+          "pnl": -10.595649,
+          "wins": 1
+        },
+        "USDJPY": {
+          "trades": 4,
+          "pnl": -21.849485,
+          "wins": 2
+        }
+      }
+    },
+    "test": {
+      "returnPct": 15.106493,
+      "trades": 37,
+      "tradesPerMarketDay": 0.711538,
+      "winRate": 54.054054,
+      "profitFactor": 1.283069,
+      "maxDrawdownPct": 8.85514,
+      "positiveDayPct": 56.666667,
+      "longestLosingDayStreak": 2,
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 34,
+          "pnl": 116.49163,
+          "wins": 18
+        },
+        "tokyo": {
+          "trades": 3,
+          "pnl": 34.573301,
+          "wins": 2
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 9,
+          "pnl": -66.245555,
+          "wins": 3
+        },
+        "AUDUSD": {
+          "trades": 9,
+          "pnl": 32.755603,
+          "wins": 5
+        },
+        "EURJPY": {
+          "trades": 4,
+          "pnl": -19.584493,
+          "wins": 2
+        },
+        "EURUSD": {
+          "trades": 6,
+          "pnl": 153.205051,
+          "wins": 5
+        },
+        "GBPUSD": {
+          "trades": 4,
+          "pnl": 7.673474,
+          "wins": 2
+        },
+        "USDCHF": {
+          "trades": 3,
+          "pnl": 45.777561,
+          "wins": 2
+        },
+        "USDJPY": {
+          "trades": 2,
+          "pnl": -2.51671,
+          "wins": 1
+        }
+      }
+    },
+    "full": {
+      "returnPct": 89.095034,
+      "trades": 133,
+      "tradesPerMarketDay": 0.511538,
+      "winRate": 57.894737,
+      "profitFactor": 1.372378,
+      "maxDrawdownPct": 16.242203,
+      "positiveDayPct": 59.130435,
+      "longestLosingDayStreak": 3,
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 121,
+          "pnl": 627.338754,
+          "wins": 68
+        },
+        "tokyo": {
+          "trades": 12,
+          "pnl": 263.61159,
+          "wins": 9
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 14,
+          "pnl": -163.152877,
+          "wins": 5
+        },
+        "AUDUSD": {
+          "trades": 40,
+          "pnl": 138.024187,
+          "wins": 21
+        },
+        "EURJPY": {
+          "trades": 9,
+          "pnl": 54.135955,
+          "wins": 6
+        },
+        "EURUSD": {
+          "trades": 28,
+          "pnl": 382.315877,
+          "wins": 18
+        },
+        "GBPUSD": {
+          "trades": 31,
+          "pnl": 453.061127,
+          "wins": 21
+        },
+        "USDCHF": {
+          "trades": 5,
+          "pnl": 60.604926,
+          "wins": 3
+        },
+        "USDJPY": {
+          "trades": 6,
+          "pnl": -34.03885,
+          "wins": 3
+        }
+      }
+    }
+  },
+  "searched": 400,
+  "developmentPasses": 5,
+  "diagnosticPasses": 2,
+  "winner": {
+    "experiment": {
+      "signalMode": "wave",
+      "detector": {
+        "mode": "m15"
+      },
+      "bufferPips": 1,
+      "stopMode": "signal",
+      "stopBufferAtr": 0.05,
+      "expiryMinutes": 30,
+      "targetR": 1.5,
+      "trailActivationR": 0.75,
+      "trailDistanceR": 0.35,
+      "ranking": "linear",
+      "weights": {
+        "strength": -0.984903,
+        "riskAtr": -0.199351,
+        "spreadAtr": -3.289938,
+        "entryGapAtr": -0.74576,
+        "trend": 0.539907,
+        "priceEma": -0.432509,
+        "emaSlope": 0.316831,
+        "atrRegime": 0,
+        "efficiency": 0.170911,
+        "wick": 0.273558,
+        "previousBody": 0.651536
+      },
+      "minRatingScore": -0.833014,
+      "minTrendScore": 0.5,
+      "maxStrength": 0.75,
+      "minEfficiency6": 0.1,
+      "minRejectionWick": 0.05,
+      "hours": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    "train": {
+      "returnPct": 29.069446,
+      "trades": 126,
+      "tradesPerMarketDay": 0.976744,
+      "winRate": 55.555556,
+      "profitFactor": 1.138583,
+      "maxDrawdownPct": 24.003873,
+      "positiveDayPct": 56.626506,
+      "longestLosingDayStreak": 4,
+      "bySessionCombination": {
+        "london": {
+          "trades": 46,
+          "pnl": 74.379152,
+          "wins": 27
+        },
+        "sydney+tokyo": {
+          "trades": 59,
+          "pnl": 375.694773,
+          "wins": 34
+        },
+        "tokyo": {
+          "trades": 5,
+          "pnl": 54.779601,
+          "wins": 3
+        },
+        "tokyo+london": {
+          "trades": 16,
+          "pnl": -214.159063,
+          "wins": 6
+        }
+      },
+      "bySymbol": {
+        "AUDUSD": {
+          "trades": 51,
+          "pnl": -100.112749,
+          "wins": 25
+        },
+        "EURUSD": {
+          "trades": 39,
+          "pnl": 55.720276,
+          "wins": 21
+        },
+        "GBPUSD": {
+          "trades": 36,
+          "pnl": 335.086936,
+          "wins": 24
+        }
+      }
+    },
+    "validation": {
+      "returnPct": 8.927326,
+      "trades": 64,
+      "tradesPerMarketDay": 0.810127,
+      "winRate": 53.125,
+      "profitFactor": 1.102398,
+      "maxDrawdownPct": 22.564019,
+      "positiveDayPct": 52.173913,
+      "longestLosingDayStreak": 3,
+      "bySessionCombination": {
+        "london": {
+          "trades": 21,
+          "pnl": -187.22047,
+          "wins": 7
+        },
+        "sydney+tokyo": {
+          "trades": 28,
+          "pnl": 85.718138,
+          "wins": 16
+        },
+        "tokyo": {
+          "trades": 4,
+          "pnl": 106.399909,
+          "wins": 4
+        },
+        "tokyo+london": {
+          "trades": 11,
+          "pnl": 84.375682,
+          "wins": 7
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 9,
+          "pnl": 61.032242,
+          "wins": 5
+        },
+        "AUDUSD": {
+          "trades": 12,
+          "pnl": 34.821325,
+          "wins": 6
+        },
+        "EURJPY": {
+          "trades": 6,
+          "pnl": 24.334113,
+          "wins": 4
+        },
+        "EURUSD": {
+          "trades": 11,
+          "pnl": 14.963533,
+          "wins": 6
+        },
+        "GBPCHF": {
+          "trades": 2,
+          "pnl": -56.748505,
+          "wins": 0
+        },
+        "GBPUSD": {
+          "trades": 15,
+          "pnl": 50.11369,
+          "wins": 9
+        },
+        "USDCHF": {
+          "trades": 5,
+          "pnl": -20.656107,
+          "wins": 2
+        },
+        "USDJPY": {
+          "trades": 4,
+          "pnl": -18.587033,
+          "wins": 2
+        }
+      }
+    },
+    "accepted": true,
+    "score": 52.676384,
+    "test": {
+      "returnPct": 0.385464,
+      "trades": 64,
+      "tradesPerMarketDay": 1.230769,
+      "winRate": 46.875,
+      "profitFactor": 1.003976,
+      "maxDrawdownPct": 16.323619,
+      "positiveDayPct": 50,
+      "longestLosingDayStreak": 4,
+      "bySessionCombination": {
+        "london": {
+          "trades": 20,
+          "pnl": -258.848897,
+          "wins": 5
+        },
+        "sydney+tokyo": {
+          "trades": 34,
+          "pnl": 117.686009,
+          "wins": 18
+        },
+        "tokyo": {
+          "trades": 3,
+          "pnl": 39.244322,
+          "wins": 2
+        },
+        "tokyo+london": {
+          "trades": 7,
+          "pnl": 105.773209,
+          "wins": 5
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 12,
+          "pnl": 70.836287,
+          "wins": 6
+        },
+        "AUDUSD": {
+          "trades": 16,
+          "pnl": -43.867348,
+          "wins": 7
+        },
+        "EURJPY": {
+          "trades": 6,
+          "pnl": -88.059366,
+          "wins": 2
+        },
+        "EURUSD": {
+          "trades": 11,
+          "pnl": 109.051097,
+          "wins": 7
+        },
+        "GBPCHF": {
+          "trades": 2,
+          "pnl": -4.947735,
+          "wins": 1
+        },
+        "GBPUSD": {
+          "trades": 7,
+          "pnl": -21.625551,
+          "wins": 3
+        },
+        "USDCHF": {
+          "trades": 8,
+          "pnl": -14.790752,
+          "wins": 3
+        },
+        "USDJPY": {
+          "trades": 2,
+          "pnl": -2.741989,
+          "wins": 1
+        }
+      }
+    },
+    "full": {
+      "returnPct": 41.159085,
+      "trades": 254,
+      "tradesPerMarketDay": 0.976923,
+      "winRate": 52.755906,
+      "profitFactor": 1.089709,
+      "maxDrawdownPct": 24.003873,
+      "positiveDayPct": 53.846154,
+      "longestLosingDayStreak": 4,
+      "bySessionCombination": {
+        "london": {
+          "trades": 87,
+          "pnl": -531.624654,
+          "wins": 39
+        },
+        "sydney+tokyo": {
+          "trades": 121,
+          "pnl": 652.457836,
+          "wins": 68
+        },
+        "tokyo": {
+          "trades": 12,
+          "pnl": 247.268085,
+          "wins": 9
+        },
+        "tokyo+london": {
+          "trades": 34,
+          "pnl": 43.489579,
+          "wins": 18
+        }
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 21,
+          "pnl": 178.429512,
+          "wins": 11
+        },
+        "AUDUSD": {
+          "trades": 79,
+          "pnl": -116.70515,
+          "wins": 38
+        },
+        "EURJPY": {
+          "trades": 12,
+          "pnl": -92.499177,
+          "wins": 6
+        },
+        "EURUSD": {
+          "trades": 61,
+          "pnl": 229.020453,
+          "wins": 34
+        },
+        "GBPCHF": {
+          "trades": 4,
+          "pnl": -80.604885,
+          "wins": 1
+        },
+        "GBPUSD": {
+          "trades": 58,
+          "pnl": 369.368252,
+          "wins": 36
+        },
+        "USDCHF": {
+          "trades": 13,
+          "pnl": -47.513965,
+          "wins": 5
+        },
+        "USDJPY": {
+          "trades": 6,
+          "pnl": -27.904194,
+          "wins": 3
+        }
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "experiment": {
+        "signalMode": "continuation",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": null,
+        "expiryMinutes": 30,
+        "targetR": 1.5,
+        "trailActivationR": null,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014,
+        "minTrendScore": 0.25,
+        "maxStrength": 0.5,
+        "minEfficiency6": 0.2,
+        "minRejectionWick": 0.05,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "train": {
+        "returnPct": 15.056529,
+        "trades": 129,
+        "tradesPerMarketDay": 1,
+        "winRate": 54.263566,
+        "profitFactor": 1.073384,
+        "maxDrawdownPct": 25.626372,
+        "positiveDayPct": 52.325581,
+        "longestLosingDayStreak": 3,
+        "bySessionCombination": {
+          "london": {
+            "trades": 40,
+            "pnl": -109.198275,
+            "wins": 21
+          },
+          "london+newYork": {
+            "trades": 16,
+            "pnl": 61.981627,
+            "wins": 10
+          },
+          "sydney+tokyo": {
+            "trades": 58,
+            "pnl": 297.155533,
+            "wins": 33
+          },
+          "tokyo": {
+            "trades": 5,
+            "pnl": 49.489974,
+            "wins": 3
+          },
+          "tokyo+london": {
+            "trades": 10,
+            "pnl": -148.863567,
+            "wins": 3
+          }
+        },
+        "bySymbol": {
+          "AUDUSD": {
+            "trades": 48,
+            "pnl": 38.920642,
+            "wins": 25
+          },
+          "EURUSD": {
+            "trades": 39,
+            "pnl": 20.382109,
+            "wins": 21
+          },
+          "GBPUSD": {
+            "trades": 42,
+            "pnl": 91.262543,
+            "wins": 24
+          }
+        }
+      },
+      "validation": {
+        "returnPct": 27.771488,
+        "trades": 70,
+        "tradesPerMarketDay": 0.886076,
+        "winRate": 61.428571,
+        "profitFactor": 1.294417,
+        "maxDrawdownPct": 16.696459,
+        "positiveDayPct": 57.777778,
+        "longestLosingDayStreak": 3,
+        "bySessionCombination": {
+          "london": {
+            "trades": 12,
+            "pnl": 9.796505,
+            "wins": 6
+          },
+          "london+newYork": {
+            "trades": 19,
+            "pnl": 0.156417,
+            "wins": 12
+          },
+          "sydney+tokyo": {
+            "trades": 28,
+            "pnl": 88.752372,
+            "wins": 16
+          },
+          "tokyo": {
+            "trades": 4,
+            "pnl": 119.04663,
+            "wins": 4
+          },
+          "tokyo+london": {
+            "trades": 7,
+            "pnl": 59.962957,
+            "wins": 5
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 10,
+            "pnl": -46.548726,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 12,
+            "pnl": 137.818871,
+            "wins": 8
+          },
+          "EURJPY": {
+            "trades": 7,
+            "pnl": 130.417957,
+            "wins": 6
+          },
+          "EURUSD": {
+            "trades": 13,
+            "pnl": 70.143696,
+            "wins": 9
+          },
+          "GBPCHF": {
+            "trades": 3,
+            "pnl": 12.316422,
+            "wins": 2
+          },
+          "GBPUSD": {
+            "trades": 13,
+            "pnl": 174.139299,
+            "wins": 9
+          },
+          "USDCHF": {
+            "trades": 7,
+            "pnl": -128.756207,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 5,
+            "pnl": -71.81643,
+            "wins": 2
+          }
+        }
+      },
+      "accepted": true,
+      "score": 62.802788,
+      "test": {
+        "returnPct": -0.822255,
+        "trades": 77,
+        "tradesPerMarketDay": 1.480769,
+        "winRate": 46.753247,
+        "profitFactor": 0.993359,
+        "maxDrawdownPct": 31.921313,
+        "positiveDayPct": 47.5,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london": {
+            "trades": 18,
+            "pnl": -220.388758,
+            "wins": 5
+          },
+          "london+newYork": {
+            "trades": 17,
+            "pnl": 61.315017,
+            "wins": 9
+          },
+          "sydney+tokyo": {
+            "trades": 34,
+            "pnl": 132.969947,
+            "wins": 18
+          },
+          "tokyo": {
+            "trades": 3,
+            "pnl": 39.361908,
+            "wins": 2
+          },
+          "tokyo+london": {
+            "trades": 5,
+            "pnl": -21.480661,
+            "wins": 2
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 11,
+            "pnl": -48.083717,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 15,
+            "pnl": -84.197206,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 11,
+            "pnl": 19.529693,
+            "wins": 6
+          },
+          "EURUSD": {
+            "trades": 10,
+            "pnl": 146.86941,
+            "wins": 7
+          },
+          "GBPCHF": {
+            "trades": 5,
+            "pnl": -49.098817,
+            "wins": 2
+          },
+          "GBPUSD": {
+            "trades": 12,
+            "pnl": 37.104917,
+            "wins": 6
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": -20.791674,
+            "wins": 3
+          },
+          "USDJPY": {
+            "trades": 5,
+            "pnl": -9.555154,
+            "wins": 2
+          }
+        }
+      },
+      "full": {
+        "returnPct": 45.826592,
+        "trades": 276,
+        "tradesPerMarketDay": 1.061538,
+        "winRate": 53.985507,
+        "profitFactor": 1.092398,
+        "maxDrawdownPct": 31.926921,
+        "positiveDayPct": 52.631579,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london": {
+            "trades": 70,
+            "pnl": -421.730246,
+            "wins": 32
+          },
+          "london+newYork": {
+            "trades": 52,
+            "pnl": 152.418877,
+            "wins": 31
+          },
+          "sydney+tokyo": {
+            "trades": 120,
+            "pnl": 594.721935,
+            "wins": 67
+          },
+          "tokyo": {
+            "trades": 12,
+            "pnl": 244.285648,
+            "wins": 9
+          },
+          "tokyo+london": {
+            "trades": 22,
+            "pnl": -111.43029,
+            "wins": 10
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 21,
+            "pnl": -124.023111,
+            "wins": 9
+          },
+          "AUDUSD": {
+            "trades": 75,
+            "pnl": 73.699947,
+            "wins": 39
+          },
+          "EURJPY": {
+            "trades": 18,
+            "pnl": 178.528952,
+            "wins": 12
+          },
+          "EURUSD": {
+            "trades": 62,
+            "pnl": 317.219425,
+            "wins": 37
+          },
+          "GBPCHF": {
+            "trades": 8,
+            "pnl": -57.8506,
+            "wins": 4
+          },
+          "GBPUSD": {
+            "trades": 67,
+            "pnl": 346.414784,
+            "wins": 39
+          },
+          "USDCHF": {
+            "trades": 15,
+            "pnl": -179.184677,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 10,
+            "pnl": -96.538795,
+            "wins": 4
+          }
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "continuation",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 15,
+        "targetR": 1.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014,
+        "minTrendScore": 0.1,
+        "maxStrength": 0.5,
+        "minRejectionWick": 0.2,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      },
+      "train": {
+        "returnPct": 8.44888,
+        "trades": 143,
+        "tradesPerMarketDay": 1.108527,
+        "winRate": 48.951049,
+        "profitFactor": 1.037255,
+        "maxDrawdownPct": 29.133842,
+        "positiveDayPct": 53.409091,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london": {
+            "trades": 35,
+            "pnl": 43.417547,
+            "wins": 18
+          },
+          "london+newYork": {
+            "trades": 15,
+            "pnl": 59.647861,
+            "wins": 9
+          },
+          "newYork": {
+            "trades": 15,
+            "pnl": -79.055069,
+            "wins": 4
+          },
+          "sydney+tokyo": {
+            "trades": 58,
+            "pnl": 281.049931,
+            "wins": 33
+          },
+          "tokyo": {
+            "trades": 5,
+            "pnl": 46.274966,
+            "wins": 3
+          },
+          "tokyo+london": {
+            "trades": 15,
+            "pnl": -266.846434,
+            "wins": 3
+          }
+        },
+        "bySymbol": {
+          "AUDUSD": {
+            "trades": 54,
+            "pnl": 64.438436,
+            "wins": 26
+          },
+          "EURUSD": {
+            "trades": 40,
+            "pnl": -77.776571,
+            "wins": 19
+          },
+          "GBPUSD": {
+            "trades": 49,
+            "pnl": 97.826937,
+            "wins": 25
+          }
+        }
+      },
+      "validation": {
+        "returnPct": 7.090735,
+        "trades": 80,
+        "tradesPerMarketDay": 1.012658,
+        "winRate": 51.25,
+        "profitFactor": 1.065476,
+        "maxDrawdownPct": 21.253144,
+        "positiveDayPct": 52.083333,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london": {
+            "trades": 13,
+            "pnl": 20.721027,
+            "wins": 5
+          },
+          "london+newYork": {
+            "trades": 17,
+            "pnl": -31.499411,
+            "wins": 10
+          },
+          "newYork": {
+            "trades": 12,
+            "pnl": -133.083678,
+            "wins": 3
+          },
+          "sydney+tokyo": {
+            "trades": 28,
+            "pnl": 96.54339,
+            "wins": 16
+          },
+          "tokyo": {
+            "trades": 4,
+            "pnl": 113.889485,
+            "wins": 4
+          },
+          "tokyo+london": {
+            "trades": 6,
+            "pnl": 4.336537,
+            "wins": 3
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 11,
+            "pnl": -8.109056,
+            "wins": 6
+          },
+          "AUDUSD": {
+            "trades": 16,
+            "pnl": 1.951764,
+            "wins": 7
+          },
+          "EURJPY": {
+            "trades": 8,
+            "pnl": 123.62553,
+            "wins": 7
+          },
+          "EURUSD": {
+            "trades": 17,
+            "pnl": 131.730186,
+            "wins": 10
+          },
+          "GBPCHF": {
+            "trades": 2,
+            "pnl": -11.807381,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 15,
+            "pnl": 16.29978,
+            "wins": 7
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -132.953451,
+            "wins": 1
+          },
+          "USDJPY": {
+            "trades": 5,
+            "pnl": -49.830021,
+            "wins": 2
+          }
+        }
+      },
+      "accepted": true,
+      "score": 60.334403,
+      "test": {
+        "returnPct": -28.696403,
+        "trades": 92,
+        "tradesPerMarketDay": 1.769231,
+        "winRate": 39.130435,
+        "profitFactor": 0.761753,
+        "maxDrawdownPct": 36.794202,
+        "positiveDayPct": 35.714286,
+        "longestLosingDayStreak": 6,
+        "bySessionCombination": {
+          "london": {
+            "trades": 17,
+            "pnl": -233.296031,
+            "wins": 3
+          },
+          "london+newYork": {
+            "trades": 18,
+            "pnl": -24.373036,
+            "wins": 7
+          },
+          "newYork": {
+            "trades": 14,
+            "pnl": -125.697744,
+            "wins": 4
+          },
+          "sydney+tokyo": {
+            "trades": 34,
+            "pnl": 112.822165,
+            "wins": 18
+          },
+          "tokyo": {
+            "trades": 3,
+            "pnl": 36.250523,
+            "wins": 2
+          },
+          "tokyo+london": {
+            "trades": 6,
+            "pnl": -52.66991,
+            "wins": 2
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 16,
+            "pnl": -81.530191,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 21,
+            "pnl": 11.275283,
+            "wins": 10
+          },
+          "EURJPY": {
+            "trades": 9,
+            "pnl": -44.522849,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 11,
+            "pnl": 169.398889,
+            "wins": 8
+          },
+          "GBPCHF": {
+            "trades": 5,
+            "pnl": -122.62463,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 9,
+            "pnl": -40.531199,
+            "wins": 3
+          },
+          "USDCHF": {
+            "trades": 7,
+            "pnl": 19.540004,
+            "wins": 3
+          },
+          "USDJPY": {
+            "trades": 14,
+            "pnl": -197.969342,
+            "wins": 3
+          }
+        }
+      },
+      "full": {
+        "returnPct": -17.222884,
+        "trades": 315,
+        "tradesPerMarketDay": 1.211538,
+        "winRate": 46.666667,
+        "profitFactor": 0.964428,
+        "maxDrawdownPct": 44.334284,
+        "positiveDayPct": 48.876404,
+        "longestLosingDayStreak": 6,
+        "bySessionCombination": {
+          "london": {
+            "trades": 65,
+            "pnl": -205.234524,
+            "wins": 26
+          },
+          "london+newYork": {
+            "trades": 50,
+            "pnl": -3.039691,
+            "wins": 26
+          },
+          "newYork": {
+            "trades": 41,
+            "pnl": -369.231306,
+            "wins": 11
+          },
+          "sydney+tokyo": {
+            "trades": 120,
+            "pnl": 517.033311,
+            "wins": 67
+          },
+          "tokyo": {
+            "trades": 12,
+            "pnl": 211.86989,
+            "wins": 9
+          },
+          "tokyo+london": {
+            "trades": 27,
+            "pnl": -323.626519,
+            "wins": 8
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 27,
+            "pnl": -103.776795,
+            "wins": 11
+          },
+          "AUDUSD": {
+            "trades": 91,
+            "pnl": 79.774156,
+            "wins": 43
+          },
+          "EURJPY": {
+            "trades": 17,
+            "pnl": 82.286778,
+            "wins": 11
+          },
+          "EURUSD": {
+            "trades": 68,
+            "pnl": 261.904676,
+            "wins": 37
+          },
+          "GBPCHF": {
+            "trades": 7,
+            "pnl": -155.197394,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 73,
+            "pnl": 68.103376,
+            "wins": 35
+          },
+          "USDCHF": {
+            "trades": 13,
+            "pnl": -121.514621,
+            "wins": 4
+          },
+          "USDJPY": {
+            "trades": 19,
+            "pnl": -283.809015,
+            "wins": 5
+          }
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "wave",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 30,
+        "targetR": 1.5,
+        "trailActivationR": 0.75,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014,
+        "minTrendScore": 0.5,
+        "maxStrength": 0.75,
+        "minEfficiency6": 0.1,
+        "minRejectionWick": 0.05,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "returnPct": 29.069446,
+        "trades": 126,
+        "tradesPerMarketDay": 0.976744,
+        "winRate": 55.555556,
+        "profitFactor": 1.138583,
+        "maxDrawdownPct": 24.003873,
+        "positiveDayPct": 56.626506,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 46,
+            "pnl": 74.379152,
+            "wins": 27
+          },
+          "sydney+tokyo": {
+            "trades": 59,
+            "pnl": 375.694773,
+            "wins": 34
+          },
+          "tokyo": {
+            "trades": 5,
+            "pnl": 54.779601,
+            "wins": 3
+          },
+          "tokyo+london": {
+            "trades": 16,
+            "pnl": -214.159063,
+            "wins": 6
+          }
+        },
+        "bySymbol": {
+          "AUDUSD": {
+            "trades": 51,
+            "pnl": -100.112749,
+            "wins": 25
+          },
+          "EURUSD": {
+            "trades": 39,
+            "pnl": 55.720276,
+            "wins": 21
+          },
+          "GBPUSD": {
+            "trades": 36,
+            "pnl": 335.086936,
+            "wins": 24
+          }
+        }
+      },
+      "validation": {
+        "returnPct": 8.927326,
+        "trades": 64,
+        "tradesPerMarketDay": 0.810127,
+        "winRate": 53.125,
+        "profitFactor": 1.102398,
+        "maxDrawdownPct": 22.564019,
+        "positiveDayPct": 52.173913,
+        "longestLosingDayStreak": 3,
+        "bySessionCombination": {
+          "london": {
+            "trades": 21,
+            "pnl": -187.22047,
+            "wins": 7
+          },
+          "sydney+tokyo": {
+            "trades": 28,
+            "pnl": 85.718138,
+            "wins": 16
+          },
+          "tokyo": {
+            "trades": 4,
+            "pnl": 106.399909,
+            "wins": 4
+          },
+          "tokyo+london": {
+            "trades": 11,
+            "pnl": 84.375682,
+            "wins": 7
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 9,
+            "pnl": 61.032242,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 12,
+            "pnl": 34.821325,
+            "wins": 6
+          },
+          "EURJPY": {
+            "trades": 6,
+            "pnl": 24.334113,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 11,
+            "pnl": 14.963533,
+            "wins": 6
+          },
+          "GBPCHF": {
+            "trades": 2,
+            "pnl": -56.748505,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 15,
+            "pnl": 50.11369,
+            "wins": 9
+          },
+          "USDCHF": {
+            "trades": 5,
+            "pnl": -20.656107,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": -18.587033,
+            "wins": 2
+          }
+        }
+      },
+      "accepted": true,
+      "score": 52.676384,
+      "test": {
+        "returnPct": 0.385464,
+        "trades": 64,
+        "tradesPerMarketDay": 1.230769,
+        "winRate": 46.875,
+        "profitFactor": 1.003976,
+        "maxDrawdownPct": 16.323619,
+        "positiveDayPct": 50,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 20,
+            "pnl": -258.848897,
+            "wins": 5
+          },
+          "sydney+tokyo": {
+            "trades": 34,
+            "pnl": 117.686009,
+            "wins": 18
+          },
+          "tokyo": {
+            "trades": 3,
+            "pnl": 39.244322,
+            "wins": 2
+          },
+          "tokyo+london": {
+            "trades": 7,
+            "pnl": 105.773209,
+            "wins": 5
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 12,
+            "pnl": 70.836287,
+            "wins": 6
+          },
+          "AUDUSD": {
+            "trades": 16,
+            "pnl": -43.867348,
+            "wins": 7
+          },
+          "EURJPY": {
+            "trades": 6,
+            "pnl": -88.059366,
+            "wins": 2
+          },
+          "EURUSD": {
+            "trades": 11,
+            "pnl": 109.051097,
+            "wins": 7
+          },
+          "GBPCHF": {
+            "trades": 2,
+            "pnl": -4.947735,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 7,
+            "pnl": -21.625551,
+            "wins": 3
+          },
+          "USDCHF": {
+            "trades": 8,
+            "pnl": -14.790752,
+            "wins": 3
+          },
+          "USDJPY": {
+            "trades": 2,
+            "pnl": -2.741989,
+            "wins": 1
+          }
+        }
+      },
+      "full": {
+        "returnPct": 41.159085,
+        "trades": 254,
+        "tradesPerMarketDay": 0.976923,
+        "winRate": 52.755906,
+        "profitFactor": 1.089709,
+        "maxDrawdownPct": 24.003873,
+        "positiveDayPct": 53.846154,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 87,
+            "pnl": -531.624654,
+            "wins": 39
+          },
+          "sydney+tokyo": {
+            "trades": 121,
+            "pnl": 652.457836,
+            "wins": 68
+          },
+          "tokyo": {
+            "trades": 12,
+            "pnl": 247.268085,
+            "wins": 9
+          },
+          "tokyo+london": {
+            "trades": 34,
+            "pnl": 43.489579,
+            "wins": 18
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 21,
+            "pnl": 178.429512,
+            "wins": 11
+          },
+          "AUDUSD": {
+            "trades": 79,
+            "pnl": -116.70515,
+            "wins": 38
+          },
+          "EURJPY": {
+            "trades": 12,
+            "pnl": -92.499177,
+            "wins": 6
+          },
+          "EURUSD": {
+            "trades": 61,
+            "pnl": 229.020453,
+            "wins": 34
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": -80.604885,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 58,
+            "pnl": 369.368252,
+            "wins": 36
+          },
+          "USDCHF": {
+            "trades": 13,
+            "pnl": -47.513965,
+            "wins": 5
+          },
+          "USDJPY": {
+            "trades": 6,
+            "pnl": -27.904194,
+            "wins": 3
+          }
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "wave",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": null,
+        "expiryMinutes": 45,
+        "targetR": 2,
+        "trailActivationR": null,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014,
+        "minTrendScore": 0.25,
+        "maxStrength": 1,
+        "minRejectionWick": 0.05,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "returnPct": 29.488099,
+        "trades": 128,
+        "tradesPerMarketDay": 0.992248,
+        "winRate": 56.25,
+        "profitFactor": 1.137993,
+        "maxDrawdownPct": 27.248466,
+        "positiveDayPct": 58.426966,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 46,
+            "pnl": 72.282334,
+            "wins": 28
+          },
+          "sydney+tokyo": {
+            "trades": 59,
+            "pnl": 355.813033,
+            "wins": 34
+          },
+          "tokyo": {
+            "trades": 5,
+            "pnl": 60.990973,
+            "wins": 3
+          },
+          "tokyo+london": {
+            "trades": 18,
+            "pnl": -194.205346,
+            "wins": 7
+          }
+        },
+        "bySymbol": {
+          "AUDUSD": {
+            "trades": 48,
+            "pnl": 16.305618,
+            "wins": 26
+          },
+          "EURUSD": {
+            "trades": 40,
+            "pnl": 88.571263,
+            "wins": 22
+          },
+          "GBPUSD": {
+            "trades": 40,
+            "pnl": 190.004115,
+            "wins": 24
+          }
+        }
+      },
+      "validation": {
+        "returnPct": 7.821834,
+        "trades": 65,
+        "tradesPerMarketDay": 0.822785,
+        "winRate": 53.846154,
+        "profitFactor": 1.095201,
+        "maxDrawdownPct": 13.751918,
+        "positiveDayPct": 51.111111,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 22,
+            "pnl": -197.215121,
+            "wins": 7
+          },
+          "sydney+tokyo": {
+            "trades": 28,
+            "pnl": 77.563493,
+            "wins": 16
+          },
+          "tokyo": {
+            "trades": 4,
+            "pnl": 100.260895,
+            "wins": 4
+          },
+          "tokyo+london": {
+            "trades": 11,
+            "pnl": 97.609071,
+            "wins": 8
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 8,
+            "pnl": -4.324123,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 12,
+            "pnl": 97.87245,
+            "wins": 7
+          },
+          "EURJPY": {
+            "trades": 6,
+            "pnl": 88.626694,
+            "wins": 5
+          },
+          "EURUSD": {
+            "trades": 14,
+            "pnl": -124.171404,
+            "wins": 5
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": -69.160031,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 14,
+            "pnl": 152.141203,
+            "wins": 10
+          },
+          "USDCHF": {
+            "trades": 3,
+            "pnl": -42.615327,
+            "wins": 1
+          },
+          "USDJPY": {
+            "trades": 4,
+            "pnl": -20.151123,
+            "wins": 2
+          }
+        }
+      },
+      "accepted": true,
+      "score": 52.143428,
+      "test": {
+        "returnPct": -1.220101,
+        "trades": 69,
+        "tradesPerMarketDay": 1.326923,
+        "winRate": 49.275362,
+        "profitFactor": 0.988469,
+        "maxDrawdownPct": 19.228667,
+        "positiveDayPct": 54.761905,
+        "longestLosingDayStreak": 3,
+        "bySessionCombination": {
+          "london": {
+            "trades": 21,
+            "pnl": -175.83819,
+            "wins": 8
+          },
+          "sydney+tokyo": {
+            "trades": 34,
+            "pnl": 124.836802,
+            "wins": 18
+          },
+          "tokyo": {
+            "trades": 3,
+            "pnl": 37.477174,
+            "wins": 2
+          },
+          "tokyo+london": {
+            "trades": 11,
+            "pnl": 1.323209,
+            "wins": 6
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 12,
+            "pnl": 29.023761,
+            "wins": 6
+          },
+          "AUDUSD": {
+            "trades": 16,
+            "pnl": -28.271218,
+            "wins": 8
+          },
+          "EURJPY": {
+            "trades": 7,
+            "pnl": -119.451231,
+            "wins": 2
+          },
+          "EURUSD": {
+            "trades": 10,
+            "pnl": 195.021384,
+            "wins": 8
+          },
+          "GBPCHF": {
+            "trades": 3,
+            "pnl": -35.228149,
+            "wins": 1
+          },
+          "GBPUSD": {
+            "trades": 13,
+            "pnl": -23.840882,
+            "wins": 6
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -26.766701,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 2,
+            "pnl": -2.687969,
+            "wins": 1
+          }
+        }
+      },
+      "full": {
+        "returnPct": 37.897527,
+        "trades": 262,
+        "tradesPerMarketDay": 1.007692,
+        "winRate": 53.816794,
+        "profitFactor": 1.080995,
+        "maxDrawdownPct": 27.894105,
+        "positiveDayPct": 55.681818,
+        "longestLosingDayStreak": 4,
+        "bySessionCombination": {
+          "london": {
+            "trades": 89,
+            "pnl": -428.950642,
+            "wins": 43
+          },
+          "sydney+tokyo": {
+            "trades": 121,
+            "pnl": 630.735838,
+            "wins": 68
+          },
+          "tokyo": {
+            "trades": 12,
+            "pnl": 243.001759,
+            "wins": 9
+          },
+          "tokyo+london": {
+            "trades": 40,
+            "pnl": -65.81169,
+            "wins": 21
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 20,
+            "pnl": 34.862192,
+            "wins": 10
+          },
+          "AUDUSD": {
+            "trades": 76,
+            "pnl": 103.685315,
+            "wins": 41
+          },
+          "EURJPY": {
+            "trades": 13,
+            "pnl": -51.941514,
+            "wins": 7
+          },
+          "EURUSD": {
+            "trades": 64,
+            "pnl": 200.234964,
+            "wins": 35
+          },
+          "GBPCHF": {
+            "trades": 7,
+            "pnl": -138.608516,
+            "wins": 2
+          },
+          "GBPUSD": {
+            "trades": 67,
+            "pnl": 353.656153,
+            "wins": 40
+          },
+          "USDCHF": {
+            "trades": 9,
+            "pnl": -92.766961,
+            "wins": 3
+          },
+          "USDJPY": {
+            "trades": 6,
+            "pnl": -30.146367,
+            "wins": 3
+          }
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "wave",
+        "detector": {
+          "mode": "freshM15"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 15,
+        "targetR": 1.25,
+        "trailActivationR": 0.75,
+        "trailDistanceR": 0.35,
+        "ranking": "linear",
+        "weights": {
+          "strength": -0.984903,
+          "riskAtr": -0.199351,
+          "spreadAtr": -3.289938,
+          "entryGapAtr": -0.74576,
+          "trend": 0.539907,
+          "priceEma": -0.432509,
+          "emaSlope": 0.316831,
+          "atrRegime": 0,
+          "efficiency": 0.170911,
+          "wick": 0.273558,
+          "previousBody": 0.651536
+        },
+        "minRatingScore": -0.833014,
+        "minTrendScore": 0.25,
+        "maxStrength": 0.75,
+        "minEfficiency6": 0.1,
+        "minRejectionWick": 0.05,
+        "hours": [
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "train": {
+        "returnPct": 5.02465,
+        "trades": 144,
+        "tradesPerMarketDay": 1.116279,
+        "winRate": 53.472222,
+        "profitFactor": 1.023901,
+        "maxDrawdownPct": 23.849863,
+        "positiveDayPct": 54.022989,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london+newYork": {
+            "trades": 81,
+            "pnl": -253.598033,
+            "wins": 41
+          },
+          "sydney+tokyo": {
+            "trades": 58,
+            "pnl": 255.690152,
+            "wins": 33
+          },
+          "tokyo": {
+            "trades": 5,
+            "pnl": 48.154376,
+            "wins": 3
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 19,
+            "pnl": 43.057542,
+            "wins": 11
+          },
+          "AUDUSD": {
+            "trades": 29,
+            "pnl": 73.745564,
+            "wins": 16
+          },
+          "EURJPY": {
+            "trades": 11,
+            "pnl": -62.390169,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 27,
+            "pnl": 55.376688,
+            "wins": 15
+          },
+          "GBPCHF": {
+            "trades": 10,
+            "pnl": 14.769502,
+            "wins": 6
+          },
+          "GBPUSD": {
+            "trades": 24,
+            "pnl": 251.362684,
+            "wins": 16
+          },
+          "USDCHF": {
+            "trades": 10,
+            "pnl": -214.432221,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 14,
+            "pnl": -111.243094,
+            "wins": 7
+          }
+        }
+      },
+      "validation": {
+        "returnPct": 8.376169,
+        "trades": 65,
+        "tradesPerMarketDay": 0.822785,
+        "winRate": 55.384615,
+        "profitFactor": 1.100319,
+        "maxDrawdownPct": 18.920824,
+        "positiveDayPct": 53.333333,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london+newYork": {
+            "trades": 33,
+            "pnl": -132.732168,
+            "wins": 16
+          },
+          "sydney+tokyo": {
+            "trades": 28,
+            "pnl": 102.717899,
+            "wins": 16
+          },
+          "tokyo": {
+            "trades": 4,
+            "pnl": 113.77596,
+            "wins": 4
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 10,
+            "pnl": -28.561233,
+            "wins": 5
+          },
+          "AUDUSD": {
+            "trades": 9,
+            "pnl": 5.770516,
+            "wins": 4
+          },
+          "EURJPY": {
+            "trades": 8,
+            "pnl": 14.425245,
+            "wins": 5
+          },
+          "EURUSD": {
+            "trades": 7,
+            "pnl": 56.425583,
+            "wins": 5
+          },
+          "GBPCHF": {
+            "trades": 4,
+            "pnl": -140.206251,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 11,
+            "pnl": 107.965169,
+            "wins": 8
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": 65.764539,
+            "wins": 4
+          },
+          "USDJPY": {
+            "trades": 10,
+            "pnl": 2.178123,
+            "wins": 5
+          }
+        }
+      },
+      "accepted": true,
+      "score": 48.667521,
+      "test": {
+        "returnPct": 12.761118,
+        "trades": 63,
+        "tradesPerMarketDay": 1.211538,
+        "winRate": 50.793651,
+        "profitFactor": 1.139915,
+        "maxDrawdownPct": 14.941547,
+        "positiveDayPct": 51.351351,
+        "longestLosingDayStreak": 3,
+        "bySessionCombination": {
+          "london+newYork": {
+            "trades": 26,
+            "pnl": -29.849552,
+            "wins": 12
+          },
+          "sydney+tokyo": {
+            "trades": 34,
+            "pnl": 125.436507,
+            "wins": 18
+          },
+          "tokyo": {
+            "trades": 3,
+            "pnl": 32.024227,
+            "wins": 2
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 11,
+            "pnl": -75.229441,
+            "wins": 4
+          },
+          "AUDUSD": {
+            "trades": 11,
+            "pnl": 104.112687,
+            "wins": 7
+          },
+          "EURJPY": {
+            "trades": 8,
+            "pnl": -10.276253,
+            "wins": 4
+          },
+          "EURUSD": {
+            "trades": 11,
+            "pnl": 205.650149,
+            "wins": 8
+          },
+          "GBPCHF": {
+            "trades": 1,
+            "pnl": -10.163116,
+            "wins": 0
+          },
+          "GBPUSD": {
+            "trades": 7,
+            "pnl": 32.394659,
+            "wins": 4
+          },
+          "USDCHF": {
+            "trades": 6,
+            "pnl": -60.342991,
+            "wins": 2
+          },
+          "USDJPY": {
+            "trades": 8,
+            "pnl": -58.534512,
+            "wins": 3
+          }
+        }
+      },
+      "full": {
+        "returnPct": 28.448415,
+        "trades": 272,
+        "tradesPerMarketDay": 1.046154,
+        "winRate": 53.308824,
+        "profitFactor": 1.070794,
+        "maxDrawdownPct": 23.849863,
+        "positiveDayPct": 53.254438,
+        "longestLosingDayStreak": 5,
+        "bySessionCombination": {
+          "london+newYork": {
+            "trades": 140,
+            "pnl": -426.548778,
+            "wins": 69
+          },
+          "sydney+tokyo": {
+            "trades": 120,
+            "pnl": 506.926459,
+            "wins": 67
+          },
+          "tokyo": {
+            "trades": 12,
+            "pnl": 204.106466,
+            "wins": 9
+          }
+        },
+        "bySymbol": {
+          "AUDJPY": {
+            "trades": 40,
+            "pnl": -72.380734,
+            "wins": 20
+          },
+          "AUDUSD": {
+            "trades": 49,
+            "pnl": 198.215241,
+            "wins": 27
+          },
+          "EURJPY": {
+            "trades": 27,
+            "pnl": -58.976359,
+            "wins": 13
+          },
+          "EURUSD": {
+            "trades": 45,
+            "pnl": 349.257915,
+            "wins": 28
+          },
+          "GBPCHF": {
+            "trades": 15,
+            "pnl": -144.145428,
+            "wins": 6
+          },
+          "GBPUSD": {
+            "trades": 42,
+            "pnl": 401.997439,
+            "wins": 28
+          },
+          "USDCHF": {
+            "trades": 22,
+            "pnl": -214.009289,
+            "wins": 8
+          },
+          "USDJPY": {
+            "trades": 32,
+            "pnl": -175.474638,
+            "wins": 15
+          }
+        }
+      }
+    }
+  ]
+}

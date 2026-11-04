@@ -73,8 +73,8 @@ test("timeout closes only positions beyond the configured holding limit", async 
 
 test("daily and weekend boundaries cancel orders before closing positions", async () => {
     for (const [method, timestamp, enabled] of [
-        ["dailyFlatCheck", "2026-11-04T21:59:00Z", false],
-        ["dailyFlatCheck", "2026-11-04T22:00:00Z", true],
+        ["dailyFlatCheck", "2026-11-04T20:59:00Z", false],
+        ["dailyFlatCheck", "2026-11-04T21:00:00Z", true],
         ["weekendFlatCheck", "2026-11-06T19:59:00Z", false],
         ["weekendFlatCheck", "2026-11-06T20:00:00Z", true],
     ]) {
@@ -86,7 +86,7 @@ test("daily and weekend boundaries cancel orders before closing positions", asyn
             getWorkingOrders: async () => ({ workingOrders: [{ workingOrderData: { dealId: "pending", epic: "EURUSD" } }] }),
             cancelWorkingOrder: async (id) => actions.push(`cancel:${id}`),
             getOpenPositions: async () => ({ positions: [{ position: { dealId: "position" }, market: { epic: "EURUSD" } }] }),
-            tradingService: { closePosition: async (id) => actions.push(`close:${id}`) },
+            tradingService: { dailyCloseMinute: 21 * 60, closePosition: async (id) => actions.push(`close:${id}`) },
         });
         await monitor[method]({ delay: async () => {} });
         assert.deepEqual(actions, enabled ? ["cancel:pending", "close:position"] : []);

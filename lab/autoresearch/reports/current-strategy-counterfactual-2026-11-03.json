@@ -1,0 +1,1210 @@
+{
+  "protocol": "current-strategy-single-day-signal-selection-counterfactual-v1",
+  "generatedAt": "2026-11-03T09:43:25.329Z",
+  "day": "2026-11-03",
+  "window": {
+    "from": "2026-11-03T00:00:00.000Z",
+    "to": "2026-11-03T09:25:00.000Z",
+    "completeUtcDay": false
+  },
+  "methodology": {
+    "isolated": "Each eligible signal is simulated alone with the same pending, sizing, stop, target and trailing rules.",
+    "rankings": "Causal one-slot selection rules use only features known at signal time.",
+    "hindsightOracle": "All eligible-signal subsets are enumerated. This is diagnostic hindsight, not a deployable strategy."
+  },
+  "strategy": {
+    "signalMode": "combined",
+    "detector": {
+      "mode": "requireBoth"
+    },
+    "bufferPips": 3,
+    "stopMode": "signal",
+    "stopBufferAtr": null,
+    "expiryMinutes": 45,
+    "targetR": 1.5,
+    "trailActivationR": 1,
+    "trailDistanceR": 0.35,
+    "ranking": "sessionOrder",
+    "minTrendScore": 0,
+    "maxStrength": 0.75,
+    "hours": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "eligibleSignalIds": [
+    "00:00 EURUSD BUY",
+    "00:00 USDCHF SELL",
+    "00:00 EURJPY BUY",
+    "01:00 AUDJPY SELL",
+    "02:00 USDJPY BUY",
+    "03:00 USDCHF SELL",
+    "04:00 EURUSD BUY",
+    "05:00 USDJPY BUY"
+  ],
+  "current": {
+    "finalBalance": 990.596205,
+    "returnPct": -0.94038,
+    "trades": 2,
+    "wins": 1,
+    "winRate": 50,
+    "profitFactor": 0.686368,
+    "maxDrawdownPct": 2.99835,
+    "rejections": {
+      "symbolOccupied": 0,
+      "notSelected": 2,
+      "portfolioFull": 4
+    },
+    "tradeLog": [
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "signaled": "2026-11-03T00:00:00.000Z",
+        "opened": "2026-11-03T00:08:00.000Z",
+        "closed": "2026-11-03T02:18:00.000Z",
+        "reason": "stopLoss",
+        "pnl": -29.983499,
+        "r": -1.000957,
+        "effectiveRiskPct": 2.995483,
+        "balanceAfter": 970.016501,
+        "sessions": [
+          "sydney",
+          "tokyo"
+        ]
+      },
+      {
+        "symbol": "USDCHF",
+        "side": "SELL",
+        "signaled": "2026-11-03T03:00:00.000Z",
+        "opened": "2026-11-03T03:33:00.000Z",
+        "closed": "2026-11-03T06:41:00.000Z",
+        "reason": "trailingStop",
+        "pnl": 20.579704,
+        "r": 0.708619,
+        "effectiveRiskPct": 2.993969,
+        "balanceAfter": 990.596205,
+        "sessions": [
+          "sydney",
+          "tokyo"
+        ]
+      }
+    ]
+  },
+  "isolated": [
+    {
+      "id": "00:00 EURUSD BUY",
+      "signal": {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "signalAt": "2026-11-03T00:00:00.000Z",
+        "activeRank": 3,
+        "strength": 0.409791,
+        "riskAtr": 1.174208,
+        "spreadAtr": 0.055164,
+        "entryGapAtr": 0.236418,
+        "trendScore": 0.751536,
+        "efficiency6": 0.539095,
+        "rejectionWick": 0.337079,
+        "engulfing": true
+      },
+      "outcome": {
+        "finalBalance": 970.016501,
+        "returnPct": -2.99835,
+        "trades": 1,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 2.99835,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0
+        },
+        "tradeLog": [
+          {
+            "symbol": "EURUSD",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:08:00.000Z",
+            "closed": "2026-11-03T02:18:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.983499,
+            "r": -1.000957,
+            "effectiveRiskPct": 2.995483,
+            "balanceAfter": 970.016501,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "00:00 USDCHF SELL",
+      "signal": {
+        "symbol": "USDCHF",
+        "side": "SELL",
+        "signalAt": "2026-11-03T00:00:00.000Z",
+        "activeRank": 4,
+        "strength": 0.094165,
+        "riskAtr": 1.001575,
+        "spreadAtr": 0.111286,
+        "entryGapAtr": 0.479386,
+        "trendScore": 1.76259,
+        "efficiency6": 0.183673,
+        "rejectionWick": 0.350877,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 970.115832,
+        "returnPct": -2.988417,
+        "trades": 1,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 2.988417,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:19:00.000Z",
+            "closed": "2026-11-03T00:43:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.884168,
+            "r": -1.000048,
+            "effectiveRiskPct": 2.988272,
+            "balanceAfter": 970.115832,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "00:00 EURJPY BUY",
+      "signal": {
+        "symbol": "EURJPY",
+        "side": "BUY",
+        "signalAt": "2026-11-03T00:00:00.000Z",
+        "activeRank": 6,
+        "strength": 0.576869,
+        "riskAtr": 1.06034,
+        "spreadAtr": 0.104386,
+        "entryGapAtr": 0.10988,
+        "trendScore": 1.322864,
+        "efficiency6": 0.326861,
+        "rejectionWick": 0.142857,
+        "engulfing": true
+      },
+      "outcome": {
+        "finalBalance": 970.601343,
+        "returnPct": -2.939866,
+        "trades": 1,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 2.939866,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0
+        },
+        "tradeLog": [
+          {
+            "symbol": "EURJPY",
+            "side": "BUY",
+            "signaled": "2026-11-03T00:00:00.000Z",
+            "opened": "2026-11-03T00:03:00.000Z",
+            "closed": "2026-11-03T02:08:00.000Z",
+            "reason": "stopLoss",
+            "pnl": -29.398657,
+            "r": -1.00081,
+            "effectiveRiskPct": 2.937487,
+            "balanceAfter": 970.601343,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "01:00 AUDJPY SELL",
+      "signal": {
+        "symbol": "AUDJPY",
+        "side": "SELL",
+        "signalAt": "2026-11-03T01:00:00.000Z",
+        "activeRank": 2,
+        "strength": 0.121449,
+        "riskAtr": 1.50944,
+        "spreadAtr": 0.046266,
+        "entryGapAtr": 1.156659,
+        "trendScore": 0.579699,
+        "efficiency6": 0.158576,
+        "rejectionWick": 0.049751,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 1000,
+        "returnPct": 0,
+        "trades": 0,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": []
+      }
+    },
+    {
+      "id": "02:00 USDJPY BUY",
+      "signal": {
+        "symbol": "USDJPY",
+        "side": "BUY",
+        "signalAt": "2026-11-03T02:00:00.000Z",
+        "activeRank": 0,
+        "strength": 0.165714,
+        "riskAtr": 0.90811,
+        "spreadAtr": 0.079542,
+        "entryGapAtr": 0.457369,
+        "trendScore": 0.530494,
+        "efficiency6": 0.060345,
+        "rejectionWick": 0.012987,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 1000,
+        "returnPct": 0,
+        "trades": 0,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": []
+      }
+    },
+    {
+      "id": "03:00 USDCHF SELL",
+      "signal": {
+        "symbol": "USDCHF",
+        "side": "SELL",
+        "signalAt": "2026-11-03T03:00:00.000Z",
+        "activeRank": 4,
+        "strength": 0.043878,
+        "riskAtr": 1.061852,
+        "spreadAtr": 0.122859,
+        "entryGapAtr": 0.333474,
+        "trendScore": 1.688542,
+        "efficiency6": 0.802326,
+        "rejectionWick": 0.786885,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "04:00 EURUSD BUY",
+      "signal": {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "signalAt": "2026-11-03T04:00:00.000Z",
+        "activeRank": 3,
+        "strength": 0.422875,
+        "riskAtr": 1.302454,
+        "spreadAtr": 0.059202,
+        "entryGapAtr": 0.279097,
+        "trendScore": 0.594735,
+        "efficiency6": 0.222857,
+        "rejectionWick": 0.361702,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 1000,
+        "returnPct": 0,
+        "trades": 0,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": []
+      }
+    },
+    {
+      "id": "05:00 USDJPY BUY",
+      "signal": {
+        "symbol": "USDJPY",
+        "side": "BUY",
+        "signalAt": "2026-11-03T05:00:00.000Z",
+        "activeRank": 0,
+        "strength": 0.087579,
+        "riskAtr": 1.080141,
+        "spreadAtr": 0.087579,
+        "entryGapAtr": 0.248141,
+        "trendScore": 0.572738,
+        "efficiency6": 0.239264,
+        "rejectionWick": 0.681818,
+        "engulfing": false
+      },
+      "outcome": {
+        "finalBalance": 1000,
+        "returnPct": 0,
+        "trades": 0,
+        "wins": 0,
+        "winRate": 0,
+        "profitFactor": 0,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": []
+      }
+    }
+  ],
+  "rankings": {
+    "sessionOrder": {
+      "finalBalance": 990.596205,
+      "returnPct": -0.94038,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.686368,
+      "maxDrawdownPct": 2.99835,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 4
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:08:00.000Z",
+          "closed": "2026-11-03T02:18:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.983499,
+          "r": -1.000957,
+          "effectiveRiskPct": 2.995483,
+          "balanceAfter": 970.016501,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993969,
+          "balanceAfter": 990.596205,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "bodyAtr": {
+      "finalBalance": 991.181046,
+      "returnPct": -0.881895,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.700022,
+      "maxDrawdownPct": 2.939866,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 4
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:03:00.000Z",
+          "closed": "2026-11-03T02:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.398657,
+          "r": -1.00081,
+          "effectiveRiskPct": 2.937487,
+          "balanceAfter": 970.601343,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.992165,
+          "balanceAfter": 991.181046,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "lowSpread": {
+      "finalBalance": 990.596205,
+      "returnPct": -0.94038,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.686368,
+      "maxDrawdownPct": 2.99835,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 4
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:08:00.000Z",
+          "closed": "2026-11-03T02:18:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.983499,
+          "r": -1.000957,
+          "effectiveRiskPct": 2.995483,
+          "balanceAfter": 970.016501,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993969,
+          "balanceAfter": 990.596205,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "nearEntry": {
+      "finalBalance": 991.181046,
+      "returnPct": -0.881895,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.700022,
+      "maxDrawdownPct": 2.939866,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 4
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:03:00.000Z",
+          "closed": "2026-11-03T02:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.398657,
+          "r": -1.00081,
+          "effectiveRiskPct": 2.937487,
+          "balanceAfter": 970.601343,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.992165,
+          "balanceAfter": 991.181046,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "farEntry": {
+      "finalBalance": 990.695536,
+      "returnPct": -0.930446,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.688649,
+      "maxDrawdownPct": 2.988417,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "pendingExpired": 2,
+        "portfolioFull": 2
+      },
+      "tradeLog": [
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:19:00.000Z",
+          "closed": "2026-11-03T00:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.884168,
+          "r": -1.000048,
+          "effectiveRiskPct": 2.988272,
+          "balanceAfter": 970.115832,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993663,
+          "balanceAfter": 990.695536,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "tightStop": {
+      "finalBalance": 990.695536,
+      "returnPct": -0.930446,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.688649,
+      "maxDrawdownPct": 2.988417,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "pendingExpired": 2,
+        "portfolioFull": 2
+      },
+      "tradeLog": [
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:19:00.000Z",
+          "closed": "2026-11-03T00:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.884168,
+          "r": -1.000048,
+          "effectiveRiskPct": 2.988272,
+          "balanceAfter": 970.115832,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993663,
+          "balanceAfter": 990.695536,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "composite": {
+      "finalBalance": 990.596205,
+      "returnPct": -0.94038,
+      "trades": 2,
+      "wins": 1,
+      "winRate": 50,
+      "profitFactor": 0.686368,
+      "maxDrawdownPct": 2.99835,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 4
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:08:00.000Z",
+          "closed": "2026-11-03T02:18:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.983499,
+          "r": -1.000957,
+          "effectiveRiskPct": 2.995483,
+          "balanceAfter": 970.016501,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 20.579704,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.993969,
+          "balanceAfter": 990.596205,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    }
+  },
+  "hindsightOracle": {
+    "testedSubsets": 255,
+    "best": {
+      "acceptedSignalIds": [
+        "03:00 USDCHF SELL"
+      ],
+      "finalBalance": 1021.234513,
+      "returnPct": 2.123451,
+      "trades": 1,
+      "wins": 1,
+      "winRate": 100,
+      "profitFactor": null,
+      "maxDrawdownPct": 0,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 0
+      },
+      "tradeLog": [
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:41:00.000Z",
+          "reason": "trailingStop",
+          "pnl": 21.234513,
+          "r": 0.708619,
+          "effectiveRiskPct": 2.996606,
+          "balanceAfter": 1021.234513,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    },
+    "top10": [
+      {
+        "acceptedSignalIds": [
+          "03:00 USDCHF SELL"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "01:00 AUDJPY SELL",
+          "03:00 USDCHF SELL"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "02:00 USDJPY BUY",
+          "03:00 USDCHF SELL"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "01:00 AUDJPY SELL",
+          "02:00 USDJPY BUY",
+          "03:00 USDCHF SELL"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 2
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "03:00 USDCHF SELL",
+          "04:00 EURUSD BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "01:00 AUDJPY SELL",
+          "03:00 USDCHF SELL",
+          "04:00 EURUSD BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "02:00 USDJPY BUY",
+          "03:00 USDCHF SELL",
+          "04:00 EURUSD BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "01:00 AUDJPY SELL",
+          "02:00 USDJPY BUY",
+          "03:00 USDCHF SELL",
+          "04:00 EURUSD BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 2,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "03:00 USDCHF SELL",
+          "05:00 USDJPY BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      },
+      {
+        "acceptedSignalIds": [
+          "01:00 AUDJPY SELL",
+          "03:00 USDCHF SELL",
+          "05:00 USDJPY BUY"
+        ],
+        "finalBalance": 1021.234513,
+        "returnPct": 2.123451,
+        "trades": 1,
+        "wins": 1,
+        "winRate": 100,
+        "profitFactor": null,
+        "maxDrawdownPct": 0,
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 0,
+          "pendingExpired": 1,
+          "portfolioFull": 1
+        },
+        "tradeLog": [
+          {
+            "symbol": "USDCHF",
+            "side": "SELL",
+            "signaled": "2026-11-03T03:00:00.000Z",
+            "opened": "2026-11-03T03:33:00.000Z",
+            "closed": "2026-11-03T06:41:00.000Z",
+            "reason": "trailingStop",
+            "pnl": 21.234513,
+            "r": 0.708619,
+            "effectiveRiskPct": 2.996606,
+            "balanceAfter": 1021.234513,
+            "sessions": [
+              "sydney",
+              "tokyo"
+            ]
+          }
+        ]
+      }
+    ],
+    "worst": {
+      "acceptedSignalIds": [
+        "00:00 EURUSD BUY",
+        "00:00 USDCHF SELL",
+        "00:00 EURJPY BUY",
+        "01:00 AUDJPY SELL",
+        "02:00 USDJPY BUY",
+        "04:00 EURUSD BUY",
+        "05:00 USDJPY BUY"
+      ],
+      "finalBalance": 970.016501,
+      "returnPct": -2.99835,
+      "trades": 1,
+      "wins": 0,
+      "winRate": 0,
+      "profitFactor": 0,
+      "maxDrawdownPct": 2.99835,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 2,
+        "portfolioFull": 2,
+        "pendingExpired": 2
+      },
+      "tradeLog": [
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:08:00.000Z",
+          "closed": "2026-11-03T02:18:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.983499,
+          "r": -1.000957,
+          "effectiveRiskPct": 2.995483,
+          "balanceAfter": 970.016501,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ]
+        }
+      ]
+    }
+  }
+}

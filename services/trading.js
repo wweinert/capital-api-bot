@@ -7,10 +7,11 @@ import {
     getMarketDetails,
     getAccountTransactions,
     getAccountInfo,
+    getAccountActivity,
     getHistorical,
     updatePositionProtection,
 } from "../api.js";
-import { calcIndicators } from "../indicators/indicators.js";
+import { calcIndicators, aggregateM30 } from "../indicators/indicators.js";
 import { RISK, PORTFOLIO, TIMEFRAMES } from "../config.js";
 import logger from "../utils/logger.js";
 
@@ -19,6 +20,7 @@ class TradingService {
     #orderExpiryMinutes = 45;
     #targetR = RISK.DYNAMIC_TARGET_R;
     #minSignalRating = -0.833014;
+    #lastEntryMinute = 20 * 60;
     #signalRatingWeights = {
         strength: -0.984903,
         risk: -0.199351,
@@ -37,6 +39,7 @@ class TradingService {
     availableMargin = 0;
     quotePerEurCache = new Map();
     dynamicPlanByDeal = new Map();
+    dailyCloseMinute = 21 * 60;
 
     // Account and candidate selection
     async updateAccountInfo() {
@@ -74,7 +77,7 @@ class TradingService {
         this.openTrades = [...new Set([...positionSymbols, ...orderSymbols].filter(Boolean))];
     }
 
-    async processCandidates(candidates = []) {
+    async processCandidates(candidates = [], activeSymbols = []) {
         await this.syncOpenTradesFromBroker();
 
         const freePositions = PORTFOLIO.MAX_POSITIONS - this.openTrades.length;
@@ -83,12 +86,13 @@ class TradingService {
             logger.info("[Trading] No free positions");
             return [];
         }
-        const allowedCandidates = await this.getAllowedCandidates(candidates);
+        const allowedCandidates = await this.getAllowedCandidates(this.selectActivePairs(candidates, activeSymbols));
 
         const ratedCandidates = allowedCandidates
             .filter((candidate) => !this.isSymbolTraded(candidate.symbol))
             .map((candidate) => ({ candidate, rating: this.rateCandidate(candidate) }))
-            .filter(({ rating }) => Number.isFinite(rating) && rating >= this.#minSignalRating)
+            .filter(({ candidate, rating }) => Number.isFinite(rating)
+                && (candidate.timeframe === "m30" || rating >= this.#minSignalRating))
             .sort((left, right) => right.rating - left.rating);
         const selected = ratedCandidates.slice(0, freePositions).map(({ candidate }) => candidate);
 
@@ -160,13 +164,57 @@ class TradingService {
 
         const fridayEntryClosed = now.getUTCDay() === 5 && now.getUTCHours() >= RISK.FRIDAY_LAST_ENTRY_HOUR_UTC;
 
-        if (fridayEntryClosed) {
+        if (fridayEntryClosed || [0, 6].includes(now.getUTCDay())) {
             return [];
         }
-        return candidates.filter(() => currentMinute < RISK.DAILY_LAST_ENTRY_MINUTE_UTC);
+        return candidates.filter(() => currentMinute < Math.min(RISK.DAILY_LAST_ENTRY_MINUTE_UTC, this.#lastEntryMinute));
+    }
+
+    getM30State(candidate) {
+        const { candles, indicators } = candidate;
+        const row = candles?.m30?.at(-1);
+        const previous = candles?.m30?.at(-2);
+        const values = indicators?.m30;
+        const h1 = indicators?.h1;
+        const required = [row?.open, row?.high, row?.low, row?.close, row?.spread, previous?.high, previous?.low,
+            values?.atr, values?.atrRegime, values?.efficiency6, h1?.atr, h1?.ema20, h1?.ema50];
+        if (required.some((value) => value == null || !Number.isFinite(Number(value)))
+            || !(values.atr > 0) || !(h1.atr > 0) || Number(row.spread) < 0) return null;
+        const atr = Number(values.atr);
+        const spread = Number(row.spread);
+        const efficiency = Number(values.efficiency6);
+        const atrRegime = Number(values.atrRegime);
+        const h1Trend = (Number(h1.ema20) - Number(h1.ema50)) / Number(h1.atr);
+        const spreadAtr = spread / atr;
+        const strength = Math.abs(Number(row.close) - Number(row.open)) / atr;
+        return { row, previous, atr, spread, efficiency, atrRegime, h1Trend, spreadAtr, strength,
+            pairScore: efficiency + Math.min(2, atrRegime) * 0.2 - 8 * spreadAtr };
+    }
+
+    selectActivePairs(candidates, activeSymbols) {
+        const analyses = candidates.filter((candidate) => candidate.timeframe === "m30");
+        if (!analyses.length) return candidates;
+        const states = analyses.map((candidate) => ({ candidate, state: this.getM30State(candidate) }));
+        const decisionTime = analyses[0].decisionTime;
+        const complete = states.every(({ candidate, state }) => state && candidate.decisionTime === decisionTime)
+            && activeSymbols.every((symbol) => analyses.some((candidate) => candidate.symbol === symbol));
+        if (!complete) {
+            logger.warn("[Trading] Incomplete M30 universe; skipping pair selection");
+            return candidates.filter((candidate) => candidate.timeframe !== "m30");
+        }
+        states.sort((a, b) => b.state.pairScore - a.state.pairScore);
+        const selected = new Set(states.slice(0, 3).map(({ candidate }) => candidate.symbol));
+        logger.info(`[Trading] M30 active pairs: ${[...selected].join(", ")}`);
+        return candidates.filter((candidate) => candidate.timeframe !== "m30" || (candidate.signal && selected.has(candidate.symbol)));
     }
 
     rateCandidate(candidate) {
+        if (candidate.timeframe === "m30") {
+            const state = this.getM30State(candidate);
+            const direction = candidate.signal === "bullish" ? 1 : candidate.signal === "bearish" ? -1 : 0;
+            return state && direction ? state.efficiency + state.strength * 0.25
+                + Math.min(2, direction * state.h1Trend) * 0.15 - 8 * state.spreadAtr : null;
+        }
         const { symbol, signal, candles, indicators } = candidate;
         const rows = candles?.h1;
         const current = rows?.at(-1);
@@ -223,11 +271,52 @@ class TradingService {
     }
 
     // Order execution and sizing
+    getOrderPlan(candidate) {
+        const { symbol, signal, candles, indicators } = candidate;
+        const sign = signal === "bullish" ? 1 : signal === "bearish" ? -1 : 0;
+        const timeframe = candidate.timeframe ?? "h1";
+        if (!["h1", "m30"].includes(timeframe)) return null;
+        const row = candles?.[timeframe]?.at(-1);
+        if (!sign || !row) return null;
+        const decisionTime = candidate.decisionTime ?? Date.parse(row.timestamp) + (timeframe === "m30" ? 1_800_000 : 3_600_000);
+        const expiresAt = decisionTime + this.#orderExpiryMinutes * 60_000;
+        if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) return null;
+        let buffer = this.getPipValue(symbol) * this.#orderBufferPips;
+        let entry = sign > 0 ? Number(row.high) + buffer : Number(row.low) - buffer;
+        let stop = sign > 0 ? Number(row.low) - buffer : Number(row.high) + buffer;
+        let targetR = this.#targetR;
+        let riskPct = RISK.PER_TRADE;
+        const h1 = indicators?.h1;
+        let trend = h1?.atr > 0 ? sign * (Number(h1.ema20) - Number(h1.ema50)) / h1.atr : 0;
+        let efficiency = Number(h1?.efficiency6 ?? 0);
+
+        if (timeframe === "m30") {
+            const state = this.getM30State(candidate);
+            if (!state) return null;
+            const { atr, spread, previous, atrRegime, spreadAtr } = state;
+            trend = sign * state.h1Trend;
+            efficiency = state.efficiency;
+            buffer = Math.max(this.getPipValue(symbol), spread, atr * 0.04);
+            entry = sign > 0 ? Number(row.high) + buffer : Number(row.low) - buffer;
+            stop = sign > 0 ? Math.min(Number(row.low), Number(previous.low)) - atr * 0.05
+                : Math.max(Number(row.high), Number(previous.high)) + atr * 0.05;
+            stop = sign > 0 ? Math.min(stop, entry - atr * 0.8) : Math.max(stop, entry + atr * 0.8);
+            if (Math.abs(entry - stop) / atr > 3) return null;
+            targetR = Math.max(1, Math.min(2, 1.5 + trend * 0.15 + efficiency * 0.2));
+            riskPct = 0.0075 * (0.5 + 0.5 * Math.min(1, efficiency / 0.4))
+                * (spreadAtr > 0.12 ? 0.75 : 1) * (atrRegime > 1.5 ? 0.75 : 1);
+        }
+        const riskDistance = sign * (entry - stop);
+        if (![entry, stop, riskDistance, targetR, riskPct].every(Number.isFinite) || riskDistance <= 0 || riskPct <= 0) return null;
+        return { direction: sign > 0 ? "BUY" : "SELL", entry, stop, riskDistance,
+            target: entry + sign * targetR * riskDistance, riskPct, expiresAt,
+            stepTimeframe: trend >= RISK.DYNAMIC_TREND_SCORE && efficiency >= RISK.DYNAMIC_TREND_EFFICIENCY ? "M15" : "M5" };
+    }
+
     async executeCandidate(candidate) {
-        const { symbol, signal, candles } = candidate;
-        const direction = signal === "bullish" ? "BUY" : signal === "bearish" ? "SELL" : null;
-        const current = candles?.h1?.at(-1);
-        if (!direction || !current) {
+        const { symbol } = candidate;
+        const plan = this.getOrderPlan(candidate);
+        if (!plan) {
             logger.error(`[Trading] ${symbol}: invalid signal or execution context`);
             return false;
         }
@@ -235,21 +324,17 @@ class TradingService {
         const market = await getMarketDetails(symbol);
         const bid = Number(market?.snapshot?.bid);
         const ask = Number(market?.snapshot?.offer ?? market?.snapshot?.ask);
-        const orderBuffer = this.getPipValue(symbol) * this.#orderBufferPips;
-        const entryPrice = direction === "BUY" ? Number(current.high) + orderBuffer : Number(current.low) - orderBuffer;
-        const stopLoss = direction === "BUY" ? Number(current.low) - orderBuffer : Number(current.high) + orderBuffer;
-        const riskDistance = direction === "BUY" ? entryPrice - stopLoss : stopLoss - entryPrice;
+        const { direction, entry: entryPrice, stop: stopLoss, riskDistance, target: takeProfit } = plan;
         const entryIsPending = direction === "BUY" ? entryPrice > ask : entryPrice < bid;
         if (![bid, ask, entryPrice, stopLoss, riskDistance].every(Number.isFinite) || ask < bid || riskDistance <= 0 || !entryIsPending) {
             logger.warn(`[Trading] ${symbol}: pending entry is invalid or already crossed`);
             return false;
         }
 
-        const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, RISK.PER_TRADE);
+        const sizing = await this.positionSize(this.accountBalance, entryPrice, stopLoss, symbol, plan.riskPct);
         if (!sizing.size) return false;
 
-        const takeProfit = direction === "BUY" ? entryPrice + riskDistance * this.#targetR : entryPrice - riskDistance * this.#targetR;
-        const goodTillDate = new Date(Date.now() + this.#orderExpiryMinutes * 60_000).toISOString().slice(0, 19);
+        const goodTillDate = new Date(plan.expiresAt).toISOString().slice(0, 19);
 
         try {
             const result = await placeOrder({
@@ -271,6 +356,9 @@ class TradingService {
             if (!["ACCEPTED", "OPEN"].includes(status)) {
                 logger.warn(`[Trading] ${symbol}: STOP order rejected: ${confirmation.reason}`);
                 return false;
+            }
+            if (confirmation.dealId) {
+                this.dynamicPlanByDeal.set(confirmation.dealId, { riskDistance, stepTimeframe: plan.stepTimeframe });
             }
 
             this.availableMargin = Math.max(0, sizing.availableMargin - sizing.marginRequired);
@@ -483,7 +571,7 @@ class TradingService {
 
     // Position management
     async updateDynamicStopIfNeeded(position) {
-        const { symbol, dealId, direction, entryPrice, stopLoss, takeProfit, openedAt, currentPrice, trailingStop } = position;
+        const { symbol, dealId, workingOrderId, direction, entryPrice, stopLoss, takeProfit, currentPrice, trailingStop } = position;
         const normalizedDirection = this.normalizeDirection(direction);
         const entry = Number(entryPrice);
         const stop = Number(stopLoss);
@@ -493,24 +581,14 @@ class TradingService {
         if (!symbol || !dealId || trailingStop || !["BUY", "SELL"].includes(normalizedDirection) || ![entry, stop, target, price].every(Number.isFinite))
             return;
 
-        let plan = this.dynamicPlanByDeal.get(dealId);
+        let plan = this.dynamicPlanByDeal.get(dealId) ?? this.dynamicPlanByDeal.get(workingOrderId);
 
         if (!plan) {
-            const riskDistance = Math.abs(target - entry) / this.#targetR;
-            const initialStopDistance = Math.abs(entry - stop);
-
-            if (!(riskDistance > 0) || Math.abs(initialStopDistance / riskDistance - 1) > 0.15) return;
-            let stepTimeframe = "M5";
-
-            try {
-                stepTimeframe = await this.getDynamicStepTimeframe(symbol, normalizedDirection, openedAt);
-            } catch (error) {
-                logger.warn(`[DynamicStop] ${symbol}: cannot restore entry regime, using M5: ${error.message}`);
-            }
-
-            plan = { riskDistance, stepTimeframe };
-            this.dynamicPlanByDeal.set(dealId, plan);
+            plan = await this.restoreProtectionPlan(position);
+            if (!plan) return;
         }
+        this.dynamicPlanByDeal.set(dealId, plan);
+        if (workingOrderId && workingOrderId !== dealId) this.dynamicPlanByDeal.delete(workingOrderId);
 
         const { riskDistance, stepTimeframe } = plan;
         const favorableMove = normalizedDirection === "BUY" ? price - entry : entry - price;
@@ -560,22 +638,43 @@ class TradingService {
         logger.info(`[DynamicStop] ${symbol}: ${stepTimeframe} stop ${stop} -> ${roundedStop} at ${(favorableMove / riskDistance).toFixed(2)}R`);
     }
 
-    async getDynamicStepTimeframe(symbol, direction, openedAt) {
-        const decisionTime = Math.floor(Number(openedAt) / 3_600_000) * 3_600_000;
+    async restoreProtectionPlan({ symbol, dealId, workingOrderId, direction, openedAt }) {
+        if (!Number.isFinite(openedAt)) return null;
+        const format = (time) => new Date(time).toISOString().slice(0, 19);
+        const activities = await getAccountActivity(format(openedAt - 46 * 60_000), format(Math.min(Date.now(), openedAt + 60_000)));
+        const orderId = workingOrderId ?? activities.find((activity) => activity.dealId === dealId && activity.type === "POSITION")?.details?.workingOrderId;
+        const order = activities.find((activity) => activity.dealId === orderId && activity.type === "WORKING_ORDER" && activity.status === "CREATED");
+        const details = order?.details;
+        const rawTime = order?.dateUTC ?? order?.dateUtc;
+        if (!details || !rawTime || order.epic !== symbol || details.direction !== this.normalizeDirection(direction)
+            || [details.level, details.stopLevel, details.profitLevel].some((value) => value == null || !Number.isFinite(Number(value)))) return null;
+        const createdAt = Date.parse(rawTime.endsWith("Z") ? rawTime : `${rawTime}Z`);
+        const timeframe = new Date(createdAt).getUTCHours() < 8 ? "h1" : "m30";
+        const interval = timeframe === "h1" ? 3_600_000 : 1_800_000;
+        const decisionTime = Math.floor(createdAt / interval) * interval;
+        const riskDistance = Math.abs(Number(details.level) - Number(details.stopLevel));
+        const targetR = Math.abs(Number(details.profitLevel) - Number(details.level)) / riskDistance;
+        if (!(riskDistance > 0) || !Number.isFinite(targetR)
+            || (timeframe === "h1" ? Math.abs(targetR - this.#targetR) > 0.15 : targetR < 0.95 || targetR > 2.05)) return null;
+        const stepTimeframe = await this.getDynamicStepTimeframe(symbol, direction, decisionTime, timeframe);
+        return { riskDistance, stepTimeframe };
+    }
+
+    async getDynamicStepTimeframe(symbol, direction, decisionTime, timeframe = "h1") {
         if (!Number.isFinite(decisionTime)) return "M5";
 
         const h1 = (await getHistorical(symbol, TIMEFRAMES.H1, 100)).prices.filter(({ timestamp }) => Date.parse(timestamp) + 3_600_000 <= decisionTime);
         const indicators = await calcIndicators(h1);
         const atr = Number(indicators.atr);
-        let path = 0;
-
-        for (let index = h1.length - 6; index < h1.length; index += 1) {
-            path += Math.abs(Number(h1[index]?.close) - Number(h1[index - 1]?.close));
-        }
 
         const directionSign = this.normalizeDirection(direction) === "BUY" ? 1 : -1;
         const trendScore = atr > 0 ? (directionSign * (Number(indicators.ema20) - Number(indicators.ema50))) / atr : 0;
-        const efficiency = path > 0 && h1.length >= 7 ? Math.abs(Number(h1.at(-1).close) - Number(h1.at(-7).close)) / path : 0;
+        let efficiency = indicators.efficiency6;
+        if (timeframe === "m30") {
+            const m15 = (await getHistorical(symbol, TIMEFRAMES.M15, 644)).prices;
+            const m30 = aggregateM30(m15).filter(({ timestamp }) => Date.parse(timestamp) + 1_800_000 <= decisionTime);
+            efficiency = (await calcIndicators(m30))?.efficiency6;
+        }
 
         return trendScore >= RISK.DYNAMIC_TREND_SCORE && efficiency >= RISK.DYNAMIC_TREND_EFFICIENCY ? "M15" : "M5";
     }

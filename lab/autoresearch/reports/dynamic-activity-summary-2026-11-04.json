@@ -1,0 +1,1260 @@
+{
+  "protocol": "dynamic-activity-summary-v1",
+  "liveCleanupCommit": "c399fbd",
+  "counts": {
+    "train": {
+      "quoteDates": 129,
+      "weekdays": 107
+    },
+    "validation": {
+      "quoteDates": 79,
+      "weekdays": 66
+    },
+    "diagnostic": {
+      "quoteDates": 52,
+      "weekdays": 44
+    },
+    "full": {
+      "quoteDates": 264,
+      "weekdays": 220
+    }
+  },
+  "totalConfigurations": 192,
+  "baseline": {
+    "returnPct": 114.51133560384301,
+    "trades": 137,
+    "tradesPerDay": 0.5189393939393939,
+    "profitFactor": 1.454555101202016,
+    "maxDrawdownPct": 16.564974953117883,
+    "winRate": 57.66423357664234,
+    "coverage": 44.696969696969695,
+    "losingMonths": 3,
+    "monthly": {
+      "2026-01": -5.90073624113997,
+      "2026-02": 61.9227437700259,
+      "2026-03": 266.79853852948384,
+      "2026-04": 35.463004089001515,
+      "2026-05": -0.22114126226164288,
+      "2026-06": 248.59057958997283,
+      "2026-07": 135.68473907306796,
+      "2026-08": -16.806149171629862,
+      "2026-09": 288.38504774161646,
+      "2026-10": 38.76862585777854,
+      "2026-11": 92.42810406251343
+    },
+    "rejections": {
+      "symbolOccupied": 0,
+      "notSelected": 152,
+      "pendingExpired": 179,
+      "portfolioFull": 88
+    },
+    "tradesPerWeekday": 0.6227272727272727,
+    "weekdayCoverage": 53.63636363636363
+  },
+  "finalists": [
+    {
+      "stage": 1,
+      "id": 104,
+      "config": {
+        "tf": "m15",
+        "setup": "wave",
+        "confirm": "strict",
+        "adaptive": false,
+        "addCore": true,
+        "hours": "all",
+        "spread": 0.25,
+        "maxBody": 0.75,
+        "volume": 1,
+        "topN": 8,
+        "h1Trend": 0,
+        "efficiency": 0,
+        "maxRangeTrend": 1,
+        "buffer": 0.04,
+        "stopBuffer": 0.05,
+        "minStop": 0.8,
+        "target": 1,
+        "expiry": 45,
+        "risk": 0.0075,
+        "step": true
+      },
+      "periods": {
+        "train": {
+          "returnPct": 47.386059081387955,
+          "trades": 433,
+          "tradesPerDay": 3.356589147286822,
+          "profitFactor": 1.2051794700389327,
+          "maxDrawdownPct": 18.74413307693295,
+          "winRate": 51.50115473441109,
+          "coverage": 82.17054263565892,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-01": -92.83781993928882,
+            "2026-02": 127.89552506005049,
+            "2026-03": 231.64358436082597,
+            "2026-04": 50.39111063593146,
+            "2026-05": 156.7681906963593
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 289,
+            "portfolioFull": 2687,
+            "pendingExpired": 317
+          },
+          "tradesPerWeekday": 4.046728971962617,
+          "weekdayCoverage": 99.06542056074767
+        },
+        "validation": {
+          "returnPct": 17.983423870485748,
+          "trades": 190,
+          "tradesPerDay": 2.4050632911392404,
+          "profitFactor": 1.1636679472585207,
+          "maxDrawdownPct": 18.406653822408888,
+          "winRate": 48.94736842105263,
+          "coverage": 67.0886075949367,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 207.48385066391307,
+            "2026-07": 126.29392896167832,
+            "2026-08": -153.94354092073405
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 219,
+            "pendingExpired": 183,
+            "portfolioFull": 2078
+          },
+          "tradesPerWeekday": 2.878787878787879,
+          "weekdayCoverage": 80.3030303030303
+        },
+        "diagnostic": {
+          "returnPct": 13.530682961441132,
+          "trades": 174,
+          "tradesPerDay": 3.3461538461538463,
+          "profitFactor": 1.1320669945400788,
+          "maxDrawdownPct": 11.367873071043933,
+          "winRate": 50,
+          "coverage": 82.6923076923077,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-09": 123.25158591143884,
+            "2026-10": 12.055243702973097
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 308,
+            "portfolioFull": 2361,
+            "pendingExpired": 176
+          },
+          "tradesPerWeekday": 3.9545454545454546,
+          "weekdayCoverage": 97.72727272727273
+        },
+        "full": {
+          "returnPct": 105.14939875666865,
+          "trades": 811,
+          "tradesPerDay": 3.071969696969697,
+          "profitFactor": 1.1796799273859528,
+          "maxDrawdownPct": 21.718930970054735,
+          "winRate": 50.55487053020962,
+          "coverage": 77.65151515151516,
+          "losingMonths": 2,
+          "monthly": {
+            "2026-01": -92.83781993928882,
+            "2026-02": 127.89552506005049,
+            "2026-03": 231.64358436082597,
+            "2026-04": 50.39111063593146,
+            "2026-05": 156.7681906963593,
+            "2026-06": 305.77816638314727,
+            "2026-07": 187.4300167575165,
+            "2026-08": -227.24912015857916,
+            "2026-09": 215.05472216539178,
+            "2026-10": 20.939704705307186,
+            "2026-11": 75.67990690002196
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 822,
+            "portfolioFull": 7248,
+            "pendingExpired": 682
+          },
+          "tradesPerWeekday": 3.6863636363636365,
+          "weekdayCoverage": 93.18181818181819
+        }
+      },
+      "stress": {
+        "returnPct": 21.121733506334373,
+        "trades": 817,
+        "tradesPerDay": 3.0946969696969697,
+        "profitFactor": 1.043381181792633,
+        "maxDrawdownPct": 27.052109469424835,
+        "winRate": 48.71481028151775,
+        "coverage": 77.65151515151516,
+        "losingMonths": 4,
+        "monthly": {
+          "2026-01": -129.3887696747217,
+          "2026-02": 94.69177382108425,
+          "2026-03": 171.8565238630258,
+          "2026-04": -26.404204645286327,
+          "2026-05": 86.74147201705291,
+          "2026-06": 115.45490116613757,
+          "2026-07": 99.10960986332839,
+          "2026-08": -237.51572506302625,
+          "2026-09": 59.393449868963884,
+          "2026-10": -57.20838996414997,
+          "2026-11": 34.48669381093494
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 803,
+          "portfolioFull": 7277,
+          "pendingExpired": 663,
+          "invalidPendingEntry": 3
+        },
+        "tradesPerWeekday": 3.713636363636364,
+        "weekdayCoverage": 93.18181818181819
+      },
+      "monthlyPct": {
+        "2026-01": -9.283781993928882,
+        "2026-02": 14.09841898958918,
+        "2026-03": 22.379774887410722,
+        "2026-04": 3.9781368389191907,
+        "2026-05": 11.902596255385838,
+        "2026-06": 20.746749610442727,
+        "2026-07": 10.531913625702517,
+        "2026-08": -11.552677932135724,
+        "2026-09": 12.360747948569403,
+        "2026-10": 1.0711534696448,
+        "2026-11": 3.8303151921301577
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    },
+    {
+      "stage": 1,
+      "id": 10,
+      "config": {
+        "tf": "m15",
+        "setup": "wavePattern",
+        "confirm": "m15",
+        "adaptive": false,
+        "addCore": true,
+        "hours": "day",
+        "spread": 0.25,
+        "maxBody": 1.5,
+        "volume": 1,
+        "topN": 8,
+        "h1Trend": 0.25,
+        "efficiency": 0.2,
+        "maxRangeTrend": 0.5,
+        "buffer": 0.04,
+        "stopBuffer": 0.15,
+        "minStop": 0.8,
+        "target": 1,
+        "expiry": 15,
+        "risk": 0.015,
+        "step": false
+      },
+      "periods": {
+        "train": {
+          "returnPct": 31.61008533951888,
+          "trades": 379,
+          "tradesPerDay": 2.937984496124031,
+          "profitFactor": 1.0892997996953222,
+          "maxDrawdownPct": 26.62063573002927,
+          "winRate": 49.86807387862797,
+          "coverage": 82.17054263565892,
+          "losingMonths": 2,
+          "monthly": {
+            "2026-01": -32.28843886431729,
+            "2026-02": 170.81722224508064,
+            "2026-03": 142.5585291745094,
+            "2026-04": -9.030704452045669,
+            "2026-05": 44.04424529196163
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 284,
+            "pendingExpired": 416,
+            "portfolioFull": 753,
+            "dailyLossLimit": 1,
+            "weeklyLossLimit": 13
+          },
+          "tradesPerWeekday": 3.542056074766355,
+          "weekdayCoverage": 99.06542056074767
+        },
+        "validation": {
+          "returnPct": 35.23840095426414,
+          "trades": 181,
+          "tradesPerDay": 2.2911392405063293,
+          "profitFactor": 1.1936072567065112,
+          "maxDrawdownPct": 16.714923610171475,
+          "winRate": 54.14364640883978,
+          "coverage": 69.62025316455696,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 361.0314926713888,
+            "2026-07": 231.05513819324693,
+            "2026-08": -239.7026213219927
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 188,
+            "pendingExpired": 228,
+            "portfolioFull": 645
+          },
+          "tradesPerWeekday": 2.742424242424242,
+          "weekdayCoverage": 83.33333333333333
+        },
+        "diagnostic": {
+          "returnPct": -9.303219528493202,
+          "trades": 170,
+          "tradesPerDay": 3.269230769230769,
+          "profitFactor": 0.9361221221013396,
+          "maxDrawdownPct": 22.04946041356006,
+          "winRate": 44.705882352941174,
+          "coverage": 84.61538461538461,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-09": 11.007586746845696,
+            "2026-10": -104.03978203177843
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 214,
+            "pendingExpired": 175,
+            "portfolioFull": 832
+          },
+          "tradesPerWeekday": 3.8636363636363638,
+          "weekdayCoverage": 100
+        },
+        "full": {
+          "returnPct": 65.55982612847156,
+          "trades": 742,
+          "tradesPerDay": 2.8106060606060606,
+          "profitFactor": 1.0754630473212434,
+          "maxDrawdownPct": 30.32952303278401,
+          "winRate": 49.73045822102426,
+          "coverage": 78.78787878787878,
+          "losingMonths": 4,
+          "monthly": {
+            "2026-01": -32.28843886431729,
+            "2026-02": 170.81722224508064,
+            "2026-03": 142.5585291745094,
+            "2026-04": -9.030704452045669,
+            "2026-05": 44.04424529196163,
+            "2026-06": 475.3884029822142,
+            "2026-07": 304.08059018856875,
+            "2026-08": -315.8465422119792,
+            "2026-09": 19.099741501848115,
+            "2026-10": -186.19478739807857,
+            "2026-11": 42.97000282695403
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 700,
+            "pendingExpired": 828,
+            "portfolioFull": 2278,
+            "dailyLossLimit": 1,
+            "weeklyLossLimit": 13
+          },
+          "tradesPerWeekday": 3.3727272727272726,
+          "weekdayCoverage": 94.54545454545455
+        }
+      },
+      "stress": {
+        "returnPct": -5.980330538398093,
+        "trades": 743,
+        "tradesPerDay": 2.8143939393939394,
+        "profitFactor": 0.9915899064570258,
+        "maxDrawdownPct": 41.288157801037976,
+        "winRate": 48.99057873485868,
+        "coverage": 78.4090909090909,
+        "losingMonths": 6,
+        "monthly": {
+          "2026-01": -98.3999947113312,
+          "2026-02": 120.0518860574164,
+          "2026-03": 174.33969163083444,
+          "2026-04": -68.98059696512524,
+          "2026-05": -5.0151062011688055,
+          "2026-06": 273.25980002732837,
+          "2026-07": 159.45248733576787,
+          "2026-08": -384.2917070741906,
+          "2026-09": -44.788224426290476,
+          "2026-10": -200.71708761864102,
+          "2026-11": 15.285546561419254
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 691,
+          "pendingExpired": 814,
+          "portfolioFull": 2285,
+          "dailyLossLimit": 1,
+          "weeklyLossLimit": 25,
+          "invalidPendingEntry": 3
+        },
+        "tradesPerWeekday": 3.3772727272727274,
+        "weekdayCoverage": 94.0909090909091
+      },
+      "monthlyPct": {
+        "2026-01": -3.2288438864317293,
+        "2026-02": 17.651666995133727,
+        "2026-03": 12.521293379267417,
+        "2026-04": -0.704924977676417,
+        "2026-05": 3.4624438103927098,
+        "2026-06": 36.12097065022327,
+        "2026-07": 16.973620640262986,
+        "2026-08": -15.072107604981989,
+        "2026-09": 1.0731860090341954,
+        "2026-10": -10.350922945257865,
+        "2026-11": 2.6645944346807138
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    },
+    {
+      "stage": 1,
+      "id": 119,
+      "config": {
+        "tf": "m30",
+        "setup": "wave",
+        "confirm": "m15",
+        "adaptive": true,
+        "addCore": true,
+        "hours": "all",
+        "spread": 0.25,
+        "maxBody": 0.75,
+        "volume": 0.5,
+        "topN": 3,
+        "h1Trend": 0,
+        "efficiency": 0.2,
+        "maxRangeTrend": 0.5,
+        "buffer": 0.04,
+        "stopBuffer": 0.05,
+        "minStop": 0.8,
+        "target": 1.5,
+        "expiry": 45,
+        "risk": 0.0075,
+        "step": true
+      },
+      "periods": {
+        "train": {
+          "returnPct": 44.5034380088905,
+          "trades": 278,
+          "tradesPerDay": 2.1550387596899223,
+          "profitFactor": 1.2369912024964436,
+          "maxDrawdownPct": 19.293208457526795,
+          "winRate": 50.719424460431654,
+          "coverage": 80.62015503875969,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-01": 80.9810719783163,
+            "2026-02": 33.821275394302404,
+            "2026-03": 260.737564599593,
+            "2026-04": 6.662711579961801,
+            "2026-05": 62.8317565367304
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 157,
+            "portfolioFull": 859,
+            "pendingExpired": 222,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 2.5981308411214954,
+          "weekdayCoverage": 97.19626168224299
+        },
+        "validation": {
+          "returnPct": 18.5148648531799,
+          "trades": 129,
+          "tradesPerDay": 1.6329113924050633,
+          "profitFactor": 1.2404523292292307,
+          "maxDrawdownPct": 12.426229502852342,
+          "winRate": 48.06201550387597,
+          "coverage": 69.62025316455696,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 172.57379920141565,
+            "2026-07": 91.24736117273677,
+            "2026-08": -78.67251184235323
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 113,
+            "pendingExpired": 132,
+            "portfolioFull": 669
+          },
+          "tradesPerWeekday": 1.9545454545454546,
+          "weekdayCoverage": 83.33333333333333
+        },
+        "diagnostic": {
+          "returnPct": 18.354498945678756,
+          "trades": 146,
+          "tradesPerDay": 2.8076923076923075,
+          "profitFactor": 1.2016533251977914,
+          "maxDrawdownPct": 12.242904670179842,
+          "winRate": 46.57534246575342,
+          "coverage": 84.61538461538461,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-09": 139.27013222575732,
+            "2026-10": 44.27485723103011
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 134,
+            "portfolioFull": 618,
+            "pendingExpired": 109,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 3.3181818181818183,
+          "weekdayCoverage": 100
+        },
+        "full": {
+          "returnPct": 109.48771818429321,
+          "trades": 562,
+          "tradesPerDay": 2.128787878787879,
+          "profitFactor": 1.2351220187919951,
+          "maxDrawdownPct": 20.102248444271165,
+          "winRate": 48.93238434163701,
+          "coverage": 78.03030303030303,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-01": 80.9810719783163,
+            "2026-02": 33.821275394302404,
+            "2026-03": 260.737564599593,
+            "2026-04": 6.662711579961801,
+            "2026-05": 62.8317565367304,
+            "2026-06": 250.02804716456757,
+            "2026-07": 131.895416329839,
+            "2026-08": -114.12875733145998,
+            "2026-09": 238.07696725854382,
+            "2026-10": 76.53745349587678,
+            "2026-11": 67.43367483666022
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 407,
+            "portfolioFull": 2191,
+            "pendingExpired": 467,
+            "invalidPendingEntry": 2
+          },
+          "tradesPerWeekday": 2.5545454545454547,
+          "weekdayCoverage": 93.63636363636364
+        }
+      },
+      "stress": {
+        "returnPct": 33.87642720370465,
+        "trades": 559,
+        "tradesPerDay": 2.117424242424242,
+        "profitFactor": 1.0820722168497545,
+        "maxDrawdownPct": 24.703017298082376,
+        "winRate": 45.61717352415027,
+        "coverage": 78.03030303030303,
+        "losingMonths": 3,
+        "monthly": {
+          "2026-01": 51.70262706693988,
+          "2026-02": 15.605725457685176,
+          "2026-03": 195.29151515699084,
+          "2026-04": -39.11882372765945,
+          "2026-05": 29.028198973718904,
+          "2026-06": 106.95445434415915,
+          "2026-07": 77.53892987703932,
+          "2026-08": -151.06313591146338,
+          "2026-09": 76.28839911506782,
+          "2026-10": -66.94576513307187,
+          "2026-11": 43.4821468176428
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 404,
+          "portfolioFull": 2203,
+          "pendingExpired": 458,
+          "invalidPendingEntry": 5
+        },
+        "tradesPerWeekday": 2.540909090909091,
+        "weekdayCoverage": 93.63636363636364
+      },
+      "monthlyPct": {
+        "2026-01": 8.098107197831629,
+        "2026-02": 3.128757410377749,
+        "2026-03": 23.388680981350895,
+        "2026-04": 0.48437064762511955,
+        "2026-05": 4.545770313708185,
+        "2026-06": 17.302567372077675,
+        "2026-07": 7.781153909685239,
+        "2026-08": -6.246928889591296,
+        "2026-09": 13.899633604396739,
+        "2026-10": 3.9231747401756163,
+        "2026-11": 3.326044577993346
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    },
+    {
+      "stage": 2,
+      "id": 5,
+      "config": {
+        "tf": "m30",
+        "setup": "wave",
+        "confirm": "m15",
+        "adaptive": true,
+        "addCore": true,
+        "hours": "all",
+        "spread": 0.25,
+        "maxBody": 0.75,
+        "volume": 0.5,
+        "topN": 3,
+        "h1Trend": 0,
+        "efficiency": 0.2,
+        "maxRangeTrend": 0.5,
+        "buffer": 0.04,
+        "stopBuffer": 0.05,
+        "minStop": 0.8,
+        "target": 1.5,
+        "expiry": 45,
+        "risk": 0.0075,
+        "step": true,
+        "h1Align": null,
+        "rsiGate": false,
+        "sessionAlign": true,
+        "riskAdapt": true
+      },
+      "periods": {
+        "train": {
+          "returnPct": 49.27603154266957,
+          "trades": 217,
+          "tradesPerDay": 1.682170542635659,
+          "profitFactor": 1.3205128670802355,
+          "maxDrawdownPct": 18.07287922806552,
+          "winRate": 52.07373271889401,
+          "coverage": 79.06976744186046,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-01": 42.180684747296056,
+            "2026-02": 73.82980338846453,
+            "2026-03": 257.653332613503,
+            "2026-04": 86.42860432562692,
+            "2026-05": 32.667890351806314
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 88,
+            "pendingExpired": 168,
+            "portfolioFull": 364,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 2.02803738317757,
+          "weekdayCoverage": 95.32710280373831
+        },
+        "validation": {
+          "returnPct": 23.643237040919285,
+          "trades": 125,
+          "tradesPerDay": 1.5822784810126582,
+          "profitFactor": 1.348541720786522,
+          "maxDrawdownPct": 9.44125562525149,
+          "winRate": 48.8,
+          "coverage": 69.62025316455696,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 137.9594073712621,
+            "2026-07": 130.53939306031327,
+            "2026-08": -32.06643002238141
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 73,
+            "pendingExpired": 101,
+            "portfolioFull": 296
+          },
+          "tradesPerWeekday": 1.893939393939394,
+          "weekdayCoverage": 83.33333333333333
+        },
+        "diagnostic": {
+          "returnPct": 10.073856685907302,
+          "trades": 112,
+          "tradesPerDay": 2.1538461538461537,
+          "profitFactor": 1.126182473290532,
+          "maxDrawdownPct": 13.824272198701905,
+          "winRate": 42.857142857142854,
+          "coverage": 80.76923076923077,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-09": 173.01413916243928,
+            "2026-10": -72.27557230336582
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 87,
+            "portfolioFull": 270,
+            "pendingExpired": 99,
+            "invalidPendingEntry": 2
+          },
+          "tradesPerWeekday": 2.5454545454545454,
+          "weekdayCoverage": 95.45454545454545
+        },
+        "full": {
+          "returnPct": 112.23985995561985,
+          "trades": 461,
+          "tradesPerDay": 1.746212121212121,
+          "profitFactor": 1.2735224678303225,
+          "maxDrawdownPct": 18.07287922806552,
+          "winRate": 49.0238611713666,
+          "coverage": 76.51515151515152,
+          "losingMonths": 2,
+          "monthly": {
+            "2026-01": 42.180684747296056,
+            "2026-02": 73.82980338846453,
+            "2026-03": 257.653332613503,
+            "2026-04": 86.42860432562692,
+            "2026-05": 32.667890351806314,
+            "2026-06": 205.21248990204847,
+            "2026-07": 195.0430051963755,
+            "2026-08": -47.54823862386377,
+            "2026-09": 320.4555641235859,
+            "2026-10": -134.0238470283314,
+            "2026-11": 90.4993105596872
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 252,
+            "pendingExpired": 373,
+            "portfolioFull": 953,
+            "invalidPendingEntry": 3
+          },
+          "tradesPerWeekday": 2.0954545454545452,
+          "weekdayCoverage": 91.81818181818181
+        }
+      },
+      "stress": {
+        "returnPct": 55.8535175550694,
+        "trades": 462,
+        "tradesPerDay": 1.75,
+        "profitFactor": 1.1459284276237993,
+        "maxDrawdownPct": 18.442402942006296,
+        "winRate": 46.96969696969697,
+        "coverage": 76.89393939393939,
+        "losingMonths": 3,
+        "monthly": {
+          "2026-01": 23.772743055518166,
+          "2026-02": 79.58327442754253,
+          "2026-03": 238.1371025310431,
+          "2026-04": 34.25447974220947,
+          "2026-05": -4.0471274260363685,
+          "2026-06": 65.96541907357745,
+          "2026-07": 136.02896607982666,
+          "2026-08": -74.17674788043306,
+          "2026-09": 152.33303416219525,
+          "2026-10": -150.66036185423494,
+          "2026-11": 57.34439363948378
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 252,
+          "pendingExpired": 367,
+          "portfolioFull": 954,
+          "invalidPendingEntry": 7
+        },
+        "tradesPerWeekday": 2.1,
+        "weekdayCoverage": 92.27272727272727
+      },
+      "monthlyPct": {
+        "2026-01": 4.2180684747296056,
+        "2026-02": 7.084165391758963,
+        "2026-03": 23.086999213053982,
+        "2026-04": 6.291830870123997,
+        "2026-05": 2.237385099106361,
+        "2026-06": 13.747182838484667,
+        "2026-07": 11.486815606485118,
+        "2026-08": -2.5117718700233107,
+        "2026-09": 17.364464648568315,
+        "2026-10": -6.187839485121699,
+        "2026-11": 4.453926976094461
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    },
+    {
+      "stage": 2,
+      "id": 1,
+      "config": {
+        "tf": "m30",
+        "setup": "wave",
+        "confirm": "m15",
+        "adaptive": true,
+        "addCore": true,
+        "hours": "all",
+        "spread": 0.25,
+        "maxBody": 0.75,
+        "volume": 0.5,
+        "topN": 3,
+        "h1Trend": 0,
+        "efficiency": 0.2,
+        "maxRangeTrend": 0.5,
+        "buffer": 0.04,
+        "stopBuffer": 0.05,
+        "minStop": 0.8,
+        "target": 1.5,
+        "expiry": 45,
+        "risk": 0.0075,
+        "step": true,
+        "h1Align": null,
+        "rsiGate": false,
+        "sessionAlign": false,
+        "riskAdapt": true
+      },
+      "periods": {
+        "train": {
+          "returnPct": 46.25436688526094,
+          "trades": 278,
+          "tradesPerDay": 2.1550387596899223,
+          "profitFactor": 1.2619544263589932,
+          "maxDrawdownPct": 19.294265830258894,
+          "winRate": 50.719424460431654,
+          "coverage": 80.62015503875969,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-01": 84.23582996169498,
+            "2026-02": 45.08057458205288,
+            "2026-03": 240.661698252981,
+            "2026-04": 26.897971682497143,
+            "2026-05": 65.66759437338246
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 157,
+            "portfolioFull": 859,
+            "pendingExpired": 222,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 2.5981308411214954,
+          "weekdayCoverage": 97.19626168224299
+        },
+        "validation": {
+          "returnPct": 20.32829324301284,
+          "trades": 129,
+          "tradesPerDay": 1.6329113924050633,
+          "profitFactor": 1.288922293803575,
+          "maxDrawdownPct": 11.898024573362646,
+          "winRate": 48.06201550387597,
+          "coverage": 69.62025316455696,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 181.29681897001322,
+            "2026-07": 92.39006567309147,
+            "2026-08": -70.4039522129759
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 113,
+            "pendingExpired": 132,
+            "portfolioFull": 669
+          },
+          "tradesPerWeekday": 1.9545454545454546,
+          "weekdayCoverage": 83.33333333333333
+        },
+        "diagnostic": {
+          "returnPct": 19.75272667679251,
+          "trades": 146,
+          "tradesPerDay": 2.8076923076923075,
+          "profitFactor": 1.2316047699525665,
+          "maxDrawdownPct": 10.096329648858227,
+          "winRate": 46.57534246575342,
+          "coverage": 84.61538461538461,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-09": 153.62521326671555,
+            "2026-10": 43.902053501209934
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 134,
+            "portfolioFull": 618,
+            "pendingExpired": 109,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 3.3181818181818183,
+          "weekdayCoverage": 100
+        },
+        "full": {
+          "returnPct": 117.71325951250415,
+          "trades": 562,
+          "tradesPerDay": 2.128787878787879,
+          "profitFactor": 1.2673598699523614,
+          "maxDrawdownPct": 19.294265830258894,
+          "winRate": 48.93238434163701,
+          "coverage": 78.03030303030303,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-01": 84.23582996169498,
+            "2026-02": 45.08057458205288,
+            "2026-03": 240.661698252981,
+            "2026-04": 26.897971682497143,
+            "2026-05": 65.66759437338246,
+            "2026-06": 265.30883018791957,
+            "2026-07": 135.3208568860641,
+            "2026-08": -102.74333802048741,
+            "2026-09": 269.96050840980377,
+            "2026-10": 77.30864312645747,
+            "2026-11": 69.43342568267323
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 407,
+            "portfolioFull": 2191,
+            "pendingExpired": 467,
+            "invalidPendingEntry": 2
+          },
+          "tradesPerWeekday": 2.5545454545454547,
+          "weekdayCoverage": 93.63636363636364
+        }
+      },
+      "stress": {
+        "returnPct": 46.30872218302322,
+        "trades": 559,
+        "tradesPerDay": 2.117424242424242,
+        "profitFactor": 1.1162058008203588,
+        "maxDrawdownPct": 21.162557381654548,
+        "winRate": 45.61717352415027,
+        "coverage": 78.03030303030303,
+        "losingMonths": 3,
+        "monthly": {
+          "2026-01": 56.86252447216398,
+          "2026-02": 33.846388350090415,
+          "2026-03": 192.59498478814118,
+          "2026-04": -21.75252719279711,
+          "2026-05": 31.96991450228094,
+          "2026-06": 124.94392292708257,
+          "2026-07": 85.59298269019762,
+          "2026-08": -139.21229882887786,
+          "2026-09": 104.47530635016389,
+          "2026-10": -54.78024675502658,
+          "2026-11": 48.546270526812904
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 404,
+          "portfolioFull": 2203,
+          "pendingExpired": 458,
+          "invalidPendingEntry": 5
+        },
+        "tradesPerWeekday": 2.540909090909091,
+        "weekdayCoverage": 93.63636363636364
+      },
+      "monthlyPct": {
+        "2026-01": 8.423582996169499,
+        "2026-02": 4.1578200365916285,
+        "2026-03": 21.310387176232524,
+        "2026-04": 1.9633869787835687,
+        "2026-05": 4.701032222766376,
+        "2026-06": 18.140233063677275,
+        "2026-07": 7.831736618791674,
+        "2026-08": -5.514427183797461,
+        "2026-09": 15.33491849513569,
+        "2026-10": 3.807575051422843,
+        "2026-11": 3.2942758952191102
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    },
+    {
+      "stage": 2,
+      "id": 9,
+      "config": {
+        "tf": "m30",
+        "setup": "wave",
+        "confirm": "m15",
+        "adaptive": true,
+        "addCore": true,
+        "hours": "all",
+        "spread": 0.25,
+        "maxBody": 0.75,
+        "volume": 0.5,
+        "topN": 3,
+        "h1Trend": 0,
+        "efficiency": 0.2,
+        "maxRangeTrend": 0.5,
+        "buffer": 0.04,
+        "stopBuffer": 0.05,
+        "minStop": 0.8,
+        "target": 1.5,
+        "expiry": 45,
+        "risk": 0.0075,
+        "step": true,
+        "h1Align": null,
+        "rsiGate": true,
+        "sessionAlign": false,
+        "riskAdapt": true
+      },
+      "periods": {
+        "train": {
+          "returnPct": 44.918887572083264,
+          "trades": 275,
+          "tradesPerDay": 2.131782945736434,
+          "profitFactor": 1.2566525985067292,
+          "maxDrawdownPct": 19.30422560774238,
+          "winRate": 50.54545454545455,
+          "coverage": 80.62015503875969,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-01": 84.23582996169498,
+            "2026-02": 45.08057458205288,
+            "2026-03": 230.89541490997692,
+            "2026-04": 19.801028688238304,
+            "2026-05": 69.17602757887005
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 153,
+            "portfolioFull": 834,
+            "pendingExpired": 221,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 2.5700934579439254,
+          "weekdayCoverage": 97.19626168224299
+        },
+        "validation": {
+          "returnPct": 21.17961182611201,
+          "trades": 127,
+          "tradesPerDay": 1.6075949367088607,
+          "profitFactor": 1.3038376955559055,
+          "maxDrawdownPct": 11.887016256699223,
+          "winRate": 48.818897637795274,
+          "coverage": 69.62025316455696,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-06": 180.32324091848443,
+            "2026-07": 100.0361120742553,
+            "2026-08": -68.56323473162026
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 115,
+            "pendingExpired": 127,
+            "portfolioFull": 645
+          },
+          "tradesPerWeekday": 1.9242424242424243,
+          "weekdayCoverage": 83.33333333333333
+        },
+        "diagnostic": {
+          "returnPct": 18.11155932656263,
+          "trades": 143,
+          "tradesPerDay": 2.75,
+          "profitFactor": 1.2150186095551465,
+          "maxDrawdownPct": 9.579452094782733,
+          "winRate": 46.15384615384615,
+          "coverage": 84.61538461538461,
+          "losingMonths": 0,
+          "monthly": {
+            "2026-09": 128.267573247895,
+            "2026-10": 52.848020017731784
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 135,
+            "portfolioFull": 592,
+            "pendingExpired": 113,
+            "invalidPendingEntry": 1
+          },
+          "tradesPerWeekday": 3.25,
+          "weekdayCoverage": 100
+        },
+        "full": {
+          "returnPct": 114.37289144247256,
+          "trades": 554,
+          "tradesPerDay": 2.0984848484848486,
+          "profitFactor": 1.2631583101347268,
+          "maxDrawdownPct": 19.30422560774238,
+          "winRate": 48.91696750902527,
+          "coverage": 78.03030303030303,
+          "losingMonths": 1,
+          "monthly": {
+            "2026-01": 84.23582996169498,
+            "2026-02": 45.08057458205288,
+            "2026-03": 230.89541490997692,
+            "2026-04": 19.801028688238304,
+            "2026-05": 69.17602757887005,
+            "2026-06": 261.7180489628337,
+            "2026-07": 145.92585419973818,
+            "2026-08": -99.79993455678013,
+            "2026-09": 225.2439223366198,
+            "2026-10": 93.12533864721397,
+            "2026-11": 68.32680911426809
+          },
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 406,
+            "portfolioFull": 2115,
+            "pendingExpired": 465,
+            "invalidPendingEntry": 2
+          },
+          "tradesPerWeekday": 2.518181818181818,
+          "weekdayCoverage": 93.63636363636364
+        }
+      },
+      "stress": {
+        "returnPct": 44.16742772903726,
+        "trades": 552,
+        "tradesPerDay": 2.090909090909091,
+        "profitFactor": 1.1121262056573213,
+        "maxDrawdownPct": 20.351218147968325,
+        "winRate": 45.471014492753625,
+        "coverage": 78.03030303030303,
+        "losingMonths": 3,
+        "monthly": {
+          "2026-01": 57.15616648425009,
+          "2026-02": 33.846388350090415,
+          "2026-03": 184.24025461026085,
+          "2026-04": -27.5340967559232,
+          "2026-05": 35.00133170066647,
+          "2026-06": 122.9508922931045,
+          "2026-07": 94.61924972648472,
+          "2026-08": -136.44630222646472,
+          "2026-09": 70.98132669416506,
+          "2026-10": -41.009998783887355,
+          "2026-11": 47.86906519762615
+        },
+        "rejections": {
+          "symbolOccupied": 0,
+          "notSelected": 403,
+          "portfolioFull": 2127,
+          "pendingExpired": 456,
+          "invalidPendingEntry": 4
+        },
+        "tradesPerWeekday": 2.5090909090909093,
+        "weekdayCoverage": 93.63636363636364
+      },
+      "monthlyPct": {
+        "2026-01": 8.423582996169499,
+        "2026-02": 4.1578200365916285,
+        "2026-03": 20.445591154169094,
+        "2026-04": 1.455731262222865,
+        "2026-05": 5.01270895209476,
+        "2026-06": 18.059623100036145,
+        "2026-07": 8.529152117770447,
+        "2026-08": -5.374740024612998,
+        "2026-09": 12.819562426731046,
+        "2026-10": 4.6978979027217935,
+        "2026-11": 3.2922202853816183
+      },
+      "audit": {
+        "overnight": 0,
+        "weekendEntries": 0
+      }
+    }
+  ],
+  "walkForward": [
+    {
+      "stage": 1,
+      "months": [
+        {
+          "month": "2026-04",
+          "id": 67,
+          "returnPct": 0.6000781492177865,
+          "trades": 51
+        },
+        {
+          "month": "2026-05",
+          "id": 104,
+          "returnPct": 11.899954406013658,
+          "trades": 83
+        },
+        {
+          "month": "2026-06",
+          "id": 104,
+          "returnPct": 20.74838506639134,
+          "trades": 61
+        },
+        {
+          "month": "2026-07",
+          "id": 104,
+          "returnPct": 10.514105583887478,
+          "trades": 52
+        },
+        {
+          "month": "2026-08",
+          "id": 54,
+          "returnPct": -17.697078313930646,
+          "trades": 43
+        },
+        {
+          "month": "2026-09",
+          "id": 10,
+          "returnPct": 1.1007586746845988,
+          "trades": 73
+        },
+        {
+          "month": "2026-10",
+          "id": 104,
+          "returnPct": 1.0675025373596547,
+          "trades": 88
+        }
+      ],
+      "losingMonths": 1,
+      "totalTrades": 451
+    },
+    {
+      "stage": 2,
+      "months": [
+        {
+          "month": "2026-04",
+          "id": 1,
+          "returnPct": 1.9316814695844675,
+          "trades": 52
+        },
+        {
+          "month": "2026-05",
+          "id": 16,
+          "returnPct": -2.888492951052657,
+          "trades": 47
+        },
+        {
+          "month": "2026-06",
+          "id": 0,
+          "returnPct": 17.257379920141535,
+          "trades": 40
+        },
+        {
+          "month": "2026-07",
+          "id": 1,
+          "returnPct": 7.802993408410908,
+          "trades": 40
+        },
+        {
+          "month": "2026-08",
+          "id": 9,
+          "returnPct": -5.378567742478224,
+          "trades": 48
+        },
+        {
+          "month": "2026-09",
+          "id": 5,
+          "returnPct": 17.301413916244,
+          "trades": 53
+        },
+        {
+          "month": "2026-10",
+          "id": 5,
+          "returnPct": -6.20986149024837,
+          "trades": 59
+        }
+      ],
+      "losingMonths": 3,
+      "totalTrades": 339
+    }
+  ],
+  "limitations": [
+    "weekday-normalized activity is descriptive; original quote-date selection gates unchanged",
+    "November is partial; January-October are completed months",
+    "All historical periods previously inspected; no fresh holdout",
+    "Monthly P/L and drawdown are modeled, not broker-realized"
+  ]
+}

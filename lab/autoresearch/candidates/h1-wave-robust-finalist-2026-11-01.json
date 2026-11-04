@@ -1,0 +1,21 @@
+{
+  "name": "h1-wave-robust-finalist-v1",
+  "selection": "Fourth-ranked development-valid feature-search candidate; frozen before standalone replay and spread stress",
+  "experiment": {
+    "signalMode": "combined",
+    "detector": {
+      "mode": "requireBoth"
+    },
+    "bufferPips": 3,
+    "stopMode": "signal",
+    "stopBufferAtr": null,
+    "expiryMinutes": 45,
+    "targetR": 1.5,
+    "trailActivationR": 1,
+    "trailDistanceR": 0.35,
+    "ranking": "sessionOrder",
+    "minTrendScore": 0,
+    "maxStrength": 0.75,
+    "hours": [0, 1, 2, 3, 4, 5, 6, 7]
+  }
+}

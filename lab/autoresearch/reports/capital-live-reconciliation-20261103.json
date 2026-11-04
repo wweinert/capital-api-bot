@@ -1,0 +1,267 @@
+{
+  "generatedAt": "2026-11-03T09:27:24.205Z",
+  "from": "2026-11-02T17:40:00",
+  "to": "2026-11-03T09:27:23",
+  "balance": {
+    "balance": 580.65,
+    "deposit": 580.65,
+    "profitLoss": 0,
+    "available": 580.65
+  },
+  "activity": [
+    {
+      "date": "2026-11-03T07:41:03.036",
+      "dateUTC": "2026-11-03T06:41:03.036",
+      "epic": "USDCHF",
+      "dealId": "00000000-7064-6c3d-0488-ee2f0015549e",
+      "source": "SL",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-7064-6c3d-0488-ee2f0015549e",
+        "workingOrderId": "00000000-7065-793c-0488-ee2f0015549e",
+        "marketName": "USD/CHF",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "BUY",
+        "level": 0.81822,
+        "stopLevel": 0.81945,
+        "guaranteedStop": false,
+        "profitLevel": 0.81723,
+        "openPrice": 0.81903
+      }
+    },
+    {
+      "date": "2026-11-03T07:41:03.036",
+      "dateUTC": "2026-11-03T06:41:03.036",
+      "epic": "USDCHF",
+      "dealId": "00000000-7065-793c-0488-ee2f0015549e",
+      "source": "SL",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_39d51929-6977-4668-93a4-d1b3dfe9e312",
+        "marketName": "USD/CHF",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "BUY",
+        "level": 0.81822,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-11-03T07:11:23.633",
+      "dateUTC": "2026-11-03T06:11:23.633",
+      "epic": "USDCHF",
+      "dealId": "00000000-7064-6c3d-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "EDIT_STOP_AND_LIMIT",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-7064-6c3d-0488-ee2f0015549e",
+        "marketName": "USD/CHF",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "SELL",
+        "level": 0.81903,
+        "stopLevel": 0.81945,
+        "guaranteedStop": false,
+        "profitLevel": 0.81723
+      }
+    },
+    {
+      "date": "2026-11-03T04:33:14.820",
+      "dateUTC": "2026-11-03T03:33:14.820",
+      "epic": "USDCHF",
+      "dealId": "00000000-7064-6c3d-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-7064-6c3d-0488-ee2f0015549e",
+        "workingOrderId": "00000000-7064-4038-0488-ee2f0015549e",
+        "marketName": "USD/CHF",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "SELL",
+        "level": 0.81903,
+        "stopLevel": 0.82025,
+        "guaranteedStop": false,
+        "profitLevel": 0.81723
+      }
+    },
+    {
+      "date": "2026-11-03T04:33:14.820",
+      "dateUTC": "2026-11-03T03:33:14.820",
+      "epic": "USDCHF",
+      "dealId": "00000000-7064-4038-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_7e1fe37a-7b56-4f06-9dc8-3ee2dc55dac1",
+        "marketName": "USD/CHF",
+        "goodTillDate": "2026-11-03T04:45:05.000",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "SELL",
+        "level": 0.81904,
+        "stopLevel": 0.82025,
+        "guaranteedStop": false,
+        "profitLevel": 0.81723
+      }
+    },
+    {
+      "date": "2026-11-03T04:00:05.785",
+      "dateUTC": "2026-11-03T03:00:05.785",
+      "epic": "USDCHF",
+      "dealId": "00000000-7064-4038-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_7e1fe37a-7b56-4f06-9dc8-3ee2dc55dac1",
+        "marketName": "USD/CHF",
+        "goodTillDate": "2026-11-03T04:45:05.000",
+        "currency": "CHF",
+        "size": 12900,
+        "direction": "SELL",
+        "level": 0.81904,
+        "stopLevel": 0.82025,
+        "guaranteedStop": false,
+        "profitLevel": 0.81723
+      }
+    },
+    {
+      "date": "2026-11-03T03:17:27.102",
+      "dateUTC": "2026-11-03T02:17:27.102",
+      "epic": "EURUSD",
+      "dealId": "00000000-7063-3f88-0488-ee2f0015549e",
+      "source": "SL",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-7063-3f88-0488-ee2f0015549e",
+        "workingOrderId": "00000000-7063-3f8f-0488-ee2f0015549e",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 13200,
+        "direction": "SELL",
+        "level": 1.11803,
+        "stopLevel": 1.11803,
+        "guaranteedStop": false,
+        "profitLevel": 1.12176,
+        "openPrice": 1.11952
+      }
+    },
+    {
+      "date": "2026-11-03T03:17:27.102",
+      "dateUTC": "2026-11-03T02:17:27.102",
+      "epic": "EURUSD",
+      "dealId": "00000000-7063-3f8f-0488-ee2f0015549e",
+      "source": "SL",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_68b082f8-48c6-4c2c-aee7-c44e7541cdce",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 13200,
+        "direction": "SELL",
+        "level": 1.11803,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-11-03T01:08:06.426",
+      "dateUTC": "2026-11-03T00:08:06.426",
+      "epic": "EURUSD",
+      "dealId": "00000000-7063-3f88-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-7063-3f88-0488-ee2f0015549e",
+        "workingOrderId": "00000000-7063-2f75-0488-ee2f0015549e",
+        "marketName": "EUR/USD",
+        "currency": "USD",
+        "size": 13200,
+        "direction": "BUY",
+        "level": 1.11952,
+        "stopLevel": 1.11803,
+        "guaranteedStop": false,
+        "profitLevel": 1.12176
+      }
+    },
+    {
+      "date": "2026-11-03T01:08:06.426",
+      "dateUTC": "2026-11-03T00:08:06.426",
+      "epic": "EURUSD",
+      "dealId": "00000000-7063-2f75-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_f05d545a-7187-4b19-b2c8-46067a9a73b6",
+        "marketName": "EUR/USD",
+        "goodTillDate": "2026-11-03T01:45:05.000",
+        "currency": "USD",
+        "size": 13200,
+        "direction": "BUY",
+        "level": 1.11952,
+        "stopLevel": 1.11803,
+        "guaranteedStop": false,
+        "profitLevel": 1.12176
+      }
+    },
+    {
+      "date": "2026-11-03T01:00:05.617",
+      "dateUTC": "2026-11-03T00:00:05.617",
+      "epic": "EURUSD",
+      "dealId": "00000000-7063-2f75-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_f05d545a-7187-4b19-b2c8-46067a9a73b6",
+        "marketName": "EUR/USD",
+        "goodTillDate": "2026-11-03T01:45:05.000",
+        "currency": "USD",
+        "size": 13200,
+        "direction": "BUY",
+        "level": 1.11952,
+        "stopLevel": 1.11803,
+        "guaranteedStop": false,
+        "profitLevel": 1.12176
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "date": "2026-11-03T07:41:03.165",
+      "dateUtc": "2026-11-03T06:41:03.165",
+      "instrumentName": "USDCHF",
+      "transactionType": "TRADE",
+      "note": "Trade closed",
+      "reference": "143386532291419",
+      "size": "11.41",
+      "currency": "EUR",
+      "status": "PROCESSED",
+      "dealId": "00000000-7064-6c3d-0488-ee2f0015549e"
+    },
+    {
+      "date": "2026-11-03T03:17:27.225",
+      "dateUtc": "2026-11-03T02:17:27.225",
+      "instrumentName": "EURUSD",
+      "transactionType": "TRADE",
+      "note": "Trade closed",
+      "reference": "143369948060625",
+      "size": "-17.59",
+      "currency": "EUR",
+      "status": "PROCESSED",
+      "dealId": "00000000-7063-3f88-0488-ee2f0015549e"
+    }
+  ],
+  "positions": [],
+  "workingOrders": []
+}

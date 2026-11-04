@@ -1,0 +1,671 @@
+{
+  "protocol": "current-live-strategy-reconciliation-v1",
+  "generatedAt": "2026-11-04T07:57:53.369Z",
+  "window": {
+    "from": "2026-11-03T22:56:00.000Z",
+    "requestedTo": "2026-11-04T07:45:00.000Z",
+    "to": "2026-11-04T07:45:00.000Z",
+    "dataCompleteToRequestedCutoff": true
+  },
+  "data": {
+    "directories": [
+      "/mnt/usb-ssd/trading/capital-dataset"
+    ],
+    "end": "2026-11-04T07:45:00.000Z",
+    "audit": {
+      "AUDCAD_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "AUDCAD_M15": {
+        "rows": 23059,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "AUDCAD_M5": {
+        "rows": 64669,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "AUDCAD_M1": {
+        "rows": 322288,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "AUDJPY_H1": {
+        "rows": 5766,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "AUDJPY_M15": {
+        "rows": 23057,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "AUDJPY_M5": {
+        "rows": 64659,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "AUDJPY_M1": {
+        "rows": 322674,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:01:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "AUDUSD_H1": {
+        "rows": 5409,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "AUDUSD_M15": {
+        "rows": 21631,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "AUDUSD_M5": {
+        "rows": 64660,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "AUDUSD_M1": {
+        "rows": 321239,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "EURAUD_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "EURAUD_M15": {
+        "rows": 23062,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "EURAUD_M5": {
+        "rows": 64683,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "EURAUD_M1": {
+        "rows": 322980,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:04:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "EURCHF_H1": {
+        "rows": 5535,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "EURCHF_M15": {
+        "rows": 22007,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "EURCHF_M5": {
+        "rows": 64376,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "EURCHF_M1": {
+        "rows": 319781,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "EURGBP_H1": {
+        "rows": 5409,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "EURGBP_M15": {
+        "rows": 21633,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "EURGBP_M5": {
+        "rows": 64662,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "EURGBP_M1": {
+        "rows": 319754,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:01:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "EURJPY_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "EURJPY_M15": {
+        "rows": 23067,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "EURJPY_M5": {
+        "rows": 64702,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "EURJPY_M1": {
+        "rows": 323278,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "EURUSD_H1": {
+        "rows": 5409,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "EURUSD_M15": {
+        "rows": 21636,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "EURUSD_M5": {
+        "rows": 64676,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "EURUSD_M1": {
+        "rows": 321498,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "GBPAUD_H1": {
+        "rows": 5762,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "GBPAUD_M15": {
+        "rows": 22834,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "GBPAUD_M5": {
+        "rows": 63860,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:35:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "GBPAUD_M1": {
+        "rows": 317997,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:36:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "GBPCHF_H1": {
+        "rows": 5765,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "GBPCHF_M15": {
+        "rows": 23038,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "GBPCHF_M5": {
+        "rows": 64578,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "GBPCHF_M1": {
+        "rows": 321944,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "GBPJPY_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "GBPJPY_M15": {
+        "rows": 23064,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "GBPJPY_M5": {
+        "rows": 64692,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "GBPJPY_M1": {
+        "rows": 323028,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:04:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "GBPUSD_H1": {
+        "rows": 5409,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "GBPUSD_M15": {
+        "rows": 21639,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "GBPUSD_M5": {
+        "rows": 64725,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "GBPUSD_M1": {
+        "rows": 322690,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:08:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "NZDJPY_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "NZDJPY_M15": {
+        "rows": 23055,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "NZDJPY_M5": {
+        "rows": 63917,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:25:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "NZDJPY_M1": {
+        "rows": 318851,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:20:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "NZDUSD_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "NZDUSD_M15": {
+        "rows": 23065,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "NZDUSD_M5": {
+        "rows": 63962,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:35:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "NZDUSD_M1": {
+        "rows": 318274,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:26:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "USDCAD_H1": {
+        "rows": 5349,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T10:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "USDCAD_M15": {
+        "rows": 21398,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:45:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "USDCAD_M5": {
+        "rows": 63966,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:40:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "USDCAD_M1": {
+        "rows": 316886,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:32:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "USDCHF_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "USDCHF_M15": {
+        "rows": 23071,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "USDCHF_M5": {
+        "rows": 64007,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:45:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "USDCHF_M1": {
+        "rows": 319243,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:38:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      },
+      "USDJPY_H1": {
+        "rows": 5767,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T06:00:00.000Z"
+      },
+      "USDJPY_M15": {
+        "rows": 23069,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-04T07:30:00.000Z"
+      },
+      "USDJPY_M5": {
+        "rows": 64009,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:50:00.000Z",
+        "last": "2026-11-04T07:40:00.000Z"
+      },
+      "USDJPY_M1": {
+        "rows": 318868,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:44:00.000Z",
+        "last": "2026-11-04T07:44:00.000Z"
+      }
+    }
+  },
+  "strategy": {
+    "signal": "strict M5+M15 agreement plus H1 color reversal and EMA20/EMA50 direction",
+    "admission": {
+      "lastSignalHourUtc": 7,
+      "maximumH1BodyAtr": 0.75,
+      "minimumRating": -0.833014
+    },
+    "order": {
+      "bufferPips": 3,
+      "expiryMinutes": 45,
+      "targetR": 2.5
+    },
+    "management": {
+      "dynamicPairs": false,
+      "dynamicExecution": false,
+      "dynamicManagement": true,
+      "managementSource": "core",
+      "managedTargetR": 2.5,
+      "trendModeThreshold": 1,
+      "trendEfficiency": 0.2,
+      "trendStepBars": 1,
+      "rangeStepBars": 1,
+      "trendActivationR": 1,
+      "rangeActivationR": 1,
+      "breakEvenR": 1,
+      "stepBufferAtr": 0.15,
+      "reversalExit": false,
+      "reversalMaxR": 0.5
+    }
+  },
+  "constraints": {
+    "startCapital": 1000,
+    "riskPct": 3,
+    "marginUsagePct": 90,
+    "maxPositions": 1
+  },
+  "candidates": [
+    {
+      "symbol": "EURUSD",
+      "side": "BUY",
+      "signalAt": "2026-11-04T06:00:00.000Z",
+      "rating": -0.163688,
+      "ratingAccepted": true,
+      "activeRank": 3,
+      "entry": 1.12426,
+      "stop": 1.12212,
+      "strength": 0.185275,
+      "trendScore": 0.800522,
+      "efficiency6": 0.415827,
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ]
+    },
+    {
+      "symbol": "GBPUSD",
+      "side": "BUY",
+      "signalAt": "2026-11-04T06:00:00.000Z",
+      "rating": -0.305275,
+      "ratingAccepted": true,
+      "activeRank": 1,
+      "entry": 1.34666,
+      "stop": 1.34437,
+      "strength": 0.049958,
+      "trendScore": 1.055947,
+      "efficiency6": 0.528926,
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ]
+    },
+    {
+      "symbol": "USDJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-04T01:00:00.000Z",
+      "rating": 0.106141,
+      "ratingAccepted": true,
+      "activeRank": 0,
+      "entry": 158.63,
+      "stop": 158.221,
+      "strength": 0.120515,
+      "trendScore": 1.668409,
+      "efficiency6": 0.381333,
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ]
+    },
+    {
+      "symbol": "USDJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-04T05:00:00.000Z",
+      "rating": -0.272637,
+      "ratingAccepted": true,
+      "activeRank": 0,
+      "entry": 157.867,
+      "stop": 157.349,
+      "strength": 0.530241,
+      "trendScore": 0.446497,
+      "efficiency6": 0.647627,
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ]
+    }
+  ],
+  "result": {
+    "slots": 1,
+    "from": "2026-11-03T22:56:00.000Z",
+    "to": "2026-11-04T07:45:00.000Z",
+    "startCapital": 1000,
+    "finalBalance": 1013.256628,
+    "returnPct": 1.325663,
+    "trades": 1,
+    "wins": 1,
+    "winRate": 100,
+    "profitFactor": null,
+    "maxDrawdownPct": 0,
+    "maxMarginUsagePct": 38.669491,
+    "maxEffectiveRiskPct": 2.991078,
+    "maxConcurrent": 1,
+    "rejections": {
+      "symbolOccupied": 0,
+      "notSelected": 0,
+      "pendingExpired": 1,
+      "portfolioFull": 2
+    },
+    "activeDays": 1,
+    "positiveDays": 1,
+    "negativeDays": 0,
+    "positiveDayPct": 100,
+    "longestLosingDayStreak": 0,
+    "monthly": {
+      "2026-11": 13.256628
+    },
+    "bySymbol": {
+      "USDJPY": {
+        "trades": 1,
+        "pnl": 13.256628,
+        "wins": 1
+      }
+    },
+    "bySessionCombination": {
+      "sydney+tokyo": {
+        "trades": 1,
+        "pnl": 13.256628,
+        "wins": 1
+      }
+    },
+    "tradeLog": [
+      {
+        "symbol": "USDJPY",
+        "side": "BUY",
+        "signaled": "2026-11-04T05:00:00.000Z",
+        "opened": "2026-11-04T05:03:00.000Z",
+        "closed": "2026-11-04T07:45:00.000Z",
+        "reason": "periodBoundary",
+        "pnl": 13.256628,
+        "r": 0.444809,
+        "effectiveRiskPct": 2.980294,
+        "balanceAfter": 1013.256628,
+        "sessions": [
+          "sydney",
+          "tokyo"
+        ],
+        "source": "core",
+        "managementMode": "candleStep",
+        "stopMoves": 0,
+        "pairRank": 1
+      }
+    ]
+  },
+  "caveats": [
+    "The open position is marked to the final recorded bid/ask at the period boundary.",
+    "M1 OHLC cannot reveal tick order; adverse stop ordering is conservative inside an ambiguous minute.",
+    "The replay uses requested pending-entry prices; broker gap slippage is compared separately."
+  ]
+}

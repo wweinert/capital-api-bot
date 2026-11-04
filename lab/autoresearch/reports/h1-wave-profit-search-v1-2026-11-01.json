@@ -1,0 +1,3233 @@
+{
+  "protocol": "h1-wave-profitable-days-random-development-search-v1",
+  "generatedAt": "2026-11-01T22:00:41.865Z",
+  "seed": "0x20261101",
+  "dataEnd": "2026-10-30T21:00:00.000Z",
+  "objective": "positive return and PF above one in train and validation, then maximize robust return and profitable-day percentage",
+  "guardrails": {
+    "train": "2026-01-01/2026-05-31",
+    "validation": "2026-06-01/2026-08-31",
+    "test": "2026-09-01/data-end; previously inspected diagnostic and excluded from selection",
+    "minimumTrades": {
+      "train": 80,
+      "validation": 40
+    },
+    "profiles": false
+  },
+  "searched": 1000,
+  "acceptedDevelopment": 0,
+  "winner": {
+    "experiment": {
+      "signalMode": "combined",
+      "detector": {},
+      "bufferPips": 2,
+      "stopMode": "signal",
+      "stopBufferAtr": 0.1,
+      "expiryMinutes": 60,
+      "targetR": 2.5,
+      "trailActivationR": null,
+      "trailDistanceR": 0.35,
+      "ranking": "nearEntry",
+      "minRiskAtr": 0.25,
+      "maxRiskAtr": 1.5,
+      "minEntryGapAtr": 0.05,
+      "maxEntryGapAtr": 0.5,
+      "sessions": [
+        "sydney+tokyo",
+        "tokyo",
+        "tokyo+london",
+        "london"
+      ],
+      "weekdays": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "side": "BUY"
+    },
+    "train": {
+      "finalBalance": 1757.711144,
+      "returnPct": 75.771114,
+      "trades": 127,
+      "winRate": 37.007874,
+      "profitFactor": 1.273646,
+      "maxDrawdownPct": 22.521494,
+      "activeDays": 79,
+      "positiveDays": 42,
+      "negativeDays": 37,
+      "positiveDayPct": 53.164557,
+      "longestLosingDayStreak": 4,
+      "monthly": {
+        "2026-01": 97.477032,
+        "2026-02": 54.490762,
+        "2026-03": -20.392787,
+        "2026-04": 536.54055,
+        "2026-05": 89.595587
+      }
+    },
+    "validation": {
+      "finalBalance": 963.947058,
+      "returnPct": -3.605294,
+      "trades": 75,
+      "winRate": 33.333333,
+      "profitFactor": 0.96467,
+      "maxDrawdownPct": 36.642547,
+      "activeDays": 49,
+      "positiveDays": 20,
+      "negativeDays": 29,
+      "positiveDayPct": 40.816327,
+      "longestLosingDayStreak": 12,
+      "monthly": {
+        "2026-06": -111.022857,
+        "2026-07": -128.160563,
+        "2026-08": 203.130479
+      }
+    },
+    "score": 11.282632,
+    "acceptedDevelopment": false,
+    "test": {
+      "finalBalance": 598.748916,
+      "returnPct": -40.125108,
+      "trades": 60,
+      "winRate": 21.666667,
+      "profitFactor": 0.594991,
+      "maxDrawdownPct": 44.302549,
+      "activeDays": 34,
+      "positiveDays": 12,
+      "negativeDays": 22,
+      "positiveDayPct": 35.294118,
+      "longestLosingDayStreak": 5,
+      "monthly": {
+        "2026-09": -182.507646,
+        "2026-10": -218.743438
+      }
+    },
+    "final": {
+      "train": [
+        {
+          "finalBalance": 1757.711144,
+          "returnPct": 75.771114,
+          "trades": 127,
+          "winRate": 37.007874,
+          "profitFactor": 1.273646,
+          "maxDrawdownPct": 22.521494,
+          "activeDays": 79,
+          "positiveDays": 42,
+          "negativeDays": 37,
+          "positiveDayPct": 53.164557,
+          "longestLosingDayStreak": 4,
+          "monthly": {
+            "2026-01": 97.477032,
+            "2026-02": 54.490762,
+            "2026-03": -20.392787,
+            "2026-04": 536.54055,
+            "2026-05": 89.595587
+          }
+        },
+        {
+          "finalBalance": 1038.354123,
+          "returnPct": 3.835412,
+          "trades": 214,
+          "winRate": 33.64486,
+          "profitFactor": 1.019381,
+          "maxDrawdownPct": 43.680419,
+          "activeDays": 81,
+          "positiveDays": 40,
+          "negativeDays": 41,
+          "positiveDayPct": 49.382716,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-01": -124.5676,
+            "2026-02": -109.468111,
+            "2026-03": -155.310292,
+            "2026-04": 373.097152,
+            "2026-05": 54.602973
+          }
+        }
+      ],
+      "validation": [
+        {
+          "finalBalance": 963.947058,
+          "returnPct": -3.605294,
+          "trades": 75,
+          "winRate": 33.333333,
+          "profitFactor": 0.96467,
+          "maxDrawdownPct": 36.642547,
+          "activeDays": 49,
+          "positiveDays": 20,
+          "negativeDays": 29,
+          "positiveDayPct": 40.816327,
+          "longestLosingDayStreak": 12,
+          "monthly": {
+            "2026-06": -111.022857,
+            "2026-07": -128.160563,
+            "2026-08": 203.130479
+          }
+        },
+        {
+          "finalBalance": 960.671877,
+          "returnPct": -3.932812,
+          "trades": 118,
+          "winRate": 31.355932,
+          "profitFactor": 0.955581,
+          "maxDrawdownPct": 25.183661,
+          "activeDays": 49,
+          "positiveDays": 21,
+          "negativeDays": 28,
+          "positiveDayPct": 42.857143,
+          "longestLosingDayStreak": 8,
+          "monthly": {
+            "2026-06": -155.93233,
+            "2026-07": 44.654875,
+            "2026-08": 71.949332
+          }
+        }
+      ],
+      "test": [
+        {
+          "finalBalance": 598.748916,
+          "returnPct": -40.125108,
+          "trades": 60,
+          "winRate": 21.666667,
+          "profitFactor": 0.594991,
+          "maxDrawdownPct": 44.302549,
+          "activeDays": 34,
+          "positiveDays": 12,
+          "negativeDays": 22,
+          "positiveDayPct": 35.294118,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": -182.507646,
+            "2026-10": -218.743438
+          }
+        },
+        {
+          "finalBalance": 830.882388,
+          "returnPct": -16.911761,
+          "trades": 104,
+          "winRate": 27.884615,
+          "profitFactor": 0.833116,
+          "maxDrawdownPct": 26.847263,
+          "activeDays": 34,
+          "positiveDays": 14,
+          "negativeDays": 20,
+          "positiveDayPct": 41.176471,
+          "longestLosingDayStreak": 4,
+          "monthly": {
+            "2026-09": -37.651103,
+            "2026-10": -131.466509
+          }
+        }
+      ],
+      "full": [
+        {
+          "finalBalance": 1013.618854,
+          "returnPct": 1.361885,
+          "trades": 262,
+          "winRate": 32.442748,
+          "profitFactor": 1.002182,
+          "maxDrawdownPct": 47.382717,
+          "activeDays": 162,
+          "positiveDays": 74,
+          "negativeDays": 88,
+          "positiveDayPct": 45.679012,
+          "longestLosingDayStreak": 12,
+          "monthly": {
+            "2026-01": 97.477032,
+            "2026-02": 54.490762,
+            "2026-03": -20.392787,
+            "2026-04": 536.54055,
+            "2026-05": 89.595587,
+            "2026-06": -195.146161,
+            "2026-07": -226.257622,
+            "2026-08": 357.208936,
+            "2026-09": -309.299323,
+            "2026-10": -370.59812
+          }
+        },
+        {
+          "finalBalance": 827.053678,
+          "returnPct": -17.294632,
+          "trades": 436,
+          "winRate": 31.651376,
+          "profitFactor": 0.955757,
+          "maxDrawdownPct": 43.680419,
+          "activeDays": 164,
+          "positiveDays": 75,
+          "negativeDays": 89,
+          "positiveDayPct": 45.731707,
+          "longestLosingDayStreak": 8,
+          "monthly": {
+            "2026-01": -124.5676,
+            "2026-02": -109.468111,
+            "2026-03": -155.310292,
+            "2026-04": 373.097152,
+            "2026-05": 54.602973,
+            "2026-06": -161.833113,
+            "2026-07": 46.614855,
+            "2026-08": 73.851303,
+            "2026-09": -38.354357,
+            "2026-10": -131.579133
+          }
+        }
+      ]
+    }
+  },
+  "top30": [
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 2,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 60,
+        "targetR": 2.5,
+        "trailActivationR": null,
+        "trailDistanceR": 0.35,
+        "ranking": "nearEntry",
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 1.5,
+        "minEntryGapAtr": 0.05,
+        "maxEntryGapAtr": 0.5,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "side": "BUY"
+      },
+      "train": {
+        "finalBalance": 1757.711144,
+        "returnPct": 75.771114,
+        "trades": 127,
+        "winRate": 37.007874,
+        "profitFactor": 1.273646,
+        "maxDrawdownPct": 22.521494,
+        "activeDays": 79,
+        "positiveDays": 42,
+        "negativeDays": 37,
+        "positiveDayPct": 53.164557,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": 97.477032,
+          "2026-02": 54.490762,
+          "2026-03": -20.392787,
+          "2026-04": 536.54055,
+          "2026-05": 89.595587
+        }
+      },
+      "validation": {
+        "finalBalance": 963.947058,
+        "returnPct": -3.605294,
+        "trades": 75,
+        "winRate": 33.333333,
+        "profitFactor": 0.96467,
+        "maxDrawdownPct": 36.642547,
+        "activeDays": 49,
+        "positiveDays": 20,
+        "negativeDays": 29,
+        "positiveDayPct": 40.816327,
+        "longestLosingDayStreak": 12,
+        "monthly": {
+          "2026-06": -111.022857,
+          "2026-07": -128.160563,
+          "2026-08": 203.130479
+        }
+      },
+      "score": 11.282632,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 598.748916,
+        "returnPct": -40.125108,
+        "trades": 60,
+        "winRate": 21.666667,
+        "profitFactor": 0.594991,
+        "maxDrawdownPct": 44.302549,
+        "activeDays": 34,
+        "positiveDays": 12,
+        "negativeDays": 22,
+        "positiveDayPct": 35.294118,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-09": -182.507646,
+          "2026-10": -218.743438
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 120,
+        "targetR": 1.5,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "farEntry",
+        "minStrength": 0.3,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 2,
+        "maxSpreadAtr": 0.08,
+        "minEntryGapAtr": 0.1,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "finalBalance": 1043.59237,
+        "returnPct": 4.359237,
+        "trades": 148,
+        "winRate": 58.108108,
+        "profitFactor": 1.023802,
+        "maxDrawdownPct": 26.970927,
+        "activeDays": 92,
+        "positiveDays": 48,
+        "negativeDays": 44,
+        "positiveDayPct": 52.173913,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -175.385415,
+          "2026-02": 168.121553,
+          "2026-03": 186.645262,
+          "2026-04": -132.405319,
+          "2026-05": -3.383712
+        }
+      },
+      "validation": {
+        "finalBalance": 955.250338,
+        "returnPct": -4.474966,
+        "trades": 49,
+        "winRate": 59.183673,
+        "profitFactor": 0.92478,
+        "maxDrawdownPct": 12.876841,
+        "activeDays": 34,
+        "positiveDays": 19,
+        "negativeDays": 15,
+        "positiveDayPct": 55.882353,
+        "longestLosingDayStreak": 3,
+        "monthly": {
+          "2026-06": 63.466707,
+          "2026-07": 4.912383,
+          "2026-08": -113.128752
+        }
+      },
+      "score": 1.931106,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 868.385227,
+        "returnPct": -13.161477,
+        "trades": 57,
+        "winRate": 54.385965,
+        "profitFactor": 0.813426,
+        "maxDrawdownPct": 13.253816,
+        "activeDays": 35,
+        "positiveDays": 16,
+        "negativeDays": 19,
+        "positiveDayPct": 45.714286,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -90.389564,
+          "2026-10": -41.225209
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 2,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 45,
+        "targetR": 1,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "lowSpread",
+        "minStrength": 0.1,
+        "minRiskAtr": 1,
+        "maxRiskAtr": 3,
+        "maxSpreadAtr": 0.08,
+        "minEntryGapAtr": 0.05,
+        "sessions": [
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 1063.218053,
+        "returnPct": 6.321805,
+        "trades": 90,
+        "winRate": 48.888889,
+        "profitFactor": 1.057426,
+        "maxDrawdownPct": 23.796027,
+        "activeDays": 72,
+        "positiveDays": 34,
+        "negativeDays": 38,
+        "positiveDayPct": 47.222222,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-01": 98.350015,
+          "2026-02": -65.127876,
+          "2026-03": 65.618393,
+          "2026-04": -9.924737,
+          "2026-05": -25.697743
+        }
+      },
+      "validation": {
+        "finalBalance": 958.548122,
+        "returnPct": -4.145188,
+        "trades": 41,
+        "winRate": 46.341463,
+        "profitFactor": 0.915664,
+        "maxDrawdownPct": 18.593898,
+        "activeDays": 38,
+        "positiveDays": 18,
+        "negativeDays": 20,
+        "positiveDayPct": 47.368421,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": 96.816909,
+          "2026-07": -69.911172,
+          "2026-08": -68.357615
+        }
+      },
+      "score": -2.29176,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 879.062116,
+        "returnPct": -12.093788,
+        "trades": 38,
+        "winRate": 47.368421,
+        "profitFactor": 0.694684,
+        "maxDrawdownPct": 20.391003,
+        "activeDays": 35,
+        "positiveDays": 16,
+        "negativeDays": 19,
+        "positiveDayPct": 45.714286,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -140.120019,
+          "2026-10": 19.182135
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m5"
+        },
+        "bufferPips": 2,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 45,
+        "targetR": 2.5,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "nearEntry",
+        "minStrength": 0.3,
+        "maxStrength": 2,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 4,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0.05,
+        "maxEntryGapAtr": 0.75,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 1270.625219,
+        "returnPct": 27.062522,
+        "trades": 173,
+        "winRate": 58.959538,
+        "profitFactor": 1.108076,
+        "maxDrawdownPct": 20.378865,
+        "activeDays": 99,
+        "positiveDays": 52,
+        "negativeDays": 47,
+        "positiveDayPct": 52.525253,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -45.1545,
+          "2026-02": 342.456474,
+          "2026-03": -73.280386,
+          "2026-04": 46.858534,
+          "2026-05": -0.254904
+        }
+      },
+      "validation": {
+        "finalBalance": 885.719984,
+        "returnPct": -11.428002,
+        "trades": 64,
+        "winRate": 53.125,
+        "profitFactor": 0.852509,
+        "maxDrawdownPct": 18.310006,
+        "activeDays": 43,
+        "positiveDays": 18,
+        "negativeDays": 25,
+        "positiveDayPct": 41.860465,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": 6.356502,
+          "2026-07": 29.651372,
+          "2026-08": -150.28789
+        }
+      },
+      "score": -5.30079,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 628.759309,
+        "returnPct": -37.124069,
+        "trades": 80,
+        "winRate": 42.5,
+        "profitFactor": 0.624062,
+        "maxDrawdownPct": 43.272344,
+        "activeDays": 43,
+        "positiveDays": 14,
+        "negativeDays": 29,
+        "positiveDayPct": 32.55814,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-09": -167.225638,
+          "2026-10": -204.015054
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 60,
+        "targetR": 2,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "composite",
+        "minStrength": 0.2,
+        "maxStrength": 1.5,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0.05,
+        "maxEntryGapAtr": 0.5,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 994.670931,
+        "returnPct": -0.532907,
+        "trades": 113,
+        "winRate": 49.557522,
+        "profitFactor": 0.996534,
+        "maxDrawdownPct": 20.891439,
+        "activeDays": 92,
+        "positiveDays": 49,
+        "negativeDays": 42,
+        "positiveDayPct": 53.26087,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -152.896788,
+          "2026-02": 163.652095,
+          "2026-03": -101.320629,
+          "2026-04": 121.088833,
+          "2026-05": -35.85258
+        }
+      },
+      "validation": {
+        "finalBalance": 907.389738,
+        "returnPct": -9.261026,
+        "trades": 43,
+        "winRate": 44.186047,
+        "profitFactor": 0.840063,
+        "maxDrawdownPct": 20.953078,
+        "activeDays": 41,
+        "positiveDays": 19,
+        "negativeDays": 22,
+        "positiveDayPct": 46.341463,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-06": 34.05717,
+          "2026-07": -67.473117,
+          "2026-08": -59.194315
+        }
+      },
+      "score": -8.157211,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 806.764611,
+        "returnPct": -19.323539,
+        "trades": 43,
+        "winRate": 37.209302,
+        "profitFactor": 0.699991,
+        "maxDrawdownPct": 26.165611,
+        "activeDays": 36,
+        "positiveDays": 13,
+        "negativeDays": 23,
+        "positiveDayPct": 36.111111,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -37.272182,
+          "2026-10": -155.963207
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 2,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 60,
+        "targetR": 2.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "tightStop",
+        "minStrength": 0.3,
+        "maxStrength": 2,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 2,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ]
+      },
+      "train": {
+        "finalBalance": 1444.117197,
+        "returnPct": 44.41172,
+        "trades": 188,
+        "winRate": 53.723404,
+        "profitFactor": 1.175777,
+        "maxDrawdownPct": 39.012447,
+        "activeDays": 100,
+        "positiveDays": 49,
+        "negativeDays": 51,
+        "positiveDayPct": 49,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-01": -97.397927,
+          "2026-02": 220.651085,
+          "2026-03": -331.55722,
+          "2026-04": 347.84342,
+          "2026-05": 304.577839
+        }
+      },
+      "validation": {
+        "finalBalance": 837.450016,
+        "returnPct": -16.254998,
+        "trades": 72,
+        "winRate": 45.833333,
+        "profitFactor": 0.820292,
+        "maxDrawdownPct": 25.823921,
+        "activeDays": 46,
+        "positiveDays": 18,
+        "negativeDays": 28,
+        "positiveDayPct": 39.130435,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-06": -239.43944,
+          "2026-07": 119.451425,
+          "2026-08": -42.561969
+        }
+      },
+      "score": -11.592313,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 710.151249,
+        "returnPct": -28.984875,
+        "trades": 91,
+        "winRate": 41.758242,
+        "profitFactor": 0.747348,
+        "maxDrawdownPct": 33.927715,
+        "activeDays": 43,
+        "positiveDays": 21,
+        "negativeDays": 22,
+        "positiveDayPct": 48.837209,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -267.237148,
+          "2026-10": -22.611602
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 45,
+        "targetR": 2,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "tightStop",
+        "minStrength": 0.1,
+        "maxStrength": 1,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 2.5,
+        "minEntryGapAtr": 0.05,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 888.889443,
+        "returnPct": -11.111056,
+        "trades": 96,
+        "winRate": 47.916667,
+        "profitFactor": 0.923803,
+        "maxDrawdownPct": 27.458953,
+        "activeDays": 84,
+        "positiveDays": 40,
+        "negativeDays": 44,
+        "positiveDayPct": 47.619048,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-01": -144.114192,
+          "2026-02": 349.824911,
+          "2026-03": -123.972051,
+          "2026-04": -158.528615,
+          "2026-05": -34.32061
+        }
+      },
+      "validation": {
+        "finalBalance": 974.634135,
+        "returnPct": -2.536586,
+        "trades": 46,
+        "winRate": 43.478261,
+        "profitFactor": 0.964739,
+        "maxDrawdownPct": 13.803351,
+        "activeDays": 41,
+        "positiveDays": 19,
+        "negativeDays": 22,
+        "positiveDayPct": 46.341463,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": -39.745674,
+          "2026-07": 33.27728,
+          "2026-08": -18.89747
+        }
+      },
+      "score": -13.667084,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 735.906423,
+        "returnPct": -26.409358,
+        "trades": 50,
+        "winRate": 38,
+        "profitFactor": 0.654597,
+        "maxDrawdownPct": 34.640497,
+        "activeDays": 39,
+        "positiveDays": 15,
+        "negativeDays": 24,
+        "positiveDayPct": 38.461538,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-09": -127.257561,
+          "2026-10": -136.836015
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 4
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 90,
+        "targetR": 0.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "sessionOrder",
+        "minStrength": 0.1,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 2,
+        "maxSpreadAtr": 0.08,
+        "minEntryGapAtr": 0.1,
+        "maxEntryGapAtr": 0.5,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 923.627203,
+        "returnPct": -7.63728,
+        "trades": 138,
+        "winRate": 64.492754,
+        "profitFactor": 0.943694,
+        "maxDrawdownPct": 17.000765,
+        "activeDays": 81,
+        "positiveDays": 40,
+        "negativeDays": 41,
+        "positiveDayPct": 49.382716,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -56.29224,
+          "2026-02": 120.62618,
+          "2026-03": -53.654245,
+          "2026-04": -19.625708,
+          "2026-05": -67.426783
+        }
+      },
+      "validation": {
+        "finalBalance": 888.038998,
+        "returnPct": -11.1961,
+        "trades": 46,
+        "winRate": 54.347826,
+        "profitFactor": 0.76628,
+        "maxDrawdownPct": 18.459747,
+        "activeDays": 29,
+        "positiveDays": 13,
+        "negativeDays": 16,
+        "positiveDayPct": 44.827586,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": 56.522375,
+          "2026-07": -93.481036,
+          "2026-08": -75.002341
+        }
+      },
+      "score": -14.015888,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 955.764728,
+        "returnPct": -4.423527,
+        "trades": 48,
+        "winRate": 62.5,
+        "profitFactor": 0.900285,
+        "maxDrawdownPct": 19.74619,
+        "activeDays": 30,
+        "positiveDays": 14,
+        "negativeDays": 16,
+        "positiveDayPct": 46.666667,
+        "longestLosingDayStreak": 3,
+        "monthly": {
+          "2026-09": -137.809826,
+          "2026-10": 93.574554
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 3,
+        "stopMode": "signal",
+        "stopBufferAtr": 0,
+        "expiryMinutes": 60,
+        "targetR": 0.5,
+        "trailActivationR": 0.75,
+        "trailDistanceR": 0.5,
+        "ranking": "nearEntry",
+        "minStrength": 0.3,
+        "maxStrength": 1.25,
+        "minRiskAtr": 0.75,
+        "maxRiskAtr": 2,
+        "minEntryGapAtr": 0.1,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 1011.055696,
+        "returnPct": 1.10557,
+        "trades": 91,
+        "winRate": 67.032967,
+        "profitFactor": 1.013102,
+        "maxDrawdownPct": 15.649369,
+        "activeDays": 65,
+        "positiveDays": 39,
+        "negativeDays": 26,
+        "positiveDayPct": 60,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -76.627528,
+          "2026-02": -4.152694,
+          "2026-03": 98.067525,
+          "2026-04": 109.984064,
+          "2026-05": -116.215671
+        }
+      },
+      "validation": {
+        "finalBalance": 823.51273,
+        "returnPct": -17.648727,
+        "trades": 50,
+        "winRate": 58,
+        "profitFactor": 0.647987,
+        "maxDrawdownPct": 23.293532,
+        "activeDays": 35,
+        "positiveDays": 17,
+        "negativeDays": 18,
+        "positiveDayPct": 48.571429,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-06": -23.092509,
+          "2026-07": -79.067144,
+          "2026-08": -74.327617
+        }
+      },
+      "score": -17.531347,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 734.625435,
+        "returnPct": -26.537457,
+        "trades": 67,
+        "winRate": 55.223881,
+        "profitFactor": 0.616101,
+        "maxDrawdownPct": 29.596395,
+        "activeDays": 34,
+        "positiveDays": 15,
+        "negativeDays": 19,
+        "positiveDayPct": 44.117647,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-09": -152.745631,
+          "2026-10": -112.628935
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 3,
+          "m15KeepBars": 1
+        },
+        "bufferPips": 2,
+        "stopMode": "signal",
+        "stopBufferAtr": 0,
+        "expiryMinutes": 90,
+        "targetR": 1,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "lowSpread",
+        "minStrength": 0.1,
+        "maxStrength": 0.75,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 1,
+        "minEntryGapAtr": 0.1,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 808.174899,
+        "returnPct": -19.18251,
+        "trades": 90,
+        "winRate": 45.555556,
+        "profitFactor": 0.800338,
+        "maxDrawdownPct": 31.275335,
+        "activeDays": 68,
+        "positiveDays": 30,
+        "negativeDays": 38,
+        "positiveDayPct": 44.117647,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -194.015365,
+          "2026-02": -59.004375,
+          "2026-03": 26.884785,
+          "2026-04": 25.041824,
+          "2026-05": 9.26803
+        }
+      },
+      "validation": {
+        "finalBalance": 942.629183,
+        "returnPct": -5.737082,
+        "trades": 45,
+        "winRate": 48.888889,
+        "profitFactor": 0.870745,
+        "maxDrawdownPct": 10.855802,
+        "activeDays": 34,
+        "positiveDays": 17,
+        "negativeDays": 17,
+        "positiveDayPct": 50,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-06": -24.291553,
+          "2026-07": 34.960149,
+          "2026-08": -68.039413
+        }
+      },
+      "score": -19.46741,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 1055.518554,
+        "returnPct": 5.551855,
+        "trades": 44,
+        "winRate": 54.545455,
+        "profitFactor": 1.136272,
+        "maxDrawdownPct": 9.021094,
+        "activeDays": 34,
+        "positiveDays": 18,
+        "negativeDays": 16,
+        "positiveDayPct": 52.941176,
+        "longestLosingDayStreak": 3,
+        "monthly": {
+          "2026-09": 11.507153,
+          "2026-10": 44.0114
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 3,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 120,
+        "targetR": 0.5,
+        "trailActivationR": 0.75,
+        "trailDistanceR": 0.5,
+        "ranking": "sessionOrder",
+        "maxStrength": 2,
+        "minRiskAtr": 1,
+        "maxRiskAtr": 4,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 1,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "side": "BUY"
+      },
+      "train": {
+        "finalBalance": 984.834892,
+        "returnPct": -1.516511,
+        "trades": 106,
+        "winRate": 66.981132,
+        "profitFactor": 0.98578,
+        "maxDrawdownPct": 10.612079,
+        "activeDays": 84,
+        "positiveDays": 52,
+        "negativeDays": 32,
+        "positiveDayPct": 61.904762,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": 42.365599,
+          "2026-02": -18.525243,
+          "2026-03": 41.88802,
+          "2026-04": 7.709447,
+          "2026-05": -88.602931
+        }
+      },
+      "validation": {
+        "finalBalance": 776.052294,
+        "returnPct": -22.394771,
+        "trades": 54,
+        "winRate": 55.555556,
+        "profitFactor": 0.60841,
+        "maxDrawdownPct": 24.236879,
+        "activeDays": 45,
+        "positiveDays": 23,
+        "negativeDays": 22,
+        "positiveDayPct": 51.111111,
+        "longestLosingDayStreak": 3,
+        "monthly": {
+          "2026-06": -91.510315,
+          "2026-07": -56.056954,
+          "2026-08": -76.380436
+        }
+      },
+      "score": -20.166205,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 694.164474,
+        "returnPct": -30.583553,
+        "trades": 52,
+        "winRate": 48.076923,
+        "profitFactor": 0.483342,
+        "maxDrawdownPct": 31.605404,
+        "activeDays": 35,
+        "positiveDays": 13,
+        "negativeDays": 22,
+        "positiveDayPct": 37.142857,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -128.527171,
+          "2026-10": -177.308355
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m5"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 60,
+        "targetR": 2.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "sessionOrder",
+        "maxStrength": 0.75,
+        "minRiskAtr": 0.75,
+        "maxRiskAtr": 4,
+        "minEntryGapAtr": 0.1,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 833.666686,
+        "returnPct": -16.633331,
+        "trades": 114,
+        "winRate": 45.614035,
+        "profitFactor": 0.887379,
+        "maxDrawdownPct": 37.371999,
+        "activeDays": 78,
+        "positiveDays": 34,
+        "negativeDays": 44,
+        "positiveDayPct": 43.589744,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-01": -74.092313,
+          "2026-02": -2.803727,
+          "2026-03": -162.182588,
+          "2026-04": 116.134506,
+          "2026-05": -43.389192
+        }
+      },
+      "validation": {
+        "finalBalance": 850.301337,
+        "returnPct": -14.969866,
+        "trades": 69,
+        "winRate": 43.478261,
+        "profitFactor": 0.807927,
+        "maxDrawdownPct": 26.945511,
+        "activeDays": 46,
+        "positiveDays": 23,
+        "negativeDays": 23,
+        "positiveDayPct": 50,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-06": -137.228919,
+          "2026-07": 20.619412,
+          "2026-08": -33.089156
+        }
+      },
+      "score": -23.801263,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 590.056726,
+        "returnPct": -40.994327,
+        "trades": 62,
+        "winRate": 32.258065,
+        "profitFactor": 0.472263,
+        "maxDrawdownPct": 43.092191,
+        "activeDays": 35,
+        "positiveDays": 11,
+        "negativeDays": 24,
+        "positiveDayPct": 31.428571,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -215.394579,
+          "2026-10": -194.548695
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 4
+        },
+        "bufferPips": 2,
+        "stopMode": "pattern",
+        "stopBufferAtr": null,
+        "expiryMinutes": 90,
+        "targetR": 1.25,
+        "trailActivationR": null,
+        "trailDistanceR": 0.35,
+        "ranking": "lowSpread",
+        "maxStrength": 1.25,
+        "maxRiskAtr": 2.5,
+        "minEntryGapAtr": 0.1,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "side": "BUY"
+      },
+      "train": {
+        "finalBalance": 911.69397,
+        "returnPct": -8.830603,
+        "trades": 85,
+        "winRate": 47.058824,
+        "profitFactor": 0.92203,
+        "maxDrawdownPct": 36.238286,
+        "activeDays": 79,
+        "positiveDays": 38,
+        "negativeDays": 41,
+        "positiveDayPct": 48.101266,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-01": -32.087352,
+          "2026-02": -53.348704,
+          "2026-03": -241.248003,
+          "2026-04": 64.442013,
+          "2026-05": 173.936017
+        }
+      },
+      "validation": {
+        "finalBalance": 802.176513,
+        "returnPct": -19.782349,
+        "trades": 45,
+        "winRate": 37.777778,
+        "profitFactor": 0.670664,
+        "maxDrawdownPct": 22.040161,
+        "activeDays": 43,
+        "positiveDays": 17,
+        "negativeDays": 26,
+        "positiveDayPct": 39.534884,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": -152.994957,
+          "2026-07": 47.063645,
+          "2026-08": -91.892175
+        }
+      },
+      "score": -25.209337,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 660.413561,
+        "returnPct": -33.958644,
+        "trades": 42,
+        "winRate": 28.571429,
+        "profitFactor": 0.448749,
+        "maxDrawdownPct": 35.382328,
+        "activeDays": 34,
+        "positiveDays": 11,
+        "negativeDays": 23,
+        "positiveDayPct": 32.352941,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -254.700968,
+          "2026-10": -84.885471
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 60,
+        "targetR": 2,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "bodyAtr",
+        "minStrength": 0.3,
+        "maxStrength": 1.25,
+        "minRiskAtr": 0.5,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "side": "BUY"
+      },
+      "train": {
+        "finalBalance": 906.25906,
+        "returnPct": -9.374094,
+        "trades": 88,
+        "winRate": 45.454545,
+        "profitFactor": 0.931576,
+        "maxDrawdownPct": 23.87223,
+        "activeDays": 77,
+        "positiveDays": 37,
+        "negativeDays": 40,
+        "positiveDayPct": 48.051948,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": 122.354715,
+          "2026-02": 2.792887,
+          "2026-03": -70.383587,
+          "2026-04": 8.232092,
+          "2026-05": -156.737047
+        }
+      },
+      "validation": {
+        "finalBalance": 778.260472,
+        "returnPct": -22.173953,
+        "trades": 53,
+        "winRate": 43.396226,
+        "profitFactor": 0.650775,
+        "maxDrawdownPct": 25.506853,
+        "activeDays": 44,
+        "positiveDays": 21,
+        "negativeDays": 23,
+        "positiveDayPct": 47.727273,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-06": -90.600638,
+          "2026-07": -120.292846,
+          "2026-08": -10.846044
+        }
+      },
+      "score": -25.700642,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 512.985508,
+        "returnPct": -48.701449,
+        "trades": 61,
+        "winRate": 29.508197,
+        "profitFactor": 0.420862,
+        "maxDrawdownPct": 48.701449,
+        "activeDays": 40,
+        "positiveDays": 11,
+        "negativeDays": 29,
+        "positiveDayPct": 27.5,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-09": -157.337869,
+          "2026-10": -329.676623
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 4,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 45,
+        "targetR": 2.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "farEntry",
+        "minStrength": 0.1,
+        "maxStrength": 0.75,
+        "minRiskAtr": 0.75,
+        "maxRiskAtr": 4,
+        "minEntryGapAtr": 0.25,
+        "maxEntryGapAtr": 1,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 1071.347561,
+        "returnPct": 7.134756,
+        "trades": 92,
+        "winRate": 52.173913,
+        "profitFactor": 1.061697,
+        "maxDrawdownPct": 26.793621,
+        "activeDays": 76,
+        "positiveDays": 40,
+        "negativeDays": 36,
+        "positiveDayPct": 52.631579,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -122.322834,
+          "2026-02": -112.063411,
+          "2026-03": 26.752991,
+          "2026-04": 210.841438,
+          "2026-05": 68.139376
+        }
+      },
+      "validation": {
+        "finalBalance": 747.595317,
+        "returnPct": -25.240468,
+        "trades": 43,
+        "winRate": 39.534884,
+        "profitFactor": 0.6035,
+        "maxDrawdownPct": 28.004533,
+        "activeDays": 37,
+        "positiveDays": 14,
+        "negativeDays": 23,
+        "positiveDayPct": 37.837838,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": -96.323212,
+          "2026-07": 16.500671,
+          "2026-08": -172.582142
+        }
+      },
+      "score": -26.246294,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 845.509106,
+        "returnPct": -15.449089,
+        "trades": 51,
+        "winRate": 45.098039,
+        "profitFactor": 0.803722,
+        "maxDrawdownPct": 20.351668,
+        "activeDays": 38,
+        "positiveDays": 18,
+        "negativeDays": 20,
+        "positiveDayPct": 47.368421,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -80.360565,
+          "2026-10": -74.130329
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {},
+        "bufferPips": 2,
+        "stopMode": "pattern",
+        "stopBufferAtr": null,
+        "expiryMinutes": 15,
+        "targetR": 2,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "lowSpread",
+        "minStrength": 0.3,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 2,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "train": {
+        "finalBalance": 1149.85269,
+        "returnPct": 14.985269,
+        "trades": 113,
+        "winRate": 59.292035,
+        "profitFactor": 1.103598,
+        "maxDrawdownPct": 22.219202,
+        "activeDays": 77,
+        "positiveDays": 42,
+        "negativeDays": 35,
+        "positiveDayPct": 54.545455,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -12.669859,
+          "2026-02": 298.153944,
+          "2026-03": -82.543813,
+          "2026-04": -25.179784,
+          "2026-05": -27.907799
+        }
+      },
+      "validation": {
+        "finalBalance": 777.688697,
+        "returnPct": -22.23113,
+        "trades": 45,
+        "winRate": 42.222222,
+        "profitFactor": 0.587335,
+        "maxDrawdownPct": 22.23113,
+        "activeDays": 35,
+        "positiveDays": 13,
+        "negativeDays": 22,
+        "positiveDayPct": 37.142857,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-06": -37.596627,
+          "2026-07": -36.115062,
+          "2026-08": -148.599615
+        }
+      },
+      "score": -26.536374,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 778.742661,
+        "returnPct": -22.125734,
+        "trades": 51,
+        "winRate": 49.019608,
+        "profitFactor": 0.642991,
+        "maxDrawdownPct": 30.228651,
+        "activeDays": 35,
+        "positiveDays": 17,
+        "negativeDays": 18,
+        "positiveDayPct": 48.571429,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -132.20661,
+          "2026-10": -89.050729
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 4,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 90,
+        "targetR": 1.25,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "farEntry",
+        "maxStrength": 0.75,
+        "minEntryGapAtr": 0.1,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 744.736884,
+        "returnPct": -25.526312,
+        "trades": 93,
+        "winRate": 53.763441,
+        "profitFactor": 0.768103,
+        "maxDrawdownPct": 31.00344,
+        "activeDays": 80,
+        "positiveDays": 42,
+        "negativeDays": 38,
+        "positiveDayPct": 52.5,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-01": -106.520923,
+          "2026-02": 13.954507,
+          "2026-03": -96.308197,
+          "2026-04": -22.2825,
+          "2026-05": -44.106003
+        }
+      },
+      "validation": {
+        "finalBalance": 911.511106,
+        "returnPct": -8.848889,
+        "trades": 41,
+        "winRate": 51.219512,
+        "profitFactor": 0.837862,
+        "maxDrawdownPct": 18.862237,
+        "activeDays": 41,
+        "positiveDays": 21,
+        "negativeDays": 20,
+        "positiveDayPct": 51.219512,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": 8.33896,
+          "2026-07": 81.389415,
+          "2026-08": -178.21727
+        }
+      },
+      "score": -27.927943,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 781.753053,
+        "returnPct": -21.824695,
+        "trades": 38,
+        "winRate": 44.736842,
+        "profitFactor": 0.607435,
+        "maxDrawdownPct": 28.41107,
+        "activeDays": 34,
+        "positiveDays": 16,
+        "negativeDays": 18,
+        "positiveDayPct": 47.058824,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -48.56032,
+          "2026-10": -169.686627
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 3,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 120,
+        "targetR": 1,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "tightStop",
+        "minStrength": 0.1,
+        "maxStrength": 1.5,
+        "minRiskAtr": 0.25,
+        "maxSpreadAtr": 0.08,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 1,
+        "side": "SELL"
+      },
+      "train": {
+        "finalBalance": 806.093778,
+        "returnPct": -19.390622,
+        "trades": 195,
+        "winRate": 47.179487,
+        "profitFactor": 0.909209,
+        "maxDrawdownPct": 39.165631,
+        "activeDays": 101,
+        "positiveDays": 49,
+        "negativeDays": 52,
+        "positiveDayPct": 48.514851,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-01": -284.056527,
+          "2026-02": 155.770637,
+          "2026-03": -128.203153,
+          "2026-04": -29.780723,
+          "2026-05": 92.363544
+        }
+      },
+      "validation": {
+        "finalBalance": 794.293543,
+        "returnPct": -20.570646,
+        "trades": 55,
+        "winRate": 38.181818,
+        "profitFactor": 0.686863,
+        "maxDrawdownPct": 31.791293,
+        "activeDays": 33,
+        "positiveDays": 14,
+        "negativeDays": 19,
+        "positiveDayPct": 42.424242,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-06": 72.926625,
+          "2026-07": -167.61562,
+          "2026-08": -111.017462
+        }
+      },
+      "score": -28.053571,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 500.205006,
+        "returnPct": -49.979499,
+        "trades": 91,
+        "winRate": 35.164835,
+        "profitFactor": 0.518365,
+        "maxDrawdownPct": 49.979499,
+        "activeDays": 40,
+        "positiveDays": 13,
+        "negativeDays": 27,
+        "positiveDayPct": 32.5,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -314.496545,
+          "2026-10": -185.298449
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 4
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 60,
+        "targetR": 0.75,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "farEntry",
+        "minStrength": 0.1,
+        "maxStrength": 0.75,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 4,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 1260.2743,
+        "returnPct": 26.02743,
+        "trades": 154,
+        "winRate": 58.441558,
+        "profitFactor": 1.144559,
+        "maxDrawdownPct": 21.657804,
+        "activeDays": 93,
+        "positiveDays": 48,
+        "negativeDays": 45,
+        "positiveDayPct": 51.612903,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -84.776612,
+          "2026-02": 256.876072,
+          "2026-03": 22.902129,
+          "2026-04": 154.03858,
+          "2026-05": -88.76587
+        }
+      },
+      "validation": {
+        "finalBalance": 718.268536,
+        "returnPct": -28.173146,
+        "trades": 73,
+        "winRate": 45.205479,
+        "profitFactor": 0.654134,
+        "maxDrawdownPct": 35.069289,
+        "activeDays": 42,
+        "positiveDays": 15,
+        "negativeDays": 27,
+        "positiveDayPct": 35.714286,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-06": -59.397493,
+          "2026-07": -58.58747,
+          "2026-08": -163.746501
+        }
+      },
+      "score": -29.567733,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 692.887046,
+        "returnPct": -30.711295,
+        "trades": 79,
+        "winRate": 44.303797,
+        "profitFactor": 0.612315,
+        "maxDrawdownPct": 37.202057,
+        "activeDays": 43,
+        "positiveDays": 19,
+        "negativeDays": 24,
+        "positiveDayPct": 44.186047,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -220.484056,
+          "2026-10": -86.628899
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 4,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 90,
+        "targetR": 0.75,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "tightStop",
+        "minStrength": 0.3,
+        "maxStrength": 1.5,
+        "minRiskAtr": 0.5,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.5,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 783.757169,
+        "returnPct": -21.624283,
+        "trades": 118,
+        "winRate": 50.847458,
+        "profitFactor": 0.837251,
+        "maxDrawdownPct": 30.821675,
+        "activeDays": 81,
+        "positiveDays": 37,
+        "negativeDays": 44,
+        "positiveDayPct": 45.679012,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-01": -84.822654,
+          "2026-02": 15.02832,
+          "2026-03": -124.737914,
+          "2026-04": -54.837446,
+          "2026-05": 33.126864
+        }
+      },
+      "validation": {
+        "finalBalance": 775.313913,
+        "returnPct": -22.468609,
+        "trades": 40,
+        "winRate": 40,
+        "profitFactor": 0.555364,
+        "maxDrawdownPct": 29.490062,
+        "activeDays": 34,
+        "positiveDays": 15,
+        "negativeDays": 19,
+        "positiveDayPct": 44.117647,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-06": 29.624471,
+          "2026-07": -186.25782,
+          "2026-08": -68.052739
+        }
+      },
+      "score": -29.94815,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 733.94169,
+        "returnPct": -26.605831,
+        "trades": 48,
+        "winRate": 41.666667,
+        "profitFactor": 0.53873,
+        "maxDrawdownPct": 35.824838,
+        "activeDays": 35,
+        "positiveDays": 12,
+        "negativeDays": 23,
+        "positiveDayPct": 34.285714,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -160.632357,
+          "2026-10": -105.425953
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 3,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 90,
+        "targetR": 2,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "composite",
+        "minStrength": 0.1,
+        "maxStrength": 2,
+        "minRiskAtr": 1,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 923.035449,
+        "returnPct": -7.696455,
+        "trades": 113,
+        "winRate": 50.442478,
+        "profitFactor": 0.950111,
+        "maxDrawdownPct": 36.399988,
+        "activeDays": 76,
+        "positiveDays": 37,
+        "negativeDays": 39,
+        "positiveDayPct": 48.684211,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -95.534718,
+          "2026-02": 406.414805,
+          "2026-03": -190.309482,
+          "2026-04": -225.601201,
+          "2026-05": 28.066045
+        }
+      },
+      "validation": {
+        "finalBalance": 762.531199,
+        "returnPct": -23.74688,
+        "trades": 51,
+        "winRate": 43.137255,
+        "profitFactor": 0.594226,
+        "maxDrawdownPct": 27.455749,
+        "activeDays": 35,
+        "positiveDays": 16,
+        "negativeDays": 19,
+        "positiveDayPct": 45.714286,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-06": -95.805436,
+          "2026-07": -73.83667,
+          "2026-08": -67.826695
+        }
+      },
+      "score": -30.69214,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 734.272208,
+        "returnPct": -26.572779,
+        "trades": 55,
+        "winRate": 34.545455,
+        "profitFactor": 0.643198,
+        "maxDrawdownPct": 37.896753,
+        "activeDays": 35,
+        "positiveDays": 14,
+        "negativeDays": 21,
+        "positiveDayPct": 40,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -165.692982,
+          "2026-10": -100.03481
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 4
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 120,
+        "targetR": 1,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "composite",
+        "minStrength": 0.5,
+        "maxStrength": 1,
+        "minRiskAtr": 1,
+        "maxRiskAtr": 3,
+        "maxEntryGapAtr": 1,
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "train": {
+        "finalBalance": 767.848211,
+        "returnPct": -23.215179,
+        "trades": 134,
+        "winRate": 46.268657,
+        "profitFactor": 0.864179,
+        "maxDrawdownPct": 30.781654,
+        "activeDays": 88,
+        "positiveDays": 35,
+        "negativeDays": 53,
+        "positiveDayPct": 39.772727,
+        "longestLosingDayStreak": 9,
+        "monthly": {
+          "2026-01": -143.646777,
+          "2026-02": 98.843695,
+          "2026-03": -46.649403,
+          "2026-04": -98.928799,
+          "2026-05": -41.770505
+        }
+      },
+      "validation": {
+        "finalBalance": 928.805894,
+        "returnPct": -7.119411,
+        "trades": 76,
+        "winRate": 50,
+        "profitFactor": 0.92193,
+        "maxDrawdownPct": 18.539433,
+        "activeDays": 46,
+        "positiveDays": 20,
+        "negativeDays": 26,
+        "positiveDayPct": 43.478261,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-06": -60.170175,
+          "2026-07": 65.002427,
+          "2026-08": -76.026357
+        }
+      },
+      "score": -31.060857,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 803.076692,
+        "returnPct": -19.692331,
+        "trades": 72,
+        "winRate": 41.666667,
+        "profitFactor": 0.80123,
+        "maxDrawdownPct": 31.621713,
+        "activeDays": 42,
+        "positiveDays": 20,
+        "negativeDays": 22,
+        "positiveDayPct": 47.619048,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": 19.994712,
+          "2026-10": -216.91802
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 12,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0,
+        "expiryMinutes": 90,
+        "targetR": 2.5,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.5,
+        "ranking": "lowSpread",
+        "maxStrength": 1,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 2.5,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0.05,
+        "sessions": [
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "side": "BUY"
+      },
+      "train": {
+        "finalBalance": 899.621935,
+        "returnPct": -10.037806,
+        "trades": 91,
+        "winRate": 47.252747,
+        "profitFactor": 0.921576,
+        "maxDrawdownPct": 23.213562,
+        "activeDays": 68,
+        "positiveDays": 33,
+        "negativeDays": 34,
+        "positiveDayPct": 48.529412,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-01": 66.020574,
+          "2026-02": 28.044661,
+          "2026-03": -125.234986,
+          "2026-04": -18.409777,
+          "2026-05": -50.798537
+        }
+      },
+      "validation": {
+        "finalBalance": 754.285984,
+        "returnPct": -24.571402,
+        "trades": 60,
+        "winRate": 41.666667,
+        "profitFactor": 0.630857,
+        "maxDrawdownPct": 27.706707,
+        "activeDays": 41,
+        "positiveDays": 16,
+        "negativeDays": 25,
+        "positiveDayPct": 39.02439,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": -127.474429,
+          "2026-07": -81.673802,
+          "2026-08": -36.565785
+        }
+      },
+      "score": -32.325644,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 859.457796,
+        "returnPct": -14.05422,
+        "trades": 47,
+        "winRate": 46.808511,
+        "profitFactor": 0.741812,
+        "maxDrawdownPct": 26.644664,
+        "activeDays": 33,
+        "positiveDays": 16,
+        "negativeDays": 17,
+        "positiveDayPct": 48.484848,
+        "longestLosingDayStreak": 3,
+        "monthly": {
+          "2026-09": -68.829829,
+          "2026-10": -71.712375
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": null,
+        "expiryMinutes": 90,
+        "targetR": 0.5,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "bodyAtr",
+        "minStrength": 0.5,
+        "maxStrength": 2,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 3,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 1010.372494,
+        "returnPct": 1.037249,
+        "trades": 144,
+        "winRate": 63.194444,
+        "profitFactor": 1.008349,
+        "maxDrawdownPct": 20.400592,
+        "activeDays": 77,
+        "positiveDays": 43,
+        "negativeDays": 34,
+        "positiveDayPct": 55.844156,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -105.582667,
+          "2026-02": -51.142813,
+          "2026-03": 149.086919,
+          "2026-04": -26.697178,
+          "2026-05": 44.708234
+        }
+      },
+      "validation": {
+        "finalBalance": 757.851325,
+        "returnPct": -24.214868,
+        "trades": 58,
+        "winRate": 48.275862,
+        "profitFactor": 0.565051,
+        "maxDrawdownPct": 25.933643,
+        "activeDays": 29,
+        "positiveDays": 5,
+        "negativeDays": 24,
+        "positiveDayPct": 17.241379,
+        "longestLosingDayStreak": 12,
+        "monthly": {
+          "2026-06": -94.361543,
+          "2026-07": -131.662406,
+          "2026-08": -16.124726
+        }
+      },
+      "score": -32.781142,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 760.348475,
+        "returnPct": -23.965152,
+        "trades": 86,
+        "winRate": 54.651163,
+        "profitFactor": 0.694646,
+        "maxDrawdownPct": 28.846421,
+        "activeDays": 34,
+        "positiveDays": 12,
+        "negativeDays": 22,
+        "positiveDayPct": 35.294118,
+        "longestLosingDayStreak": 9,
+        "monthly": {
+          "2026-09": -162.188123,
+          "2026-10": -77.463402
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 4,
+        "stopMode": "signal",
+        "stopBufferAtr": null,
+        "expiryMinutes": 120,
+        "targetR": 0.5,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "nearEntry",
+        "minStrength": 0.2,
+        "maxStrength": 1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "finalBalance": 846.182679,
+        "returnPct": -15.381732,
+        "trades": 173,
+        "winRate": 64.739884,
+        "profitFactor": 0.905289,
+        "maxDrawdownPct": 24.875143,
+        "activeDays": 106,
+        "positiveDays": 56,
+        "negativeDays": 50,
+        "positiveDayPct": 52.830189,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-01": -81.898885,
+          "2026-02": -86.861552,
+          "2026-03": 99.38517,
+          "2026-04": 34.357833,
+          "2026-05": -118.799887
+        }
+      },
+      "validation": {
+        "finalBalance": 731.680062,
+        "returnPct": -26.831994,
+        "trades": 74,
+        "winRate": 56.756757,
+        "profitFactor": 0.656044,
+        "maxDrawdownPct": 27.920811,
+        "activeDays": 44,
+        "positiveDays": 19,
+        "negativeDays": 25,
+        "positiveDayPct": 43.181818,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": -130.980478,
+          "2026-07": -25.654958,
+          "2026-08": -111.684502
+        }
+      },
+      "score": -34.185328,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 547.570855,
+        "returnPct": -45.242915,
+        "trades": 100,
+        "winRate": 52,
+        "profitFactor": 0.564745,
+        "maxDrawdownPct": 46.83712,
+        "activeDays": 43,
+        "positiveDays": 14,
+        "negativeDays": 29,
+        "positiveDayPct": 32.55814,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -207.21518,
+          "2026-10": -245.213966
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 120,
+        "targetR": 2,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "nearEntry",
+        "maxStrength": 2,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 3,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.75,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "finalBalance": 841.601238,
+        "returnPct": -15.839876,
+        "trades": 175,
+        "winRate": 55.428571,
+        "profitFactor": 0.909456,
+        "maxDrawdownPct": 41.786319,
+        "activeDays": 103,
+        "positiveDays": 47,
+        "negativeDays": 56,
+        "positiveDayPct": 45.631068,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -114.043077,
+          "2026-02": -177.445517,
+          "2026-03": 154.040832,
+          "2026-04": 31.033173,
+          "2026-05": -51.984173
+        }
+      },
+      "validation": {
+        "finalBalance": 760.597128,
+        "returnPct": -23.940287,
+        "trades": 86,
+        "winRate": 50,
+        "profitFactor": 0.713791,
+        "maxDrawdownPct": 33.313611,
+        "activeDays": 48,
+        "positiveDays": 20,
+        "negativeDays": 28,
+        "positiveDayPct": 41.666667,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-06": -150.59867,
+          "2026-07": -88.620526,
+          "2026-08": -0.183676
+        }
+      },
+      "score": -34.455759,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 475.88275,
+        "returnPct": -52.411725,
+        "trades": 96,
+        "winRate": 40.625,
+        "profitFactor": 0.479853,
+        "maxDrawdownPct": 55.814796,
+        "activeDays": 43,
+        "positiveDays": 12,
+        "negativeDays": 31,
+        "positiveDayPct": 27.906977,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -388.736922,
+          "2026-10": -135.380327
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m15"
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 90,
+        "targetR": 1.5,
+        "trailActivationR": null,
+        "trailDistanceR": 0.35,
+        "ranking": "bodyAtr",
+        "minStrength": 0.2,
+        "minRiskAtr": 0.5,
+        "maxSpreadAtr": 0.08,
+        "maxEntryGapAtr": 1,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo",
+          "tokyo+london",
+          "london"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "train": {
+        "finalBalance": 969.509769,
+        "returnPct": -3.049023,
+        "trades": 199,
+        "winRate": 42.211055,
+        "profitFactor": 0.991262,
+        "maxDrawdownPct": 50.356594,
+        "activeDays": 99,
+        "positiveDays": 51,
+        "negativeDays": 48,
+        "positiveDayPct": 51.515152,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": 4.69288,
+          "2026-02": 281.208084,
+          "2026-03": -9.609854,
+          "2026-04": -292.15645,
+          "2026-05": -14.62489
+        }
+      },
+      "validation": {
+        "finalBalance": 720.103127,
+        "returnPct": -27.989687,
+        "trades": 66,
+        "winRate": 34.848485,
+        "profitFactor": 0.68726,
+        "maxDrawdownPct": 31.339011,
+        "activeDays": 42,
+        "positiveDays": 16,
+        "negativeDays": 26,
+        "positiveDayPct": 38.095238,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-06": -275.683097,
+          "2026-07": 164.314673,
+          "2026-08": -168.528449
+        }
+      },
+      "score": -35.259064,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 623.288265,
+        "returnPct": -37.671173,
+        "trades": 84,
+        "winRate": 33.333333,
+        "profitFactor": 0.691246,
+        "maxDrawdownPct": 43.751741,
+        "activeDays": 44,
+        "positiveDays": 19,
+        "negativeDays": 25,
+        "positiveDayPct": 43.181818,
+        "longestLosingDayStreak": 4,
+        "monthly": {
+          "2026-09": -65.79952,
+          "2026-10": -310.912215
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 2
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.2,
+        "expiryMinutes": 30,
+        "targetR": 1,
+        "trailActivationR": 1,
+        "trailDistanceR": 0.35,
+        "ranking": "bodyAtr",
+        "minStrength": 0.1,
+        "minRiskAtr": 0.75,
+        "maxRiskAtr": 3,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.5,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "hours": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "train": {
+        "finalBalance": 758.268829,
+        "returnPct": -24.173117,
+        "trades": 155,
+        "winRate": 47.096774,
+        "profitFactor": 0.858962,
+        "maxDrawdownPct": 37.400487,
+        "activeDays": 97,
+        "positiveDays": 43,
+        "negativeDays": 54,
+        "positiveDayPct": 44.329897,
+        "longestLosingDayStreak": 8,
+        "monthly": {
+          "2026-01": -197.360458,
+          "2026-02": -20.669055,
+          "2026-03": -120.706177,
+          "2026-04": -24.577435,
+          "2026-05": 121.581954
+        }
+      },
+      "validation": {
+        "finalBalance": 755.551815,
+        "returnPct": -24.444818,
+        "trades": 61,
+        "winRate": 39.344262,
+        "profitFactor": 0.663399,
+        "maxDrawdownPct": 33.80693,
+        "activeDays": 41,
+        "positiveDays": 17,
+        "negativeDays": 24,
+        "positiveDayPct": 41.463415,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": 23.41727,
+          "2026-07": -209.831659,
+          "2026-08": -58.033796
+        }
+      },
+      "score": -36.27544,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 795.689269,
+        "returnPct": -20.431073,
+        "trades": 67,
+        "winRate": 41.791045,
+        "profitFactor": 0.746929,
+        "maxDrawdownPct": 28.636155,
+        "activeDays": 42,
+        "positiveDays": 16,
+        "negativeDays": 26,
+        "positiveDayPct": 38.095238,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-09": -53.445954,
+          "2026-10": -150.864776
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "m5"
+        },
+        "bufferPips": 1,
+        "stopMode": "pattern",
+        "stopBufferAtr": 0.05,
+        "expiryMinutes": 30,
+        "targetR": 2.5,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "tightStop",
+        "minStrength": 0.2,
+        "maxStrength": 1,
+        "minRiskAtr": 0.25,
+        "maxRiskAtr": 4,
+        "minEntryGapAtr": 0.05,
+        "maxEntryGapAtr": 0.5,
+        "sessions": [
+          "tokyo+london",
+          "london",
+          "london+newYork"
+        ],
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "train": {
+        "finalBalance": 1606.401977,
+        "returnPct": 60.640198,
+        "trades": 92,
+        "winRate": 51.086957,
+        "profitFactor": 1.396969,
+        "maxDrawdownPct": 18.248913,
+        "activeDays": 68,
+        "positiveDays": 36,
+        "negativeDays": 32,
+        "positiveDayPct": 52.941176,
+        "longestLosingDayStreak": 6,
+        "monthly": {
+          "2026-01": 65.722541,
+          "2026-02": 298.998416,
+          "2026-03": -104.474044,
+          "2026-04": 200.047702,
+          "2026-05": 146.107362
+        }
+      },
+      "validation": {
+        "finalBalance": 605.112762,
+        "returnPct": -39.488724,
+        "trades": 62,
+        "winRate": 29.032258,
+        "profitFactor": 0.540084,
+        "maxDrawdownPct": 43.130025,
+        "activeDays": 35,
+        "positiveDays": 11,
+        "negativeDays": 24,
+        "positiveDayPct": 31.428571,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-06": -12.289694,
+          "2026-07": -80.758009,
+          "2026-08": -301.839535
+        }
+      },
+      "score": -36.352368,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 579.920359,
+        "returnPct": -42.007964,
+        "trades": 62,
+        "winRate": 30.645161,
+        "profitFactor": 0.487859,
+        "maxDrawdownPct": 44.413605,
+        "activeDays": 34,
+        "positiveDays": 12,
+        "negativeDays": 22,
+        "positiveDayPct": 35.294118,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -216.521089,
+          "2026-10": -203.558552
+        }
+      }
+    },
+    {
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "m5KeepBars": 6,
+          "m15KeepBars": 4
+        },
+        "bufferPips": 1,
+        "stopMode": "signal",
+        "stopBufferAtr": 0.1,
+        "expiryMinutes": 60,
+        "targetR": 1,
+        "trailActivationR": 1.25,
+        "trailDistanceR": 0.5,
+        "ranking": "lowSpread",
+        "minStrength": 0.3,
+        "maxStrength": 1.25,
+        "minRiskAtr": 0.5,
+        "maxRiskAtr": 1.5,
+        "maxSpreadAtr": 0.1,
+        "minEntryGapAtr": 0,
+        "maxEntryGapAtr": 0.25,
+        "sessions": [
+          "sydney+tokyo",
+          "tokyo"
+        ],
+        "hours": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "train": {
+        "finalBalance": 726.562869,
+        "returnPct": -27.343713,
+        "trades": 118,
+        "winRate": 45.762712,
+        "profitFactor": 0.802268,
+        "maxDrawdownPct": 34.190167,
+        "activeDays": 88,
+        "positiveDays": 39,
+        "negativeDays": 49,
+        "positiveDayPct": 44.318182,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-01": -149.92355,
+          "2026-02": -50.082143,
+          "2026-03": -24.113358,
+          "2026-04": -64.126286,
+          "2026-05": 14.808206
+        }
+      },
+      "validation": {
+        "finalBalance": 867.675309,
+        "returnPct": -13.232469,
+        "trades": 45,
+        "winRate": 44.444444,
+        "profitFactor": 0.748915,
+        "maxDrawdownPct": 16.518127,
+        "activeDays": 35,
+        "positiveDays": 13,
+        "negativeDays": 22,
+        "positiveDayPct": 37.142857,
+        "longestLosingDayStreak": 5,
+        "monthly": {
+          "2026-06": -59.470697,
+          "2026-07": 32.750652,
+          "2026-08": -105.604645
+        }
+      },
+      "score": -37.194596,
+      "acceptedDevelopment": false,
+      "test": {
+        "finalBalance": 660.376318,
+        "returnPct": -33.962368,
+        "trades": 63,
+        "winRate": 38.095238,
+        "profitFactor": 0.601199,
+        "maxDrawdownPct": 34.191293,
+        "activeDays": 41,
+        "positiveDays": 15,
+        "negativeDays": 26,
+        "positiveDayPct": 36.585366,
+        "longestLosingDayStreak": 7,
+        "monthly": {
+          "2026-09": -81.987437,
+          "2026-10": -257.636245
+        }
+      }
+    }
+  ]
+}

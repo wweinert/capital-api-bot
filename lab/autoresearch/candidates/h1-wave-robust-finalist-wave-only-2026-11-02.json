@@ -1,0 +1,19 @@
+{
+  "name": "h1-wave-robust-finalist-wave-only-v1",
+  "selection": "Exact frozen combined finalist with only signalMode changed to wave for a paired comparison",
+  "experiment": {
+    "signalMode": "wave",
+    "detector": { "mode": "requireBoth" },
+    "bufferPips": 3,
+    "stopMode": "signal",
+    "stopBufferAtr": null,
+    "expiryMinutes": 45,
+    "targetR": 1.5,
+    "trailActivationR": 1,
+    "trailDistanceR": 0.35,
+    "ranking": "sessionOrder",
+    "minTrendScore": 0,
+    "maxStrength": 0.75,
+    "hours": [0, 1, 2, 3, 4, 5, 6, 7]
+  }
+}

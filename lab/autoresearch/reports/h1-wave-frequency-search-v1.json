@@ -1,0 +1,322 @@
+{
+  "protocol": "h1-wave-all-session-frequency-search-v1",
+  "generatedAt": "2026-11-01T23:16:54.380Z",
+  "seed": "0x24a1101",
+  "dataEnd": "2026-10-30T21:00:00.000Z",
+  "searched": 4000,
+  "objective": "all configured sessions, target 2.5 executed trades per market day, maximize profitable days and robust return",
+  "guardrails": {
+    "profiles": false,
+    "hoursFilter": false,
+    "sessionsFilter": false,
+    "sideFilter": false,
+    "selectionUses": "January-August development only",
+    "diagnostic": "September-October was previously inspected and is not used for selection",
+    "minimumTradesPerMarketDay": 1.5,
+    "minimumPositiveRollingPeriods": 3,
+    "maximumDevelopmentDrawdownPct": 30
+  },
+  "marketDays": {
+    "train": 129,
+    "validation": 79,
+    "test": 52,
+    "outOfSample": 131,
+    "full": 260,
+    "screenshotWindow": 5
+  },
+  "acceptedDevelopment": 0,
+  "rollingFinalists": 0,
+  "winner": {
+    "slots": 2,
+    "experiment": {
+      "signalMode": "combined",
+      "detector": {},
+      "bufferPips": 3,
+      "stopMode": "signal",
+      "stopBufferAtr": null,
+      "expiryMinutes": 15,
+      "targetR": 0.75,
+      "trailActivationR": 1,
+      "trailDistanceR": 0.5,
+      "ranking": "nearEntry",
+      "maxTrendScore": 0,
+      "maxSpreadAtr": 0.03
+    },
+    "train": {
+      "finalBalance": 1110.975526,
+      "returnPct": 11.097553,
+      "trades": 20,
+      "tradesPerMarketDay": 0.155039,
+      "tradesPerActiveDay": 1.428571,
+      "winRate": 65,
+      "profitFactor": 1.674244,
+      "maxDrawdownPct": 3.733751,
+      "activeDays": 14,
+      "positiveDays": 10,
+      "negativeDays": 4,
+      "positiveDayPct": 71.428571,
+      "longestLosingDayStreak": 1,
+      "monthly": {
+        "2026-01": 19.15677,
+        "2026-02": 10.001774,
+        "2026-03": 81.816982
+      },
+      "sessionTrades": {
+        "sydney": 9,
+        "tokyo": 11,
+        "london": 9,
+        "newYork": 6
+      }
+    },
+    "validation": {
+      "finalBalance": 1032.576871,
+      "returnPct": 3.257687,
+      "trades": 5,
+      "tradesPerMarketDay": 0.063291,
+      "tradesPerActiveDay": 1.25,
+      "winRate": 80,
+      "profitFactor": 2.236295,
+      "maxDrawdownPct": 2.597005,
+      "activeDays": 4,
+      "positiveDays": 3,
+      "negativeDays": 1,
+      "positiveDayPct": 75,
+      "longestLosingDayStreak": 1,
+      "monthly": {
+        "2026-07": -11.70507,
+        "2026-08": 44.281941
+      },
+      "sessionTrades": {
+        "sydney": 2,
+        "tokyo": 3,
+        "london": 2,
+        "newYork": 2
+      }
+    },
+    "score": 42.622849,
+    "acceptedDevelopment": false,
+    "final": {
+      "train": [
+        {
+          "finalBalance": 1150.074961,
+          "returnPct": 15.007496,
+          "trades": 17,
+          "tradesPerMarketDay": 0.131783,
+          "tradesPerActiveDay": 1.214286,
+          "winRate": 70.588235,
+          "profitFactor": 2.175718,
+          "maxDrawdownPct": 3.780494,
+          "activeDays": 14,
+          "positiveDays": 9,
+          "negativeDays": 5,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 1,
+          "monthly": {
+            "2026-01": 14.128344,
+            "2026-02": 10.13459,
+            "2026-03": 125.812026
+          },
+          "sessionTrades": {
+            "sydney": 9,
+            "tokyo": 10,
+            "london": 8,
+            "newYork": 4
+          }
+        },
+        {
+          "finalBalance": 1110.975526,
+          "returnPct": 11.097553,
+          "trades": 20,
+          "tradesPerMarketDay": 0.155039,
+          "tradesPerActiveDay": 1.428571,
+          "winRate": 65,
+          "profitFactor": 1.674244,
+          "maxDrawdownPct": 3.733751,
+          "activeDays": 14,
+          "positiveDays": 10,
+          "negativeDays": 4,
+          "positiveDayPct": 71.428571,
+          "longestLosingDayStreak": 1,
+          "monthly": {
+            "2026-01": 19.15677,
+            "2026-02": 10.001774,
+            "2026-03": 81.816982
+          },
+          "sessionTrades": {
+            "sydney": 9,
+            "tokyo": 11,
+            "london": 9,
+            "newYork": 6
+          }
+        }
+      ],
+      "validation": [
+        {
+          "finalBalance": 1033.751615,
+          "returnPct": 3.375162,
+          "trades": 4,
+          "tradesPerMarketDay": 0.050633,
+          "tradesPerActiveDay": 1,
+          "winRate": 75,
+          "profitFactor": 2.104932,
+          "maxDrawdownPct": 2.987667,
+          "activeDays": 4,
+          "positiveDays": 3,
+          "negativeDays": 1,
+          "positiveDayPct": 75,
+          "longestLosingDayStreak": 1,
+          "monthly": {
+            "2026-07": -8.132604,
+            "2026-08": 41.884219
+          },
+          "sessionTrades": {
+            "sydney": 1,
+            "tokyo": 2,
+            "london": 2,
+            "newYork": 2
+          }
+        },
+        {
+          "finalBalance": 1032.576871,
+          "returnPct": 3.257687,
+          "trades": 5,
+          "tradesPerMarketDay": 0.063291,
+          "tradesPerActiveDay": 1.25,
+          "winRate": 80,
+          "profitFactor": 2.236295,
+          "maxDrawdownPct": 2.597005,
+          "activeDays": 4,
+          "positiveDays": 3,
+          "negativeDays": 1,
+          "positiveDayPct": 75,
+          "longestLosingDayStreak": 1,
+          "monthly": {
+            "2026-07": -11.70507,
+            "2026-08": 44.281941
+          },
+          "sessionTrades": {
+            "sydney": 2,
+            "tokyo": 3,
+            "london": 2,
+            "newYork": 2
+          }
+        }
+      ],
+      "test": [
+        {
+          "finalBalance": 975.477431,
+          "returnPct": -2.452257,
+          "trades": 4,
+          "tradesPerMarketDay": 0.076923,
+          "tradesPerActiveDay": 1,
+          "winRate": 25,
+          "profitFactor": 0.401054,
+          "maxDrawdownPct": 2.993325,
+          "activeDays": 4,
+          "positiveDays": 1,
+          "negativeDays": 3,
+          "positiveDayPct": 25,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-09": -19.011631,
+            "2026-10": -5.510938
+          },
+          "sessionTrades": {
+            "sydney": 1,
+            "tokyo": 1,
+            "london": 2,
+            "newYork": 3
+          }
+        },
+        {
+          "finalBalance": 975.237776,
+          "returnPct": -2.476222,
+          "trades": 4,
+          "tradesPerMarketDay": 0.076923,
+          "tradesPerActiveDay": 1,
+          "winRate": 25,
+          "profitFactor": 0.249661,
+          "maxDrawdownPct": 2.476222,
+          "activeDays": 4,
+          "positiveDays": 1,
+          "negativeDays": 3,
+          "positiveDayPct": 25,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-09": -19.251286,
+            "2026-10": -5.510938
+          },
+          "sessionTrades": {
+            "sydney": 1,
+            "tokyo": 1,
+            "london": 2,
+            "newYork": 3
+          }
+        }
+      ],
+      "full": [
+        {
+          "finalBalance": 1159.816802,
+          "returnPct": 15.98168,
+          "trades": 25,
+          "tradesPerMarketDay": 0.096154,
+          "tradesPerActiveDay": 1.136364,
+          "winRate": 64,
+          "profitFactor": 1.755319,
+          "maxDrawdownPct": 3.780494,
+          "activeDays": 22,
+          "positiveDays": 13,
+          "negativeDays": 9,
+          "positiveDayPct": 59.090909,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-01": 14.128344,
+            "2026-02": 10.13459,
+            "2026-03": 125.812026,
+            "2026-07": -9.520921,
+            "2026-08": 48.464576,
+            "2026-09": -22.648265,
+            "2026-10": -6.553548
+          },
+          "sessionTrades": {
+            "sydney": 11,
+            "tokyo": 13,
+            "london": 12,
+            "newYork": 9
+          }
+        },
+        {
+          "finalBalance": 1118.92542,
+          "returnPct": 11.892542,
+          "trades": 29,
+          "tradesPerMarketDay": 0.111538,
+          "tradesPerActiveDay": 1.318182,
+          "winRate": 62.068966,
+          "profitFactor": 1.512688,
+          "maxDrawdownPct": 3.733751,
+          "activeDays": 22,
+          "positiveDays": 14,
+          "negativeDays": 8,
+          "positiveDayPct": 63.636364,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-01": 19.15677,
+            "2026-02": 10.001774,
+            "2026-03": 81.816982,
+            "2026-07": -13.070576,
+            "2026-08": 49.563252,
+            "2026-09": -22.21265,
+            "2026-10": -6.330132
+          },
+          "sessionTrades": {
+            "sydney": 12,
+            "tokyo": 15,
+            "london": 13,
+            "newYork": 11
+          }
+        }
+      ]
+    }
+  },
+  "top20": []
+}

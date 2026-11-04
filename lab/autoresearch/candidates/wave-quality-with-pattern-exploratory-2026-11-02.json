@@ -1,0 +1,21 @@
+{
+  "name": "wave-quality-with-pattern-exploratory-v1",
+  "selection": "Exact wave-quality exploratory candidate with only signalMode changed to combined for a paired comparison",
+  "experiment": {
+    "signalMode": "combined",
+    "detector": {},
+    "bufferPips": 3,
+    "stopMode": "signal",
+    "stopBufferAtr": null,
+    "expiryMinutes": 45,
+    "targetR": 0.75,
+    "trailActivationR": 1,
+    "trailDistanceR": 0.35,
+    "ranking": "tightStop",
+    "minTrendScore": 0.25,
+    "minEfficiency6": 0.3,
+    "maxRiskAtr": 2.5,
+    "sessions": ["sydney+tokyo", "tokyo"],
+    "weekdays": [1, 2, 3, 4]
+  }
+}

@@ -46,6 +46,7 @@ class TradeMonitor {
                 await tradingService.updateDynamicStopIfNeeded({
                     symbol: market?.epic ?? position?.epic,
                     dealId: position?.dealId,
+                    workingOrderId: position?.workingOrderId,
                     direction: position?.direction,
                     entryPrice: position?.level,
                     stopLoss: position?.stopLevel,
@@ -75,11 +76,10 @@ class TradeMonitor {
     }
 
     async dailyFlatCheck(bot) {
-        if (!RISK.DAILY_FORCED_CLOSE_UTC) return;
-
         const now = new Date();
         const currentMinute = now.getUTCHours() * 60 + now.getUTCMinutes();
-        const closeMinute = RISK.DAILY_CLOSE_MINUTE_UTC;
+        const closeMinute = tradingService.dailyCloseMinute;
+        if (!Number.isFinite(closeMinute)) return;
         if (closeMinute >= 24 * 60 || currentMinute < closeMinute) return;
 
         try {

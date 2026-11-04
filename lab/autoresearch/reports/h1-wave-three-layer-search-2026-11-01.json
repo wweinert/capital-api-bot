@@ -1,0 +1,1313 @@
+{
+  "protocol": "h1-wave-three-layer-audit-and-development-search-v1",
+  "generatedAt": "2026-11-01T21:47:34.918Z",
+  "dataEnd": "2026-10-30T21:00:00.000Z",
+  "methodology": {
+    "layer1": "wave-only trade comparator using the M5/M15 direction",
+    "layer2": "H1 color-flip-only comparator and the actual wave+pattern intersection",
+    "layer3": "causal simultaneous-candidate ranking comparison",
+    "selection": "detector/exit and ranking selected only from January-August development; September-October is an already-inspected diagnostic, not a fresh holdout"
+  },
+  "layerAudit": {
+    "wave": {
+      "rawSignals": 20663,
+      "periodSignals": {
+        "train": 9846,
+        "validation": 6043,
+        "test": 4220
+      },
+      "results": {
+        "train": {
+          "slots": 1,
+          "finalBalance": 334.898751,
+          "returnPct": -66.510125,
+          "trades": 403,
+          "winRate": 48.635236,
+          "profitFactor": 0.800508,
+          "maxDrawdownPct": 69.711038,
+          "maxMarginUsagePct": 89.998482,
+          "maxEffectiveRiskPct": 2.999865
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 337.735711,
+          "returnPct": -66.226429,
+          "trades": 240,
+          "winRate": 45.833333,
+          "profitFactor": 0.613553,
+          "maxDrawdownPct": 67.210744,
+          "maxMarginUsagePct": 89.993113,
+          "maxEffectiveRiskPct": 2.99982
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 269.919561,
+          "returnPct": -73.008044,
+          "trades": 160,
+          "winRate": 37.5,
+          "profitFactor": 0.432689,
+          "maxDrawdownPct": 73.008044,
+          "maxMarginUsagePct": 89.983015,
+          "maxEffectiveRiskPct": 2.99984
+        }
+      }
+    },
+    "pattern": {
+      "rawSignals": 13626,
+      "periodSignals": {
+        "train": 6006,
+        "validation": 4158,
+        "test": 3156
+      },
+      "results": {
+        "train": {
+          "slots": 1,
+          "finalBalance": 597.092701,
+          "returnPct": -40.29073,
+          "trades": 440,
+          "winRate": 52.272727,
+          "profitFactor": 0.913586,
+          "maxDrawdownPct": 56.090992,
+          "maxMarginUsagePct": 89.997689,
+          "maxEffectiveRiskPct": 2.999997
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 372.071299,
+          "returnPct": -62.79287,
+          "trades": 234,
+          "winRate": 47.008547,
+          "profitFactor": 0.656757,
+          "maxDrawdownPct": 63.994623,
+          "maxMarginUsagePct": 89.998393,
+          "maxEffectiveRiskPct": 2.999866
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 249.258841,
+          "returnPct": -75.074116,
+          "trades": 171,
+          "winRate": 36.25731,
+          "profitFactor": 0.440028,
+          "maxDrawdownPct": 75.074116,
+          "maxMarginUsagePct": 89.992065,
+          "maxEffectiveRiskPct": 2.999857
+        }
+      }
+    },
+    "combined": {
+      "rawSignals": 7817,
+      "periodSignals": {
+        "train": 3138,
+        "validation": 2327,
+        "test": 2190
+      },
+      "results": {
+        "train": {
+          "slots": 1,
+          "finalBalance": 440.514197,
+          "returnPct": -55.94858,
+          "trades": 412,
+          "winRate": 50.728155,
+          "profitFactor": 0.839186,
+          "maxDrawdownPct": 57.807674,
+          "maxMarginUsagePct": 89.987973,
+          "maxEffectiveRiskPct": 2.999992
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 391.492323,
+          "returnPct": -60.850768,
+          "trades": 202,
+          "winRate": 44.059406,
+          "profitFactor": 0.612054,
+          "maxDrawdownPct": 61.743141,
+          "maxMarginUsagePct": 89.994274,
+          "maxEffectiveRiskPct": 2.999934
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 285.694487,
+          "returnPct": -71.430551,
+          "trades": 158,
+          "winRate": 37.341772,
+          "profitFactor": 0.447247,
+          "maxDrawdownPct": 71.430551,
+          "maxMarginUsagePct": 89.994784,
+          "maxEffectiveRiskPct": 2.999535
+        }
+      }
+    }
+  },
+  "rankingAudit": [
+    {
+      "ranking": "bodyAtr",
+      "train": {
+        "slots": 1,
+        "finalBalance": 440.514197,
+        "returnPct": -55.94858,
+        "trades": 412,
+        "winRate": 50.728155,
+        "profitFactor": 0.839186,
+        "maxDrawdownPct": 57.807674,
+        "maxMarginUsagePct": 89.987973,
+        "maxEffectiveRiskPct": 2.999992
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 391.492323,
+        "returnPct": -60.850768,
+        "trades": 202,
+        "winRate": 44.059406,
+        "profitFactor": 0.612054,
+        "maxDrawdownPct": 61.743141,
+        "maxMarginUsagePct": 89.994274,
+        "maxEffectiveRiskPct": 2.999934
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 285.694487,
+        "returnPct": -71.430551,
+        "trades": 158,
+        "winRate": 37.341772,
+        "profitFactor": 0.447247,
+        "maxDrawdownPct": 71.430551,
+        "maxMarginUsagePct": 89.994784,
+        "maxEffectiveRiskPct": 2.999535
+      }
+    },
+    {
+      "ranking": "sessionOrder",
+      "train": {
+        "slots": 1,
+        "finalBalance": 593.211432,
+        "returnPct": -40.678857,
+        "trades": 416,
+        "winRate": 52.884615,
+        "profitFactor": 0.900606,
+        "maxDrawdownPct": 46.607347,
+        "maxMarginUsagePct": 89.999457,
+        "maxEffectiveRiskPct": 2.999983
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 661.798166,
+        "returnPct": -33.820183,
+        "trades": 220,
+        "winRate": 50,
+        "profitFactor": 0.788115,
+        "maxDrawdownPct": 48.841633,
+        "maxMarginUsagePct": 89.994079,
+        "maxEffectiveRiskPct": 2.999953
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 300.784191,
+        "returnPct": -69.921581,
+        "trades": 165,
+        "winRate": 38.787879,
+        "profitFactor": 0.519385,
+        "maxDrawdownPct": 70.415635,
+        "maxMarginUsagePct": 89.995364,
+        "maxEffectiveRiskPct": 2.999808
+      }
+    },
+    {
+      "ranking": "tightStop",
+      "train": {
+        "slots": 1,
+        "finalBalance": 515.737358,
+        "returnPct": -48.426264,
+        "trades": 436,
+        "winRate": 52.06422,
+        "profitFactor": 0.874833,
+        "maxDrawdownPct": 48.921597,
+        "maxMarginUsagePct": 89.998757,
+        "maxEffectiveRiskPct": 2.999876
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 342.503338,
+        "returnPct": -65.749666,
+        "trades": 242,
+        "winRate": 44.214876,
+        "profitFactor": 0.686821,
+        "maxDrawdownPct": 68.383902,
+        "maxMarginUsagePct": 89.999934,
+        "maxEffectiveRiskPct": 2.999899
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 313.960341,
+        "returnPct": -68.603966,
+        "trades": 185,
+        "winRate": 43.243243,
+        "profitFactor": 0.563303,
+        "maxDrawdownPct": 69.992572,
+        "maxMarginUsagePct": 89.997648,
+        "maxEffectiveRiskPct": 2.999934
+      }
+    },
+    {
+      "ranking": "lowSpread",
+      "train": {
+        "slots": 1,
+        "finalBalance": 973.841783,
+        "returnPct": -2.615822,
+        "trades": 401,
+        "winRate": 55.361596,
+        "profitFactor": 0.994384,
+        "maxDrawdownPct": 34.307888,
+        "maxMarginUsagePct": 89.999856,
+        "maxEffectiveRiskPct": 2.999909
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 575.697003,
+        "returnPct": -42.4303,
+        "trades": 212,
+        "winRate": 49.528302,
+        "profitFactor": 0.743553,
+        "maxDrawdownPct": 46.746955,
+        "maxMarginUsagePct": 89.995805,
+        "maxEffectiveRiskPct": 2.999961
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 445.20446,
+        "returnPct": -55.479554,
+        "trades": 172,
+        "winRate": 42.44186,
+        "profitFactor": 0.648562,
+        "maxDrawdownPct": 55.479554,
+        "maxMarginUsagePct": 89.997802,
+        "maxEffectiveRiskPct": 2.999962
+      }
+    },
+    {
+      "ranking": "nearEntry",
+      "train": {
+        "slots": 1,
+        "finalBalance": 863.847029,
+        "returnPct": -13.615297,
+        "trades": 438,
+        "winRate": 54.56621,
+        "profitFactor": 0.968313,
+        "maxDrawdownPct": 36.352853,
+        "maxMarginUsagePct": 89.999367,
+        "maxEffectiveRiskPct": 2.999967
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 432.736866,
+        "returnPct": -56.726313,
+        "trades": 233,
+        "winRate": 46.781116,
+        "profitFactor": 0.694623,
+        "maxDrawdownPct": 57.380856,
+        "maxMarginUsagePct": 89.995647,
+        "maxEffectiveRiskPct": 2.99984
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 420.729761,
+        "returnPct": -57.927024,
+        "trades": 176,
+        "winRate": 43.181818,
+        "profitFactor": 0.640817,
+        "maxDrawdownPct": 63.21966,
+        "maxMarginUsagePct": 89.994728,
+        "maxEffectiveRiskPct": 2.999932
+      }
+    },
+    {
+      "ranking": "farEntry",
+      "train": {
+        "slots": 1,
+        "finalBalance": 221.011853,
+        "returnPct": -77.898815,
+        "trades": 385,
+        "winRate": 47.532468,
+        "profitFactor": 0.704708,
+        "maxDrawdownPct": 77.898815,
+        "maxMarginUsagePct": 89.998147,
+        "maxEffectiveRiskPct": 2.999986
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 422.511377,
+        "returnPct": -57.748862,
+        "trades": 201,
+        "winRate": 44.278607,
+        "profitFactor": 0.629101,
+        "maxDrawdownPct": 60.581519,
+        "maxMarginUsagePct": 89.999019,
+        "maxEffectiveRiskPct": 2.999941
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 300.718317,
+        "returnPct": -69.928168,
+        "trades": 158,
+        "winRate": 37.341772,
+        "profitFactor": 0.492043,
+        "maxDrawdownPct": 70.046153,
+        "maxMarginUsagePct": 89.991921,
+        "maxEffectiveRiskPct": 2.99996
+      }
+    },
+    {
+      "ranking": "composite",
+      "train": {
+        "slots": 1,
+        "finalBalance": 432.46522,
+        "returnPct": -56.753478,
+        "trades": 406,
+        "winRate": 50.492611,
+        "profitFactor": 0.819991,
+        "maxDrawdownPct": 59.666408,
+        "maxMarginUsagePct": 89.99633,
+        "maxEffectiveRiskPct": 2.999919
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 386.083239,
+        "returnPct": -61.391676,
+        "trades": 218,
+        "winRate": 45.412844,
+        "profitFactor": 0.625262,
+        "maxDrawdownPct": 61.942949,
+        "maxMarginUsagePct": 89.99979,
+        "maxEffectiveRiskPct": 2.999785
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 330.872373,
+        "returnPct": -66.912763,
+        "trades": 176,
+        "winRate": 42.045455,
+        "profitFactor": 0.54751,
+        "maxDrawdownPct": 66.912763,
+        "maxMarginUsagePct": 89.99948,
+        "maxEffectiveRiskPct": 2.999919
+      }
+    }
+  ],
+  "optimization": {
+    "searched": 80,
+    "top10": [
+      {
+        "detector": "requireBoth",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1147.698077,
+          "returnPct": 14.769808,
+          "trades": 286,
+          "winRate": 56.293706,
+          "profitFactor": 1.037296,
+          "maxDrawdownPct": 44.54852,
+          "maxMarginUsagePct": 89.994225,
+          "maxEffectiveRiskPct": 2.999933
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 799.597055,
+          "returnPct": -20.040294,
+          "trades": 133,
+          "winRate": 49.62406,
+          "profitFactor": 0.846531,
+          "maxDrawdownPct": 28.616219,
+          "maxMarginUsagePct": 89.998705,
+          "maxEffectiveRiskPct": 2.999941
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 388.005646,
+          "returnPct": -61.199435,
+          "trades": 135,
+          "winRate": 37.777778,
+          "profitFactor": 0.520074,
+          "maxDrawdownPct": 61.199435,
+          "maxMarginUsagePct": 89.986776,
+          "maxEffectiveRiskPct": 2.999516
+        }
+      },
+      {
+        "detector": "m15Only",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "m15"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 899.482102,
+          "returnPct": -10.05179,
+          "trades": 317,
+          "winRate": 54.88959,
+          "profitFactor": 0.972701,
+          "maxDrawdownPct": 50.717587,
+          "maxMarginUsagePct": 89.999995,
+          "maxEffectiveRiskPct": 2.999978
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 805.208859,
+          "returnPct": -19.479114,
+          "trades": 152,
+          "winRate": 48.684211,
+          "profitFactor": 0.8647,
+          "maxDrawdownPct": 32.250818,
+          "maxMarginUsagePct": 89.984979,
+          "maxEffectiveRiskPct": 2.999952
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 242.981806,
+          "returnPct": -75.701819,
+          "trades": 146,
+          "winRate": 32.876712,
+          "profitFactor": 0.382533,
+          "maxDrawdownPct": 75.701819,
+          "maxMarginUsagePct": 89.986367,
+          "maxEffectiveRiskPct": 2.99981
+        }
+      },
+      {
+        "detector": "fresh6_2",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "m5KeepBars": 6,
+            "m15KeepBars": 2
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 713.867649,
+          "returnPct": -28.613235,
+          "trades": 342,
+          "winRate": 53.508772,
+          "profitFactor": 0.924534,
+          "maxDrawdownPct": 53.265024,
+          "maxMarginUsagePct": 89.988225,
+          "maxEffectiveRiskPct": 2.999898
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 720.205441,
+          "returnPct": -27.979456,
+          "trades": 158,
+          "winRate": 46.835443,
+          "profitFactor": 0.823036,
+          "maxDrawdownPct": 38.982786,
+          "maxMarginUsagePct": 89.997497,
+          "maxEffectiveRiskPct": 2.999975
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 346.529638,
+          "returnPct": -65.347036,
+          "trades": 139,
+          "winRate": 38.129496,
+          "profitFactor": 0.503713,
+          "maxDrawdownPct": 65.347036,
+          "maxMarginUsagePct": 89.972205,
+          "maxEffectiveRiskPct": 2.999653
+        }
+      },
+      {
+        "detector": "m5Only",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "m5"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 861.832782,
+          "returnPct": -13.816722,
+          "trades": 339,
+          "winRate": 55.457227,
+          "profitFactor": 0.962279,
+          "maxDrawdownPct": 43.110151,
+          "maxMarginUsagePct": 89.998644,
+          "maxEffectiveRiskPct": 2.999995
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 706.600257,
+          "returnPct": -29.339974,
+          "trades": 173,
+          "winRate": 47.976879,
+          "profitFactor": 0.814332,
+          "maxDrawdownPct": 39.455487,
+          "maxMarginUsagePct": 89.990153,
+          "maxEffectiveRiskPct": 2.999973
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 350.083854,
+          "returnPct": -64.991615,
+          "trades": 138,
+          "winRate": 36.956522,
+          "profitFactor": 0.520681,
+          "maxDrawdownPct": 64.991615,
+          "maxMarginUsagePct": 89.971438,
+          "maxEffectiveRiskPct": 2.999935
+        }
+      },
+      {
+        "detector": "mixed12_2",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "m5KeepBars": 12,
+            "m15KeepBars": 2
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 791.014556,
+          "returnPct": -20.898544,
+          "trades": 352,
+          "winRate": 54.545455,
+          "profitFactor": 0.944256,
+          "maxDrawdownPct": 50.058491,
+          "maxMarginUsagePct": 89.99806,
+          "maxEffectiveRiskPct": 2.999972
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 675.306297,
+          "returnPct": -32.46937,
+          "trades": 174,
+          "winRate": 46.551724,
+          "profitFactor": 0.7951,
+          "maxDrawdownPct": 44.013978,
+          "maxMarginUsagePct": 89.998122,
+          "maxEffectiveRiskPct": 2.999902
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 329.222594,
+          "returnPct": -67.077741,
+          "trades": 128,
+          "winRate": 34.375,
+          "profitFactor": 0.454042,
+          "maxDrawdownPct": 67.077741,
+          "maxMarginUsagePct": 89.990586,
+          "maxEffectiveRiskPct": 2.999923
+        }
+      },
+      {
+        "detector": "mixed6_4",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "m5KeepBars": 6,
+            "m15KeepBars": 4
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 835.635952,
+          "returnPct": -16.436405,
+          "trades": 350,
+          "winRate": 53.714286,
+          "profitFactor": 0.957512,
+          "maxDrawdownPct": 54.872281,
+          "maxMarginUsagePct": 89.988225,
+          "maxEffectiveRiskPct": 2.999961
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 669.484403,
+          "returnPct": -33.05156,
+          "trades": 175,
+          "winRate": 46.285714,
+          "profitFactor": 0.797083,
+          "maxDrawdownPct": 41.584574,
+          "maxMarginUsagePct": 89.990601,
+          "maxEffectiveRiskPct": 2.999916
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 300.271359,
+          "returnPct": -69.972864,
+          "trades": 136,
+          "winRate": 35.294118,
+          "profitFactor": 0.430885,
+          "maxDrawdownPct": 69.972864,
+          "maxMarginUsagePct": 89.985156,
+          "maxEffectiveRiskPct": 2.999954
+        }
+      },
+      {
+        "detector": "requireBoth",
+        "execution": "expiry30",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 2,
+          "expiryMinutes": 30,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 941.000004,
+          "returnPct": -5.9,
+          "trades": 292,
+          "winRate": 54.452055,
+          "profitFactor": 0.985055,
+          "maxDrawdownPct": 40.207757,
+          "maxMarginUsagePct": 89.999909,
+          "maxEffectiveRiskPct": 2.999967
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 659.419835,
+          "returnPct": -34.058017,
+          "trades": 144,
+          "winRate": 47.916667,
+          "profitFactor": 0.747519,
+          "maxDrawdownPct": 36.789413,
+          "maxMarginUsagePct": 89.997338,
+          "maxEffectiveRiskPct": 2.999974
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 305.880146,
+          "returnPct": -69.411985,
+          "trades": 138,
+          "winRate": 36.956522,
+          "profitFactor": 0.403252,
+          "maxDrawdownPct": 69.411985,
+          "maxMarginUsagePct": 89.986798,
+          "maxEffectiveRiskPct": 2.999562
+        }
+      },
+      {
+        "detector": "current",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {},
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 976.485258,
+          "returnPct": -2.351474,
+          "trades": 359,
+          "winRate": 55.710306,
+          "profitFactor": 0.993879,
+          "maxDrawdownPct": 50.600818,
+          "maxMarginUsagePct": 89.99806,
+          "maxEffectiveRiskPct": 2.999987
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 648.683882,
+          "returnPct": -35.131612,
+          "trades": 182,
+          "winRate": 46.703297,
+          "profitFactor": 0.79399,
+          "maxDrawdownPct": 42.510481,
+          "maxMarginUsagePct": 89.99211,
+          "maxEffectiveRiskPct": 2.999969
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 275.382264,
+          "returnPct": -72.461774,
+          "trades": 132,
+          "winRate": 33.333333,
+          "profitFactor": 0.388002,
+          "maxDrawdownPct": 72.461774,
+          "maxMarginUsagePct": 89.974053,
+          "maxEffectiveRiskPct": 2.999953
+        }
+      },
+      {
+        "detector": "fresh3_1",
+        "execution": "buffer3",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "m5KeepBars": 3,
+            "m15KeepBars": 1
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 646.056357,
+          "returnPct": -35.394364,
+          "trades": 293,
+          "winRate": 53.242321,
+          "profitFactor": 0.861557,
+          "maxDrawdownPct": 47.926418,
+          "maxMarginUsagePct": 89.992586,
+          "maxEffectiveRiskPct": 2.999974
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 670.783373,
+          "returnPct": -32.921663,
+          "trades": 146,
+          "winRate": 45.890411,
+          "profitFactor": 0.777448,
+          "maxDrawdownPct": 38.576152,
+          "maxMarginUsagePct": 89.995424,
+          "maxEffectiveRiskPct": 2.999954
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 404.662343,
+          "returnPct": -59.533766,
+          "trades": 130,
+          "winRate": 39.230769,
+          "profitFactor": 0.472317,
+          "maxDrawdownPct": 62.046108,
+          "maxMarginUsagePct": 89.977307,
+          "maxEffectiveRiskPct": 2.999657
+        }
+      },
+      {
+        "detector": "requireBoth",
+        "execution": "current",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 2,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1026.667129,
+          "returnPct": 2.666713,
+          "trades": 330,
+          "winRate": 55.151515,
+          "profitFactor": 1.006293,
+          "maxDrawdownPct": 39.015299,
+          "maxMarginUsagePct": 89.995023,
+          "maxEffectiveRiskPct": 2.999964
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 583.968499,
+          "returnPct": -41.60315,
+          "trades": 160,
+          "winRate": 47.5,
+          "profitFactor": 0.686547,
+          "maxDrawdownPct": 45.280096,
+          "maxMarginUsagePct": 89.990424,
+          "maxEffectiveRiskPct": 2.999658
+        },
+        "test": {
+          "slots": 1,
+          "finalBalance": 261.481493,
+          "returnPct": -73.851851,
+          "trades": 150,
+          "winRate": 36,
+          "profitFactor": 0.379981,
+          "maxDrawdownPct": 73.851851,
+          "maxMarginUsagePct": 89.98811,
+          "maxEffectiveRiskPct": 2.999656
+        }
+      }
+    ],
+    "developmentWinner": {
+      "detector": "requireBoth",
+      "execution": "buffer3",
+      "experiment": {
+        "signalMode": "combined",
+        "detector": {
+          "mode": "requireBoth"
+        },
+        "bufferPips": 3,
+        "expiryMinutes": 60,
+        "targetR": 1.5,
+        "trailActivationR": 0.7,
+        "trailDistanceR": 0.35,
+        "ranking": "bodyAtr"
+      },
+      "train": {
+        "slots": 1,
+        "finalBalance": 1147.698077,
+        "returnPct": 14.769808,
+        "trades": 286,
+        "winRate": 56.293706,
+        "profitFactor": 1.037296,
+        "maxDrawdownPct": 44.54852,
+        "maxMarginUsagePct": 89.994225,
+        "maxEffectiveRiskPct": 2.999933
+      },
+      "validation": {
+        "slots": 1,
+        "finalBalance": 799.597055,
+        "returnPct": -20.040294,
+        "trades": 133,
+        "winRate": 49.62406,
+        "profitFactor": 0.846531,
+        "maxDrawdownPct": 28.616219,
+        "maxMarginUsagePct": 89.998705,
+        "maxEffectiveRiskPct": 2.999941
+      },
+      "test": {
+        "slots": 1,
+        "finalBalance": 388.005646,
+        "returnPct": -61.199435,
+        "trades": 135,
+        "winRate": 37.777778,
+        "profitFactor": 0.520074,
+        "maxDrawdownPct": 61.199435,
+        "maxMarginUsagePct": 89.986776,
+        "maxEffectiveRiskPct": 2.999516
+      }
+    },
+    "rankingSearch": [
+      {
+        "ranking": "sessionOrder",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "sessionOrder"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1308.537451,
+          "returnPct": 30.853745,
+          "trades": 297,
+          "winRate": 58.922559,
+          "profitFactor": 1.078155,
+          "maxDrawdownPct": 35.595154,
+          "maxMarginUsagePct": 89.985968,
+          "maxEffectiveRiskPct": 2.999988
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 919.414083,
+          "returnPct": -8.058592,
+          "trades": 139,
+          "winRate": 53.23741,
+          "profitFactor": 0.941664,
+          "maxDrawdownPct": 24.145771,
+          "maxMarginUsagePct": 89.997908,
+          "maxEffectiveRiskPct": 2.999925
+        }
+      },
+      {
+        "ranking": "lowSpread",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "lowSpread"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 867.638178,
+          "returnPct": -13.236182,
+          "trades": 286,
+          "winRate": 54.195804,
+          "profitFactor": 0.96475,
+          "maxDrawdownPct": 39.173748,
+          "maxMarginUsagePct": 89.999563,
+          "maxEffectiveRiskPct": 2.999963
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 1070.19696,
+          "returnPct": 7.019696,
+          "trades": 129,
+          "winRate": 55.03876,
+          "profitFactor": 1.053928,
+          "maxDrawdownPct": 19.230842,
+          "maxMarginUsagePct": 89.995988,
+          "maxEffectiveRiskPct": 2.99988
+        }
+      },
+      {
+        "ranking": "composite",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "composite"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1146.77811,
+          "returnPct": 14.677811,
+          "trades": 287,
+          "winRate": 55.400697,
+          "profitFactor": 1.033376,
+          "maxDrawdownPct": 40.896944,
+          "maxMarginUsagePct": 89.995391,
+          "maxEffectiveRiskPct": 2.999961
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 810.215461,
+          "returnPct": -18.978454,
+          "trades": 133,
+          "winRate": 50.37594,
+          "profitFactor": 0.863068,
+          "maxDrawdownPct": 32.803557,
+          "maxMarginUsagePct": 89.984655,
+          "maxEffectiveRiskPct": 2.999676
+        }
+      },
+      {
+        "ranking": "bodyAtr",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "bodyAtr"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1147.698077,
+          "returnPct": 14.769808,
+          "trades": 286,
+          "winRate": 56.293706,
+          "profitFactor": 1.037296,
+          "maxDrawdownPct": 44.54852,
+          "maxMarginUsagePct": 89.994225,
+          "maxEffectiveRiskPct": 2.999933
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 799.597055,
+          "returnPct": -20.040294,
+          "trades": 133,
+          "winRate": 49.62406,
+          "profitFactor": 0.846531,
+          "maxDrawdownPct": 28.616219,
+          "maxMarginUsagePct": 89.998705,
+          "maxEffectiveRiskPct": 2.999941
+        }
+      },
+      {
+        "ranking": "nearEntry",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "nearEntry"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1465.585706,
+          "returnPct": 46.558571,
+          "trades": 302,
+          "winRate": 57.615894,
+          "profitFactor": 1.107441,
+          "maxDrawdownPct": 30.615124,
+          "maxMarginUsagePct": 89.997086,
+          "maxEffectiveRiskPct": 2.999907
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 658.385237,
+          "returnPct": -34.161476,
+          "trades": 145,
+          "winRate": 51.724138,
+          "profitFactor": 0.77284,
+          "maxDrawdownPct": 40.79022,
+          "maxMarginUsagePct": 89.998476,
+          "maxEffectiveRiskPct": 2.999978
+        }
+      },
+      {
+        "ranking": "farEntry",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "farEntry"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 691.373333,
+          "returnPct": -30.862667,
+          "trades": 282,
+          "winRate": 54.255319,
+          "profitFactor": 0.905624,
+          "maxDrawdownPct": 42.449934,
+          "maxMarginUsagePct": 89.999892,
+          "maxEffectiveRiskPct": 2.999999
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 666.154114,
+          "returnPct": -33.384589,
+          "trades": 128,
+          "winRate": 46.875,
+          "profitFactor": 0.748511,
+          "maxDrawdownPct": 37.26658,
+          "maxMarginUsagePct": 89.997512,
+          "maxEffectiveRiskPct": 2.999927
+        }
+      },
+      {
+        "ranking": "tightStop",
+        "experiment": {
+          "signalMode": "combined",
+          "detector": {
+            "mode": "requireBoth"
+          },
+          "bufferPips": 3,
+          "expiryMinutes": 60,
+          "targetR": 1.5,
+          "trailActivationR": 0.7,
+          "trailDistanceR": 0.35,
+          "ranking": "tightStop"
+        },
+        "train": {
+          "slots": 1,
+          "finalBalance": 1668.543893,
+          "returnPct": 66.854389,
+          "trades": 308,
+          "winRate": 59.090909,
+          "profitFactor": 1.152583,
+          "maxDrawdownPct": 18.501814,
+          "maxMarginUsagePct": 89.998785,
+          "maxEffectiveRiskPct": 2.999986
+        },
+        "validation": {
+          "slots": 1,
+          "finalBalance": 450.876815,
+          "returnPct": -54.912319,
+          "trades": 150,
+          "winRate": 44,
+          "profitFactor": 0.639864,
+          "maxDrawdownPct": 60.185806,
+          "maxMarginUsagePct": 89.999567,
+          "maxEffectiveRiskPct": 2.999955
+        }
+      }
+    ],
+    "finalExperiment": {
+      "signalMode": "combined",
+      "detector": {
+        "mode": "requireBoth"
+      },
+      "bufferPips": 3,
+      "expiryMinutes": 60,
+      "targetR": 1.5,
+      "trailActivationR": 0.7,
+      "trailDistanceR": 0.35,
+      "ranking": "sessionOrder"
+    },
+    "finalEvaluation": {
+      "train": [
+        {
+          "slots": 1,
+          "finalBalance": 1308.537451,
+          "returnPct": 30.853745,
+          "trades": 297,
+          "winRate": 58.922559,
+          "profitFactor": 1.078155,
+          "maxDrawdownPct": 35.595154,
+          "maxMarginUsagePct": 89.985968,
+          "maxEffectiveRiskPct": 2.999988
+        },
+        {
+          "slots": 2,
+          "finalBalance": 795.967609,
+          "returnPct": -20.403239,
+          "trades": 496,
+          "winRate": 54.637097,
+          "profitFactor": 0.948879,
+          "maxDrawdownPct": 42.490553,
+          "maxMarginUsagePct": 89.987701,
+          "maxEffectiveRiskPct": 2.999841
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "finalBalance": 919.414083,
+          "returnPct": -8.058592,
+          "trades": 139,
+          "winRate": 53.23741,
+          "profitFactor": 0.941664,
+          "maxDrawdownPct": 24.145771,
+          "maxMarginUsagePct": 89.997908,
+          "maxEffectiveRiskPct": 2.999925
+        },
+        {
+          "slots": 2,
+          "finalBalance": 766.693457,
+          "returnPct": -23.330654,
+          "trades": 255,
+          "winRate": 49.411765,
+          "profitFactor": 0.859355,
+          "maxDrawdownPct": 31.10503,
+          "maxMarginUsagePct": 89.98829,
+          "maxEffectiveRiskPct": 2.999126
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "finalBalance": 393.579237,
+          "returnPct": -60.642076,
+          "trades": 127,
+          "winRate": 38.582677,
+          "profitFactor": 0.504402,
+          "maxDrawdownPct": 60.748791,
+          "maxMarginUsagePct": 89.988841,
+          "maxEffectiveRiskPct": 2.999951
+        },
+        {
+          "slots": 2,
+          "finalBalance": 258.107068,
+          "returnPct": -74.189293,
+          "trades": 251,
+          "winRate": 39.043825,
+          "profitFactor": 0.46767,
+          "maxDrawdownPct": 75.044557,
+          "maxMarginUsagePct": 89.97963,
+          "maxEffectiveRiskPct": 2.999858
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "finalBalance": 472.54677,
+          "returnPct": -52.745323,
+          "trades": 563,
+          "winRate": 52.930728,
+          "profitFactor": 0.927034,
+          "maxDrawdownPct": 67.339123,
+          "maxMarginUsagePct": 89.999146,
+          "maxEffectiveRiskPct": 2.999988
+        },
+        {
+          "slots": 2,
+          "finalBalance": 154.221002,
+          "returnPct": -84.5779,
+          "trades": 1003,
+          "winRate": 49.351944,
+          "profitFactor": 0.862673,
+          "maxDrawdownPct": 87.665147,
+          "maxMarginUsagePct": 89.992333,
+          "maxEffectiveRiskPct": 2.999841
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "generatedAt": "2026-11-04T07:47:58.254Z",
+  "from": "2026-11-03T22:56:00",
+  "to": "2026-11-04T07:47:57",
+  "balance": {
+    "balance": 587.45,
+    "deposit": 580.65,
+    "profitLoss": 6.8,
+    "available": 412.55
+  },
+  "activity": [
+    {
+      "date": "2026-11-04T06:03:06.038",
+      "dateUTC": "2026-11-04T05:03:06.038",
+      "epic": "USDJPY",
+      "dealId": "00000000-70a2-c7bb-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "POSITION",
+      "status": "ACCEPTED",
+      "details": {
+        "dealReference": "p_00000000-70a2-c7bb-0488-ee2f0015549e",
+        "workingOrderId": "00000000-70a2-afe5-0488-ee2f0015549e",
+        "marketName": "USD/JPY",
+        "currency": "JPY",
+        "size": 5900,
+        "direction": "BUY",
+        "level": 157.868,
+        "stopLevel": 157.349,
+        "guaranteedStop": false,
+        "profitLevel": 159.162
+      }
+    },
+    {
+      "date": "2026-11-04T06:03:06.038",
+      "dateUTC": "2026-11-04T05:03:06.038",
+      "epic": "USDJPY",
+      "dealId": "00000000-70a2-afe5-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "EXECUTED",
+      "details": {
+        "dealReference": "o_73e6578e-f72f-432d-9a10-4080afdfbbea",
+        "marketName": "USD/JPY",
+        "goodTillDate": "2026-11-04T06:45:05.000",
+        "currency": "JPY",
+        "size": 5900,
+        "direction": "BUY",
+        "level": 157.867,
+        "stopLevel": 157.349,
+        "guaranteedStop": false,
+        "profitLevel": 159.162
+      }
+    },
+    {
+      "date": "2026-11-04T06:00:05.809",
+      "dateUTC": "2026-11-04T05:00:05.809",
+      "epic": "USDJPY",
+      "dealId": "00000000-70a2-afe5-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_73e6578e-f72f-432d-9a10-4080afdfbbea",
+        "marketName": "USD/JPY",
+        "goodTillDate": "2026-11-04T06:45:05.000",
+        "currency": "JPY",
+        "size": 5900,
+        "direction": "BUY",
+        "level": 157.867,
+        "stopLevel": 157.349,
+        "guaranteedStop": false,
+        "profitLevel": 159.162
+      }
+    },
+    {
+      "date": "2026-11-04T02:45:05.476",
+      "dateUTC": "2026-11-04T01:45:05.476",
+      "epic": "USDJPY",
+      "dealId": "00000000-709f-e49d-0488-ee2f0015549e",
+      "source": "SYSTEM",
+      "type": "WORKING_ORDER",
+      "status": "EXPIRED",
+      "details": {
+        "dealReference": "o_1ad916d4-5140-4fb1-84fe-2b232ffdbee6",
+        "marketName": "USD/JPY",
+        "goodTillDate": "2026-11-04T02:45:05.000",
+        "currency": "JPY",
+        "size": 7500,
+        "direction": "BUY",
+        "level": 158.63,
+        "guaranteedStop": false
+      }
+    },
+    {
+      "date": "2026-11-04T02:00:05.709",
+      "dateUTC": "2026-11-04T01:00:05.709",
+      "epic": "USDJPY",
+      "dealId": "00000000-709f-e49d-0488-ee2f0015549e",
+      "source": "USER",
+      "type": "WORKING_ORDER",
+      "status": "CREATED",
+      "details": {
+        "dealReference": "o_1ad916d4-5140-4fb1-84fe-2b232ffdbee6",
+        "marketName": "USD/JPY",
+        "goodTillDate": "2026-11-04T02:45:05.000",
+        "currency": "JPY",
+        "size": 7500,
+        "direction": "BUY",
+        "level": 158.63,
+        "stopLevel": 158.221,
+        "guaranteedStop": false,
+        "profitLevel": 159.652
+      }
+    }
+  ],
+  "transactions": [],
+  "positions": [
+    {
+      "position": {
+        "contractSize": 1,
+        "createdDate": "2026-11-04T06:03:06.096",
+        "createdDateUTC": "2026-11-04T05:03:06.096",
+        "dealId": "00000000-70a2-c7bb-0488-ee2f0015549e",
+        "dealReference": "p_00000000-70a2-c7bb-0488-ee2f0015549e",
+        "workingOrderId": "00000000-70a2-afe5-0488-ee2f0015549e",
+        "size": 5900,
+        "leverage": 30,
+        "upl": 6.8,
+        "direction": "BUY",
+        "profitLevel": 159.162,
+        "level": 157.868,
+        "currency": "JPY",
+        "guaranteedStop": false,
+        "stopLevel": 157.349,
+        "trailingStop": false
+      },
+      "market": {
+        "instrumentName": "USD/JPY",
+        "instrumentId": 374675767075865,
+        "expiry": "-",
+        "epic": "USDJPY",
+        "symbol": "USD/JPY",
+        "instrumentType": "CURRENCIES",
+        "marketStatus": "TRADEABLE",
+        "lotSize": 1,
+        "high": 158.74,
+        "low": 157.379,
+        "percentageChange": -0.38,
+        "netChange": 0.134,
+        "bid": 158.073,
+        "offer": 158.085,
+        "updateTime": "2026-11-04T08:47:57.110",
+        "updateTimeUTC": "2026-11-04T07:47:57.110",
+        "delayTime": 0,
+        "streamingPricesAvailable": true,
+        "scalingFactor": 1,
+        "marketModes": [
+          "REGULAR"
+        ],
+        "pipPosition": 2,
+        "tickSize": 0.001
+      }
+    }
+  ],
+  "workingOrders": []
+}

@@ -1,0 +1,808 @@
+{
+  "protocol": "capital-dataset-append-v1",
+  "generatedAt": "2026-11-04T07:49:58.176Z",
+  "cutoff": "2026-11-04T07:45:00.000Z",
+  "dataset": "/mnt/usb-ssd/trading/capital-dataset",
+  "files": 114,
+  "addedRows": 32638,
+  "audit": [
+    {
+      "file": "AUDCAD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "AUDCAD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "AUDCAD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "AUDCAD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1330,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "AUDCAD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "AUDCAD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "AUDJPY_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "AUDJPY_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "AUDJPY_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "AUDJPY_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "AUDJPY_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "AUDJPY_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "AUDUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "AUDUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "AUDUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "AUDUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1333,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "AUDUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "AUDUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "BTCUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "BTCUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "BTCUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "BTCUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "BTCUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "BTCUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "ETHUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "ETHUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "ETHUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "ETHUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "ETHUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "ETHUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "EURAUD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "EURAUD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "EURAUD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "EURAUD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "EURAUD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "EURAUD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "EURCHF_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "EURCHF_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "EURCHF_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "EURCHF_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1327,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "EURCHF_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "EURCHF_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 266,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "EURGBP_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "EURGBP_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "EURGBP_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "EURGBP_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1334,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "EURGBP_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "EURGBP_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "EURJPY_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "EURJPY_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "EURJPY_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "EURJPY_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "EURJPY_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "EURJPY_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "EURUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "EURUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "EURUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "EURUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1334,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "EURUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "EURUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "GBPAUD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "GBPAUD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "GBPAUD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "GBPAUD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1334,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "GBPAUD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "GBPAUD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "GBPCHF_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "GBPCHF_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "GBPCHF_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "GBPCHF_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1334,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "GBPCHF_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "GBPCHF_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "GBPJPY_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "GBPJPY_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "GBPJPY_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "GBPJPY_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "GBPJPY_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "GBPJPY_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "GBPUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "GBPUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "GBPUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "GBPUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "GBPUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "GBPUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "NZDJPY_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "NZDJPY_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "NZDJPY_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "NZDJPY_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1331,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "NZDJPY_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "NZDJPY_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "NZDUSD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "NZDUSD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "NZDUSD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "NZDUSD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1331,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "NZDUSD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "NZDUSD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "USDCAD_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "USDCAD_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "USDCAD_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "USDCAD_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1323,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "USDCAD_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "USDCAD_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "USDCHF_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "USDCHF_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "USDCHF_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "USDCHF_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1335,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "USDCHF_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "USDCHF_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    },
+    {
+      "file": "USDJPY_D1.jsonl",
+      "before": "2026-11-02T00:00:00.000Z",
+      "added": 1,
+      "after": "2026-11-03T00:00:00.000Z",
+      "targetLastOpen": "2026-11-03T07:45:00.000Z"
+    },
+    {
+      "file": "USDJPY_H1.jsonl",
+      "before": "2026-11-03T08:00:00.000Z",
+      "added": 22,
+      "after": "2026-11-04T06:00:00.000Z",
+      "targetLastOpen": "2026-11-04T06:45:00.000Z"
+    },
+    {
+      "file": "USDJPY_H4.jsonl",
+      "before": "2026-11-03T04:00:00.000Z",
+      "added": 5,
+      "after": "2026-11-04T00:00:00.000Z",
+      "targetLastOpen": "2026-11-04T03:45:00.000Z"
+    },
+    {
+      "file": "USDJPY_M1.jsonl",
+      "before": "2026-11-03T09:24:00.000Z",
+      "added": 1333,
+      "after": "2026-11-04T07:44:00.000Z",
+      "targetLastOpen": "2026-11-04T07:44:00.000Z"
+    },
+    {
+      "file": "USDJPY_M15.jsonl",
+      "before": "2026-11-03T09:00:00.000Z",
+      "added": 90,
+      "after": "2026-11-04T07:30:00.000Z",
+      "targetLastOpen": "2026-11-04T07:30:00.000Z"
+    },
+    {
+      "file": "USDJPY_M5.jsonl",
+      "before": "2026-11-03T09:20:00.000Z",
+      "added": 267,
+      "after": "2026-11-04T07:40:00.000Z",
+      "targetLastOpen": "2026-11-04T07:40:00.000Z"
+    }
+  ]
+}

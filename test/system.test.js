@@ -142,10 +142,11 @@ test("session overlap preserves configured symbol priority without duplicates", 
     assert.deepEqual(activeSymbols("21:30"), []);
 });
 
-test("daily limits keep the four-session strategy continuous", () => {
+test("legacy configuration stays intact while the finalist owns its intraday close", () => {
     assert.equal(RISK.DAILY_FORCED_CLOSE_UTC, false);
     assert.equal(RISK.DAILY_LAST_ENTRY_MINUTE_UTC, 24 * 60);
     assert.equal(RISK.WEEKEND_FLAT, true);
+    assert.equal(tradingService.dailyCloseMinute, 21 * 60);
 });
 
 test("indicators return finite ATR and EMA values", async () => {

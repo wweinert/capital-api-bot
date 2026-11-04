@@ -1,0 +1,6745 @@
+{
+  "protocol": "h1-wave-frozen-finalist-replay-v1",
+  "generatedAt": "2026-11-02T13:16:12.326Z",
+  "candidate": {
+    "name": "wave-quality-with-pattern-exploratory-v1",
+    "selection": "Exact wave-quality exploratory candidate with only signalMode changed to combined for a paired comparison",
+    "experiment": {
+      "signalMode": "combined",
+      "detector": {},
+      "bufferPips": 3,
+      "stopMode": "signal",
+      "stopBufferAtr": null,
+      "expiryMinutes": 45,
+      "targetR": 0.75,
+      "trailActivationR": 1,
+      "trailDistanceR": 0.35,
+      "ranking": "tightStop",
+      "minTrendScore": 0.25,
+      "minEfficiency6": 0.3,
+      "maxRiskAtr": 2.5,
+      "sessions": [
+        "sydney+tokyo",
+        "tokyo"
+      ],
+      "weekdays": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  "dataEnd": "2026-10-30T21:00:00.000Z",
+  "candidateSignals": 7817,
+  "selectionDisclosure": "The diagnostic September-October period had already been inspected before this standalone replay; it is evidence of historical consistency, not a fresh holdout.",
+  "scenarios": {
+    "base": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 768.732679,
+          "returnPct": -23.126732,
+          "trades": 63,
+          "wins": 31,
+          "winRate": 49.206349,
+          "profitFactor": 0.723776,
+          "maxDrawdownPct": 23.126732,
+          "maxMarginUsagePct": 89.994864,
+          "maxEffectiveRiskPct": 2.999594,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 16
+          },
+          "activeDays": 54,
+          "positiveDays": 26,
+          "negativeDays": 28,
+          "positiveDayPct": 48.148148,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -156.974566,
+            "2026-02": 49.384912,
+            "2026-03": -17.090602,
+            "2026-04": 68.52046,
+            "2026-05": -175.107525
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -57.034269,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -169.708529,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 20.113686,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 13,
+              "pnl": -21.942879,
+              "wins": 7
+            },
+            "GBPUSD": {
+              "trades": 22,
+              "pnl": 16.108371,
+              "wins": 13
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 9.400824,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -28.204524,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 50,
+              "pnl": -158.997704,
+              "wins": 25
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -72.269617,
+              "wins": 6
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 728.636859,
+          "returnPct": -27.136314,
+          "trades": 80,
+          "wins": 37,
+          "winRate": 46.25,
+          "profitFactor": 0.642188,
+          "maxDrawdownPct": 27.136314,
+          "maxMarginUsagePct": 89.951292,
+          "maxEffectiveRiskPct": 2.99886,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2
+          },
+          "activeDays": 55,
+          "positiveDays": 26,
+          "negativeDays": 29,
+          "positiveDayPct": 47.272727,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -143.899299,
+            "2026-02": 25.748866,
+            "2026-03": -49.352008,
+            "2026-04": -2.220024,
+            "2026-05": -101.640675
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -35.988586,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -94.074573,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 4,
+              "pnl": 13.614804,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -155.888998,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 30.490468,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 10.290216,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -39.806473,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 67,
+              "pnl": -218.250917,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -53.112223,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1169.333173,
+          "returnPct": 16.933317,
+          "trades": 30,
+          "wins": 20,
+          "winRate": 66.666667,
+          "profitFactor": 1.643389,
+          "maxDrawdownPct": 7.821737,
+          "maxMarginUsagePct": 89.9987,
+          "maxEffectiveRiskPct": 2.999947,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 54,
+            "portfolioFull": 20
+          },
+          "activeDays": 28,
+          "positiveDays": 18,
+          "negativeDays": 10,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 45.948387,
+            "2026-07": 22.262921,
+            "2026-08": 101.121864
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -55.382002,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 50.849218,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 8,
+              "pnl": 78.647364,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 2,
+              "pnl": -11.973883,
+              "wins": 1
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": 32.079945,
+              "wins": 3
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 47.70778,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 27.404751,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 25,
+              "pnl": 157.212173,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 5,
+              "pnl": 12.121001,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1205.299629,
+          "returnPct": 20.529963,
+          "trades": 53,
+          "wins": 37,
+          "winRate": 69.811321,
+          "profitFactor": 1.747447,
+          "maxDrawdownPct": 5.197302,
+          "maxMarginUsagePct": 89.958208,
+          "maxEffectiveRiskPct": 2.990558,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 2,
+            "notSelected": 18,
+            "portfolioFull": 9
+          },
+          "activeDays": 34,
+          "positiveDays": 20,
+          "negativeDays": 14,
+          "positiveDayPct": 58.823529,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 76.049621,
+            "2026-07": 108.835953,
+            "2026-08": 20.414055
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 9,
+              "pnl": 29.539661,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 47.65622,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 10,
+              "pnl": 46.336121,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 9.841813,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -8.412708,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 39.449193,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 40.889329,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 46,
+              "pnl": 173.16855,
+              "wins": 32
+            },
+            "tokyo": {
+              "trades": 7,
+              "pnl": 32.131079,
+              "wins": 5
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 973.187748,
+          "returnPct": -2.681225,
+          "trades": 30,
+          "wins": 17,
+          "winRate": 56.666667,
+          "profitFactor": 0.932609,
+          "maxDrawdownPct": 14.355845,
+          "maxMarginUsagePct": 89.986745,
+          "maxEffectiveRiskPct": 2.999613,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 37,
+            "portfolioFull": 20
+          },
+          "activeDays": 24,
+          "positiveDays": 12,
+          "negativeDays": 12,
+          "positiveDayPct": 50,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 98.395351,
+            "2026-10": -125.207604
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 37.855045,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 69.513136,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": -1.02226,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -2.652003,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -71.748793,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": -41.499298,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -17.25808,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 27,
+              "pnl": -41.482018,
+              "wins": 15
+            },
+            "tokyo": {
+              "trades": 3,
+              "pnl": 14.669765,
+              "wins": 2
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 926.35909,
+          "returnPct": -7.364091,
+          "trades": 43,
+          "wins": 23,
+          "winRate": 53.488372,
+          "profitFactor": 0.812895,
+          "maxDrawdownPct": 15.473083,
+          "maxMarginUsagePct": 89.939469,
+          "maxEffectiveRiskPct": 2.997633,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 15,
+            "portfolioFull": 4
+          },
+          "activeDays": 26,
+          "positiveDays": 11,
+          "negativeDays": 15,
+          "positiveDayPct": 42.307692,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 21.570313,
+            "2026-10": -95.211223
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 27.505676,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -6.164064,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": 28.039806,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -42.389938,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -37.991078,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 7,
+              "pnl": -37.229581,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -5.411732,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 37,
+              "pnl": -33.970615,
+              "wins": 21
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -39.670295,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 874.408027,
+          "returnPct": -12.559197,
+          "trades": 123,
+          "wins": 68,
+          "winRate": 55.284553,
+          "profitFactor": 0.91009,
+          "maxDrawdownPct": 24.681548,
+          "maxMarginUsagePct": 89.999824,
+          "maxEffectiveRiskPct": 2.999926,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 134,
+            "portfolioFull": 56
+          },
+          "activeDays": 106,
+          "positiveDays": 56,
+          "negativeDays": 50,
+          "positiveDayPct": 52.830189,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -156.974566,
+            "2026-02": 49.384912,
+            "2026-03": -17.090602,
+            "2026-04": 68.52046,
+            "2026-05": -175.107525,
+            "2026-06": 35.319911,
+            "2026-07": 17.090415,
+            "2026-08": 77.633985,
+            "2026-09": 88.163526,
+            "2026-10": -112.532491
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 13,
+              "pnl": -65.519665,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -68.140725,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 16,
+              "pnl": 79.375569,
+              "wins": 11
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -33.714505,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 30,
+              "pnl": -23.677942,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 10,
+              "pnl": 8.571905,
+              "wins": 6
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -22.486612,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 102,
+              "pnl": -75.769302,
+              "wins": 57
+            },
+            "tokyo": {
+              "trades": 21,
+              "pnl": -49.822671,
+              "wins": 11
+            }
+          },
+          "tradeLog": [
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-01-05T04:00:00.000Z",
+              "opened": "2026-01-05T04:04:00.000Z",
+              "closed": "2026-01-05T10:56:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.914786,
+              "r": -0.998905,
+              "effectiveRiskPct": 2.994758,
+              "balanceAfter": 970.085214,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-01-12T02:00:00.000Z",
+              "opened": "2026-01-12T02:30:00.000Z",
+              "closed": "2026-01-12T07:10:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.033778,
+              "r": -0.998261,
+              "effectiveRiskPct": 2.998122,
+              "balanceAfter": 941.051437,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-01-13T06:00:00.000Z",
+              "opened": "2026-01-13T06:02:00.000Z",
+              "closed": "2026-01-13T10:45:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -22.837538,
+              "r": -0.998997,
+              "effectiveRiskPct": 2.429248,
+              "balanceAfter": 918.213898,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-01-15T07:00:00.000Z",
+              "opened": "2026-01-15T07:25:00.000Z",
+              "closed": "2026-01-15T10:36:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.463682,
+              "r": -0.999407,
+              "effectiveRiskPct": 2.992764,
+              "balanceAfter": 890.750217,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-01-19T01:00:00.000Z",
+              "opened": "2026-01-19T01:29:00.000Z",
+              "closed": "2026-01-19T02:39:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.648786,
+              "r": -0.998558,
+              "effectiveRiskPct": 2.996044,
+              "balanceAfter": 864.101431,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-01-22T07:00:00.000Z",
+              "opened": "2026-01-22T07:06:00.000Z",
+              "closed": "2026-01-22T14:33:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.358514,
+              "r": 0.748118,
+              "effectiveRiskPct": 2.994588,
+              "balanceAfter": 883.459945,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-01-26T01:00:00.000Z",
+              "opened": "2026-01-26T01:05:00.000Z",
+              "closed": "2026-01-26T07:56:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.482572,
+              "r": -1.001655,
+              "effectiveRiskPct": 2.992644,
+              "balanceAfter": 856.977372,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "SELL",
+              "signaled": "2026-01-27T02:00:00.000Z",
+              "opened": "2026-01-27T02:23:00.000Z",
+              "closed": "2026-01-27T02:42:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.184054,
+              "r": 0.750407,
+              "effectiveRiskPct": 2.983143,
+              "balanceAfter": 876.161426,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-01-28T03:00:00.000Z",
+              "opened": "2026-01-28T03:21:00.000Z",
+              "closed": "2026-01-28T04:54:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.661441,
+              "r": 0.751128,
+              "effectiveRiskPct": 2.987562,
+              "balanceAfter": 895.822867,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-01-28T07:00:00.000Z",
+              "opened": "2026-01-28T07:00:00.000Z",
+              "closed": "2026-01-28T14:04:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.896406,
+              "r": -1.001789,
+              "effectiveRiskPct": 2.997063,
+              "balanceAfter": 868.926461,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-01-29T03:00:00.000Z",
+              "opened": "2026-01-29T03:12:00.000Z",
+              "closed": "2026-01-29T10:14:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -25.901026,
+              "r": -1.001807,
+              "effectiveRiskPct": 2.97543,
+              "balanceAfter": 843.025434,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-02-02T05:00:00.000Z",
+              "opened": "2026-02-02T05:28:00.000Z",
+              "closed": "2026-02-02T13:04:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.886782,
+              "r": 0.751673,
+              "effectiveRiskPct": 2.980496,
+              "balanceAfter": 861.912216,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-02-03T00:00:00.000Z",
+              "opened": "2026-02-03T00:00:00.000Z",
+              "closed": "2026-02-03T00:27:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.348461,
+              "r": 0.749304,
+              "effectiveRiskPct": 2.995888,
+              "balanceAfter": 881.260677,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-02-03T05:00:00.000Z",
+              "opened": "2026-02-03T05:16:00.000Z",
+              "closed": "2026-02-03T07:15:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.387015,
+              "r": -0.999154,
+              "effectiveRiskPct": 2.99677,
+              "balanceAfter": 854.873663,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-02-05T02:00:00.000Z",
+              "opened": "2026-02-05T02:06:00.000Z",
+              "closed": "2026-02-05T02:50:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.199796,
+              "r": 0.75084,
+              "effectiveRiskPct": 2.991214,
+              "balanceAfter": 874.073459,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-02-09T05:00:00.000Z",
+              "opened": "2026-02-09T05:08:00.000Z",
+              "closed": "2026-02-09T06:01:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.627216,
+              "r": 0.748854,
+              "effectiveRiskPct": 2.998566,
+              "balanceAfter": 893.700675,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-02-09T07:00:00.000Z",
+              "opened": "2026-02-09T07:03:00.000Z",
+              "closed": "2026-02-09T08:20:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.983969,
+              "r": 0.748487,
+              "effectiveRiskPct": 2.987483,
+              "balanceAfter": 913.684644,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-02-11T06:00:00.000Z",
+              "opened": "2026-02-11T06:04:00.000Z",
+              "closed": "2026-02-11T06:43:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.328546,
+              "r": -1.000411,
+              "effectiveRiskPct": 2.989796,
+              "balanceAfter": 886.356098,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "SELL",
+              "signaled": "2026-02-12T01:00:00.000Z",
+              "opened": "2026-02-12T01:00:00.000Z",
+              "closed": "2026-02-12T02:05:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.895905,
+              "r": 0.751575,
+              "effectiveRiskPct": 2.986643,
+              "balanceAfter": 906.252003,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-02-18T07:00:00.000Z",
+              "opened": "2026-02-18T07:15:00.000Z",
+              "closed": "2026-02-18T12:36:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.128313,
+              "r": -1.000422,
+              "effectiveRiskPct": 2.9922,
+              "balanceAfter": 879.12369,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-02-19T00:00:00.000Z",
+              "opened": "2026-02-19T00:29:00.000Z",
+              "closed": "2026-02-19T00:31:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.499264,
+              "r": -0.999873,
+              "effectiveRiskPct": 2.787137,
+              "balanceAfter": 854.624426,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-02-19T04:00:00.000Z",
+              "opened": "2026-02-19T04:22:00.000Z",
+              "closed": "2026-02-19T05:06:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.14853,
+              "r": 0.750185,
+              "effectiveRiskPct": 2.986703,
+              "balanceAfter": 873.772956,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-02-25T05:00:00.000Z",
+              "opened": "2026-02-25T05:04:00.000Z",
+              "closed": "2026-02-25T08:02:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.63739,
+              "r": 0.749886,
+              "effectiveRiskPct": 2.844406,
+              "balanceAfter": 892.410346,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-02T05:00:00.000Z",
+              "opened": "2026-03-02T05:04:00.000Z",
+              "closed": "2026-03-02T06:00:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.10122,
+              "r": 0.751275,
+              "effectiveRiskPct": 2.998189,
+              "balanceAfter": 912.511566,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-03T02:00:00.000Z",
+              "opened": "2026-03-03T02:02:00.000Z",
+              "closed": "2026-03-03T04:59:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.469694,
+              "r": 0.751098,
+              "effectiveRiskPct": 2.986595,
+              "balanceAfter": 932.98126,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-04T00:00:00.000Z",
+              "opened": "2026-03-04T00:02:00.000Z",
+              "closed": "2026-03-04T01:08:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.984044,
+              "r": 0.751288,
+              "effectiveRiskPct": 2.993712,
+              "balanceAfter": 953.965304,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-03-04T05:00:00.000Z",
+              "opened": "2026-03-04T05:12:00.000Z",
+              "closed": "2026-03-04T09:43:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.552332,
+              "r": -0.999567,
+              "effectiveRiskPct": 2.994312,
+              "balanceAfter": 925.412972,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-03-05T02:00:00.000Z",
+              "opened": "2026-03-05T02:24:00.000Z",
+              "closed": "2026-03-05T05:47:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.829222,
+              "r": 0.75159,
+              "effectiveRiskPct": 2.994722,
+              "balanceAfter": 946.242194,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-03-09T07:00:00.000Z",
+              "opened": "2026-03-09T07:05:00.000Z",
+              "closed": "2026-03-09T09:33:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.233707,
+              "r": -0.998642,
+              "effectiveRiskPct": 2.987829,
+              "balanceAfter": 918.008487,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-03-10T05:00:00.000Z",
+              "opened": "2026-03-10T05:03:00.000Z",
+              "closed": "2026-03-10T06:15:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.569026,
+              "r": 0.748916,
+              "effectiveRiskPct": 2.991807,
+              "balanceAfter": 938.577513,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "SELL",
+              "signaled": "2026-03-11T00:00:00.000Z",
+              "opened": "2026-03-11T00:13:00.000Z",
+              "closed": "2026-03-11T02:49:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.077108,
+              "r": 0.75011,
+              "effectiveRiskPct": 2.993755,
+              "balanceAfter": 959.654622,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-03-12T02:00:00.000Z",
+              "opened": "2026-03-12T02:27:00.000Z",
+              "closed": "2026-03-12T08:41:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.488925,
+              "r": 0.748829,
+              "effectiveRiskPct": 2.990317,
+              "balanceAfter": 981.143546,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-03-18T04:00:00.000Z",
+              "opened": "2026-03-18T04:22:00.000Z",
+              "closed": "2026-03-18T11:28:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.351817,
+              "r": -1.000147,
+              "effectiveRiskPct": 2.991152,
+              "balanceAfter": 951.791729,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-19T04:00:00.000Z",
+              "opened": "2026-03-19T04:05:00.000Z",
+              "closed": "2026-03-19T05:42:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.427544,
+              "r": 0.75053,
+              "effectiveRiskPct": 2.999594,
+              "balanceAfter": 973.219273,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-23T06:00:00.000Z",
+              "opened": "2026-03-23T06:02:00.000Z",
+              "closed": "2026-03-23T08:26:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.107383,
+              "r": -0.999142,
+              "effectiveRiskPct": 2.993402,
+              "balanceAfter": 944.111889,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-03-24T06:00:00.000Z",
+              "opened": "2026-03-24T06:02:00.000Z",
+              "closed": "2026-03-24T07:04:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.104816,
+              "r": 0.749211,
+              "effectiveRiskPct": 2.983692,
+              "balanceAfter": 965.216705,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-03-25T00:00:00.000Z",
+              "opened": "2026-03-25T00:30:00.000Z",
+              "closed": "2026-03-25T00:44:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.795845,
+              "r": -0.998598,
+              "effectiveRiskPct": 2.987543,
+              "balanceAfter": 936.42086,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-03-25T07:00:00.000Z",
+              "opened": "2026-03-25T07:13:00.000Z",
+              "closed": "2026-03-25T13:32:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.076052,
+              "r": -1.001045,
+              "effectiveRiskPct": 2.995102,
+              "balanceAfter": 908.344808,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-03-30T07:00:00.000Z",
+              "opened": "2026-03-30T07:00:00.000Z",
+              "closed": "2026-03-30T13:47:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.459332,
+              "r": 0.753022,
+              "effectiveRiskPct": 2.991115,
+              "balanceAfter": 928.80414,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-03-31T00:00:00.000Z",
+              "opened": "2026-03-31T00:09:00.000Z",
+              "closed": "2026-03-31T00:46:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.736876,
+              "r": -0.998788,
+              "effectiveRiskPct": 2.989923,
+              "balanceAfter": 901.067264,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-03-31T03:00:00.000Z",
+              "opened": "2026-03-31T03:40:00.000Z",
+              "closed": "2026-03-31T08:45:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -25.747519,
+              "r": -1.000261,
+              "effectiveRiskPct": 2.8567,
+              "balanceAfter": 875.319745,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-04-02T01:00:00.000Z",
+              "opened": "2026-04-02T01:11:00.000Z",
+              "closed": "2026-04-02T01:17:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.238113,
+              "r": -1.001096,
+              "effectiveRiskPct": 2.994263,
+              "balanceAfter": 849.081632,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-04-02T07:00:00.000Z",
+              "opened": "2026-04-02T07:25:00.000Z",
+              "closed": "2026-04-02T10:50:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -25.357985,
+              "r": -1.00192,
+              "effectiveRiskPct": 2.980797,
+              "balanceAfter": 823.723647,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-04-07T03:00:00.000Z",
+              "opened": "2026-04-07T03:40:00.000Z",
+              "closed": "2026-04-07T08:03:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.425595,
+              "r": 0.748261,
+              "effectiveRiskPct": 2.989421,
+              "balanceAfter": 842.149242,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-04-08T05:00:00.000Z",
+              "opened": "2026-04-08T05:06:00.000Z",
+              "closed": "2026-04-08T05:51:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.848812,
+              "r": 0.748602,
+              "effectiveRiskPct": 2.989811,
+              "balanceAfter": 860.998054,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-04-09T02:00:00.000Z",
+              "opened": "2026-04-09T02:20:00.000Z",
+              "closed": "2026-04-09T09:10:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.310079,
+              "r": 0.749146,
+              "effectiveRiskPct": 2.993751,
+              "balanceAfter": 880.308133,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-04-13T01:00:00.000Z",
+              "opened": "2026-04-13T01:00:00.000Z",
+              "closed": "2026-04-13T07:28:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.790665,
+              "r": 0.749596,
+              "effectiveRiskPct": 2.999152,
+              "balanceAfter": 900.098798,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-04-14T04:00:00.000Z",
+              "opened": "2026-04-14T04:06:00.000Z",
+              "closed": "2026-04-14T05:08:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -19.531724,
+              "r": -1.000612,
+              "effectiveRiskPct": 2.168626,
+              "balanceAfter": 880.567074,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-04-14T07:00:00.000Z",
+              "opened": "2026-04-14T07:01:00.000Z",
+              "closed": "2026-04-14T11:19:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.724749,
+              "r": 0.748602,
+              "effectiveRiskPct": 2.992252,
+              "balanceAfter": 900.291823,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-04-16T03:00:00.000Z",
+              "opened": "2026-04-16T03:00:00.000Z",
+              "closed": "2026-04-16T06:32:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.041671,
+              "r": -1.002001,
+              "effectiveRiskPct": 2.997658,
+              "balanceAfter": 873.250152,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-04-20T05:00:00.000Z",
+              "opened": "2026-04-20T05:23:00.000Z",
+              "closed": "2026-04-20T05:45:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.014186,
+              "r": 0.750747,
+              "effectiveRiskPct": 2.595248,
+              "balanceAfter": 890.264338,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-04-23T00:00:00.000Z",
+              "opened": "2026-04-23T00:10:00.000Z",
+              "closed": "2026-04-23T00:15:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 12.535637,
+              "r": 0.750513,
+              "effectiveRiskPct": 1.876157,
+              "balanceAfter": 902.799975,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-04-27T07:00:00.000Z",
+              "opened": "2026-04-27T07:03:00.000Z",
+              "closed": "2026-04-27T08:10:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.24261,
+              "r": 0.748889,
+              "effectiveRiskPct": 2.994039,
+              "balanceAfter": 923.042585,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-04-30T01:00:00.000Z",
+              "opened": "2026-04-30T01:07:00.000Z",
+              "closed": "2026-04-30T04:23:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.797619,
+              "r": 0.75119,
+              "effectiveRiskPct": 2.999454,
+              "balanceAfter": 943.840205,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-05-04T06:00:00.000Z",
+              "opened": "2026-05-04T06:04:00.000Z",
+              "closed": "2026-05-04T06:44:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -25.953951,
+              "r": -1.000171,
+              "effectiveRiskPct": 2.749356,
+              "balanceAfter": 917.886253,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-05-05T03:00:00.000Z",
+              "opened": "2026-05-05T03:42:00.000Z",
+              "closed": "2026-05-05T06:34:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -23.434499,
+              "r": -0.999906,
+              "effectiveRiskPct": 2.553334,
+              "balanceAfter": 894.451754,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-05-07T07:00:00.000Z",
+              "opened": "2026-05-07T07:07:00.000Z",
+              "closed": "2026-05-07T16:01:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.728494,
+              "r": -0.998665,
+              "effectiveRiskPct": 2.992248,
+              "balanceAfter": 867.72326,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-05-13T00:00:00.000Z",
+              "opened": "2026-05-13T00:13:00.000Z",
+              "closed": "2026-05-13T01:50:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -23.858657,
+              "r": -0.999455,
+              "effectiveRiskPct": 2.751069,
+              "balanceAfter": 843.864603,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-05-14T02:00:00.000Z",
+              "opened": "2026-05-14T02:15:00.000Z",
+              "closed": "2026-05-14T06:49:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -25.220949,
+              "r": -1.000256,
+              "effectiveRiskPct": 2.987979,
+              "balanceAfter": 818.643654,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-05-18T05:00:00.000Z",
+              "opened": "2026-05-18T05:15:00.000Z",
+              "closed": "2026-05-18T06:23:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.511165,
+              "r": -0.999011,
+              "effectiveRiskPct": 2.997082,
+              "balanceAfter": 794.132489,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-05-19T07:00:00.000Z",
+              "opened": "2026-05-19T07:06:00.000Z",
+              "closed": "2026-05-19T09:06:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.845848,
+              "r": 0.751058,
+              "effectiveRiskPct": 2.992061,
+              "balanceAfter": 811.978337,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-05-20T00:00:00.000Z",
+              "opened": "2026-05-20T00:06:00.000Z",
+              "closed": "2026-05-20T00:55:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -19.548098,
+              "r": -1.000496,
+              "effectiveRiskPct": 2.406272,
+              "balanceAfter": 792.430239,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-05-21T01:00:00.000Z",
+              "opened": "2026-05-21T01:08:00.000Z",
+              "closed": "2026-05-21T02:31:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -23.697559,
+              "r": -1.000611,
+              "effectiveRiskPct": 2.988666,
+              "balanceAfter": 768.732679,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-06-01T05:00:00.000Z",
+              "opened": "2026-06-01T05:02:00.000Z",
+              "closed": "2026-06-01T06:50:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 16.586801,
+              "r": 0.749556,
+              "effectiveRiskPct": 2.878613,
+              "balanceAfter": 785.319481,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-06-04T03:00:00.000Z",
+              "opened": "2026-06-04T03:40:00.000Z",
+              "closed": "2026-06-04T07:41:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.579119,
+              "r": 0.749062,
+              "effectiveRiskPct": 2.98836,
+              "balanceAfter": 802.8986,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-06-08T05:00:00.000Z",
+              "opened": "2026-06-08T05:36:00.000Z",
+              "closed": "2026-06-08T05:58:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 14.064759,
+              "r": 0.750873,
+              "effectiveRiskPct": 2.33295,
+              "balanceAfter": 816.963359,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-06-09T00:00:00.000Z",
+              "opened": "2026-06-09T00:04:00.000Z",
+              "closed": "2026-06-09T01:01:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.026754,
+              "r": -0.999264,
+              "effectiveRiskPct": 2.943149,
+              "balanceAfter": 792.936605,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-06-10T06:00:00.000Z",
+              "opened": "2026-06-10T06:07:00.000Z",
+              "closed": "2026-06-10T11:06:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -23.739913,
+              "r": -1.000918,
+              "effectiveRiskPct": 2.991177,
+              "balanceAfter": 769.196691,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-06-11T00:00:00.000Z",
+              "opened": "2026-06-11T00:00:00.000Z",
+              "closed": "2026-06-11T01:42:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.213824,
+              "r": 0.74911,
+              "effectiveRiskPct": 2.987407,
+              "balanceAfter": 786.410516,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-06-11T06:00:00.000Z",
+              "opened": "2026-06-11T06:04:00.000Z",
+              "closed": "2026-06-11T08:14:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 13.300451,
+              "r": 0.75054,
+              "effectiveRiskPct": 2.253424,
+              "balanceAfter": 799.710966,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-06-15T02:00:00.000Z",
+              "opened": "2026-06-15T02:39:00.000Z",
+              "closed": "2026-06-15T22:00:00.000Z",
+              "reason": "dailyFlat",
+              "pnl": -13.112053,
+              "r": -0.548574,
+              "effectiveRiskPct": 2.988841,
+              "balanceAfter": 786.598914,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-06-16T07:00:00.000Z",
+              "opened": "2026-06-16T07:01:00.000Z",
+              "closed": "2026-06-16T07:32:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.453677,
+              "r": 0.749193,
+              "effectiveRiskPct": 2.961692,
+              "balanceAfter": 804.052591,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-07-02T01:00:00.000Z",
+              "opened": "2026-07-02T01:01:00.000Z",
+              "closed": "2026-07-02T06:09:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.085793,
+              "r": -1.001194,
+              "effectiveRiskPct": 2.991978,
+              "balanceAfter": 779.966797,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-07-06T07:00:00.000Z",
+              "opened": "2026-07-06T07:44:00.000Z",
+              "closed": "2026-07-06T16:22:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.534283,
+              "r": 0.749501,
+              "effectiveRiskPct": 2.999435,
+              "balanceAfter": 797.50108,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-07-08T04:00:00.000Z",
+              "opened": "2026-07-08T04:02:00.000Z",
+              "closed": "2026-07-08T05:43:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -16.130947,
+              "r": -1.000054,
+              "effectiveRiskPct": 2.022577,
+              "balanceAfter": 781.370133,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-07-13T01:00:00.000Z",
+              "opened": "2026-07-13T01:08:00.000Z",
+              "closed": "2026-07-13T05:13:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -23.414839,
+              "r": -0.998904,
+              "effectiveRiskPct": 2.999926,
+              "balanceAfter": 757.955293,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-07-16T03:00:00.000Z",
+              "opened": "2026-07-16T03:06:00.000Z",
+              "closed": "2026-07-16T12:02:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.019431,
+              "r": 0.749725,
+              "effectiveRiskPct": 2.995017,
+              "balanceAfter": 774.974724,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-07-20T06:00:00.000Z",
+              "opened": "2026-07-20T06:09:00.000Z",
+              "closed": "2026-07-20T11:33:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -14.291409,
+              "r": -1.0007,
+              "effectiveRiskPct": 1.842822,
+              "balanceAfter": 760.683315,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-07-21T05:00:00.000Z",
+              "opened": "2026-07-21T05:09:00.000Z",
+              "closed": "2026-07-21T06:36:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 12.074153,
+              "r": 0.74965,
+              "effectiveRiskPct": 2.117356,
+              "balanceAfter": 772.757468,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-07-22T07:00:00.000Z",
+              "opened": "2026-07-22T07:27:00.000Z",
+              "closed": "2026-07-22T07:31:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -19.572944,
+              "r": -1.000812,
+              "effectiveRiskPct": 2.530815,
+              "balanceAfter": 753.184524,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-07-23T03:00:00.000Z",
+              "opened": "2026-07-23T03:00:00.000Z",
+              "closed": "2026-07-23T07:51:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 16.865368,
+              "r": 0.749047,
+              "effectiveRiskPct": 2.989408,
+              "balanceAfter": 770.049892,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-07-27T03:00:00.000Z",
+              "opened": "2026-07-27T03:30:00.000Z",
+              "closed": "2026-07-27T07:57:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.268449,
+              "r": 0.750359,
+              "effectiveRiskPct": 2.988585,
+              "balanceAfter": 787.318341,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-07-29T01:00:00.000Z",
+              "opened": "2026-07-29T01:30:00.000Z",
+              "closed": "2026-07-29T01:31:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.684284,
+              "r": 0.750105,
+              "effectiveRiskPct": 2.994435,
+              "balanceAfter": 805.002625,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-07-29T06:00:00.000Z",
+              "opened": "2026-07-29T06:07:00.000Z",
+              "closed": "2026-07-29T07:52:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 16.140381,
+              "r": 0.74925,
+              "effectiveRiskPct": 2.676022,
+              "balanceAfter": 821.143006,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-08-05T00:00:00.000Z",
+              "opened": "2026-08-05T00:22:00.000Z",
+              "closed": "2026-08-05T00:57:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.344112,
+              "r": 0.751047,
+              "effectiveRiskPct": 2.974479,
+              "balanceAfter": 839.487117,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-08-11T02:00:00.000Z",
+              "opened": "2026-08-11T02:09:00.000Z",
+              "closed": "2026-08-11T07:58:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 18.320673,
+              "r": 0.750022,
+              "effectiveRiskPct": 2.909733,
+              "balanceAfter": 857.80779,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-08-17T04:00:00.000Z",
+              "opened": "2026-08-17T04:06:00.000Z",
+              "closed": "2026-08-17T07:20:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 14.518819,
+              "r": 0.748862,
+              "effectiveRiskPct": 2.260161,
+              "balanceAfter": 872.326609,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-08-18T07:00:00.000Z",
+              "opened": "2026-08-18T07:21:00.000Z",
+              "closed": "2026-08-18T21:49:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.042092,
+              "r": -1.00049,
+              "effectiveRiskPct": 2.754739,
+              "balanceAfter": 848.284518,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "SELL",
+              "signaled": "2026-08-20T06:00:00.000Z",
+              "opened": "2026-08-20T06:10:00.000Z",
+              "closed": "2026-08-20T08:00:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.017565,
+              "r": 0.750302,
+              "effectiveRiskPct": 2.987978,
+              "balanceAfter": 867.302083,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-08-25T06:00:00.000Z",
+              "opened": "2026-08-25T06:24:00.000Z",
+              "closed": "2026-08-25T08:08:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 13.824112,
+              "r": 0.748971,
+              "effectiveRiskPct": 2.128147,
+              "balanceAfter": 881.126195,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-08-26T06:00:00.000Z",
+              "opened": "2026-08-26T06:07:00.000Z",
+              "closed": "2026-08-26T12:31:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -19.668703,
+              "r": -0.999647,
+              "effectiveRiskPct": 2.233011,
+              "balanceAfter": 861.457491,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-08-27T02:00:00.000Z",
+              "opened": "2026-08-27T02:03:00.000Z",
+              "closed": "2026-08-27T09:40:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.350395,
+              "r": 0.750051,
+              "effectiveRiskPct": 2.994784,
+              "balanceAfter": 880.807886,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-08-31T07:00:00.000Z",
+              "opened": "2026-08-31T07:06:00.000Z",
+              "closed": "2026-08-31T07:16:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.969105,
+              "r": 0.750858,
+              "effectiveRiskPct": 2.716988,
+              "balanceAfter": 898.776991,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-09-01T01:00:00.000Z",
+              "opened": "2026-09-01T01:19:00.000Z",
+              "closed": "2026-09-01T06:35:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.242174,
+              "r": 0.751105,
+              "effectiveRiskPct": 2.998502,
+              "balanceAfter": 919.019165,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "SELL",
+              "signaled": "2026-09-01T07:00:00.000Z",
+              "opened": "2026-09-01T07:30:00.000Z",
+              "closed": "2026-09-01T08:33:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.616224,
+              "r": 0.750919,
+              "effectiveRiskPct": 2.987388,
+              "balanceAfter": 939.635389,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-09-02T00:00:00.000Z",
+              "opened": "2026-09-02T00:08:00.000Z",
+              "closed": "2026-09-02T01:36:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 14.25626,
+              "r": 0.750706,
+              "effectiveRiskPct": 2.021047,
+              "balanceAfter": 953.891649,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-09-02T04:00:00.000Z",
+              "opened": "2026-09-02T04:19:00.000Z",
+              "closed": "2026-09-02T06:11:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.601791,
+              "r": -1.000364,
+              "effectiveRiskPct": 2.997342,
+              "balanceAfter": 925.289859,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "BUY",
+              "signaled": "2026-09-02T07:00:00.000Z",
+              "opened": "2026-09-02T07:04:00.000Z",
+              "closed": "2026-09-02T10:02:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.656335,
+              "r": 0.748221,
+              "effectiveRiskPct": 2.983635,
+              "balanceAfter": 945.946193,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-09-03T01:00:00.000Z",
+              "opened": "2026-09-03T01:16:00.000Z",
+              "closed": "2026-09-03T02:22:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.247437,
+              "r": 0.752327,
+              "effectiveRiskPct": 2.985612,
+              "balanceAfter": 967.19363,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-09-07T06:00:00.000Z",
+              "opened": "2026-09-07T06:22:00.000Z",
+              "closed": "2026-09-07T08:08:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.756005,
+              "r": 0.752464,
+              "effectiveRiskPct": 2.989373,
+              "balanceAfter": 988.949635,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-09-10T02:00:00.000Z",
+              "opened": "2026-09-10T02:03:00.000Z",
+              "closed": "2026-09-10T09:43:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.583586,
+              "r": -1.000705,
+              "effectiveRiskPct": 2.989307,
+              "balanceAfter": 959.366049,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-09-15T00:00:00.000Z",
+              "opened": "2026-09-15T00:29:00.000Z",
+              "closed": "2026-09-15T04:26:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 19.19741,
+              "r": 0.750832,
+              "effectiveRiskPct": 2.665111,
+              "balanceAfter": 978.563459,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-09-15T05:00:00.000Z",
+              "opened": "2026-09-15T05:07:00.000Z",
+              "closed": "2026-09-15T05:26:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.965593,
+              "r": 0.749303,
+              "effectiveRiskPct": 2.995686,
+              "balanceAfter": 1000.529051,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-09-17T01:00:00.000Z",
+              "opened": "2026-09-17T01:00:00.000Z",
+              "closed": "2026-09-17T05:45:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.915893,
+              "r": -1.001802,
+              "effectiveRiskPct": 2.984629,
+              "balanceAfter": 970.613158,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-09-21T04:00:00.000Z",
+              "opened": "2026-09-21T04:13:00.000Z",
+              "closed": "2026-09-21T11:50:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.751714,
+              "r": 0.749119,
+              "effectiveRiskPct": 2.991553,
+              "balanceAfter": 992.364872,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-09-22T00:00:00.000Z",
+              "opened": "2026-09-22T00:06:00.000Z",
+              "closed": "2026-09-22T01:51:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.852535,
+              "r": 0.749265,
+              "effectiveRiskPct": 2.401005,
+              "balanceAfter": 1010.217407,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "BUY",
+              "signaled": "2026-09-22T07:00:00.000Z",
+              "opened": "2026-09-22T07:00:00.000Z",
+              "closed": "2026-09-22T07:59:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.167641,
+              "r": -1.000734,
+              "effectiveRiskPct": 2.786231,
+              "balanceAfter": 982.049766,
+              "sessions": [
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-09-23T01:00:00.000Z",
+              "opened": "2026-09-23T01:17:00.000Z",
+              "closed": "2026-09-23T02:57:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 17.904387,
+              "r": 0.75084,
+              "effectiveRiskPct": 2.428168,
+              "balanceAfter": 999.954153,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-09-23T06:00:00.000Z",
+              "opened": "2026-09-23T06:10:00.000Z",
+              "closed": "2026-09-23T07:33:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 21.138243,
+              "r": 0.749247,
+              "effectiveRiskPct": 2.821394,
+              "balanceAfter": 1021.092396,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-09-24T00:00:00.000Z",
+              "opened": "2026-09-24T00:22:00.000Z",
+              "closed": "2026-09-24T06:11:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.07997,
+              "r": -0.999447,
+              "effectiveRiskPct": 2.555538,
+              "balanceAfter": 995.012426,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-09-28T06:00:00.000Z",
+              "opened": "2026-09-28T06:07:00.000Z",
+              "closed": "2026-09-28T06:50:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 22.383435,
+              "r": 0.75147,
+              "effectiveRiskPct": 2.993552,
+              "balanceAfter": 1017.395862,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "SELL",
+              "signaled": "2026-09-30T06:00:00.000Z",
+              "opened": "2026-09-30T06:23:00.000Z",
+              "closed": "2026-09-30T12:30:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -30.455344,
+              "r": -0.997951,
+              "effectiveRiskPct": 2.999608,
+              "balanceAfter": 986.940517,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDCHF",
+              "side": "SELL",
+              "signaled": "2026-10-05T05:00:00.000Z",
+              "opened": "2026-10-05T05:05:00.000Z",
+              "closed": "2026-10-05T13:33:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -29.480148,
+              "r": -0.996752,
+              "effectiveRiskPct": 2.996757,
+              "balanceAfter": 957.460369,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "USDJPY",
+              "side": "BUY",
+              "signaled": "2026-10-06T05:00:00.000Z",
+              "opened": "2026-10-06T05:27:00.000Z",
+              "closed": "2026-10-06T11:46:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -28.542853,
+              "r": -0.996738,
+              "effectiveRiskPct": 2.990855,
+              "balanceAfter": 928.917516,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "BUY",
+              "signaled": "2026-10-07T06:00:00.000Z",
+              "opened": "2026-10-07T06:35:00.000Z",
+              "closed": "2026-10-07T07:16:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -24.187216,
+              "r": -1.001016,
+              "effectiveRiskPct": 2.601164,
+              "balanceAfter": 904.730301,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "SELL",
+              "signaled": "2026-10-08T00:00:00.000Z",
+              "opened": "2026-10-08T00:15:00.000Z",
+              "closed": "2026-10-08T01:49:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -20.683778,
+              "r": -0.99942,
+              "effectiveRiskPct": 2.287508,
+              "balanceAfter": 884.046522,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-10-13T00:00:00.000Z",
+              "opened": "2026-10-13T00:03:00.000Z",
+              "closed": "2026-10-13T00:31:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 14.947972,
+              "r": 0.750781,
+              "effectiveRiskPct": 2.252133,
+              "balanceAfter": 898.994495,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDJPY",
+              "side": "BUY",
+              "signaled": "2026-10-14T01:00:00.000Z",
+              "opened": "2026-10-14T01:01:00.000Z",
+              "closed": "2026-10-14T08:06:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.237156,
+              "r": 0.750507,
+              "effectiveRiskPct": 2.999421,
+              "balanceAfter": 919.23165,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-10-15T04:00:00.000Z",
+              "opened": "2026-10-15T04:13:00.000Z",
+              "closed": "2026-10-15T08:17:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.583104,
+              "r": -1.000535,
+              "effectiveRiskPct": 2.999066,
+              "balanceAfter": 891.648547,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "AUDUSD",
+              "side": "BUY",
+              "signaled": "2026-10-19T02:00:00.000Z",
+              "opened": "2026-10-19T02:03:00.000Z",
+              "closed": "2026-10-19T10:39:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 20.073922,
+              "r": 0.75099,
+              "effectiveRiskPct": 2.997813,
+              "balanceAfter": 911.722469,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURUSD",
+              "side": "BUY",
+              "signaled": "2026-10-22T03:00:00.000Z",
+              "opened": "2026-10-22T03:03:00.000Z",
+              "closed": "2026-10-22T09:50:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -27.258028,
+              "r": -1.001657,
+              "effectiveRiskPct": 2.984783,
+              "balanceAfter": 884.464441,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "GBPUSD",
+              "side": "SELL",
+              "signaled": "2026-10-27T01:00:00.000Z",
+              "opened": "2026-10-27T01:04:00.000Z",
+              "closed": "2026-10-27T06:48:00.000Z",
+              "reason": "takeProfit",
+              "pnl": 16.933435,
+              "r": 0.750726,
+              "effectiveRiskPct": 2.550254,
+              "balanceAfter": 901.397876,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            },
+            {
+              "symbol": "EURJPY",
+              "side": "SELL",
+              "signaled": "2026-10-28T05:00:00.000Z",
+              "opened": "2026-10-28T05:00:00.000Z",
+              "closed": "2026-10-28T11:44:00.000Z",
+              "reason": "stopLoss",
+              "pnl": -26.98985,
+              "r": -0.999092,
+              "effectiveRiskPct": 2.996942,
+              "balanceAfter": 874.408027,
+              "sessions": [
+                "sydney",
+                "tokyo"
+              ]
+            }
+          ]
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 813.571331,
+          "returnPct": -18.642867,
+          "trades": 176,
+          "wins": 97,
+          "winRate": 55.113636,
+          "profitFactor": 0.85705,
+          "maxDrawdownPct": 27.136314,
+          "maxMarginUsagePct": 89.951292,
+          "maxEffectiveRiskPct": 2.999828,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 9,
+            "notSelected": 45,
+            "portfolioFull": 15
+          },
+          "activeDays": 115,
+          "positiveDays": 57,
+          "negativeDays": 58,
+          "positiveDayPct": 49.565217,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -143.899299,
+            "2026-02": 25.748866,
+            "2026-03": -49.352008,
+            "2026-04": -2.220024,
+            "2026-05": -101.640675,
+            "2026-06": 55.711627,
+            "2026-07": 79.074117,
+            "2026-08": 15.041386,
+            "2026-09": 18.69202,
+            "2026-10": -83.584679
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 17,
+              "pnl": 9.661064,
+              "wins": 10
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -64.57766,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 20,
+              "pnl": 72.008913,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -185.979583,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 37,
+              "pnl": -8.926249,
+              "wins": 21
+            },
+            "USDCHF": {
+              "trades": 17,
+              "pnl": 6.340095,
+              "wins": 10
+            },
+            "USDJPY": {
+              "trades": 19,
+              "pnl": -14.955249,
+              "wins": 11
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 150,
+              "pnl": -121.938141,
+              "wins": 84
+            },
+            "tokyo": {
+              "trades": 26,
+              "pnl": -64.490528,
+              "wins": 13
+            }
+          }
+        }
+      ]
+    },
+    "spread1p25": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 806.894395,
+          "returnPct": -19.310561,
+          "trades": 63,
+          "wins": 32,
+          "winRate": 50.793651,
+          "profitFactor": 0.771372,
+          "maxDrawdownPct": 21.969769,
+          "maxMarginUsagePct": 89.994556,
+          "maxEffectiveRiskPct": 2.999827,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 19
+          },
+          "activeDays": 54,
+          "positiveDays": 27,
+          "negativeDays": 27,
+          "positiveDayPct": 50,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -111.567455,
+            "2026-02": 52.25669,
+            "2026-03": -18.043888,
+            "2026-04": 71.949029,
+            "2026-05": -187.699982
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 3,
+              "pnl": -29.123629,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -178.104647,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 20.13091,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 12,
+              "pnl": -39.101397,
+              "wins": 6
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 38.583846,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 8.805167,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -14.295856,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 52,
+              "pnl": -127.170626,
+              "wins": 27
+            },
+            "tokyo": {
+              "trades": 11,
+              "pnl": -65.93498,
+              "wins": 5
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 743.642593,
+          "returnPct": -25.635741,
+          "trades": 82,
+          "wins": 39,
+          "winRate": 47.560976,
+          "profitFactor": 0.665067,
+          "maxDrawdownPct": 26.183849,
+          "maxMarginUsagePct": 89.875564,
+          "maxEffectiveRiskPct": 2.999529,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 55,
+          "positiveDays": 26,
+          "negativeDays": 29,
+          "positiveDayPct": 47.272727,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -133.602286,
+            "2026-02": 26.335101,
+            "2026-03": -50.319192,
+            "2026-04": -2.522928,
+            "2026-05": -96.248103
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -35.486244,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -95.403857,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 4,
+              "pnl": 13.711538,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -156.630845,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 24,
+              "pnl": 40.467108,
+              "wins": 15
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 10.296835,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": -33.311942,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 69,
+              "pnl": -202.760503,
+              "wins": 33
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -53.596904,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1138.895919,
+          "returnPct": 13.889592,
+          "trades": 31,
+          "wins": 20,
+          "winRate": 64.516129,
+          "profitFactor": 1.49218,
+          "maxDrawdownPct": 7.811566,
+          "maxMarginUsagePct": 89.996687,
+          "maxEffectiveRiskPct": 2.999694,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 53,
+            "portfolioFull": 22
+          },
+          "activeDays": 28,
+          "positiveDays": 18,
+          "negativeDays": 10,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 40.363089,
+            "2026-07": -0.070565,
+            "2026-08": 98.603394
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -54.445689,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 50.561108,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 9,
+              "pnl": 55.646687,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 3,
+              "pnl": 4.138775,
+              "wins": 2
+            },
+            "GBPUSD": {
+              "trades": 3,
+              "pnl": 10.050581,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 46.974301,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 25.970155,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 26,
+              "pnl": 126.711377,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 5,
+              "pnl": 12.184542,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1147.203783,
+          "returnPct": 14.720378,
+          "trades": 54,
+          "wins": 36,
+          "winRate": 66.666667,
+          "profitFactor": 1.484721,
+          "maxDrawdownPct": 5.212431,
+          "maxMarginUsagePct": 89.909542,
+          "maxEffectiveRiskPct": 2.997092,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 18,
+            "portfolioFull": 9
+          },
+          "activeDays": 34,
+          "positiveDays": 20,
+          "negativeDays": 14,
+          "positiveDayPct": 58.823529,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 74.575493,
+            "2026-07": 53.405388,
+            "2026-08": 19.222902
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 9,
+              "pnl": -12.886165,
+              "wins": 5
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 48.462303,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 11,
+              "pnl": 33.782025,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 8.206812,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -7.878689,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 39.268738,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 38.248759,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 47,
+              "pnl": 114.946381,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 7,
+              "pnl": 32.257402,
+              "wins": 5
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 973.184918,
+          "returnPct": -2.681508,
+          "trades": 30,
+          "wins": 17,
+          "winRate": 56.666667,
+          "profitFactor": 0.932232,
+          "maxDrawdownPct": 14.047351,
+          "maxMarginUsagePct": 89.986015,
+          "maxEffectiveRiskPct": 2.999491,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 37,
+            "portfolioFull": 21
+          },
+          "activeDays": 25,
+          "positiveDays": 13,
+          "negativeDays": 12,
+          "positiveDayPct": 52,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 98.406588,
+            "2026-10": -125.221671
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 37.244588,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 68.969343,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": -0.765401,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -2.554636,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -71.760005,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 4,
+              "pnl": -16.597124,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -41.351847,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 26,
+              "pnl": -67.114779,
+              "wins": 14
+            },
+            "tokyo": {
+              "trades": 4,
+              "pnl": 40.299696,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 926.316254,
+          "returnPct": -7.368375,
+          "trades": 43,
+          "wins": 23,
+          "winRate": 53.488372,
+          "profitFactor": 0.812738,
+          "maxDrawdownPct": 15.465889,
+          "maxMarginUsagePct": 89.952734,
+          "maxEffectiveRiskPct": 2.997633,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 15,
+            "portfolioFull": 4
+          },
+          "activeDays": 26,
+          "positiveDays": 11,
+          "negativeDays": 15,
+          "positiveDayPct": 42.307692,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 21.530295,
+            "2026-10": -95.214041
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 27.614445,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -6.164064,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": 28.039806,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -42.389299,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -37.996389,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 7,
+              "pnl": -37.227088,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -5.561158,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 37,
+              "pnl": -34.013451,
+              "wins": 21
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -39.670295,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 894.392825,
+          "returnPct": -10.560718,
+          "trades": 124,
+          "wins": 69,
+          "winRate": 55.645161,
+          "profitFactor": 0.926432,
+          "maxDrawdownPct": 23.950073,
+          "maxMarginUsagePct": 89.994556,
+          "maxEffectiveRiskPct": 2.999946,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 133,
+            "portfolioFull": 62
+          },
+          "activeDays": 107,
+          "positiveDays": 58,
+          "negativeDays": 49,
+          "positiveDayPct": 54.205607,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -111.567455,
+            "2026-02": 52.25669,
+            "2026-03": -18.043888,
+            "2026-04": 71.949029,
+            "2026-05": -187.699982,
+            "2026-06": 32.538081,
+            "2026-07": 0.031146,
+            "2026-08": 79.48516,
+            "2026-09": 90.348922,
+            "2026-10": -114.90488
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 12,
+              "pnl": -38.835925,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -73.894933,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 17,
+              "pnl": 64.313745,
+              "wins": 11
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -38.035037,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 30,
+              "pnl": -19.106377,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 11,
+              "pnl": 31.30981,
+              "wins": 7
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -31.358457,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 104,
+              "pnl": -86.581634,
+              "wins": 58
+            },
+            "tokyo": {
+              "trades": 20,
+              "pnl": -19.025541,
+              "wins": 11
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 789.953636,
+          "returnPct": -21.004636,
+          "trades": 179,
+          "wins": 98,
+          "winRate": 54.748603,
+          "profitFactor": 0.841659,
+          "maxDrawdownPct": 26.183849,
+          "maxMarginUsagePct": 89.897931,
+          "maxEffectiveRiskPct": 2.999529,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 10,
+            "notSelected": 45,
+            "portfolioFull": 15,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 115,
+          "positiveDays": 57,
+          "negativeDays": 58,
+          "positiveDayPct": 49.565217,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -133.602286,
+            "2026-02": 26.335101,
+            "2026-03": -50.319192,
+            "2026-04": -2.522928,
+            "2026-05": -96.248103,
+            "2026-06": 55.415343,
+            "2026-07": 39.752272,
+            "2026-08": 14.378686,
+            "2026-09": 18.239117,
+            "2026-10": -81.474376
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 17,
+              "pnl": -21.680037,
+              "wins": 9
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -64.469106,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 21,
+              "pnl": 62.754965,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -186.792567,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 38,
+              "pnl": 2.254751,
+              "wins": 22
+            },
+            "USDCHF": {
+              "trades": 17,
+              "pnl": 7.619264,
+              "wins": 10
+            },
+            "USDJPY": {
+              "trades": 20,
+              "pnl": -9.733635,
+              "wins": 12
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 153,
+              "pnl": -146.676701,
+              "wins": 85
+            },
+            "tokyo": {
+              "trades": 26,
+              "pnl": -63.369663,
+              "wins": 13
+            }
+          }
+        }
+      ]
+    },
+    "spread1p5": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 726.015443,
+          "returnPct": -27.398456,
+          "trades": 63,
+          "wins": 30,
+          "winRate": 47.619048,
+          "profitFactor": 0.67394,
+          "maxDrawdownPct": 27.398456,
+          "maxMarginUsagePct": 89.994603,
+          "maxEffectiveRiskPct": 2.999563,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 19
+          },
+          "activeDays": 54,
+          "positiveDays": 25,
+          "negativeDays": 29,
+          "positiveDayPct": 46.296296,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -156.952163,
+            "2026-02": 49.393546,
+            "2026-03": -61.814904,
+            "2026-04": 64.552076,
+            "2026-05": -169.163112
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 3,
+              "pnl": -30.141568,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -164.8762,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 20.058677,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 12,
+              "pnl": -39.285608,
+              "wins": 6
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 38.00314,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": -84.395012,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -13.347985,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 52,
+              "pnl": -211.512423,
+              "wins": 25
+            },
+            "tokyo": {
+              "trades": 11,
+              "pnl": -62.472134,
+              "wins": 5
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 700.295965,
+          "returnPct": -29.970403,
+          "trades": 83,
+          "wins": 38,
+          "winRate": 45.783133,
+          "profitFactor": 0.608708,
+          "maxDrawdownPct": 30.482392,
+          "maxMarginUsagePct": 89.953748,
+          "maxEffectiveRiskPct": 2.997633,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 55,
+          "positiveDays": 24,
+          "negativeDays": 31,
+          "positiveDayPct": 43.636364,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -169.39526,
+            "2026-02": 25.223536,
+            "2026-03": -68.611707,
+            "2026-04": 3.899456,
+            "2026-05": -90.82006
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -35.495271,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -90.732836,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": 19.482245,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -151.256773,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 24,
+              "pnl": 39.97684,
+              "wins": 15
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": -48.693137,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": -32.985102,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 70,
+              "pnl": -248.527334,
+              "wins": 32
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -51.176701,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1113.966467,
+          "returnPct": 11.396647,
+          "trades": 30,
+          "wins": 19,
+          "winRate": 63.333333,
+          "profitFactor": 1.410123,
+          "maxDrawdownPct": 9.818119,
+          "maxMarginUsagePct": 89.998863,
+          "maxEffectiveRiskPct": 2.999694,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 53,
+            "portfolioFull": 22,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 27,
+          "positiveDays": 17,
+          "negativeDays": 10,
+          "positiveDayPct": 62.962963,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 17.805035,
+            "2026-07": -0.235939,
+            "2026-08": 96.397371
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -53.598202,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 49.110224,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 8,
+              "pnl": 32.757469,
+              "wins": 5
+            },
+            "EURUSD": {
+              "trades": 3,
+              "pnl": 4.727828,
+              "wins": 2
+            },
+            "GBPUSD": {
+              "trades": 3,
+              "pnl": 9.188699,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 46.440509,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 25.339941,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 26,
+              "pnl": 124.019722,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 4,
+              "pnl": -10.053255,
+              "wins": 2
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1123.227741,
+          "returnPct": 12.322774,
+          "trades": 54,
+          "wins": 35,
+          "winRate": 64.814815,
+          "profitFactor": 1.395793,
+          "maxDrawdownPct": 5.201083,
+          "maxMarginUsagePct": 89.986702,
+          "maxEffectiveRiskPct": 2.993798,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 18,
+            "invalidPendingEntry": 1,
+            "portfolioFull": 9
+          },
+          "activeDays": 35,
+          "positiveDays": 20,
+          "negativeDays": 15,
+          "positiveDayPct": 57.142857,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 62.965092,
+            "2026-07": 52.628936,
+            "2026-08": 7.633713
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 10,
+              "pnl": -24.185583,
+              "wins": 5
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 48.297178,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 10,
+              "pnl": 21.972495,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 8.419482,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -7.506508,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 38.773405,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 37.457272,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 48,
+              "pnl": 102.625036,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": 20.602705,
+              "wins": 4
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 946.423545,
+          "returnPct": -5.357646,
+          "trades": 31,
+          "wins": 17,
+          "winRate": 54.83871,
+          "profitFactor": 0.872946,
+          "maxDrawdownPct": 16.411028,
+          "maxMarginUsagePct": 89.984738,
+          "maxEffectiveRiskPct": 2.999999,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 36,
+            "portfolioFull": 23
+          },
+          "activeDays": 26,
+          "positiveDays": 13,
+          "negativeDays": 13,
+          "positiveDayPct": 50,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 98.40775,
+            "2026-10": -151.984205
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 37.133395,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 68.879728,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": -23.732356,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -1.695427,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 3,
+              "pnl": -45.208017,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": -47.601931,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -41.351847,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 27,
+              "pnl": -93.876151,
+              "wins": 14
+            },
+            "tokyo": {
+              "trades": 4,
+              "pnl": 40.299696,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 918.187764,
+          "returnPct": -8.181224,
+          "trades": 46,
+          "wins": 24,
+          "winRate": 52.173913,
+          "profitFactor": 0.80593,
+          "maxDrawdownPct": 15.405634,
+          "maxMarginUsagePct": 89.952678,
+          "maxEffectiveRiskPct": 2.9989,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 16,
+            "portfolioFull": 4
+          },
+          "activeDays": 28,
+          "positiveDays": 12,
+          "negativeDays": 16,
+          "positiveDayPct": 42.857143,
+          "longestLosingDayStreak": 4,
+          "monthly": {
+            "2026-09": 21.530929,
+            "2026-10": -103.343165
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 27.614445,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -6.174824,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 7,
+              "pnl": 17.805831,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -42.280115,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -38.309237,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 9,
+              "pnl": -34.283435,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -6.184901,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 40,
+              "pnl": -41.553641,
+              "wins": 22
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -40.258595,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 765.509843,
+          "returnPct": -23.449016,
+          "trades": 124,
+          "wins": 66,
+          "winRate": 53.225806,
+          "profitFactor": 0.830404,
+          "maxDrawdownPct": 30.803712,
+          "maxMarginUsagePct": 89.99642,
+          "maxEffectiveRiskPct": 2.999959,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 132,
+            "portfolioFull": 64,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 107,
+          "positiveDays": 55,
+          "negativeDays": 52,
+          "positiveDayPct": 51.401869,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -156.952163,
+            "2026-02": 49.393546,
+            "2026-03": -61.814904,
+            "2026-04": 64.552076,
+            "2026-05": -169.163112,
+            "2026-06": 12.778565,
+            "2026-07": -0.18815,
+            "2026-08": 70.031594,
+            "2026-09": 79.501636,
+            "2026-10": -122.629245
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 12,
+              "pnl": -39.041308,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -73.627052,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 17,
+              "pnl": 24.833776,
+              "wins": 10
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -37.372875,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 29,
+              "pnl": 8.155145,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 12,
+              "pnl": -89.105932,
+              "wins": 5
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -28.331911,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 105,
+              "pnl": -197.36286,
+              "wins": 56
+            },
+            "tokyo": {
+              "trades": 19,
+              "pnl": -37.127297,
+              "wins": 10
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 722.125812,
+          "returnPct": -27.787419,
+          "trades": 183,
+          "wins": 97,
+          "winRate": 53.005464,
+          "profitFactor": 0.788719,
+          "maxDrawdownPct": 30.482392,
+          "maxMarginUsagePct": 89.967208,
+          "maxEffectiveRiskPct": 2.997994,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 10,
+            "notSelected": 46,
+            "portfolioFull": 15,
+            "invalidPendingEntry": 2
+          },
+          "activeDays": 118,
+          "positiveDays": 56,
+          "negativeDays": 62,
+          "positiveDayPct": 47.457627,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -169.39526,
+            "2026-02": 25.223536,
+            "2026-03": -68.611707,
+            "2026-04": 3.899456,
+            "2026-05": -90.82006,
+            "2026-06": 43.993,
+            "2026-07": 36.881462,
+            "2026-08": 5.465649,
+            "2026-09": 16.751021,
+            "2026-10": -81.261285
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 18,
+              "pnl": -30.707914,
+              "wins": 9
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -61.70291,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 22,
+              "pnl": 48.85324,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -178.767883,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 38,
+              "pnl": 4.531762,
+              "wins": 22
+            },
+            "USDCHF": {
+              "trades": 19,
+              "pnl": -48.548759,
+              "wins": 9
+            },
+            "USDJPY": {
+              "trades": 20,
+              "pnl": -11.531723,
+              "wins": 12
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 158,
+              "pnl": -209.375773,
+              "wins": 85
+            },
+            "tokyo": {
+              "trades": 25,
+              "pnl": -68.498414,
+              "wins": 12
+            }
+          }
+        }
+      ]
+    },
+    "slippage0p5": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 729.002203,
+          "returnPct": -27.09978,
+          "trades": 63,
+          "wins": 31,
+          "winRate": 49.206349,
+          "profitFactor": 0.677289,
+          "maxDrawdownPct": 27.09978,
+          "maxMarginUsagePct": 89.989091,
+          "maxEffectiveRiskPct": 2.99988,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 16
+          },
+          "activeDays": 54,
+          "positiveDays": 25,
+          "negativeDays": 29,
+          "positiveDayPct": 46.296296,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -164.117655,
+            "2026-02": 39.385159,
+            "2026-03": -29.501605,
+            "2026-04": 57.568504,
+            "2026-05": -174.332201
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -59.389751,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -175.576539,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 18.943031,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 13,
+              "pnl": -32.724511,
+              "wins": 7
+            },
+            "GBPUSD": {
+              "trades": 22,
+              "pnl": 2.112307,
+              "wins": 13
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 3.948112,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -28.310447,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 50,
+              "pnl": -190.343935,
+              "wins": 25
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -80.653862,
+              "wins": 6
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 696.963449,
+          "returnPct": -30.303655,
+          "trades": 80,
+          "wins": 37,
+          "winRate": 46.25,
+          "profitFactor": 0.602819,
+          "maxDrawdownPct": 30.303655,
+          "maxMarginUsagePct": 89.929704,
+          "maxEffectiveRiskPct": 2.999308,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2
+          },
+          "activeDays": 55,
+          "positiveDays": 26,
+          "negativeDays": 29,
+          "positiveDayPct": 47.272727,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -151.373743,
+            "2026-02": 19.464854,
+            "2026-03": -58.547829,
+            "2026-04": -10.438679,
+            "2026-05": -102.141155
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -37.336906,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -100.446295,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 4,
+              "pnl": 12.571922,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -165.475158,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 21.385101,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 6.741245,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -40.476461,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 67,
+              "pnl": -244.164492,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -58.87206,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1139.600295,
+          "returnPct": 13.96003,
+          "trades": 30,
+          "wins": 20,
+          "winRate": 66.666667,
+          "profitFactor": 1.520089,
+          "maxDrawdownPct": 8.879266,
+          "maxMarginUsagePct": 89.990804,
+          "maxEffectiveRiskPct": 2.999858,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 54,
+            "portfolioFull": 20
+          },
+          "activeDays": 28,
+          "positiveDays": 18,
+          "negativeDays": 10,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 37.672615,
+            "2026-07": 11.198406,
+            "2026-08": 90.729274
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -58.783326,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 45.922435,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 8,
+              "pnl": 71.829803,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 2,
+              "pnl": -13.858383,
+              "wins": 1
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": 27.760854,
+              "wins": 3
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 44.673822,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 22.055091,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 25,
+              "pnl": 131.663176,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 5,
+              "pnl": 7.937119,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1173.476114,
+          "returnPct": 17.347611,
+          "trades": 53,
+          "wins": 37,
+          "winRate": 69.811321,
+          "profitFactor": 1.620726,
+          "maxDrawdownPct": 5.450153,
+          "maxMarginUsagePct": 89.955631,
+          "maxEffectiveRiskPct": 2.996406,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 2,
+            "notSelected": 18,
+            "portfolioFull": 9
+          },
+          "activeDays": 34,
+          "positiveDays": 19,
+          "negativeDays": 15,
+          "positiveDayPct": 55.882353,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 68.289903,
+            "2026-07": 95.421591,
+            "2026-08": 9.76462
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 9,
+              "pnl": 25.14953,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 41.907525,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 10,
+              "pnl": 41.800329,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 7.378098,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -13.645029,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 34.408464,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 36.477197,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 46,
+              "pnl": 144.964195,
+              "wins": 32
+            },
+            "tokyo": {
+              "trades": 7,
+              "pnl": 28.511919,
+              "wins": 5
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 947.774649,
+          "returnPct": -5.222535,
+          "trades": 30,
+          "wins": 17,
+          "winRate": 56.666667,
+          "profitFactor": 0.870543,
+          "maxDrawdownPct": 15.388898,
+          "maxMarginUsagePct": 89.999961,
+          "maxEffectiveRiskPct": 2.998942,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 37,
+            "portfolioFull": 20
+          },
+          "activeDays": 24,
+          "positiveDays": 12,
+          "negativeDays": 12,
+          "positiveDayPct": 50,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 79.893682,
+            "2026-10": -132.119033
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 34.539848,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 65.300441,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": -4.192722,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -9.491656,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -74.763924,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": -43.913133,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -19.704203,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 27,
+              "pnl": -64.408979,
+              "wins": 15
+            },
+            "tokyo": {
+              "trades": 3,
+              "pnl": 12.183629,
+              "wins": 2
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 904.974962,
+          "returnPct": -9.502504,
+          "trades": 43,
+          "wins": 23,
+          "winRate": 53.488372,
+          "profitFactor": 0.762656,
+          "maxDrawdownPct": 16.616771,
+          "maxMarginUsagePct": 89.958782,
+          "maxEffectiveRiskPct": 2.997267,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 15,
+            "portfolioFull": 4
+          },
+          "activeDays": 26,
+          "positiveDays": 11,
+          "negativeDays": 15,
+          "positiveDayPct": 42.307692,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 7.473912,
+            "2026-10": -102.49895
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 25.58282,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -8.942789,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": 25.736827,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -46.468036,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -39.60223,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 7,
+              "pnl": -42.647497,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -8.684134,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 37,
+              "pnl": -51.893639,
+              "wins": 21
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -43.131398,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 787.370703,
+          "returnPct": -21.26293,
+          "trades": 123,
+          "wins": 68,
+          "winRate": 55.284553,
+          "profitFactor": 0.844805,
+          "maxDrawdownPct": 29.632364,
+          "maxMarginUsagePct": 89.992883,
+          "maxEffectiveRiskPct": 2.99988,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 134,
+            "portfolioFull": 56
+          },
+          "activeDays": 106,
+          "positiveDays": 55,
+          "negativeDays": 51,
+          "positiveDayPct": 51.886792,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -164.117655,
+            "2026-02": 39.385159,
+            "2026-03": -29.501605,
+            "2026-04": 57.568504,
+            "2026-05": -174.332201,
+            "2026-06": 27.588018,
+            "2026-07": 7.986782,
+            "2026-08": 66.242945,
+            "2026-09": 66.265036,
+            "2026-10": -109.714281
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 13,
+              "pnl": -73.559244,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -87.878428,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 16,
+              "pnl": 67.803247,
+              "wins": 11
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -50.815753,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 30,
+              "pnl": -39.475232,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 10,
+              "pnl": -0.104123,
+              "wins": 6
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -28.599763,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 102,
+              "pnl": -147.879741,
+              "wins": 57
+            },
+            "tokyo": {
+              "trades": 21,
+              "pnl": -64.749556,
+              "wins": 11
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 740.00216,
+          "returnPct": -25.999784,
+          "trades": 176,
+          "wins": 97,
+          "winRate": 55.113636,
+          "profitFactor": 0.79761,
+          "maxDrawdownPct": 30.303655,
+          "maxMarginUsagePct": 89.929704,
+          "maxEffectiveRiskPct": 2.999872,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 9,
+            "notSelected": 45,
+            "portfolioFull": 15
+          },
+          "activeDays": 115,
+          "positiveDays": 56,
+          "negativeDays": 59,
+          "positiveDayPct": 48.695652,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -151.373743,
+            "2026-02": 19.464854,
+            "2026-03": -58.547829,
+            "2026-04": -10.438679,
+            "2026-05": -102.141155,
+            "2026-06": 47.672398,
+            "2026-07": 66.221328,
+            "2026-08": 6.895291,
+            "2026-09": 5.801755,
+            "2026-10": -83.552062
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 17,
+              "pnl": 1.099087,
+              "wins": 10
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -78.678203,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 20,
+              "pnl": 62.69321,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -198.476743,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 37,
+              "pnl": -20.35994,
+              "wins": 21
+            },
+            "USDCHF": {
+              "trades": 17,
+              "pnl": -4.009391,
+              "wins": 10
+            },
+            "USDJPY": {
+              "trades": 19,
+              "pnl": -22.265859,
+              "wins": 11
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 150,
+              "pnl": -185.978273,
+              "wins": 84
+            },
+            "tokyo": {
+              "trades": 26,
+              "pnl": -74.019567,
+              "wins": 13
+            }
+          }
+        }
+      ]
+    },
+    "slippage1": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 690.906716,
+          "returnPct": -30.909328,
+          "trades": 63,
+          "wins": 31,
+          "winRate": 49.206349,
+          "profitFactor": 0.632814,
+          "maxDrawdownPct": 30.909328,
+          "maxMarginUsagePct": 89.998398,
+          "maxEffectiveRiskPct": 2.999944,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 16
+          },
+          "activeDays": 54,
+          "positiveDays": 25,
+          "negativeDays": 29,
+          "positiveDayPct": 46.296296,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -171.41184,
+            "2026-02": 29.747658,
+            "2026-03": -41.170269,
+            "2026-04": 46.725228,
+            "2026-05": -172.984061
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -61.868197,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -180.890594,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 17.995125,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 13,
+              "pnl": -42.724646,
+              "wins": 7
+            },
+            "GBPUSD": {
+              "trades": 22,
+              "pnl": -11.986645,
+              "wins": 13
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": -1.217495,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -28.400832,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 50,
+              "pnl": -221.170798,
+              "wins": 25
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -87.922486,
+              "wins": 6
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 667.280909,
+          "returnPct": -33.271909,
+          "trades": 80,
+          "wins": 37,
+          "winRate": 46.25,
+          "profitFactor": 0.566449,
+          "maxDrawdownPct": 33.271909,
+          "maxMarginUsagePct": 89.929183,
+          "maxEffectiveRiskPct": 2.99785,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2
+          },
+          "activeDays": 55,
+          "positiveDays": 25,
+          "negativeDays": 30,
+          "positiveDayPct": 45.454545,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -157.945938,
+            "2026-02": 13.139916,
+            "2026-03": -67.275158,
+            "2026-04": -17.915166,
+            "2026-05": -102.722747
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -38.72316,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -106.00079,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 4,
+              "pnl": 11.663753,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -174.587226,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 12.650993,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 3.393795,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -41.116456,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 67,
+              "pnl": -268.884958,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -63.834133,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1110.543041,
+          "returnPct": 11.054304,
+          "trades": 30,
+          "wins": 20,
+          "winRate": 66.666667,
+          "profitFactor": 1.404129,
+          "maxDrawdownPct": 9.944454,
+          "maxMarginUsagePct": 89.985212,
+          "maxEffectiveRiskPct": 2.999854,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 54,
+            "portfolioFull": 20
+          },
+          "activeDays": 28,
+          "positiveDays": 18,
+          "negativeDays": 10,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 29.260122,
+            "2026-07": 0.296055,
+            "2026-08": 80.986864
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -62.147368,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 41.105587,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 8,
+              "pnl": 65.292191,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 2,
+              "pnl": -15.71667,
+              "wins": 1
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": 23.429933,
+              "wins": 3
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 41.607178,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 16.97219,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 25,
+              "pnl": 106.563382,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 5,
+              "pnl": 3.97966,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1143.156948,
+          "returnPct": 14.315695,
+          "trades": 53,
+          "wins": 37,
+          "winRate": 69.811321,
+          "profitFactor": 1.504319,
+          "maxDrawdownPct": 5.686558,
+          "maxMarginUsagePct": 89.933159,
+          "maxEffectiveRiskPct": 2.992399,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 2,
+            "notSelected": 18,
+            "portfolioFull": 9
+          },
+          "activeDays": 34,
+          "positiveDays": 19,
+          "negativeDays": 15,
+          "positiveDayPct": 55.882353,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 60.537931,
+            "2026-07": 82.781366,
+            "2026-08": -0.162349
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 9,
+              "pnl": 20.90667,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 36.524209,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 10,
+              "pnl": 37.298079,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 5.096782,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -18.767441,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 29.819559,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 32.27909,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 46,
+              "pnl": 118.060995,
+              "wins": 32
+            },
+            "tokyo": {
+              "trades": 7,
+              "pnl": 25.095953,
+              "wins": 5
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 923.087579,
+          "returnPct": -7.691242,
+          "trades": 30,
+          "wins": 17,
+          "winRate": 56.666667,
+          "profitFactor": 0.811948,
+          "maxDrawdownPct": 16.423905,
+          "maxMarginUsagePct": 89.996937,
+          "maxEffectiveRiskPct": 2.999268,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 37,
+            "portfolioFull": 20
+          },
+          "activeDays": 24,
+          "positiveDays": 12,
+          "negativeDays": 12,
+          "positiveDayPct": 50,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 61.97248,
+            "2026-10": -138.884901
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 31.393757,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 61.248058,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": -7.086109,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -16.250674,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -77.72116,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 3,
+              "pnl": -46.490418,
+              "wins": 1
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -22.005876,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 27,
+              "pnl": -86.746225,
+              "wins": 15
+            },
+            "tokyo": {
+              "trades": 3,
+              "pnl": 9.833804,
+              "wins": 2
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 883.82575,
+          "returnPct": -11.617425,
+          "trades": 43,
+          "wins": 23,
+          "winRate": 53.488372,
+          "profitFactor": 0.714426,
+          "maxDrawdownPct": 17.786099,
+          "maxMarginUsagePct": 89.966555,
+          "maxEffectiveRiskPct": 2.99798,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 15,
+            "portfolioFull": 4
+          },
+          "activeDays": 26,
+          "positiveDays": 10,
+          "negativeDays": 16,
+          "positiveDayPct": 38.461538,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": -6.563319,
+            "2026-10": -109.610932
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 23.701585,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -11.948203,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": 23.724808,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -50.329978,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -41.190018,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 7,
+              "pnl": -47.979371,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -12.153074,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 37,
+              "pnl": -69.898183,
+              "wins": 21
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -46.276068,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 708.499285,
+          "returnPct": -29.150071,
+          "trades": 123,
+          "wins": 68,
+          "winRate": 55.284553,
+          "profitFactor": 0.783119,
+          "maxDrawdownPct": 34.296906,
+          "maxMarginUsagePct": 89.998398,
+          "maxEffectiveRiskPct": 2.999944,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 134,
+            "portfolioFull": 56
+          },
+          "activeDays": 106,
+          "positiveDays": 55,
+          "negativeDays": 51,
+          "positiveDayPct": 51.886792,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -171.41184,
+            "2026-02": 29.747658,
+            "2026-03": -41.170269,
+            "2026-04": 46.725228,
+            "2026-05": -172.984061,
+            "2026-06": 20.324633,
+            "2026-07": 0.246409,
+            "2026-08": 55.923613,
+            "2026-09": 47.662977,
+            "2026-10": -106.565063
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 13,
+              "pnl": -80.702404,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -105.552731,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 16,
+              "pnl": 57.682247,
+              "wins": 11
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -65.917785,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 30,
+              "pnl": -55.27834,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 10,
+              "pnl": -8.265177,
+              "wins": 6
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -33.466525,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 102,
+              "pnl": -213.887716,
+              "wins": 57
+            },
+            "tokyo": {
+              "trades": 21,
+              "pnl": -77.612998,
+              "wins": 11
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 674.616863,
+          "returnPct": -32.538314,
+          "trades": 176,
+          "wins": 97,
+          "winRate": 55.113636,
+          "profitFactor": 0.743036,
+          "maxDrawdownPct": 33.271909,
+          "maxMarginUsagePct": 89.929183,
+          "maxEffectiveRiskPct": 2.99979,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 9,
+            "notSelected": 45,
+            "portfolioFull": 15
+          },
+          "activeDays": 115,
+          "positiveDays": 53,
+          "negativeDays": 62,
+          "positiveDayPct": 46.086957,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -157.945938,
+            "2026-02": 13.139916,
+            "2026-03": -67.275158,
+            "2026-04": -17.915166,
+            "2026-05": -102.722747,
+            "2026-06": 40.396414,
+            "2026-07": 54.933297,
+            "2026-08": -0.008833,
+            "2026-09": -4.702551,
+            "2026-10": -83.282374
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 17,
+              "pnl": -6.812252,
+              "wins": 10
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -90.598055,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 20,
+              "pnl": 54.76353,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -209.795157,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 37,
+              "pnl": -31.254436,
+              "wins": 21
+            },
+            "USDCHF": {
+              "trades": 17,
+              "pnl": -12.999308,
+              "wins": 10
+            },
+            "USDJPY": {
+              "trades": 19,
+              "pnl": -28.687459,
+              "wins": 11
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 150,
+              "pnl": -243.348719,
+              "wins": 84
+            },
+            "tokyo": {
+              "trades": 26,
+              "pnl": -82.034418,
+              "wins": 13
+            }
+          }
+        }
+      ]
+    },
+    "spread1p25_slippage0p5": {
+      "train": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 765.448143,
+          "returnPct": -23.455186,
+          "trades": 63,
+          "wins": 32,
+          "winRate": 50.793651,
+          "profitFactor": 0.723052,
+          "maxDrawdownPct": 23.970356,
+          "maxMarginUsagePct": 89.99696,
+          "maxEffectiveRiskPct": 2.999783,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 43,
+            "portfolioFull": 19
+          },
+          "activeDays": 54,
+          "positiveDays": 26,
+          "negativeDays": 28,
+          "positiveDayPct": 48.148148,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -119.148344,
+            "2026-02": 41.63777,
+            "2026-03": -30.838678,
+            "2026-04": 60.599844,
+            "2026-05": -186.802449
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 3,
+              "pnl": -31.113497,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 13,
+              "pnl": -184.246856,
+              "wins": 4
+            },
+            "EURJPY": {
+              "trades": 3,
+              "pnl": 18.987377,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 12,
+              "pnl": -48.29696,
+              "wins": 6
+            },
+            "GBPUSD": {
+              "trades": 23,
+              "pnl": 22.62017,
+              "wins": 14
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 3.181026,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 4,
+              "pnl": -15.683116,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 52,
+              "pnl": -161.958682,
+              "wins": 27
+            },
+            "tokyo": {
+              "trades": 11,
+              "pnl": -72.593175,
+              "wins": 5
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-06-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 711.1092,
+          "returnPct": -28.88908,
+          "trades": 82,
+          "wins": 39,
+          "winRate": 47.560976,
+          "profitFactor": 0.624465,
+          "maxDrawdownPct": 29.238827,
+          "maxMarginUsagePct": 89.896862,
+          "maxEffectiveRiskPct": 2.998273,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 4,
+            "notSelected": 12,
+            "portfolioFull": 2,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 55,
+          "positiveDays": 26,
+          "negativeDays": 29,
+          "positiveDayPct": 47.272727,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -141.722731,
+            "2026-02": 19.431133,
+            "2026-03": -58.993298,
+            "2026-04": -10.327308,
+            "2026-05": -97.278597
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": -36.949975,
+              "wins": 1
+            },
+            "AUDUSD": {
+              "trades": 16,
+              "pnl": -101.30958,
+              "wins": 7
+            },
+            "EURJPY": {
+              "trades": 4,
+              "pnl": 12.488618,
+              "wins": 2
+            },
+            "EURUSD": {
+              "trades": 24,
+              "pnl": -166.241417,
+              "wins": 9
+            },
+            "GBPUSD": {
+              "trades": 24,
+              "pnl": 31.145221,
+              "wins": 15
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 6.600055,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": -34.623722,
+              "wins": 2
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 69,
+              "pnl": -229.900109,
+              "wins": 33
+            },
+            "tokyo": {
+              "trades": 13,
+              "pnl": -58.990691,
+              "wins": 6
+            }
+          }
+        }
+      ],
+      "validation": [
+        {
+          "slots": 1,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1108.645244,
+          "returnPct": 10.864524,
+          "trades": 31,
+          "wins": 20,
+          "winRate": 64.516129,
+          "profitFactor": 1.377528,
+          "maxDrawdownPct": 8.887709,
+          "maxMarginUsagePct": 89.967237,
+          "maxEffectiveRiskPct": 2.999805,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 53,
+            "portfolioFull": 22
+          },
+          "activeDays": 28,
+          "positiveDays": 18,
+          "negativeDays": 10,
+          "positiveDayPct": 64.285714,
+          "longestLosingDayStreak": 2,
+          "monthly": {
+            "2026-06": 31.804507,
+            "2026-07": -11.528588,
+            "2026-08": 88.369325
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 5,
+              "pnl": -57.912684,
+              "wins": 2
+            },
+            "AUDUSD": {
+              "trades": 4,
+              "pnl": 45.663886,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 9,
+              "pnl": 48.602687,
+              "wins": 6
+            },
+            "EURUSD": {
+              "trades": 3,
+              "pnl": 1.113532,
+              "wins": 2
+            },
+            "GBPUSD": {
+              "trades": 3,
+              "pnl": 6.675652,
+              "wins": 2
+            },
+            "USDCHF": {
+              "trades": 2,
+              "pnl": 43.885902,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 5,
+              "pnl": 20.616269,
+              "wins": 3
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 26,
+              "pnl": 100.476788,
+              "wins": 17
+            },
+            "tokyo": {
+              "trades": 5,
+              "pnl": 8.168456,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-06-01T00:00:00.000Z",
+          "to": "2026-09-01T00:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 1117.020845,
+          "returnPct": 11.702085,
+          "trades": 54,
+          "wins": 36,
+          "winRate": 66.666667,
+          "profitFactor": 1.37947,
+          "maxDrawdownPct": 5.444222,
+          "maxMarginUsagePct": 89.927626,
+          "maxEffectiveRiskPct": 2.989795,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 18,
+            "portfolioFull": 9
+          },
+          "activeDays": 34,
+          "positiveDays": 19,
+          "negativeDays": 15,
+          "positiveDayPct": 55.882353,
+          "longestLosingDayStreak": 3,
+          "monthly": {
+            "2026-06": 66.668342,
+            "2026-07": 40.706133,
+            "2026-08": 9.64637
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 9,
+              "pnl": -16.557264,
+              "wins": 5
+            },
+            "AUDUSD": {
+              "trades": 8,
+              "pnl": 42.850302,
+              "wins": 6
+            },
+            "EURJPY": {
+              "trades": 11,
+              "pnl": 28.951988,
+              "wins": 7
+            },
+            "EURUSD": {
+              "trades": 4,
+              "pnl": 5.894561,
+              "wins": 3
+            },
+            "GBPUSD": {
+              "trades": 10,
+              "pnl": -12.874064,
+              "wins": 6
+            },
+            "USDCHF": {
+              "trades": 5,
+              "pnl": 34.674119,
+              "wins": 4
+            },
+            "USDJPY": {
+              "trades": 7,
+              "pnl": 34.081204,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 47,
+              "pnl": 88.375063,
+              "wins": 31
+            },
+            "tokyo": {
+              "trades": 7,
+              "pnl": 28.645782,
+              "wins": 5
+            }
+          }
+        }
+      ],
+      "test": [
+        {
+          "slots": 1,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 947.774384,
+          "returnPct": -5.222562,
+          "trades": 30,
+          "wins": 17,
+          "winRate": 56.666667,
+          "profitFactor": 0.869898,
+          "maxDrawdownPct": 14.925235,
+          "maxMarginUsagePct": 89.970357,
+          "maxEffectiveRiskPct": 2.999943,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 37,
+            "portfolioFull": 21
+          },
+          "activeDays": 25,
+          "positiveDays": 13,
+          "negativeDays": 12,
+          "positiveDayPct": 52,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 79.907619,
+            "2026-10": -132.133236
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 34.04509,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 3,
+              "pnl": 64.787112,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 5,
+              "pnl": -3.833006,
+              "wins": 3
+            },
+            "EURUSD": {
+              "trades": 7,
+              "pnl": -9.274228,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -74.775253,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 4,
+              "pnl": -20.382964,
+              "wins": 2
+            },
+            "USDJPY": {
+              "trades": 3,
+              "pnl": -42.792367,
+              "wins": 1
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 26,
+              "pnl": -88.686573,
+              "wins": 14
+            },
+            "tokyo": {
+              "trades": 4,
+              "pnl": 36.460956,
+              "wins": 3
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-09-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 904.828565,
+          "returnPct": -9.517143,
+          "trades": 43,
+          "wins": 23,
+          "winRate": 53.488372,
+          "profitFactor": 0.762295,
+          "maxDrawdownPct": 16.619738,
+          "maxMarginUsagePct": 89.973374,
+          "maxEffectiveRiskPct": 2.997693,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 3,
+            "notSelected": 15,
+            "portfolioFull": 4
+          },
+          "activeDays": 26,
+          "positiveDays": 11,
+          "negativeDays": 15,
+          "positiveDayPct": 42.307692,
+          "longestLosingDayStreak": 5,
+          "monthly": {
+            "2026-09": 7.330684,
+            "2026-10": -102.502119
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 4,
+              "pnl": 25.58282,
+              "wins": 3
+            },
+            "AUDUSD": {
+              "trades": 5,
+              "pnl": -8.942789,
+              "wins": 3
+            },
+            "EURJPY": {
+              "trades": 6,
+              "pnl": 25.736827,
+              "wins": 4
+            },
+            "EURUSD": {
+              "trades": 9,
+              "pnl": -46.467435,
+              "wins": 4
+            },
+            "GBPUSD": {
+              "trades": 4,
+              "pnl": -39.607615,
+              "wins": 1
+            },
+            "USDCHF": {
+              "trades": 7,
+              "pnl": -42.64528,
+              "wins": 3
+            },
+            "USDJPY": {
+              "trades": 8,
+              "pnl": -8.827963,
+              "wins": 5
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 37,
+              "pnl": -52.040036,
+              "wins": 21
+            },
+            "tokyo": {
+              "trades": 6,
+              "pnl": -43.131398,
+              "wins": 2
+            }
+          }
+        }
+      ],
+      "full": [
+        {
+          "slots": 1,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 804.130237,
+          "returnPct": -19.586976,
+          "trades": 124,
+          "wins": 69,
+          "winRate": 55.645161,
+          "profitFactor": 0.860848,
+          "maxDrawdownPct": 27.021896,
+          "maxMarginUsagePct": 89.99696,
+          "maxEffectiveRiskPct": 2.999966,
+          "maxConcurrent": 1,
+          "rejections": {
+            "symbolOccupied": 0,
+            "notSelected": 133,
+            "portfolioFull": 62
+          },
+          "activeDays": 107,
+          "positiveDays": 57,
+          "negativeDays": 50,
+          "positiveDayPct": 53.271028,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -119.148344,
+            "2026-02": 41.63777,
+            "2026-03": -30.838678,
+            "2026-04": 60.599844,
+            "2026-05": -186.802449,
+            "2026-06": 24.390581,
+            "2026-07": -8.795423,
+            "2026-08": 67.591583,
+            "2026-09": 67.596485,
+            "2026-10": -112.101132
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 12,
+              "pnl": -46.530296,
+              "wins": 6
+            },
+            "AUDUSD": {
+              "trades": 20,
+              "pnl": -94.268842,
+              "wins": 10
+            },
+            "EURJPY": {
+              "trades": 17,
+              "pnl": 52.490056,
+              "wins": 11
+            },
+            "EURUSD": {
+              "trades": 22,
+              "pnl": -55.284428,
+              "wins": 12
+            },
+            "GBPUSD": {
+              "trades": 30,
+              "pnl": -35.698245,
+              "wins": 17
+            },
+            "USDCHF": {
+              "trades": 11,
+              "pnl": 19.503038,
+              "wins": 7
+            },
+            "USDJPY": {
+              "trades": 12,
+              "pnl": -36.081045,
+              "wins": 6
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 104,
+              "pnl": -160.293387,
+              "wins": 58
+            },
+            "tokyo": {
+              "trades": 20,
+              "pnl": -35.576376,
+              "wins": 11
+            }
+          }
+        },
+        {
+          "slots": 2,
+          "from": "2026-01-01T00:00:00.000Z",
+          "to": "2026-10-30T21:00:00.000Z",
+          "startCapital": 1000,
+          "finalBalance": 719.057219,
+          "returnPct": -28.094278,
+          "trades": 179,
+          "wins": 98,
+          "winRate": 54.748603,
+          "profitFactor": 0.784873,
+          "maxDrawdownPct": 29.238827,
+          "maxMarginUsagePct": 89.937416,
+          "maxEffectiveRiskPct": 2.998875,
+          "maxConcurrent": 2,
+          "rejections": {
+            "symbolOccupied": 10,
+            "notSelected": 45,
+            "portfolioFull": 15,
+            "invalidPendingEntry": 1
+          },
+          "activeDays": 115,
+          "positiveDays": 56,
+          "negativeDays": 59,
+          "positiveDayPct": 48.695652,
+          "longestLosingDayStreak": 6,
+          "monthly": {
+            "2026-01": -141.722731,
+            "2026-02": 19.431133,
+            "2026-03": -58.993298,
+            "2026-04": -10.327308,
+            "2026-05": -97.278597,
+            "2026-06": 47.52736,
+            "2026-07": 28.747227,
+            "2026-08": 7.075413,
+            "2026-09": 5.927137,
+            "2026-10": -81.329118
+          },
+          "bySymbol": {
+            "AUDJPY": {
+              "trades": 17,
+              "pnl": -28.478995,
+              "wins": 9
+            },
+            "AUDUSD": {
+              "trades": 29,
+              "pnl": -78.025298,
+              "wins": 16
+            },
+            "EURJPY": {
+              "trades": 21,
+              "pnl": 53.793812,
+              "wins": 13
+            },
+            "EURUSD": {
+              "trades": 37,
+              "pnl": -198.910208,
+              "wins": 16
+            },
+            "GBPUSD": {
+              "trades": 38,
+              "pnl": -9.272275,
+              "wins": 22
+            },
+            "USDCHF": {
+              "trades": 17,
+              "pnl": -2.660259,
+              "wins": 10
+            },
+            "USDJPY": {
+              "trades": 20,
+              "pnl": -17.389558,
+              "wins": 12
+            }
+          },
+          "bySessionCombination": {
+            "sydney+tokyo": {
+              "trades": 153,
+              "pnl": -208.29296,
+              "wins": 85
+            },
+            "tokyo": {
+              "trades": 26,
+              "pnl": -72.649821,
+              "wins": 13
+            }
+          }
+        }
+      ]
+    }
+  },
+  "bootstrap": {
+    "trials": 10000,
+    "sampledActiveDays": 20,
+    "losingProbabilityPct": 57.75,
+    "returnPct": {
+      "p05": -20.464213,
+      "median": -2.526647,
+      "p95": 19.002205
+    },
+    "maxDrawdownPct": {
+      "median": 11.687678,
+      "p95": 23.816333
+    }
+  },
+  "rolling": {
+    "jan_feb": {
+      "from": "2026-01-01T00:00:00.000Z",
+      "to": "2026-03-01T00:00:00.000Z",
+      "returnPct": -10.758965,
+      "trades": 23,
+      "profitFactor": 0.66433,
+      "maxDrawdownPct": 15.697457,
+      "positiveDayPct": 36.842105
+    },
+    "mar_apr": {
+      "from": "2026-03-01T00:00:00.000Z",
+      "to": "2026-05-01T00:00:00.000Z",
+      "returnPct": 5.689533,
+      "trades": 31,
+      "profitFactor": 1.156689,
+      "maxDrawdownPct": 16.071016,
+      "positiveDayPct": 69.230769
+    },
+    "may_jun": {
+      "from": "2026-05-01T00:00:00.000Z",
+      "to": "2026-07-01T00:00:00.000Z",
+      "returnPct": -14.804024,
+      "trades": 18,
+      "profitFactor": 0.449576,
+      "maxDrawdownPct": 18.551865,
+      "positiveDayPct": 35.294118
+    },
+    "jul_aug": {
+      "from": "2026-07-01T00:00:00.000Z",
+      "to": "2026-09-01T00:00:00.000Z",
+      "returnPct": 11.802101,
+      "trades": 21,
+      "profitFactor": 1.672043,
+      "maxDrawdownPct": 6.335929,
+      "positiveDayPct": 65
+    },
+    "sep_oct": {
+      "from": "2026-09-01T00:00:00.000Z",
+      "to": "2026-10-30T21:00:00.000Z",
+      "returnPct": -2.681225,
+      "trades": 30,
+      "profitFactor": 0.932609,
+      "maxDrawdownPct": 14.355845,
+      "positiveDayPct": 50
+    }
+  },
+  "neighborhood": {
+    "base": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "buffer2": {
+      "train": {
+        "returnPct": -14.835725,
+        "trades": 70,
+        "profitFactor": 0.815678,
+        "maxDrawdownPct": 21.672257,
+        "positiveDayPct": 50
+      },
+      "validation": {
+        "returnPct": -6.569103,
+        "trades": 37,
+        "profitFactor": 0.832687,
+        "maxDrawdownPct": 13.054054,
+        "positiveDayPct": 48.275862
+      },
+      "test": {
+        "returnPct": 8.351181,
+        "trades": 36,
+        "profitFactor": 1.213518,
+        "maxDrawdownPct": 12.505999,
+        "positiveDayPct": 57.142857
+      },
+      "full": {
+        "returnPct": -13.728456,
+        "trades": 143,
+        "profitFactor": 0.90532,
+        "maxDrawdownPct": 25.584359,
+        "positiveDayPct": 51.304348
+      }
+    },
+    "buffer4": {
+      "train": {
+        "returnPct": -6.168489,
+        "trades": 54,
+        "profitFactor": 0.911482,
+        "maxDrawdownPct": 13.377669,
+        "positiveDayPct": 53.061224
+      },
+      "validation": {
+        "returnPct": 14.372393,
+        "trades": 26,
+        "profitFactor": 1.576026,
+        "maxDrawdownPct": 8.699732,
+        "positiveDayPct": 62.5
+      },
+      "test": {
+        "returnPct": -0.031648,
+        "trades": 24,
+        "profitFactor": 0.999,
+        "maxDrawdownPct": 10.208041,
+        "positiveDayPct": 54.545455
+      },
+      "full": {
+        "returnPct": 7.241507,
+        "trades": 104,
+        "profitFactor": 1.056976,
+        "maxDrawdownPct": 13.377669,
+        "positiveDayPct": 55.789474
+      }
+    },
+    "expiry30": {
+      "train": {
+        "returnPct": -15.614229,
+        "trades": 58,
+        "profitFactor": 0.797076,
+        "maxDrawdownPct": 16.586486,
+        "positiveDayPct": 49.019608
+      },
+      "validation": {
+        "returnPct": 10.321042,
+        "trades": 26,
+        "profitFactor": 1.433764,
+        "maxDrawdownPct": 8.390263,
+        "positiveDayPct": 64
+      },
+      "test": {
+        "returnPct": -2.300065,
+        "trades": 28,
+        "profitFactor": 0.937115,
+        "maxDrawdownPct": 12.083385,
+        "positiveDayPct": 52.173913
+      },
+      "full": {
+        "returnPct": -9.013459,
+        "trades": 112,
+        "profitFactor": 0.931236,
+        "maxDrawdownPct": 20.287233,
+        "positiveDayPct": 53.535354
+      }
+    },
+    "expiry60": {
+      "train": {
+        "returnPct": -28.117947,
+        "trades": 71,
+        "profitFactor": 0.702574,
+        "maxDrawdownPct": 28.117947,
+        "positiveDayPct": 47.457627
+      },
+      "validation": {
+        "returnPct": 13.550503,
+        "trades": 33,
+        "profitFactor": 1.427736,
+        "maxDrawdownPct": 10.588481,
+        "positiveDayPct": 62.068966
+      },
+      "test": {
+        "returnPct": -1.306746,
+        "trades": 33,
+        "profitFactor": 0.970168,
+        "maxDrawdownPct": 15.048115,
+        "positiveDayPct": 51.851852
+      },
+      "full": {
+        "returnPct": -19.458138,
+        "trades": 137,
+        "profitFactor": 0.872812,
+        "maxDrawdownPct": 30.157404,
+        "positiveDayPct": 52.173913
+      }
+    },
+    "target1p25": {
+      "train": {
+        "returnPct": -16.831282,
+        "trades": 63,
+        "profitFactor": 0.824335,
+        "maxDrawdownPct": 18.514404,
+        "positiveDayPct": 47.272727
+      },
+      "validation": {
+        "returnPct": 5.208671,
+        "trades": 29,
+        "profitFactor": 1.151141,
+        "maxDrawdownPct": 8.833924,
+        "positiveDayPct": 50
+      },
+      "test": {
+        "returnPct": -1.545691,
+        "trades": 28,
+        "profitFactor": 0.965941,
+        "maxDrawdownPct": 15.048453,
+        "positiveDayPct": 45.833333
+      },
+      "full": {
+        "returnPct": -13.849403,
+        "trades": 120,
+        "profitFactor": 0.915634,
+        "maxDrawdownPct": 24.202267,
+        "positiveDayPct": 47.663551
+      }
+    },
+    "target1p75": {
+      "train": {
+        "returnPct": -13.206514,
+        "trades": 63,
+        "profitFactor": 0.867076,
+        "maxDrawdownPct": 18.539301,
+        "positiveDayPct": 47.272727
+      },
+      "validation": {
+        "returnPct": 7.908693,
+        "trades": 29,
+        "profitFactor": 1.226345,
+        "maxDrawdownPct": 7.508841,
+        "positiveDayPct": 50
+      },
+      "test": {
+        "returnPct": -6.422919,
+        "trades": 28,
+        "profitFactor": 0.853744,
+        "maxDrawdownPct": 15.615852,
+        "positiveDayPct": 41.666667
+      },
+      "full": {
+        "returnPct": -12.303603,
+        "trades": 120,
+        "profitFactor": 0.92797,
+        "maxDrawdownPct": 22.705271,
+        "positiveDayPct": 46.728972
+      }
+    },
+    "target2": {
+      "train": {
+        "returnPct": -14.457395,
+        "trades": 63,
+        "profitFactor": 0.852432,
+        "maxDrawdownPct": 18.539751,
+        "positiveDayPct": 47.272727
+      },
+      "validation": {
+        "returnPct": 7.826561,
+        "trades": 29,
+        "profitFactor": 1.224312,
+        "maxDrawdownPct": 7.503128,
+        "positiveDayPct": 50
+      },
+      "test": {
+        "returnPct": -6.422919,
+        "trades": 28,
+        "profitFactor": 0.853744,
+        "maxDrawdownPct": 15.615852,
+        "positiveDayPct": 41.666667
+      },
+      "full": {
+        "returnPct": -13.715227,
+        "trades": 120,
+        "profitFactor": 0.918501,
+        "maxDrawdownPct": 22.934941,
+        "positiveDayPct": 46.728972
+      }
+    },
+    "trail0p75": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "trail1p25": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "trailDistance0p25": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "trailDistance0p5": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "maxStrength0p5": {
+      "train": {
+        "returnPct": -16.099649,
+        "trades": 48,
+        "profitFactor": 0.757314,
+        "maxDrawdownPct": 21.92637,
+        "positiveDayPct": 46.511628
+      },
+      "validation": {
+        "returnPct": 15.828497,
+        "trades": 26,
+        "profitFactor": 1.752392,
+        "maxDrawdownPct": 6.019229,
+        "positiveDayPct": 68
+      },
+      "test": {
+        "returnPct": -1.677254,
+        "trades": 21,
+        "profitFactor": 0.934837,
+        "maxDrawdownPct": 13.435045,
+        "positiveDayPct": 47.058824
+      },
+      "full": {
+        "returnPct": -4.469758,
+        "trades": 95,
+        "profitFactor": 0.958996,
+        "maxDrawdownPct": 21.92637,
+        "positiveDayPct": 52.941176
+      }
+    },
+    "maxStrength1": {
+      "train": {
+        "returnPct": -21.848348,
+        "trades": 59,
+        "profitFactor": 0.725401,
+        "maxDrawdownPct": 21.848348,
+        "positiveDayPct": 47.058824
+      },
+      "validation": {
+        "returnPct": 15.978754,
+        "trades": 30,
+        "profitFactor": 1.60836,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": 6.583831,
+        "trades": 27,
+        "profitFactor": 1.210285,
+        "maxDrawdownPct": 13.4326,
+        "positiveDayPct": 57.142857
+      },
+      "full": {
+        "returnPct": -3.414042,
+        "trades": 116,
+        "profitFactor": 0.973419,
+        "maxDrawdownPct": 23.424016,
+        "positiveDayPct": 54
+      }
+    },
+    "trend0p1": {
+      "train": {
+        "returnPct": -27.287366,
+        "trades": 70,
+        "profitFactor": 0.696135,
+        "maxDrawdownPct": 28.609561,
+        "positiveDayPct": 46.666667
+      },
+      "validation": {
+        "returnPct": 21.161629,
+        "trades": 32,
+        "profitFactor": 1.805625,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 66.666667
+      },
+      "test": {
+        "returnPct": 3.541437,
+        "trades": 32,
+        "profitFactor": 1.092978,
+        "maxDrawdownPct": 13.409548,
+        "positiveDayPct": 52
+      },
+      "full": {
+        "returnPct": -8.826914,
+        "trades": 134,
+        "profitFactor": 0.938007,
+        "maxDrawdownPct": 28.777536,
+        "positiveDayPct": 53.043478
+      }
+    },
+    "trend0p25": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "hours0to6": {
+      "train": {
+        "returnPct": -16.782344,
+        "trades": 50,
+        "profitFactor": 0.756037,
+        "maxDrawdownPct": 21.496413,
+        "positiveDayPct": 47.826087
+      },
+      "validation": {
+        "returnPct": 15.695232,
+        "trades": 25,
+        "profitFactor": 1.773984,
+        "maxDrawdownPct": 11.234132,
+        "positiveDayPct": 65.217391
+      },
+      "test": {
+        "returnPct": -4.242731,
+        "trades": 27,
+        "profitFactor": 0.881663,
+        "maxDrawdownPct": 14.356032,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -7.84757,
+        "trades": 102,
+        "profitFactor": 0.934711,
+        "maxDrawdownPct": 25.932679,
+        "positiveDayPct": 52.688172
+      }
+    },
+    "hours0to8": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "rankingBodyAtr": {
+      "train": {
+        "returnPct": -13.946955,
+        "trades": 61,
+        "profitFactor": 0.830644,
+        "maxDrawdownPct": 22.791216,
+        "positiveDayPct": 54.716981
+      },
+      "validation": {
+        "returnPct": 4.929114,
+        "trades": 34,
+        "profitFactor": 1.126637,
+        "maxDrawdownPct": 10.961675,
+        "positiveDayPct": 54.83871
+      },
+      "test": {
+        "returnPct": 2.547773,
+        "trades": 30,
+        "profitFactor": 1.068393,
+        "maxDrawdownPct": 12.496117,
+        "positiveDayPct": 56
+      },
+      "full": {
+        "returnPct": -7.450544,
+        "trades": 125,
+        "profitFactor": 0.95015,
+        "maxDrawdownPct": 24.208125,
+        "positiveDayPct": 55.045872
+      }
+    },
+    "rankingLowSpread": {
+      "train": {
+        "returnPct": -24.288063,
+        "trades": 60,
+        "profitFactor": 0.691897,
+        "maxDrawdownPct": 25.333491,
+        "positiveDayPct": 49.056604
+      },
+      "validation": {
+        "returnPct": 24.764344,
+        "trades": 33,
+        "profitFactor": 1.898683,
+        "maxDrawdownPct": 7.275967,
+        "positiveDayPct": 66.666667
+      },
+      "test": {
+        "returnPct": 6.139963,
+        "trades": 27,
+        "profitFactor": 1.190805,
+        "maxDrawdownPct": 12.137877,
+        "positiveDayPct": 59.090909
+      },
+      "full": {
+        "returnPct": 0.221979,
+        "trades": 120,
+        "profitFactor": 1.001707,
+        "maxDrawdownPct": 25.551572,
+        "positiveDayPct": 56.190476
+      }
+    },
+    "rankingTightStop": {
+      "train": {
+        "returnPct": -23.126732,
+        "trades": 63,
+        "profitFactor": 0.723776,
+        "maxDrawdownPct": 23.126732,
+        "positiveDayPct": 48.148148
+      },
+      "validation": {
+        "returnPct": 16.933317,
+        "trades": 30,
+        "profitFactor": 1.643389,
+        "maxDrawdownPct": 7.821737,
+        "positiveDayPct": 64.285714
+      },
+      "test": {
+        "returnPct": -2.681225,
+        "trades": 30,
+        "profitFactor": 0.932609,
+        "maxDrawdownPct": 14.355845,
+        "positiveDayPct": 50
+      },
+      "full": {
+        "returnPct": -12.559197,
+        "trades": 123,
+        "profitFactor": 0.91009,
+        "maxDrawdownPct": 24.681548,
+        "positiveDayPct": 52.830189
+      }
+    },
+    "rankingNearEntry": {
+      "train": {
+        "returnPct": -22.686117,
+        "trades": 63,
+        "profitFactor": 0.734301,
+        "maxDrawdownPct": 25.269068,
+        "positiveDayPct": 49.090909
+      },
+      "validation": {
+        "returnPct": 21.277807,
+        "trades": 34,
+        "profitFactor": 1.700434,
+        "maxDrawdownPct": 9.143867,
+        "positiveDayPct": 64.516129
+      },
+      "test": {
+        "returnPct": -0.535351,
+        "trades": 31,
+        "profitFactor": 0.986575,
+        "maxDrawdownPct": 14.305396,
+        "positiveDayPct": 53.846154
+      },
+      "full": {
+        "returnPct": -6.72086,
+        "trades": 128,
+        "profitFactor": 0.954043,
+        "maxDrawdownPct": 26.576639,
+        "positiveDayPct": 54.464286
+      }
+    },
+    "rankingComposite": {
+      "train": {
+        "returnPct": -13.953861,
+        "trades": 61,
+        "profitFactor": 0.830574,
+        "maxDrawdownPct": 22.7975,
+        "positiveDayPct": 54.716981
+      },
+      "validation": {
+        "returnPct": 21.486517,
+        "trades": 34,
+        "profitFactor": 1.706084,
+        "maxDrawdownPct": 9.131027,
+        "positiveDayPct": 64.516129
+      },
+      "test": {
+        "returnPct": 2.557904,
+        "trades": 30,
+        "profitFactor": 1.06792,
+        "maxDrawdownPct": 15.116825,
+        "positiveDayPct": 58.333333
+      },
+      "full": {
+        "returnPct": 7.203206,
+        "trades": 125,
+        "profitFactor": 1.048702,
+        "maxDrawdownPct": 23.480776,
+        "positiveDayPct": 58.333333
+      }
+    }
+  }
+}

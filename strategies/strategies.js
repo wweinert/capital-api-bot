@@ -7,8 +7,32 @@ class Strategy {
         { timeframe: "m15", lookback: 4, pivotWindow: 4, breakBars: 1, bodyAtr: 0.2, closeAt: 0.55, keepBars: 4 },
     ];
 
+    getTimeframe(timestamp = Date.now()) {
+        const date = new Date(timestamp);
+        const hour = date.getUTCHours();
+        if (!Number.isFinite(date.getTime()) || [0, 6].includes(date.getUTCDay()) || hour >= 20
+            || (date.getUTCDay() === 5 && hour >= 18)) return null;
+        return hour < 8 ? "h1" : "m30";
+    }
+
     getSignal(context) {
         const { symbol, indicators, candles } = context;
+        if (context.timeframe === "m30") {
+            const rows = candles?.m30;
+            const last = rows?.at(-1);
+            const values = indicators?.m30;
+            const required = [values?.atr, values?.atrLow60, values?.atrHigh60, values?.volumeRatio20,
+                last?.open, last?.close, last?.spread];
+            if (!rows || rows.length < 75 || !values || required.some((value) => value == null || !Number.isFinite(Number(value)))
+                || !(values.atr > 0) || Number(last.spread) < 0
+                || this.getTimeframe(Date.parse(last.timestamp) + 30 * 60_000) !== "m30"
+                || Math.abs(Number(last.close) - Number(last.open)) / values.atr > 0.75
+                || Number(last.spread) / values.atr > 0.25
+                || values.atr < values.atrLow60 || values.atr > values.atrHigh60 || values.volumeRatio20 < 0.5) {
+                return { symbol, signal: null };
+            }
+            return { symbol, signal: this.detectWave(symbol, indicators, candles, "m15").waveDirection };
+        }
 
         const rows = candles?.h1;
         const prev = rows?.at(-2);
@@ -39,10 +63,11 @@ class Strategy {
         return { symbol, signal: bullish ? "bullish" : bearish ? "bearish" : null };
     }
 
-    detectWave(symbol, indicators, candles) {
+    detectWave(symbol, indicators, candles, timeframe = null) {
         const waveDirections = [];
+        const setups = timeframe ? this.#waveSetups.filter((setup) => setup.timeframe === timeframe) : this.#waveSetups;
 
-        for (const setup of this.#waveSetups) {
+        for (const setup of setups) {
             const rows = candles?.[setup.timeframe];
             const atr = Number(indicators?.[setup.timeframe]?.atr);
 
@@ -101,7 +126,7 @@ class Strategy {
             }
         }
 
-        const waveDirection = waveDirections.length === this.#waveSetups.length && waveDirections.every((direction) => direction === waveDirections[0])
+        const waveDirection = setups.length > 0 && waveDirections.length === setups.length && waveDirections.every((direction) => direction === waveDirections[0])
             ? waveDirections[0]
             : null;
 

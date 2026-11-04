@@ -1,0 +1,1436 @@
+{
+  "protocol": "audusd-causal-wave-layer-v2-development-study",
+  "generatedAt": "2026-11-02T12:11:21.154Z",
+  "definition": {
+    "label": "distinct alternating H1 extrema with >=2 ATR swing and >=0.5 ATR reversal within six hours",
+    "detection": "first causal M5/M15 structure-break confirmation after a unique pivot; closed candles only",
+    "match": "same direction from exact M5 extremum close through +75 minutes"
+  },
+  "data": {
+    "end": "2026-10-30T21:00:00.000Z",
+    "rows": {
+      "H1": 5352,
+      "M15": 21400,
+      "M5": 63969
+    }
+  },
+  "periods": {
+    "train": [
+      "2026-01-01T00:00:00.000Z",
+      "2026-06-01T00:00:00.000Z"
+    ],
+    "validation": [
+      "2026-06-01T00:00:00.000Z",
+      "2026-09-01T00:00:00.000Z"
+    ],
+    "diagnostic": [
+      "2026-09-01T00:00:00.000Z",
+      "2026-10-22T00:00:00.000Z"
+    ],
+    "screenshot": [
+      "2026-10-22T00:00:00.000Z",
+      "2026-10-30T21:00:00.000Z"
+    ]
+  },
+  "eventCounts": {
+    "train": 266,
+    "validation": 136,
+    "diagnostic": 98,
+    "screenshot": 24
+  },
+  "searched": {
+    "m5Configs": 162,
+    "m15Configs": 162,
+    "combinedDevelopmentCandidates": 35616
+  },
+  "selected": {
+    "config": {
+      "mode": "paired",
+      "m5": {
+        "lookback": 24,
+        "pivotAge": 12,
+        "breakBars": 1,
+        "bodyAtr": 0.2,
+        "closeLocation": 0.65
+      },
+      "m15": {
+        "lookback": 12,
+        "pivotAge": 4,
+        "breakBars": 2,
+        "bodyAtr": 0.2,
+        "closeLocation": 0.55
+      },
+      "alignMinutes": 60,
+      "cooldownMinutes": 30,
+      "sameSideCooldownMinutes": 60,
+      "switchMoveAtr": 0
+    },
+    "train": {
+      "events": 266,
+      "signals": 585,
+      "matched": 190,
+      "falseSignals": 395,
+      "recall": 0.714286,
+      "precision": 0.324786,
+      "f1": 0.446533,
+      "medianDelayMinutes": 40,
+      "p90DelayMinutes": 65
+    },
+    "validation": {
+      "events": 136,
+      "signals": 291,
+      "matched": 82,
+      "falseSignals": 209,
+      "recall": 0.602941,
+      "precision": 0.281787,
+      "f1": 0.384075,
+      "medianDelayMinutes": 40,
+      "p90DelayMinutes": 70
+    },
+    "diagnostic": {
+      "events": 98,
+      "signals": 213,
+      "matched": 65,
+      "falseSignals": 148,
+      "recall": 0.663265,
+      "precision": 0.305164,
+      "f1": 0.418006,
+      "medianDelayMinutes": 40,
+      "p90DelayMinutes": 65
+    },
+    "screenshot": {
+      "events": 24,
+      "signals": 39,
+      "matched": 19,
+      "falseSignals": 20,
+      "recall": 0.791667,
+      "precision": 0.487179,
+      "f1": 0.603175,
+      "medianDelayMinutes": 40,
+      "p90DelayMinutes": 60
+    },
+    "screenshotEvents": [
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-22T00:25:00.000Z",
+        "price": 0.70364,
+        "reversalAtr": 3.45819
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-22T11:30:00.000Z",
+        "price": 0.69937,
+        "reversalAtr": 3.146658
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-22T17:40:00.000Z",
+        "price": 0.70241,
+        "reversalAtr": 1.276164
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-23T05:00:00.000Z",
+        "price": 0.70046,
+        "reversalAtr": 2.424752
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-25T22:45:00.000Z",
+        "price": 0.70395,
+        "reversalAtr": 1.887039
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-26T06:15:00.000Z",
+        "price": 0.70219,
+        "reversalAtr": 2.523903
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-26T09:45:00.000Z",
+        "price": 0.70391,
+        "reversalAtr": 3.95302
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-26T14:00:00.000Z",
+        "price": 0.70122,
+        "reversalAtr": 1.998508
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-26T17:30:00.000Z",
+        "price": 0.70271,
+        "reversalAtr": 2.472254
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-26T23:05:00.000Z",
+        "price": 0.70093,
+        "reversalAtr": 3.618768
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T04:10:00.000Z",
+        "price": 0.70334,
+        "reversalAtr": 2.813389
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-27T07:10:00.000Z",
+        "price": 0.7012,
+        "reversalAtr": 3.377877
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T15:05:00.000Z",
+        "price": 0.70402,
+        "reversalAtr": 2.316415
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-27T22:05:00.000Z",
+        "price": 0.70216,
+        "reversalAtr": 4.767764
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-28T00:35:00.000Z",
+        "price": 0.70545,
+        "reversalAtr": 3.372337
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-28T10:20:00.000Z",
+        "price": 0.70232,
+        "reversalAtr": 2.815363
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-29T01:25:00.000Z",
+        "price": 0.70677,
+        "reversalAtr": 2.905835
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T14:15:00.000Z",
+        "price": 0.70143,
+        "reversalAtr": 2.666533
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-29T16:15:00.000Z",
+        "price": 0.70416,
+        "reversalAtr": 2.332499
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T23:00:00.000Z",
+        "price": 0.70175,
+        "reversalAtr": 2.636119
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-30T04:35:00.000Z",
+        "price": 0.70429,
+        "reversalAtr": 2.494794
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T07:55:00.000Z",
+        "price": 0.70202,
+        "reversalAtr": 2.218025
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-30T11:10:00.000Z",
+        "price": 0.70406,
+        "reversalAtr": 2.895372
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T14:20:00.000Z",
+        "price": 0.70133,
+        "reversalAtr": 2.302596
+      }
+    ],
+    "screenshotSignals": [
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-22T01:30:00.000Z",
+        "price": 0.7026,
+        "pivotTime": "2026-10-22T00:15:00.000Z",
+        "pivotPrice": 0.70364
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-22T03:00:00.000Z",
+        "price": 0.70195,
+        "pivotTime": "2026-10-22T02:00:00.000Z",
+        "pivotPrice": 0.70124
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-22T04:15:00.000Z",
+        "price": 0.7014,
+        "pivotTime": "2026-10-22T03:30:00.000Z",
+        "pivotPrice": 0.70072
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-22T09:00:00.000Z",
+        "price": 0.70136,
+        "pivotTime": "2026-10-22T08:15:00.000Z",
+        "pivotPrice": 0.70226
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-22T12:00:00.000Z",
+        "price": 0.70076,
+        "pivotTime": "2026-10-22T11:15:00.000Z",
+        "pivotPrice": 0.69937
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-22T18:15:00.000Z",
+        "price": 0.70184,
+        "pivotTime": "2026-10-22T17:30:00.000Z",
+        "pivotPrice": 0.70241
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-23T00:45:00.000Z",
+        "price": 0.70189,
+        "pivotTime": "2026-10-23T00:00:00.000Z",
+        "pivotPrice": 0.70118
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-23T02:00:00.000Z",
+        "price": 0.70145,
+        "pivotTime": "2026-10-23T01:45:00.000Z",
+        "pivotPrice": 0.70234
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-23T02:45:00.000Z",
+        "price": 0.70191,
+        "pivotTime": "2026-10-23T02:00:00.000Z",
+        "pivotPrice": 0.70104
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-23T05:45:00.000Z",
+        "price": 0.70111,
+        "pivotTime": "2026-10-23T04:45:00.000Z",
+        "pivotPrice": 0.70046
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-23T14:30:00.000Z",
+        "price": 0.70232,
+        "pivotTime": "2026-10-23T13:45:00.000Z",
+        "pivotPrice": 0.70325
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-23T16:30:00.000Z",
+        "price": 0.70305,
+        "pivotTime": "2026-10-23T15:30:00.000Z",
+        "pivotPrice": 0.7036
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-23T20:15:00.000Z",
+        "price": 0.70358,
+        "pivotTime": "2026-10-23T19:15:00.000Z",
+        "pivotPrice": 0.70382
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-25T23:30:00.000Z",
+        "price": 0.70264,
+        "pivotTime": "2026-10-25T22:45:00.000Z",
+        "pivotPrice": 0.70395
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-26T10:15:00.000Z",
+        "price": 0.70325,
+        "pivotTime": "2026-10-26T09:30:00.000Z",
+        "pivotPrice": 0.70391
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-26T23:45:00.000Z",
+        "price": 0.70167,
+        "pivotTime": "2026-10-26T23:00:00.000Z",
+        "pivotPrice": 0.70093
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T01:00:00.000Z",
+        "price": 0.70165,
+        "pivotTime": "2026-10-27T00:00:00.000Z",
+        "pivotPrice": 0.70221
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T04:45:00.000Z",
+        "price": 0.70254,
+        "pivotTime": "2026-10-27T04:00:00.000Z",
+        "pivotPrice": 0.70334
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-27T07:45:00.000Z",
+        "price": 0.70186,
+        "pivotTime": "2026-10-27T07:00:00.000Z",
+        "pivotPrice": 0.7012
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T11:45:00.000Z",
+        "price": 0.70289,
+        "pivotTime": "2026-10-27T10:45:00.000Z",
+        "pivotPrice": 0.70364
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-27T14:30:00.000Z",
+        "price": 0.70357,
+        "pivotTime": "2026-10-27T13:50:00.000Z",
+        "pivotPrice": 0.70273
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-27T15:45:00.000Z",
+        "price": 0.70349,
+        "pivotTime": "2026-10-27T15:00:00.000Z",
+        "pivotPrice": 0.70402
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-27T22:45:00.000Z",
+        "price": 0.7028,
+        "pivotTime": "2026-10-27T22:00:00.000Z",
+        "pivotPrice": 0.70216
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-28T01:15:00.000Z",
+        "price": 0.70336,
+        "pivotTime": "2026-10-28T00:30:00.000Z",
+        "pivotPrice": 0.70545
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-28T11:15:00.000Z",
+        "price": 0.70306,
+        "pivotTime": "2026-10-28T10:15:00.000Z",
+        "pivotPrice": 0.70232
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-28T14:45:00.000Z",
+        "price": 0.70322,
+        "pivotTime": "2026-10-28T14:00:00.000Z",
+        "pivotPrice": 0.70395
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-28T17:30:00.000Z",
+        "price": 0.70377,
+        "pivotTime": "2026-10-28T16:45:00.000Z",
+        "pivotPrice": 0.70453
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T00:00:00.000Z",
+        "price": 0.70561,
+        "pivotTime": "2026-10-28T23:00:00.000Z",
+        "pivotPrice": 0.7047
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T11:00:00.000Z",
+        "price": 0.70357,
+        "pivotTime": "2026-10-29T10:15:00.000Z",
+        "pivotPrice": 0.70301
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T12:45:00.000Z",
+        "price": 0.70331,
+        "pivotTime": "2026-10-29T12:00:00.000Z",
+        "pivotPrice": 0.70272
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T15:15:00.000Z",
+        "price": 0.70305,
+        "pivotTime": "2026-10-29T14:00:00.000Z",
+        "pivotPrice": 0.70143
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T19:30:00.000Z",
+        "price": 0.70334,
+        "pivotTime": "2026-10-29T18:30:00.000Z",
+        "pivotPrice": 0.70277
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-29T23:30:00.000Z",
+        "price": 0.7024,
+        "pivotTime": "2026-10-29T22:45:00.000Z",
+        "pivotPrice": 0.70175
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-30T05:15:00.000Z",
+        "price": 0.70359,
+        "pivotTime": "2026-10-30T04:30:00.000Z",
+        "pivotPrice": 0.70429
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T07:25:00.000Z",
+        "price": 0.70321,
+        "pivotTime": "2026-10-30T06:30:00.000Z",
+        "pivotPrice": 0.70245
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T08:45:00.000Z",
+        "price": 0.7028,
+        "pivotTime": "2026-10-30T07:45:00.000Z",
+        "pivotPrice": 0.70202
+      },
+      {
+        "side": "bearish",
+        "timestamp": "2026-10-30T11:45:00.000Z",
+        "price": 0.70307,
+        "pivotTime": "2026-10-30T11:00:00.000Z",
+        "pivotPrice": 0.70406
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T12:30:00.000Z",
+        "price": 0.70321,
+        "pivotTime": "2026-10-30T11:45:00.000Z",
+        "pivotPrice": 0.70247
+      },
+      {
+        "side": "bullish",
+        "timestamp": "2026-10-30T15:00:00.000Z",
+        "price": 0.70346,
+        "pivotTime": "2026-10-30T14:15:00.000Z",
+        "pivotPrice": 0.70133
+      }
+    ]
+  },
+  "developmentTop20": [
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 585,
+        "matched": 190,
+        "falseSignals": 395,
+        "recall": 0.714286,
+        "precision": 0.324786,
+        "f1": 0.446533,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 291,
+        "matched": 82,
+        "falseSignals": 209,
+        "recall": 0.602941,
+        "precision": 0.281787,
+        "f1": 0.384075,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 587,
+        "matched": 191,
+        "falseSignals": 396,
+        "recall": 0.718045,
+        "precision": 0.325383,
+        "f1": 0.447831,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 292,
+        "matched": 82,
+        "falseSignals": 210,
+        "recall": 0.602941,
+        "precision": 0.280822,
+        "f1": 0.383178,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 587,
+        "matched": 191,
+        "falseSignals": 396,
+        "recall": 0.718045,
+        "precision": 0.325383,
+        "f1": 0.447831,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 292,
+        "matched": 82,
+        "falseSignals": 210,
+        "recall": 0.602941,
+        "precision": 0.280822,
+        "f1": 0.383178,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 585,
+        "matched": 190,
+        "falseSignals": 395,
+        "recall": 0.714286,
+        "precision": 0.324786,
+        "f1": 0.446533,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 292,
+        "matched": 82,
+        "falseSignals": 210,
+        "recall": 0.602941,
+        "precision": 0.280822,
+        "f1": 0.383178,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 589,
+        "matched": 192,
+        "falseSignals": 397,
+        "recall": 0.721805,
+        "precision": 0.325976,
+        "f1": 0.449123,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 293,
+        "matched": 82,
+        "falseSignals": 211,
+        "recall": 0.602941,
+        "precision": 0.279863,
+        "f1": 0.382284,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 590,
+        "matched": 192,
+        "falseSignals": 398,
+        "recall": 0.721805,
+        "precision": 0.325424,
+        "f1": 0.448598,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 293,
+        "matched": 82,
+        "falseSignals": 211,
+        "recall": 0.602941,
+        "precision": 0.279863,
+        "f1": 0.382284,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 590,
+        "matched": 192,
+        "falseSignals": 398,
+        "recall": 0.721805,
+        "precision": 0.325424,
+        "f1": 0.448598,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 293,
+        "matched": 82,
+        "falseSignals": 211,
+        "recall": 0.602941,
+        "precision": 0.279863,
+        "f1": 0.382284,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 587,
+        "matched": 191,
+        "falseSignals": 396,
+        "recall": 0.718045,
+        "precision": 0.325383,
+        "f1": 0.447831,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 293,
+        "matched": 82,
+        "falseSignals": 211,
+        "recall": 0.602941,
+        "precision": 0.279863,
+        "f1": 0.382284,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 587,
+        "matched": 191,
+        "falseSignals": 396,
+        "recall": 0.718045,
+        "precision": 0.325383,
+        "f1": 0.447831,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 293,
+        "matched": 82,
+        "falseSignals": 211,
+        "recall": 0.602941,
+        "precision": 0.279863,
+        "f1": 0.382284,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 575,
+        "matched": 188,
+        "falseSignals": 387,
+        "recall": 0.706767,
+        "precision": 0.326957,
+        "f1": 0.447087,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 287,
+        "matched": 81,
+        "falseSignals": 206,
+        "recall": 0.595588,
+        "precision": 0.28223,
+        "f1": 0.382979,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 575,
+        "matched": 188,
+        "falseSignals": 387,
+        "recall": 0.706767,
+        "precision": 0.326957,
+        "f1": 0.447087,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 287,
+        "matched": 81,
+        "falseSignals": 206,
+        "recall": 0.595588,
+        "precision": 0.28223,
+        "f1": 0.382979,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 589,
+        "matched": 192,
+        "falseSignals": 397,
+        "recall": 0.721805,
+        "precision": 0.325976,
+        "f1": 0.449123,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 294,
+        "matched": 82,
+        "falseSignals": 212,
+        "recall": 0.602941,
+        "precision": 0.278912,
+        "f1": 0.381395,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 590,
+        "matched": 192,
+        "falseSignals": 398,
+        "recall": 0.721805,
+        "precision": 0.325424,
+        "f1": 0.448598,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 294,
+        "matched": 82,
+        "falseSignals": 212,
+        "recall": 0.602941,
+        "precision": 0.278912,
+        "f1": 0.381395,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 590,
+        "matched": 192,
+        "falseSignals": 398,
+        "recall": 0.721805,
+        "precision": 0.325424,
+        "f1": 0.448598,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 294,
+        "matched": 82,
+        "falseSignals": 212,
+        "recall": 0.602941,
+        "precision": 0.278912,
+        "f1": 0.381395,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 592,
+        "matched": 192,
+        "falseSignals": 400,
+        "recall": 0.721805,
+        "precision": 0.324324,
+        "f1": 0.447552,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 294,
+        "matched": 82,
+        "falseSignals": 212,
+        "recall": 0.602941,
+        "precision": 0.278912,
+        "f1": 0.381395,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 577,
+        "matched": 189,
+        "falseSignals": 388,
+        "recall": 0.710526,
+        "precision": 0.327556,
+        "f1": 0.448399,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 288,
+        "matched": 81,
+        "falseSignals": 207,
+        "recall": 0.595588,
+        "precision": 0.28125,
+        "f1": 0.382075,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.1,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 577,
+        "matched": 189,
+        "falseSignals": 388,
+        "recall": 0.710526,
+        "precision": 0.327556,
+        "f1": 0.448399,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 288,
+        "matched": 81,
+        "falseSignals": 207,
+        "recall": 0.595588,
+        "precision": 0.28125,
+        "f1": 0.382075,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 0,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 577,
+        "matched": 189,
+        "falseSignals": 388,
+        "recall": 0.710526,
+        "precision": 0.327556,
+        "f1": 0.448399,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 288,
+        "matched": 81,
+        "falseSignals": 207,
+        "recall": 0.595588,
+        "precision": 0.28125,
+        "f1": 0.382075,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.05,
+          "closeLocation": 0.65
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 3,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 60,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 577,
+        "matched": 189,
+        "falseSignals": 388,
+        "recall": 0.710526,
+        "precision": 0.327556,
+        "f1": 0.448399,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 288,
+        "matched": 81,
+        "falseSignals": 207,
+        "recall": 0.595588,
+        "precision": 0.28125,
+        "f1": 0.382075,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    },
+    {
+      "config": {
+        "mode": "paired",
+        "m5": {
+          "lookback": 24,
+          "pivotAge": 12,
+          "breakBars": 1,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "m15": {
+          "lookback": 12,
+          "pivotAge": 4,
+          "breakBars": 2,
+          "bodyAtr": 0.2,
+          "closeLocation": 0.55
+        },
+        "alignMinutes": 90,
+        "cooldownMinutes": 30,
+        "sameSideCooldownMinutes": 60,
+        "switchMoveAtr": 0
+      },
+      "train": {
+        "events": 266,
+        "signals": 593,
+        "matched": 193,
+        "falseSignals": 400,
+        "recall": 0.725564,
+        "precision": 0.325464,
+        "f1": 0.44936,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 65
+      },
+      "validation": {
+        "events": 136,
+        "signals": 295,
+        "matched": 82,
+        "falseSignals": 213,
+        "recall": 0.602941,
+        "precision": 0.277966,
+        "f1": 0.38051,
+        "medianDelayMinutes": 40,
+        "p90DelayMinutes": 70
+      }
+    }
+  ]
+}

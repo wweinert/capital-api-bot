@@ -1,0 +1,979 @@
+{
+  "protocol": "current-live-strategy-single-day-replay-v1",
+  "generatedAt": "2026-11-03T09:29:33.803Z",
+  "day": "2026-11-03",
+  "window": {
+    "from": "2026-11-03T00:00:00.000Z",
+    "to": "2026-11-03T09:25:00.000Z",
+    "completeUtcDay": false
+  },
+  "data": {
+    "directories": [
+      "/mnt/usb-ssd/trading/capital-dataset"
+    ],
+    "end": "2026-11-03T09:25:00.000Z",
+    "audit": {
+      "USDJPY_H1": {
+        "rows": 5745,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "USDJPY_M15": {
+        "rows": 22979,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "USDJPY_M5": {
+        "rows": 63742,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:50:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "USDJPY_M1": {
+        "rows": 317535,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:44:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "GBPUSD_H1": {
+        "rows": 5387,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "GBPUSD_M15": {
+        "rows": 21549,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "GBPUSD_M5": {
+        "rows": 64458,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "GBPUSD_M1": {
+        "rows": 321355,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:08:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "AUDJPY_H1": {
+        "rows": 5744,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "AUDJPY_M15": {
+        "rows": 22967,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "AUDJPY_M5": {
+        "rows": 64392,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "AUDJPY_M1": {
+        "rows": 321339,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:01:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "EURUSD_H1": {
+        "rows": 5387,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "EURUSD_M15": {
+        "rows": 21546,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "EURUSD_M5": {
+        "rows": 64409,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "EURUSD_M1": {
+        "rows": 320164,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "USDCHF_H1": {
+        "rows": 5745,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "USDCHF_M15": {
+        "rows": 22981,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "USDCHF_M5": {
+        "rows": 63740,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:45:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "USDCHF_M1": {
+        "rows": 317908,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-24T09:38:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "AUDUSD_H1": {
+        "rows": 5387,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "AUDUSD_M15": {
+        "rows": 21541,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "AUDUSD_M5": {
+        "rows": 64393,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "AUDUSD_M1": {
+        "rows": 319906,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "EURJPY_H1": {
+        "rows": 5745,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "EURJPY_M15": {
+        "rows": 22977,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "EURJPY_M5": {
+        "rows": 64435,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "EURJPY_M1": {
+        "rows": 321943,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:00:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      },
+      "GBPCHF_H1": {
+        "rows": 5743,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T08:00:00.000Z"
+      },
+      "GBPCHF_M15": {
+        "rows": 22948,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-01T00:00:00.000Z",
+        "last": "2026-11-03T09:00:00.000Z"
+      },
+      "GBPCHF_M5": {
+        "rows": 64311,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-03T09:20:00.000Z"
+      },
+      "GBPCHF_M1": {
+        "rows": 320610,
+        "invalid": 0,
+        "duplicates": 0,
+        "first": "2025-12-21T22:05:00.000Z",
+        "last": "2026-11-03T09:24:00.000Z"
+      }
+    }
+  },
+  "brokerRules": {
+    "file": "/tmp/capital-market-rules-2026-08-29.json",
+    "sha256": "4c2e3dc8c4fbfe2f0232a9ed060dc08c18e7f1a244e46d1d5f84be1a4b2b31da"
+  },
+  "strategy": {
+    "signalMode": "combined",
+    "detector": {
+      "mode": "requireBoth"
+    },
+    "bufferPips": 3,
+    "stopMode": "signal",
+    "stopBufferAtr": null,
+    "expiryMinutes": 45,
+    "targetR": 1.5,
+    "trailActivationR": 1,
+    "trailDistanceR": 0.35,
+    "ranking": "sessionOrder",
+    "minTrendScore": 0,
+    "maxStrength": 0.75,
+    "hours": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "constraints": {
+    "startCapital": 1000,
+    "riskPct": 3,
+    "marginUsagePct": 90,
+    "maxPositions": 1
+  },
+  "counts": {
+    "combinedSignalsBeforeFilters": 18,
+    "eligibleSignals": 8
+  },
+  "candidates": [
+    {
+      "symbol": "EURUSD",
+      "side": "BUY",
+      "signalAt": "2026-11-03T00:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 3,
+      "strength": 0.409791,
+      "entry": 1.11952,
+      "stop": 1.11803,
+      "target": 1.121755,
+      "distance": 0.00149,
+      "atr": 0.001269,
+      "riskAtr": 1.174208,
+      "spreadAtr": 0.055164,
+      "entryGapAtr": 0.236418,
+      "trendScore": 0.751536,
+      "priceEmaScore": -0.128396,
+      "emaSlopeScore": -0.13451,
+      "atrRegime": 0.875321,
+      "efficiency6": 0.539095,
+      "rejectionWick": 0.337079,
+      "engulfing": true,
+      "previousBodyAtr": 0.055164,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 1.11915,
+      "marketAsk": 1.11922,
+      "passesFilters": true
+    },
+    {
+      "symbol": "USDCHF",
+      "side": "SELL",
+      "signalAt": "2026-11-03T00:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 4,
+      "strength": 0.094165,
+      "entry": 0.81799,
+      "stop": 0.81916,
+      "target": 0.816235,
+      "distance": 0.00117,
+      "atr": 0.001168,
+      "riskAtr": 1.001575,
+      "spreadAtr": 0.111286,
+      "entryGapAtr": 0.479386,
+      "trendScore": 1.76259,
+      "priceEmaScore": 1.122666,
+      "emaSlopeScore": 0.377693,
+      "atrRegime": 0.866506,
+      "efficiency6": 0.183673,
+      "rejectionWick": 0.350877,
+      "engulfing": false,
+      "previousBodyAtr": 0.410903,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 0.81855,
+      "marketAsk": 0.81868,
+      "passesFilters": true
+    },
+    {
+      "symbol": "EURJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-03T00:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 6,
+      "strength": 0.576869,
+      "entry": 176.769,
+      "stop": 176.576,
+      "target": 177.0585,
+      "distance": 0.193,
+      "atr": 0.182017,
+      "riskAtr": 1.06034,
+      "spreadAtr": 0.104386,
+      "entryGapAtr": 0.10988,
+      "trendScore": 1.322864,
+      "priceEmaScore": 0.337256,
+      "emaSlopeScore": 0.023293,
+      "atrRegime": 0.729457,
+      "efficiency6": 0.326861,
+      "rejectionWick": 0.142857,
+      "engulfing": true,
+      "previousBodyAtr": 0.170314,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 176.73,
+      "marketAsk": 176.749,
+      "passesFilters": true
+    },
+    {
+      "symbol": "GBPUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T01:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 1,
+      "strength": 0.007625,
+      "entry": 1.33965,
+      "stop": 1.34183,
+      "target": 1.33638,
+      "distance": 0.00218,
+      "atr": 0.001312,
+      "riskAtr": 1.662196,
+      "spreadAtr": 0.099122,
+      "entryGapAtr": 0.91497,
+      "trendScore": -0.9685,
+      "priceEmaScore": -0.050026,
+      "emaSlopeScore": 0.017627,
+      "atrRegime": 0.87706,
+      "efficiency6": 0.151515,
+      "rejectionWick": 0.424051,
+      "engulfing": false,
+      "previousBodyAtr": 0.46511,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.34085,
+      "marketAsk": 1.34098,
+      "passesFilters": false
+    },
+    {
+      "symbol": "AUDJPY",
+      "side": "SELL",
+      "signalAt": "2026-11-03T01:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 2,
+      "strength": 0.121449,
+      "entry": 110.314,
+      "stop": 110.575,
+      "target": 109.9225,
+      "distance": 0.261,
+      "atr": 0.172912,
+      "riskAtr": 1.50944,
+      "spreadAtr": 0.046266,
+      "entryGapAtr": 1.156659,
+      "trendScore": 0.579699,
+      "priceEmaScore": 0.528505,
+      "emaSlopeScore": 0.215263,
+      "atrRegime": 0.82833,
+      "efficiency6": 0.158576,
+      "rejectionWick": 0.049751,
+      "engulfing": false,
+      "previousBodyAtr": 0.56098,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 110.514,
+      "marketAsk": 110.522,
+      "passesFilters": true
+    },
+    {
+      "symbol": "EURUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T01:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 3,
+      "strength": 0.250612,
+      "entry": 1.11805,
+      "stop": 1.12003,
+      "target": 1.11508,
+      "distance": 0.00198,
+      "atr": 0.001277,
+      "riskAtr": 1.550663,
+      "spreadAtr": 0.054821,
+      "entryGapAtr": 0.603036,
+      "trendScore": -0.695951,
+      "priceEmaScore": 0.349276,
+      "emaSlopeScore": 0.103789,
+      "atrRegime": 0.884038,
+      "efficiency6": 0.416667,
+      "rejectionWick": 0.427536,
+      "engulfing": false,
+      "previousBodyAtr": 0.407245,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.11882,
+      "marketAsk": 1.11889,
+      "passesFilters": false
+    },
+    {
+      "symbol": "EURJPY",
+      "side": "SELL",
+      "signalAt": "2026-11-03T01:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 6,
+      "strength": 0.525023,
+      "entry": 176.559,
+      "stop": 176.786,
+      "target": 176.2185,
+      "distance": 0.227,
+      "atr": 0.180944,
+      "riskAtr": 1.254529,
+      "spreadAtr": 0.121584,
+      "entryGapAtr": 0.414492,
+      "trendScore": -1.267804,
+      "priceEmaScore": 0.173076,
+      "emaSlopeScore": 0.003539,
+      "atrRegime": 0.72654,
+      "efficiency6": 0.430137,
+      "rejectionWick": 0.161677,
+      "engulfing": false,
+      "previousBodyAtr": 0.580289,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 176.634,
+      "marketAsk": 176.656,
+      "passesFilters": false
+    },
+    {
+      "symbol": "USDJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-03T02:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 0,
+      "strength": 0.165714,
+      "entry": 157.98,
+      "stop": 157.843,
+      "target": 158.1855,
+      "distance": 0.137,
+      "atr": 0.150863,
+      "riskAtr": 0.90811,
+      "spreadAtr": 0.079542,
+      "entryGapAtr": 0.457369,
+      "trendScore": 0.530494,
+      "priceEmaScore": 0.405165,
+      "emaSlopeScore": 0.135938,
+      "atrRegime": 0.719047,
+      "efficiency6": 0.060345,
+      "rejectionWick": 0.012987,
+      "engulfing": false,
+      "previousBodyAtr": 0.27177,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 157.899,
+      "marketAsk": 157.911,
+      "passesFilters": true
+    },
+    {
+      "symbol": "USDCHF",
+      "side": "SELL",
+      "signalAt": "2026-11-03T03:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 4,
+      "strength": 0.043878,
+      "entry": 0.81904,
+      "stop": 0.82025,
+      "target": 0.817225,
+      "distance": 0.00121,
+      "atr": 0.00114,
+      "riskAtr": 1.061852,
+      "spreadAtr": 0.122859,
+      "entryGapAtr": 0.333474,
+      "trendScore": 1.688542,
+      "priceEmaScore": 0.231939,
+      "emaSlopeScore": 0.155465,
+      "atrRegime": 0.845955,
+      "efficiency6": 0.802326,
+      "rejectionWick": 0.786885,
+      "engulfing": false,
+      "previousBodyAtr": 0.82491,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 0.81942,
+      "marketAsk": 0.81956,
+      "passesFilters": true
+    },
+    {
+      "symbol": "EURUSD",
+      "side": "BUY",
+      "signalAt": "2026-11-03T04:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 3,
+      "strength": 0.422875,
+      "entry": 1.11938,
+      "stop": 1.11784,
+      "target": 1.12169,
+      "distance": 0.00154,
+      "atr": 0.001182,
+      "riskAtr": 1.302454,
+      "spreadAtr": 0.059202,
+      "entryGapAtr": 0.279097,
+      "trendScore": 0.594735,
+      "priceEmaScore": -0.112957,
+      "emaSlopeScore": -0.128912,
+      "atrRegime": 0.830535,
+      "efficiency6": 0.222857,
+      "rejectionWick": 0.361702,
+      "engulfing": false,
+      "previousBodyAtr": 0.06766,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 1.11898,
+      "marketAsk": 1.11905,
+      "passesFilters": true
+    },
+    {
+      "symbol": "USDJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-03T05:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 0,
+      "strength": 0.087579,
+      "entry": 157.938,
+      "stop": 157.79,
+      "target": 158.16,
+      "distance": 0.148,
+      "atr": 0.137019,
+      "riskAtr": 1.080141,
+      "spreadAtr": 0.087579,
+      "entryGapAtr": 0.248141,
+      "trendScore": 0.572738,
+      "priceEmaScore": 0.29789,
+      "emaSlopeScore": 0.097123,
+      "atrRegime": 0.663299,
+      "efficiency6": 0.239264,
+      "rejectionWick": 0.681818,
+      "engulfing": false,
+      "previousBodyAtr": 0.145965,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 157.892,
+      "marketAsk": 157.904,
+      "passesFilters": true
+    },
+    {
+      "symbol": "EURUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T05:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 3,
+      "strength": 0.051881,
+      "entry": 1.11817,
+      "stop": 1.11959,
+      "target": 1.11604,
+      "distance": 0.00142,
+      "atr": 0.001156,
+      "riskAtr": 1.227844,
+      "spreadAtr": 0.060528,
+      "entryGapAtr": 0.639862,
+      "trendScore": -0.57434,
+      "priceEmaScore": 0.15925,
+      "emaSlopeScore": 0.088775,
+      "atrRegime": 0.817349,
+      "efficiency6": 0.132948,
+      "rejectionWick": 0.390244,
+      "engulfing": false,
+      "previousBodyAtr": 0.432339,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.11891,
+      "marketAsk": 1.11898,
+      "passesFilters": false
+    },
+    {
+      "symbol": "AUDUSD",
+      "side": "BUY",
+      "signalAt": "2026-11-03T06:00:00.000Z",
+      "sessions": [
+        "sydney",
+        "tokyo"
+      ],
+      "activeRank": 5,
+      "strength": 0.352559,
+      "entry": 0.69845,
+      "stop": 0.69709,
+      "target": 0.70049,
+      "distance": 0.00136,
+      "atr": 0.001078,
+      "riskAtr": 1.261789,
+      "spreadAtr": 0.055667,
+      "entryGapAtr": 0.426782,
+      "trendScore": -1.204037,
+      "priceEmaScore": -1.836489,
+      "emaSlopeScore": -0.623703,
+      "atrRegime": 1.135951,
+      "efficiency6": 0.651613,
+      "rejectionWick": 0.210526,
+      "engulfing": false,
+      "previousBodyAtr": 0.937064,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 0.69793,
+      "marketAsk": 0.69799,
+      "passesFilters": false
+    },
+    {
+      "symbol": "EURUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T07:00:00.000Z",
+      "sessions": [
+        "tokyo"
+      ],
+      "activeRank": 3,
+      "strength": 0.188446,
+      "entry": 1.11821,
+      "stop": 1.11994,
+      "target": 1.115615,
+      "distance": 0.00173,
+      "atr": 0.001114,
+      "riskAtr": 1.552434,
+      "spreadAtr": 0.062815,
+      "entryGapAtr": 0.717888,
+      "trendScore": -0.55146,
+      "priceEmaScore": 0.078069,
+      "emaSlopeScore": 0.014861,
+      "atrRegime": 0.796898,
+      "efficiency6": 0.131034,
+      "rejectionWick": 0.371681,
+      "engulfing": false,
+      "previousBodyAtr": 0.269208,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.11901,
+      "marketAsk": 1.11908,
+      "passesFilters": false
+    },
+    {
+      "symbol": "EURJPY",
+      "side": "BUY",
+      "signalAt": "2026-11-03T08:00:00.000Z",
+      "sessions": [
+        "tokyo",
+        "london"
+      ],
+      "activeRank": 2,
+      "strength": 1.03166,
+      "entry": 176.816,
+      "stop": 176.562,
+      "target": 177.197,
+      "distance": 0.254,
+      "atr": 0.152182,
+      "riskAtr": 1.669055,
+      "spreadAtr": 0.131422,
+      "entryGapAtr": 0.157706,
+      "trendScore": 1.150202,
+      "priceEmaScore": 0.693326,
+      "emaSlopeScore": 0.059757,
+      "atrRegime": 0.634782,
+      "efficiency6": 0.48265,
+      "rejectionWick": 0.118557,
+      "engulfing": false,
+      "previousBodyAtr": 0.440263,
+      "timeframeDirections": {
+        "m5": "BUY",
+        "m15": "BUY"
+      },
+      "marketBid": 176.772,
+      "marketAsk": 176.792,
+      "passesFilters": false
+    },
+    {
+      "symbol": "EURUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T09:00:00.000Z",
+      "sessions": [
+        "london"
+      ],
+      "activeRank": 0,
+      "strength": 0.405255,
+      "entry": 1.11867,
+      "stop": 1.12084,
+      "target": 1.115415,
+      "distance": 0.00217,
+      "atr": 0.001184,
+      "riskAtr": 1.832091,
+      "spreadAtr": 0.0591,
+      "entryGapAtr": 0.54034,
+      "trendScore": -0.5178,
+      "priceEmaScore": -0.111563,
+      "emaSlopeScore": -0.060539,
+      "atrRegime": 0.853749,
+      "efficiency6": 0.352941,
+      "rejectionWick": 0.477707,
+      "engulfing": false,
+      "previousBodyAtr": 0.658539,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.11931,
+      "marketAsk": 1.11938,
+      "passesFilters": false
+    },
+    {
+      "symbol": "GBPUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T09:00:00.000Z",
+      "sessions": [
+        "london"
+      ],
+      "activeRank": 1,
+      "strength": 0.057005,
+      "entry": 1.34083,
+      "stop": 1.34288,
+      "target": 1.337755,
+      "distance": 0.00205,
+      "atr": 0.001228,
+      "riskAtr": 1.669421,
+      "spreadAtr": 0.105866,
+      "entryGapAtr": 0.732917,
+      "trendScore": -0.834699,
+      "priceEmaScore": -0.637544,
+      "emaSlopeScore": -0.182842,
+      "atrRegime": 0.856581,
+      "efficiency6": 0.908571,
+      "rejectionWick": 0.537931,
+      "engulfing": false,
+      "previousBodyAtr": 0.529329,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 1.34173,
+      "marketAsk": 1.34186,
+      "passesFilters": false
+    },
+    {
+      "symbol": "AUDUSD",
+      "side": "SELL",
+      "signalAt": "2026-11-03T09:00:00.000Z",
+      "sessions": [
+        "london"
+      ],
+      "activeRank": 2,
+      "strength": 1.798862,
+      "entry": 0.69585,
+      "stop": 0.6992,
+      "target": 0.690825,
+      "distance": 0.00335,
+      "atr": 0.001173,
+      "riskAtr": 2.856013,
+      "spreadAtr": 0.051152,
+      "entryGapAtr": 0.664982,
+      "trendScore": 1.258548,
+      "priceEmaScore": 2.308714,
+      "emaSlopeScore": 0.487137,
+      "atrRegime": 1.222979,
+      "efficiency6": 0.550274,
+      "rejectionWick": 0.058182,
+      "engulfing": true,
+      "previousBodyAtr": 0.733185,
+      "timeframeDirections": {
+        "m5": "SELL",
+        "m15": "SELL"
+      },
+      "marketBid": 0.69663,
+      "marketAsk": 0.69669,
+      "passesFilters": false
+    }
+  ],
+  "result": {
+    "slots": 1,
+    "from": "2026-11-03T00:00:00.000Z",
+    "to": "2026-11-03T09:25:00.000Z",
+    "startCapital": 1000,
+    "finalBalance": 990.596205,
+    "returnPct": -0.94038,
+    "trades": 2,
+    "wins": 1,
+    "winRate": 50,
+    "profitFactor": 0.686368,
+    "maxDrawdownPct": 2.99835,
+    "maxMarginUsagePct": 75.022442,
+    "maxEffectiveRiskPct": 2.995483,
+    "maxConcurrent": 1,
+    "rejections": {
+      "symbolOccupied": 0,
+      "notSelected": 2,
+      "portfolioFull": 4
+    },
+    "activeDays": 1,
+    "positiveDays": 0,
+    "negativeDays": 1,
+    "positiveDayPct": 0,
+    "longestLosingDayStreak": 1,
+    "monthly": {
+      "2026-11": -9.403795
+    },
+    "bySymbol": {
+      "EURUSD": {
+        "trades": 1,
+        "pnl": -29.983499,
+        "wins": 0
+      },
+      "USDCHF": {
+        "trades": 1,
+        "pnl": 20.579704,
+        "wins": 1
+      }
+    },
+    "bySessionCombination": {
+      "sydney+tokyo": {
+        "trades": 2,
+        "pnl": -9.403795,
+        "wins": 1
+      }
+    },
+    "tradeLog": [
+      {
+        "symbol": "EURUSD",
+        "side": "BUY",
+        "signaled": "2026-11-03T00:00:00.000Z",
+        "opened": "2026-11-03T00:08:00.000Z",
+        "closed": "2026-11-03T02:18:00.000Z",
+        "reason": "stopLoss",
+        "pnl": -29.983499,
+        "r": -1.000957,
+        "effectiveRiskPct": 2.995483,
+        "balanceAfter": 970.016501,
+        "sessions": [
+          "sydney",
+          "tokyo"
+        ]
+      },
+      {
+        "symbol": "USDCHF",
+        "side": "SELL",
+        "signaled": "2026-11-03T03:00:00.000Z",
+        "opened": "2026-11-03T03:33:00.000Z",
+        "closed": "2026-11-03T06:41:00.000Z",
+        "reason": "trailingStop",
+        "pnl": 20.579704,
+        "r": 0.708619,
+        "effectiveRiskPct": 2.993969,
+        "balanceAfter": 990.596205,
+        "sessions": [
+          "sydney",
+          "tokyo"
+        ]
+      }
+    ]
+  },
+  "caveats": [
+    "Replay uses recorded bid/ask M1 candles and conservative stop-before-target ordering inside an ambiguous minute.",
+    "The final open position, if any, is marked to the latest recorded quote and labeled periodBoundary.",
+    "This is a frozen-strategy replay; no parameter was selected using this day."
+  ]
+}
