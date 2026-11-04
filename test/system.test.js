@@ -82,6 +82,59 @@ test("strategy rejects late and oversized H1 signals", () => {
     assert.equal(Strategy.getSignal(strategyContext("BUY", 6, 0.8)).signal, null);
 });
 
+test("strategy respects decision time and H1 body boundaries", () => {
+    assert.equal(Strategy.getSignal(strategyContext("BUY", 6, 0.75)).signal, "bullish");
+    assert.equal(Strategy.getSignal(strategyContext("BUY", 6, 0.751)).signal, null);
+    assert.equal(Strategy.getSignal(strategyContext("BUY", 7)).signal, null);
+    assert.equal(Strategy.getSignal(strategyContext("BUY", 23)).signal, "bullish");
+});
+
+test("strategy rejects missing inputs, incorrect trend and non-reversal candles", () => {
+    for (const direction of ["BUY", "SELL"]) {
+        const invalidInputs = [
+            (context) => { delete context.candles.h1; },
+            (context) => { context.candles.h1 = context.candles.h1.slice(-1); },
+            (context) => { context.candles.h1.at(-1).timestamp = "invalid"; },
+            (context) => { context.indicators.h1.atr = 0; },
+            (context) => { context.indicators.h1.ema20 = undefined; },
+            (context) => { context.indicators.h1.ema20 = direction === "BUY" ? 99 : 101; },
+            (context) => { context.candles.h1.at(-2).close = context.candles.h1.at(-2).open; },
+            (context) => { context.candles.h1.at(-1).close = context.candles.h1.at(-1).open; },
+            (context) => { delete context.candles.m5; },
+            (context) => { delete context.candles.m15; },
+            (context) => { context.indicators.m5.atr = 0; },
+            (context) => { context.candles.m15 = []; },
+        ];
+        for (const invalidate of invalidInputs) {
+            const context = strategyContext(direction);
+            invalidate(context);
+            assert.deepEqual(Strategy.getSignal(context), { symbol: "TEST", signal: null });
+        }
+
+        const equalEma = strategyContext(direction);
+        equalEma.indicators.h1.ema20 = equalEma.indicators.h1.ema50;
+        assert.equal(Strategy.getSignal(equalEma).signal, direction === "BUY" ? "bullish" : "bearish");
+    }
+});
+
+test("wave detector needs two matching, sufficiently populated timeframes", () => {
+    for (const direction of ["BUY", "SELL"]) {
+        const context = strategyContext(direction);
+        const expected = direction === "BUY" ? "bullish" : "bearish";
+        assert.deepEqual(Strategy.detectWave(context.symbol, context.indicators, context.candles),
+            { symbol: "TEST", waveDirection: expected });
+
+        for (const timeframe of ["m5", "m15"]) {
+            const missing = strategyContext(direction);
+            missing.candles[timeframe] = missing.candles[timeframe].slice(0, timeframe === "m5" ? 37 : 9);
+            assert.deepEqual(Strategy.detectWave(missing.symbol, missing.indicators, missing.candles),
+                { symbol: "TEST", waveDirection: null });
+        }
+        context.candles.m15 = lowerTimeframeRows(20, direction === "BUY" ? "SELL" : "BUY");
+        assert.equal(Strategy.detectWave(context.symbol, context.indicators, context.candles).waveDirection, null);
+    }
+});
+
 test("session overlap preserves configured symbol priority without duplicates", () => {
     assert.deepEqual(activeSymbols("23:00"), ["USDJPY", "GBPUSD", "AUDJPY", "EURUSD", "USDCHF"]);
     assert.deepEqual(activeSymbols("01:00"), ["USDJPY", "GBPUSD", "AUDJPY", "EURUSD", "USDCHF", "AUDUSD", "EURJPY"]);
@@ -214,7 +267,7 @@ test("position sizing respects risk and margin caps", async (context) => {
 
     tradingService.getQuotePerEur = async () => 1.1;
     tradingService.leverageForSymbol = async () => 30;
-    tradingService.setAvailableMargin(1000);
+    tradingService.availableMargin = 1000;
 
     const sizing = await tradingService.positionSize(1000, 1.1, 1.09, "EURUSD", RISK.PER_TRADE);
 

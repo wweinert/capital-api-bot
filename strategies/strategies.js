@@ -1,8 +1,12 @@
-const HOUR_MS = 60 * 60_000;
-const LAST_SIGNAL_HOUR_UTC = 7;
-const MAX_H1_BODY_ATR = 0.75;
-
 class Strategy {
+    #hourMs = 60 * 60_000;
+    #lastSignalHourUtc = 7;
+    #maxH1BodyAtr = 0.75;
+    #waveSetups = [
+        { timeframe: "m5", lookback: 24, pivotWindow: 12, breakBars: 3, bodyAtr: 0.1, closeAt: 0.6, keepBars: 12 },
+        { timeframe: "m15", lookback: 4, pivotWindow: 4, breakBars: 1, bodyAtr: 0.2, closeAt: 0.55, keepBars: 4 },
+    ];
+
     getSignal(context) {
         const { symbol, indicators, candles } = context;
 
@@ -21,10 +25,10 @@ class Strategy {
             return { symbol, signal: null };
         }
 
-        const decisionTime = Date.parse(last.timestamp) + HOUR_MS;
+        const decisionTime = Date.parse(last.timestamp) + this.#hourMs;
         const bodyAtr = Math.abs(lastClose - lastOpen) / atr;
 
-        if (!Number.isFinite(decisionTime) || new Date(decisionTime).getUTCHours() > LAST_SIGNAL_HOUR_UTC || bodyAtr > MAX_H1_BODY_ATR) {
+        if (!Number.isFinite(decisionTime) || new Date(decisionTime).getUTCHours() > this.#lastSignalHourUtc || bodyAtr > this.#maxH1BodyAtr) {
             return { symbol, signal: null };
         }
 
@@ -38,32 +42,9 @@ class Strategy {
     detectWave(symbol, indicators, candles) {
         const waveDirections = [];
 
-        const setups = [
-            {
-                rows: candles?.m5,
-                atr: indicators?.m5?.atr,
-                lookback: 24,
-                pivotWindow: 12,
-                breakBars: 3,
-                bodyAtr: 0.1,
-                closeAt: 0.6,
-                keepBars: 12,
-            },
-            {
-                rows: candles?.m15,
-                atr: indicators?.m15?.atr,
-                lookback: 4,
-                pivotWindow: 4,
-                breakBars: 1,
-                bodyAtr: 0.2,
-                closeAt: 0.55,
-                keepBars: 4,
-            },
-        ];
-
-        for (const setup of setups) {
-            const rows = setup.rows;
-            const atr = Number(setup.atr);
+        for (const setup of this.#waveSetups) {
+            const rows = candles?.[setup.timeframe];
+            const atr = Number(indicators?.[setup.timeframe]?.atr);
 
             if (!Array.isArray(rows) || rows.length < setup.lookback + setup.pivotWindow + 2 || !(atr > 0)) {
                 continue;
@@ -120,7 +101,7 @@ class Strategy {
             }
         }
 
-        const waveDirection = waveDirections.length === setups.length && waveDirections.every((direction) => direction === waveDirections[0])
+        const waveDirection = waveDirections.length === this.#waveSetups.length && waveDirections.every((direction) => direction === waveDirections[0])
             ? waveDirections[0]
             : null;
 
