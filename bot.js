@@ -1,46 +1,29 @@
-import { startSession, pingSession, getHistorical, getAccountInfo, getSessionTokens, refreshSession } from "./api.js";
+import { startSession, pingSession, getHistorical, getSessionTokens, refreshSession } from "./api.js";
 import { DEV, TIMEFRAMES, SESSIONS } from "./config.js";
 import tradingService from "./services/trading.js";
 import { calcIndicators } from "./indicators/indicators.js";
 import logger from "./utils/logger.js";
-import { startMonitorOpenTrades, maxHoldCheck, dailyFlatCheck, logDeals, startWebSocket } from "./monitors.js";
+import tradeMonitor from "./monitors.js";
 import Strategy from "./strategies/strategies.js";
 
-const ANALYSIS_REPEAT_MS = 15 * 60 * 1000;
-const ANALYSIS_DELAY_MS = 2 * 1000;
-const TIMEFRAME_MINUTES = {
-    m1: 1,
-    m5: 5,
-    m15: 15,
-    h1: 60,
-    h4: 240,
-    d1: 1440,
-};
 class TradingBot {
-    constructor() {
-        this.isRunning = false;
-        this.analysisInterval = null;
-        this.analysisStartTimeout = null;
-        this.analysisInProgress = false;
-        this.sessionRefreshInterval = null;
-        this.sessionPingInterval = null;
-        this.pingInterval = 9 * 60 * 1000;
-        this.checkInterval = 15 * 1000;
-        this.maxRetries = 3;
-        this.retryDelay = 30000; // 30 seconds
-        this.monitorInterval = null; // Add monitor interval for open trades
-        this.monitorInProgress = false; // Prevent overlapping monitor runs
-        this.priceMonitorInProgress = false;
-        this.dealIdMonitorInProgress = false; // Prevent overlapping dealId checks
-        this.maxCandleHistory = 322; // Rolling window size for indicators
-        this.openedPositions = {}; // Track opened positions
-        this.MONITOR_INTERVAL_MS = 60 * 1000; // 1 minute
-        this.openedBrockerDealIds = [];
-        this.activeSymbols = [];
-        this.lastAnalyzedCandles = {};
-        this.tokens = null;
-    }
+    #analysisRepeatMs = 15 * 60_000;
+    #analysisDelayMs = 2_000;
+    #timeframeMinutes = { m1: 1, m5: 5, m15: 15, h1: 60, h4: 240, d1: 1440 };
+    #monitorIntervalMs = 60_000;
 
+    analysisInterval = null;
+    analysisStartTimeout = null;
+    analysisInProgress = false;
+    sessionPingInterval = null;
+    pingInterval = 9 * 60_000;
+    maxRetries = 3;
+    retryDelay = 30_000;
+    maxCandleHistory = 322;
+    lastAnalyzedCandles = {};
+    tokens = null;
+
+    // Startup and scheduling
     async initialize() {
         for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
             try {
@@ -48,7 +31,7 @@ class TradingBot {
                 const tokens = getSessionTokens();
                 if (!tokens.cst || !tokens.xsecurity) throw new Error("Invalid session tokens");
                 this.tokens = tokens;
-                await this.startLiveTrading(tokens);
+                await this.startLiveTrading();
                 this.scheduleMidnightSessionRefresh();
                 return;
             } catch (error) {
@@ -67,11 +50,9 @@ class TradingBot {
 
     async startLiveTrading() {
         try {
-            // startWebSocket(this);
             this.startSessionPing();
             this.startAnalysisInterval();
-            this.startMonitorOpenTrades();
-            this.isRunning = true;
+            tradeMonitor.startMonitorOpenTrades(this, this.#monitorIntervalMs);
         } catch (error) {
             logger.error("[bot.js][Bot] Error starting live trading:", error);
             throw error;
@@ -121,33 +102,7 @@ class TradingBot {
         }, interval);
     }
 
-    // Updates account balance, margin, and open trades in the trading service.
-    async updateAccountInfo() {
-        let retries = 3;
-        while (retries > 0) {
-            try {
-                const accountData = await getAccountInfo();
-                if (accountData?.accounts?.[0]?.balance?.balance) {
-                    tradingService.setAccountBalance(accountData.accounts[0].balance.balance);
-                    if (typeof accountData.accounts[0].balance.available !== "undefined") {
-                        tradingService.setAvailableMargin(accountData.accounts[0].balance.available);
-                    }
-
-                    return; // Success - exit the method
-                }
-            } catch (error) {
-                retries--;
-                if (retries === 0) {
-                    logger.error("[bot.js] Failed to update account info after all retries:", error);
-                    // Don't throw - just continue with old values
-                    return;
-                }
-                logger.warn(`Account info update failed, retrying... (${retries} attempts left)`);
-                await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds before retry
-            }
-        }
-    }
-
+    // Session selection and signal analysis
     getActiveSymbols(timestamp = Date.now()) {
         const now = timestamp instanceof Date ? timestamp : new Date(timestamp);
 
@@ -170,8 +125,6 @@ class TradingBot {
 
     async analyzeAllSymbols() {
         const symbols = this.getActiveSymbols();
-        this.activeSymbols = symbols;
-
         const pairAnalyses = Promise.all(
             symbols.map(async (symbol) => {
                 try {
@@ -184,7 +137,7 @@ class TradingBot {
             }),
         );
 
-        const [results] = await Promise.all([pairAnalyses, this.updateAccountInfo()]);
+        const [results] = await Promise.all([pairAnalyses, tradingService.updateAccountInfo()]);
 
         const candidates = results.filter(Boolean);
 
@@ -247,7 +200,7 @@ class TradingBot {
                 return null;
             }
             candles[tf] = prices.filter((candle) => {
-                const closeTime = Date.parse(candle.timestamp) + TIMEFRAME_MINUTES[tf] * 60 * 1000;
+                const closeTime = Date.parse(candle.timestamp) + this.#timeframeMinutes[tf] * 60_000;
 
                 return closeTime <= Date.now();
             });
@@ -282,22 +235,7 @@ class TradingBot {
         };
     }
 
-    async startMonitorOpenTrades() {
-        return startMonitorOpenTrades(this, this.MONITOR_INTERVAL_MS);
-    }
-
-    async maxHoldCheck() {
-        return maxHoldCheck(this);
-    }
-
-    async dailyFlatCheck() {
-        return dailyFlatCheck(this);
-    }
-
-    logDeals() {
-        return logDeals(this);
-    }
-
+    // Session renewal and timer alignment
     scheduleMidnightSessionRefresh() {
         const now = new Date();
         const nextMidnight = new Date(now);
@@ -328,21 +266,21 @@ class TradingBot {
 
         const now = Date.now();
 
-        const currentCandleClose = Math.floor(now / ANALYSIS_REPEAT_MS) * ANALYSIS_REPEAT_MS;
+        const currentCandleClose = Math.floor(now / this.#analysisRepeatMs) * this.#analysisRepeatMs;
 
-        const currentAnalysisTime = currentCandleClose + ANALYSIS_DELAY_MS;
+        const currentAnalysisTime = currentCandleClose + this.#analysisDelayMs;
 
         if (currentAnalysisTime > now) {
             return currentAnalysisTime - now;
         }
 
-        const nextAnalysisTime = currentAnalysisTime + ANALYSIS_REPEAT_MS;
+        const nextAnalysisTime = currentAnalysisTime + this.#analysisRepeatMs;
 
         return nextAnalysisTime - now;
     }
 
     getRepeatIntervalMs() {
-        return DEV.MODE ? DEV.INTERVAL : ANALYSIS_REPEAT_MS;
+        return DEV.MODE ? DEV.INTERVAL : this.#analysisRepeatMs;
     }
 
     delay(ms) {

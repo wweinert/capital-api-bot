@@ -1,0 +1,5383 @@
+{
+  "protocol": "refactor-corrected-management-parity-v1",
+  "baseline": "935a365",
+  "dataEnd": "2026-11-04T07:45:00.000Z",
+  "checkedPatternContexts": 5090,
+  "admittedSignals": 563,
+  "identical": true,
+  "corrections": [
+    "Explicit null disables the legacy continuous trailing stop",
+    "Candle-step updates use each version's actual calculateDynamicStop at M1 close, including between step boundaries"
+  ],
+  "limitations": [
+    "Bid/ask M1 simulation; stop is checked before target within an ambiguous minute",
+    "Requested entry fills without tick slippage; regime uses signal-time H1; ATR uses full recorded series",
+    "Historical data was inspected before; this is a refactoring regression check, not fresh strategy validation"
+  ],
+  "results": {
+    "935a365": {
+      "slots": 1,
+      "from": "2026-01-01T00:00:00.000Z",
+      "to": "2026-11-04T07:45:00.000Z",
+      "startCapital": 1000,
+      "finalBalance": 2084.889235705759,
+      "returnPct": 108.48892357057589,
+      "trades": 137,
+      "wins": 79,
+      "winRate": 57.66423357664234,
+      "profitFactor": 1.4305419995768849,
+      "maxDrawdownPct": 16.569786749553778,
+      "maxMarginUsagePct": 89.99906090711632,
+      "maxEffectiveRiskPct": 2.9999910364797895,
+      "maxConcurrent": 1,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 152,
+        "pendingExpired": 178,
+        "portfolioFull": 89
+      },
+      "activeDays": 116,
+      "positiveDays": 70,
+      "negativeDays": 45,
+      "positiveDayPct": 60.3448275862069,
+      "longestLosingDayStreak": 3,
+      "monthly": {
+        "2026-01": -6.077928475173923,
+        "2026-02": 61.82759868258398,
+        "2026-03": 267.0842045179171,
+        "2026-04": 33.64211053070444,
+        "2026-05": -0.2038814001384992,
+        "2026-06": 248.34563637187316,
+        "2026-07": 87.58399337801625,
+        "2026-08": -15.245724969741875,
+        "2026-09": 279.98413966364313,
+        "2026-10": 38.215997092219226,
+        "2026-11": 89.73309031385581
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 14,
+          "pnl": -97.31624829336208,
+          "wins": 5
+        },
+        "AUDUSD": {
+          "trades": 40,
+          "pnl": 87.50769743994621,
+          "wins": 20
+        },
+        "EURJPY": {
+          "trades": 9,
+          "pnl": 90.02094769044135,
+          "wins": 6
+        },
+        "EURUSD": {
+          "trades": 28,
+          "pnl": 426.2037935419613,
+          "wins": 18
+        },
+        "GBPUSD": {
+          "trades": 31,
+          "pnl": 411.42283164916097,
+          "wins": 21
+        },
+        "USDCHF": {
+          "trades": 8,
+          "pnl": 119.04105939919552,
+          "wins": 5
+        },
+        "USDJPY": {
+          "trades": 7,
+          "pnl": 48.009154278415465,
+          "wins": 4
+        }
+      },
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 125,
+          "pnl": 804.4902230774719,
+          "wins": 70
+        },
+        "tokyo": {
+          "trades": 12,
+          "pnl": 280.3990126282869,
+          "wins": 9
+        }
+      },
+      "tradeLog": [
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-06T01:00:00.000Z",
+          "opened": "2026-01-06T01:01:00.000Z",
+          "closed": "2026-01-06T04:40:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 36.73825960965057,
+          "r": 1.3684899507878772,
+          "effectiveRiskPct": 2.684583806296813,
+          "balanceAfter": 1036.7382596096506,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-01-19T02:00:00.000Z",
+          "opened": "2026-01-19T02:19:00.000Z",
+          "closed": "2026-01-19T05:26:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.990538879958834,
+          "r": -0.9987711715118028,
+          "effectiveRiskPct": 2.9929123868327094,
+          "balanceAfter": 1005.7477207296918,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-21T05:00:00.000Z",
+          "opened": "2026-01-21T05:29:00.000Z",
+          "closed": "2026-01-21T07:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.27494560812324,
+          "r": 1.1721837217137352,
+          "effectiveRiskPct": 2.9921379316159946,
+          "balanceAfter": 1041.022666337815,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-01-22T05:00:00.000Z",
+          "opened": "2026-01-22T05:21:00.000Z",
+          "closed": "2026-01-22T09:05:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 10.264657074913758,
+          "r": 0.32898113374034915,
+          "effectiveRiskPct": 2.997183039772846,
+          "balanceAfter": 1051.2873234127287,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-23T04:00:00.000Z",
+          "opened": "2026-01-23T04:40:00.000Z",
+          "closed": "2026-01-23T13:24:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 37.75686608473541,
+          "r": 1.1986620997132968,
+          "effectiveRiskPct": 2.9962478697069783,
+          "balanceAfter": 1089.0441894974642,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-01-26T01:00:00.000Z",
+          "opened": "2026-01-26T01:05:00.000Z",
+          "closed": "2026-01-26T07:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -32.689425127196145,
+          "r": -1.001655160765934,
+          "effectiveRiskPct": 2.9967019331778104,
+          "balanceAfter": 1056.3547643702682,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-27T02:00:00.000Z",
+          "opened": "2026-01-27T02:19:00.000Z",
+          "closed": "2026-01-27T08:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -31.656314437877583,
+          "r": -1.00181322133529,
+          "effectiveRiskPct": 2.9913263507014336,
+          "balanceAfter": 1024.6984499323905,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-28T03:00:00.000Z",
+          "opened": "2026-01-28T03:20:00.000Z",
+          "closed": "2026-01-28T07:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 0,
+          "r": 0,
+          "effectiveRiskPct": 2.9946629776286584,
+          "balanceAfter": 1024.6984499323905,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-29T03:00:00.000Z",
+          "opened": "2026-01-29T03:05:00.000Z",
+          "closed": "2026-01-29T10:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.77637840756434,
+          "r": -1.0022936835804903,
+          "effectiveRiskPct": 2.9965838905373485,
+          "balanceAfter": 993.9220715248262,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-02-05T02:00:00.000Z",
+          "opened": "2026-02-05T02:06:00.000Z",
+          "closed": "2026-02-05T03:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 32.30324805613056,
+          "r": 1.0859703944298058,
+          "effectiveRiskPct": 2.992787434402078,
+          "balanceAfter": 1026.2253195809567,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-02-11T06:00:00.000Z",
+          "opened": "2026-02-11T06:04:00.000Z",
+          "closed": "2026-02-11T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.75993301744454,
+          "r": -1.0004112963810117,
+          "effectiveRiskPct": 2.9961535915158892,
+          "balanceAfter": 995.4653865635122,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-18T00:00:00.000Z",
+          "opened": "2026-02-18T00:34:00.000Z",
+          "closed": "2026-02-18T03:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 26.33323341031616,
+          "r": 0.8829788053098718,
+          "effectiveRiskPct": 2.99590298597953,
+          "balanceAfter": 1021.7986199738284,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-19T00:00:00.000Z",
+          "opened": "2026-02-19T00:29:00.000Z",
+          "closed": "2026-02-19T00:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -28.474616523112662,
+          "r": -0.9998727751555325,
+          "effectiveRiskPct": 2.787069693190022,
+          "balanceAfter": 993.3240034507157,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-19T04:00:00.000Z",
+          "opened": "2026-02-19T04:22:00.000Z",
+          "closed": "2026-02-19T07:38:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.777911495122368,
+          "r": -0.9992711462919569,
+          "effectiveRiskPct": 2.9999910364797895,
+          "balanceAfter": 963.5460919555934,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-20T00:00:00.000Z",
+          "opened": "2026-02-20T00:21:00.000Z",
+          "closed": "2026-02-20T01:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.34288775783677,
+          "r": 1.4011310533679426,
+          "effectiveRiskPct": 2.9882417499873646,
+          "balanceAfter": 1003.8889797134302,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-24T04:00:00.000Z",
+          "opened": "2026-02-24T04:40:00.000Z",
+          "closed": "2026-02-24T12:28:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 33.54040959486452,
+          "r": 1.116583382098189,
+          "effectiveRiskPct": 2.992206176765218,
+          "balanceAfter": 1037.4293893082947,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-02-27T06:00:00.000Z",
+          "opened": "2026-02-27T06:17:00.000Z",
+          "closed": "2026-02-27T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 18.320280899115534,
+          "r": 0.5895837162708556,
+          "effectiveRiskPct": 2.9952156835054367,
+          "balanceAfter": 1055.7496702074102,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-03T02:00:00.000Z",
+          "opened": "2026-03-03T02:02:00.000Z",
+          "closed": "2026-03-03T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 54.316267706748526,
+          "r": 1.7200175948325371,
+          "effectiveRiskPct": 2.991135423856263,
+          "balanceAfter": 1110.0659379141587,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 9,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-04T00:00:00.000Z",
+          "opened": "2026-03-04T00:02:00.000Z",
+          "closed": "2026-03-04T01:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 23.905571440279747,
+          "r": 0.7201972085038649,
+          "effectiveRiskPct": 2.9901909257278834,
+          "balanceAfter": 1133.9715093544385,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-05T02:00:00.000Z",
+          "opened": "2026-03-05T02:24:00.000Z",
+          "closed": "2026-03-05T04:51:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.698441208269074,
+          "r": 1.0551865759534589,
+          "effectiveRiskPct": 2.9834437368623856,
+          "balanceAfter": 1169.6699505627075,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-03-06T05:00:00.000Z",
+          "opened": "2026-03-06T05:31:00.000Z",
+          "closed": "2026-03-06T09:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 75.65338664340949,
+          "r": 2.157320582884158,
+          "effectiveRiskPct": 2.9981292692153017,
+          "balanceAfter": 1245.323337206117,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 9,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-09T07:00:00.000Z",
+          "opened": "2026-03-09T07:05:00.000Z",
+          "closed": "2026-03-09T09:33:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -37.160540281038905,
+          "r": -0.998641944873342,
+          "effectiveRiskPct": 2.9880653369635204,
+          "balanceAfter": 1208.162796925078,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-10T05:00:00.000Z",
+          "opened": "2026-03-10T05:03:00.000Z",
+          "closed": "2026-03-10T06:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.031107748781544,
+          "r": 1.1323487701129518,
+          "effectiveRiskPct": 2.999214803880216,
+          "balanceAfter": 1249.1939046738596,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-11T00:00:00.000Z",
+          "opened": "2026-03-11T00:09:00.000Z",
+          "closed": "2026-03-11T03:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 39.9688710599704,
+          "r": 1.0670940512194151,
+          "effectiveRiskPct": 2.998398322830858,
+          "balanceAfter": 1289.16277573383,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-13T02:00:00.000Z",
+          "opened": "2026-03-13T02:39:00.000Z",
+          "closed": "2026-03-13T05:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.406154247342066,
+          "r": 0.7865543479272885,
+          "effectiveRiskPct": 2.9986446358868064,
+          "balanceAfter": 1319.568929981172,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-17T07:00:00.000Z",
+          "opened": "2026-03-17T07:03:00.000Z",
+          "closed": "2026-03-17T08:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 47.21460750793817,
+          "r": 1.1953042130713905,
+          "effectiveRiskPct": 2.993407567459082,
+          "balanceAfter": 1366.7835374891101,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-18T04:00:00.000Z",
+          "opened": "2026-03-18T04:05:00.000Z",
+          "closed": "2026-03-18T07:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.153428483449765,
+          "r": -1.0006158303083923,
+          "effectiveRiskPct": 2.4972797648975664,
+          "balanceAfter": 1332.6301090056604,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-19T02:00:00.000Z",
+          "opened": "2026-03-19T02:05:00.000Z",
+          "closed": "2026-03-19T02:09:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.83408268880172,
+          "r": -0.9990076299330151,
+          "effectiveRiskPct": 2.9921019972576146,
+          "balanceAfter": 1292.7960263168586,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-19T04:00:00.000Z",
+          "opened": "2026-03-19T04:05:00.000Z",
+          "closed": "2026-03-19T06:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 20.375335120644497,
+          "r": 0.5258655851149404,
+          "effectiveRiskPct": 2.9970915020017066,
+          "balanceAfter": 1313.171361437503,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-03-20T01:00:00.000Z",
+          "opened": "2026-03-20T01:00:00.000Z",
+          "closed": "2026-03-20T09:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.462147342545066,
+          "r": -1.0017830326269004,
+          "effectiveRiskPct": 2.9997539877930377,
+          "balanceAfter": 1273.709214094958,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-24T00:00:00.000Z",
+          "opened": "2026-03-24T00:02:00.000Z",
+          "closed": "2026-03-24T01:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 18.126544287913212,
+          "r": 0.47502995842649776,
+          "effectiveRiskPct": 2.9958752563901174,
+          "balanceAfter": 1291.8357583828713,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-03-24T06:00:00.000Z",
+          "opened": "2026-03-24T06:02:00.000Z",
+          "closed": "2026-03-24T07:20:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.114948371450076,
+          "r": 1.1438377309800385,
+          "effectiveRiskPct": 2.985479238081471,
+          "balanceAfter": 1335.9507067543213,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-25T00:00:00.000Z",
+          "opened": "2026-03-25T00:30:00.000Z",
+          "closed": "2026-03-25T00:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.904902344335994,
+          "r": -0.9985984703550687,
+          "effectiveRiskPct": 2.991196347330938,
+          "balanceAfter": 1296.0458044099853,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-25T02:00:00.000Z",
+          "opened": "2026-03-25T02:05:00.000Z",
+          "closed": "2026-03-25T12:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.64226117327457,
+          "r": 0.791039965562596,
+          "effectiveRiskPct": 2.9888356419489224,
+          "balanceAfter": 1326.68806558326,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-26T06:00:00.000Z",
+          "opened": "2026-03-26T06:12:00.000Z",
+          "closed": "2026-03-26T12:06:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 85.74514507306965,
+          "r": 2.159124399776299,
+          "effectiveRiskPct": 2.9933882651182273,
+          "balanceAfter": 1412.4332106563295,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 10,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-27T00:00:00.000Z",
+          "opened": "2026-03-27T00:19:00.000Z",
+          "closed": "2026-03-27T03:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.31637805855912,
+          "r": -0.9999479855226372,
+          "effectiveRiskPct": 2.9961472810226746,
+          "balanceAfter": 1370.1168325977703,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-30T07:00:00.000Z",
+          "opened": "2026-03-30T07:00:00.000Z",
+          "closed": "2026-03-30T14:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.64322754253322,
+          "r": 0.86777857429594,
+          "effectiveRiskPct": 2.99785413739549,
+          "balanceAfter": 1405.7600601403035,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-31T00:00:00.000Z",
+          "opened": "2026-03-31T00:09:00.000Z",
+          "closed": "2026-03-31T00:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.034235200271354,
+          "r": -0.9987882116532192,
+          "effectiveRiskPct": 2.9937707571314887,
+          "balanceAfter": 1363.7258249400322,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-31T03:00:00.000Z",
+          "opened": "2026-03-31T03:04:00.000Z",
+          "closed": "2026-03-31T11:25:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -40.891950214705226,
+          "r": -1.0005841707173528,
+          "effectiveRiskPct": 2.996795655979036,
+          "balanceAfter": 1322.833874725327,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-02T01:00:00.000Z",
+          "opened": "2026-04-02T01:11:00.000Z",
+          "closed": "2026-04-02T01:17:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.6265264630044,
+          "r": -1.0010964202311117,
+          "effectiveRiskPct": 2.992297633009642,
+          "balanceAfter": 1283.2073482623225,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-02T07:00:00.000Z",
+          "opened": "2026-04-02T07:25:00.000Z",
+          "closed": "2026-04-02T10:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.379653155088654,
+          "r": -1.0019196775636598,
+          "effectiveRiskPct": 2.9851853492069105,
+          "balanceAfter": 1244.827695107234,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-04-03T02:00:00.000Z",
+          "opened": "2026-04-03T02:22:00.000Z",
+          "closed": "2026-04-03T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -36.310614825311646,
+          "r": -0.99967068346181,
+          "effectiveRiskPct": 2.917879847404704,
+          "balanceAfter": 1208.5170802819223,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-07T00:00:00.000Z",
+          "opened": "2026-04-07T00:15:00.000Z",
+          "closed": "2026-04-07T01:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.12104061122221,
+          "r": -1.0003033599278872,
+          "effectiveRiskPct": 2.4916409008142253,
+          "balanceAfter": 1178.3960396707,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-07T03:00:00.000Z",
+          "opened": "2026-04-07T03:40:00.000Z",
+          "closed": "2026-04-07T08:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.814329514841376,
+          "r": 1.268646366445748,
+          "effectiveRiskPct": 2.997678471551383,
+          "balanceAfter": 1223.2103691855414,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-08T05:00:00.000Z",
+          "opened": "2026-04-08T05:21:00.000Z",
+          "closed": "2026-04-08T06:02:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 6.205211796064415,
+          "r": 0.16954595951173287,
+          "effectiveRiskPct": 2.9920442423012377,
+          "balanceAfter": 1229.4155809816057,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-04-09T02:00:00.000Z",
+          "opened": "2026-04-09T02:20:00.000Z",
+          "closed": "2026-04-09T12:07:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.34775836468187,
+          "r": 1.4250162013563703,
+          "effectiveRiskPct": 2.9879929898312514,
+          "balanceAfter": 1281.7633393462875,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-10T01:00:00.000Z",
+          "opened": "2026-04-10T01:31:00.000Z",
+          "closed": "2026-04-10T03:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -37.37774185408944,
+          "r": -0.9997091891938127,
+          "effectiveRiskPct": 2.916967096780114,
+          "balanceAfter": 1244.385597492198,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-13T06:00:00.000Z",
+          "opened": "2026-04-13T06:07:00.000Z",
+          "closed": "2026-04-13T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.132308179682276,
+          "r": -1.0007363297387313,
+          "effectiveRiskPct": 2.7408862740892475,
+          "balanceAfter": 1210.2532893125158,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-04-14T03:00:00.000Z",
+          "opened": "2026-04-14T03:34:00.000Z",
+          "closed": "2026-04-14T06:15:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 6.519659732938639,
+          "r": 0.24105913042051502,
+          "effectiveRiskPct": 2.234730070205579,
+          "balanceAfter": 1216.7729490454544,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-20T05:00:00.000Z",
+          "opened": "2026-04-20T05:30:00.000Z",
+          "closed": "2026-04-20T06:57:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -33.18130618664127,
+          "r": -0.9996599579197923,
+          "effectiveRiskPct": 2.7279200356215867,
+          "balanceAfter": 1183.5916428588132,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-04-22T07:00:00.000Z",
+          "opened": "2026-04-22T07:23:00.000Z",
+          "closed": "2026-04-22T12:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.642183842872214,
+          "r": 0.8658701465913288,
+          "effectiveRiskPct": 2.9899577913824644,
+          "balanceAfter": 1214.2338267016853,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-23T02:00:00.000Z",
+          "opened": "2026-04-23T02:11:00.000Z",
+          "closed": "2026-04-23T11:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 59.338768697441935,
+          "r": 1.9142421615300351,
+          "effectiveRiskPct": 2.552932460398989,
+          "balanceAfter": 1273.5725953991273,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 7,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-29T01:00:00.000Z",
+          "opened": "2026-04-29T01:02:00.000Z",
+          "closed": "2026-04-29T05:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 34.303078481405564,
+          "r": 0.9764001256525062,
+          "effectiveRiskPct": 2.758554476481134,
+          "balanceAfter": 1307.8756738805328,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-04-30T01:00:00.000Z",
+          "opened": "2026-04-30T01:07:00.000Z",
+          "closed": "2026-04-30T04:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 48.600311375498336,
+          "r": 1.2406559422420498,
+          "effectiveRiskPct": 2.9951682932628283,
+          "balanceAfter": 1356.475985256031,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-05-05T03:00:00.000Z",
+          "opened": "2026-05-05T03:42:00.000Z",
+          "closed": "2026-05-05T06:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.60421345310521,
+          "r": -0.9999058924179234,
+          "effectiveRiskPct": 2.5512777708278294,
+          "balanceAfter": 1321.8717718029259,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-05-07T01:00:00.000Z",
+          "opened": "2026-05-07T01:17:00.000Z",
+          "closed": "2026-05-07T08:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 34.49611909101677,
+          "r": 0.8716134662968416,
+          "effectiveRiskPct": 2.9940357289059847,
+          "balanceAfter": 1356.3678908939426,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-05-11T06:00:00.000Z",
+          "opened": "2026-05-11T06:10:00.000Z",
+          "closed": "2026-05-11T08:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.77842961629695,
+          "r": 1.3278025685573775,
+          "effectiveRiskPct": 2.8750001385329136,
+          "balanceAfter": 1408.1463205102395,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-05-13T00:00:00.000Z",
+          "opened": "2026-05-13T00:13:00.000Z",
+          "closed": "2026-05-13T01:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.667478591167274,
+          "r": -0.9994549318026001,
+          "effectiveRiskPct": 2.747481986413868,
+          "balanceAfter": 1369.4788419190722,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-05-13T03:00:00.000Z",
+          "opened": "2026-05-13T03:08:00.000Z",
+          "closed": "2026-05-13T07:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 32.42350953970935,
+          "r": 0.8890824160006942,
+          "effectiveRiskPct": 2.662947923337965,
+          "balanceAfter": 1401.9023514587816,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-05-14T06:00:00.000Z",
+          "opened": "2026-05-14T06:14:00.000Z",
+          "closed": "2026-05-14T06:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.70819092968354,
+          "r": -0.9993173158566193,
+          "effectiveRiskPct": 2.7630051700902194,
+          "balanceAfter": 1363.194160529098,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-05-19T00:00:00.000Z",
+          "opened": "2026-05-19T00:01:00.000Z",
+          "closed": "2026-05-19T01:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.350220916903254,
+          "r": 1.2811321937543911,
+          "effectiveRiskPct": 2.9975529051988827,
+          "balanceAfter": 1415.5443814460014,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-05-20T00:00:00.000Z",
+          "opened": "2026-05-20T00:00:00.000Z",
+          "closed": "2026-05-20T08:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.50801057438732,
+          "r": -1.0011126396729357,
+          "effectiveRiskPct": 2.9996069072069993,
+          "balanceAfter": 1373.036370871614,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-05-21T01:00:00.000Z",
+          "opened": "2026-05-21T01:08:00.000Z",
+          "closed": "2026-05-21T02:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -41.10502562072803,
+          "r": -1.0006109392545681,
+          "effectiveRiskPct": 2.9919038673308487,
+          "balanceAfter": 1331.9313452508861,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-05-29T05:00:00.000Z",
+          "opened": "2026-05-29T05:11:00.000Z",
+          "closed": "2026-05-29T07:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 24.34075860500655,
+          "r": 0.704606482772881,
+          "effectiveRiskPct": 2.593615751963276,
+          "balanceAfter": 1356.2721038558927,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-06-01T05:00:00.000Z",
+          "opened": "2026-06-01T05:05:00.000Z",
+          "closed": "2026-06-01T07:06:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 20.093932960174183,
+          "r": 0.5709824970971186,
+          "effectiveRiskPct": 2.5947488266144867,
+          "balanceAfter": 1376.366036816067,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-06-08T05:00:00.000Z",
+          "opened": "2026-06-08T05:36:00.000Z",
+          "closed": "2026-06-08T09:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.1663169145375,
+          "r": 1.0456000086140593,
+          "effectiveRiskPct": 2.7910170204768323,
+          "balanceAfter": 1416.5323537306044,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-06-11T00:00:00.000Z",
+          "opened": "2026-06-11T00:02:00.000Z",
+          "closed": "2026-06-11T01:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.70745143519997,
+          "r": 0.9601659728012807,
+          "effectiveRiskPct": 2.9929613194939693,
+          "balanceAfter": 1457.2398051658045,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-06-11T06:00:00.000Z",
+          "opened": "2026-06-11T06:04:00.000Z",
+          "closed": "2026-06-11T12:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.89305725887291,
+          "r": 0.9587719677422055,
+          "effectiveRiskPct": 2.9984423405523954,
+          "balanceAfter": 1499.1328624246773,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-12T03:00:00.000Z",
+          "opened": "2026-06-12T03:34:00.000Z",
+          "closed": "2026-06-12T05:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -44.9594097217718,
+          "r": -1.0005276519918862,
+          "effectiveRiskPct": 2.997446086122441,
+          "balanceAfter": 1454.1734527029055,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-16T07:00:00.000Z",
+          "opened": "2026-06-16T07:05:00.000Z",
+          "closed": "2026-06-16T10:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 54.25299632645789,
+          "r": 1.2458459815359406,
+          "effectiveRiskPct": 2.994629931591676,
+          "balanceAfter": 1508.4264490293633,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-17T07:00:00.000Z",
+          "opened": "2026-06-17T07:43:00.000Z",
+          "closed": "2026-06-17T18:00:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 36.932974576562806,
+          "r": 0.8175435078822988,
+          "effectiveRiskPct": 2.9948789554473536,
+          "balanceAfter": 1545.3594236059262,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-06-23T07:00:00.000Z",
+          "opened": "2026-06-23T07:42:00.000Z",
+          "closed": "2026-06-23T12:09:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 59.25831662183972,
+          "r": 1.278672886754253,
+          "effectiveRiskPct": 2.9988887078124256,
+          "balanceAfter": 1604.6177402277658,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-07-16T03:00:00.000Z",
+          "opened": "2026-07-16T03:06:00.000Z",
+          "closed": "2026-07-17T01:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -48.19293959273897,
+          "r": -1.0021766019659348,
+          "effectiveRiskPct": 2.996867687730747,
+          "balanceAfter": 1556.424800635027,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-07-17T06:00:00.000Z",
+          "opened": "2026-07-17T06:15:00.000Z",
+          "closed": "2026-07-17T08:14:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -45.11389904869126,
+          "r": -0.9997989888264006,
+          "effectiveRiskPct": 2.8991422683119747,
+          "balanceAfter": 1511.3109015863356,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-07-20T02:00:00.000Z",
+          "opened": "2026-07-20T02:00:00.000Z",
+          "closed": "2026-07-20T07:53:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 22.3968914733426,
+          "r": 0.6661840987593378,
+          "effectiveRiskPct": 2.224537177459663,
+          "balanceAfter": 1533.7077930596781,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-07-21T05:00:00.000Z",
+          "opened": "2026-07-21T05:09:00.000Z",
+          "closed": "2026-07-21T08:51:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 80.94247684033137,
+          "r": 2.4959573157114985,
+          "effectiveRiskPct": 2.1144465500008662,
+          "balanceAfter": 1614.6502699000096,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 8,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-07-23T05:00:00.000Z",
+          "opened": "2026-07-23T05:19:00.000Z",
+          "closed": "2026-07-23T07:54:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 75.37712673762236,
+          "r": 2.4972273047526947,
+          "effectiveRiskPct": 1.8694034265047126,
+          "balanceAfter": 1690.027396637632,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-07-24T04:00:00.000Z",
+          "opened": "2026-07-24T04:16:00.000Z",
+          "closed": "2026-07-24T11:57:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -40.62240897711369,
+          "r": -1.000574217628481,
+          "effectiveRiskPct": 2.402274444847102,
+          "balanceAfter": 1649.4049876605181,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-07-27T03:00:00.000Z",
+          "opened": "2026-07-27T03:30:00.000Z",
+          "closed": "2026-07-27T08:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 55.761873003614426,
+          "r": 1.1277245603565658,
+          "effectiveRiskPct": 2.9978300636425486,
+          "balanceAfter": 1705.1668606641326,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-07-29T00:00:00.000Z",
+          "opened": "2026-07-29T00:21:00.000Z",
+          "closed": "2026-07-29T03:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 38.74109003180464,
+          "r": 0.9310003971225989,
+          "effectiveRiskPct": 2.4403666768553496,
+          "balanceAfter": 1743.9079506959372,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-07-29T06:00:00.000Z",
+          "opened": "2026-07-29T06:07:00.000Z",
+          "closed": "2026-07-29T08:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.4614423310548,
+          "r": 0.8503696923811572,
+          "effectiveRiskPct": 2.9981421227803606,
+          "balanceAfter": 1788.369393026992,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-07-30T00:00:00.000Z",
+          "opened": "2026-07-30T00:01:00.000Z",
+          "closed": "2026-07-30T00:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -43.8576588071681,
+          "r": -0.9997303941850563,
+          "effectiveRiskPct": 2.4530438983588954,
+          "balanceAfter": 1744.511734219824,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-07-30T03:00:00.000Z",
+          "opened": "2026-07-30T03:21:00.000Z",
+          "closed": "2026-07-30T07:04:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.31000061404195,
+          "r": -0.9997677318076607,
+          "effectiveRiskPct": 2.999243419215383,
+          "balanceAfter": 1692.201733605782,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-08-05T00:00:00.000Z",
+          "opened": "2026-08-05T00:22:00.000Z",
+          "closed": "2026-08-05T02:53:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.85128176886343,
+          "r": 1.0464101553523824,
+          "effectiveRiskPct": 2.9847052053714784,
+          "balanceAfter": 1745.0530153746454,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-07T04:00:00.000Z",
+          "opened": "2026-08-07T04:30:00.000Z",
+          "closed": "2026-08-07T08:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.18897900933234,
+          "r": 0.7926403565291418,
+          "effectiveRiskPct": 2.1825470747850715,
+          "balanceAfter": 1775.2419943839777,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-08-10T05:00:00.000Z",
+          "opened": "2026-08-10T05:35:00.000Z",
+          "closed": "2026-08-10T13:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -50.172966934954125,
+          "r": -1.0002597751213367,
+          "effectiveRiskPct": 2.8255267050921336,
+          "balanceAfter": 1725.0690274490237,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-11T02:00:00.000Z",
+          "opened": "2026-08-11T02:09:00.000Z",
+          "closed": "2026-08-12T02:09:00.000Z",
+          "reason": "timeout",
+          "pnl": 35.92715682061436,
+          "r": 0.7148615013671832,
+          "effectiveRiskPct": 2.913362078657834,
+          "balanceAfter": 1760.996184269638,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-12T03:00:00.000Z",
+          "opened": "2026-08-12T03:28:00.000Z",
+          "closed": "2026-08-12T09:24:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -48.16875163455853,
+          "r": -1.002111302414785,
+          "effectiveRiskPct": 2.7295497586440907,
+          "balanceAfter": 1712.8274326350795,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-13T06:00:00.000Z",
+          "opened": "2026-08-13T06:12:00.000Z",
+          "closed": "2026-08-13T12:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -51.34812927669304,
+          "r": -0.9993522011551503,
+          "effectiveRiskPct": 2.999800979269986,
+          "balanceAfter": 1661.4793033583865,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-08-14T07:00:00.000Z",
+          "opened": "2026-08-14T07:03:00.000Z",
+          "closed": "2026-08-14T11:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 45.80162626363992,
+          "r": 0.9209267819564975,
+          "effectiveRiskPct": 2.9933731567866895,
+          "balanceAfter": 1707.2809296220264,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-08-17T04:00:00.000Z",
+          "opened": "2026-08-17T04:06:00.000Z",
+          "closed": "2026-08-17T07:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 29.79311770711567,
+          "r": 0.7703005861708948,
+          "effectiveRiskPct": 2.265430456163471,
+          "balanceAfter": 1737.074047329142,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-08-20T02:00:00.000Z",
+          "opened": "2026-08-20T02:02:00.000Z",
+          "closed": "2026-08-20T08:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 53.83624985563473,
+          "r": 1.034597865786412,
+          "effectiveRiskPct": 2.995607367667323,
+          "balanceAfter": 1790.910297184777,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-08-21T02:00:00.000Z",
+          "opened": "2026-08-21T02:23:00.000Z",
+          "closed": "2026-08-21T13:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -53.762934485257226,
+          "r": -1.0009761067895078,
+          "effectiveRiskPct": 2.999061839046295,
+          "balanceAfter": 1737.1473626995198,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-08-24T00:00:00.000Z",
+          "opened": "2026-08-24T00:03:00.000Z",
+          "closed": "2026-08-24T07:17:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.076042811762896,
+          "r": -0.9997304606233129,
+          "effectiveRiskPct": 2.9985989823774273,
+          "balanceAfter": 1685.071319887757,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-25T06:00:00.000Z",
+          "opened": "2026-08-25T06:24:00.000Z",
+          "closed": "2026-08-25T09:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -35.92466471926931,
+          "r": -0.9988810526712175,
+          "effectiveRiskPct": 2.1343255405299524,
+          "balanceAfter": 1649.1466551684878,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-08-26T05:00:00.000Z",
+          "opened": "2026-08-26T05:01:00.000Z",
+          "closed": "2026-08-26T12:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 27.8093534675528,
+          "r": 0.8585417478507692,
+          "effectiveRiskPct": 1.9641298490500414,
+          "balanceAfter": 1676.9560086360407,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-09-01T01:00:00.000Z",
+          "opened": "2026-09-01T01:06:00.000Z",
+          "closed": "2026-09-01T08:41:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.67788218957226,
+          "r": 1.0500914584853498,
+          "effectiveRiskPct": 2.991434587973327,
+          "balanceAfter": 1729.633890825613,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-02T00:00:00.000Z",
+          "opened": "2026-09-02T00:20:00.000Z",
+          "closed": "2026-09-02T01:27:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -33.45487644613092,
+          "r": -1.0000754034082342,
+          "effectiveRiskPct": 1.9340713778831,
+          "balanceAfter": 1696.1790143794822,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-09-03T01:00:00.000Z",
+          "opened": "2026-09-03T01:34:00.000Z",
+          "closed": "2026-09-03T08:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.604733003963176,
+          "r": 1.01506387200636,
+          "effectiveRiskPct": 2.997260422159331,
+          "balanceAfter": 1747.7837473834454,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-09-10T02:00:00.000Z",
+          "opened": "2026-09-10T02:01:00.000Z",
+          "closed": "2026-09-10T09:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.34641900619004,
+          "r": -0.998579791665502,
+          "effectiveRiskPct": 2.9992765202031966,
+          "balanceAfter": 1695.4373283772554,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-09-11T02:00:00.000Z",
+          "opened": "2026-09-11T02:31:00.000Z",
+          "closed": "2026-09-11T05:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -50.839780765770215,
+          "r": -0.9999569453593553,
+          "effectiveRiskPct": 2.9987525281851317,
+          "balanceAfter": 1644.5975476114852,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-09-11T07:00:00.000Z",
+          "opened": "2026-09-11T07:08:00.000Z",
+          "closed": "2026-09-11T11:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.822174850697536,
+          "r": 1.0733154867385533,
+          "effectiveRiskPct": 2.992466135475274,
+          "balanceAfter": 1697.4197224621828,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-09-15T00:00:00.000Z",
+          "opened": "2026-09-15T00:29:00.000Z",
+          "closed": "2026-09-15T06:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.039811783070405,
+          "r": 1.1509866400068007,
+          "effectiveRiskPct": 2.6636440630474887,
+          "balanceAfter": 1749.4595342452533,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-09-16T00:00:00.000Z",
+          "opened": "2026-09-16T00:11:00.000Z",
+          "closed": "2026-09-16T02:35:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.70668613340293,
+          "r": -0.999618752193258,
+          "effectiveRiskPct": 2.442067011972102,
+          "balanceAfter": 1706.7528481118504,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-17T01:00:00.000Z",
+          "opened": "2026-09-17T01:00:00.000Z",
+          "closed": "2026-09-17T05:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -51.189416959052764,
+          "r": -1.001801892546768,
+          "effectiveRiskPct": 2.993833881127232,
+          "balanceAfter": 1655.5634311527976,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-09-17T07:00:00.000Z",
+          "opened": "2026-09-17T07:02:00.000Z",
+          "closed": "2026-09-17T17:25:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.21550848120261,
+          "r": 1.0346977948010672,
+          "effectiveRiskPct": 2.9898000197891337,
+          "balanceAfter": 1706.7789396340002,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-09-18T05:00:00.000Z",
+          "opened": "2026-09-18T05:21:00.000Z",
+          "closed": "2026-09-18T12:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 71.84895390372795,
+          "r": 1.6031681648282765,
+          "effectiveRiskPct": 2.625814811799429,
+          "balanceAfter": 1778.6278935377281,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-21T03:00:00.000Z",
+          "opened": "2026-09-21T03:01:00.000Z",
+          "closed": "2026-09-21T04:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 49.724492683655484,
+          "r": 1.0935107292847221,
+          "effectiveRiskPct": 2.5565966376098594,
+          "balanceAfter": 1828.3523862213835,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-09-23T01:00:00.000Z",
+          "opened": "2026-09-23T01:17:00.000Z",
+          "closed": "2026-09-23T04:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 57.80789912362773,
+          "r": 1.3030883375484663,
+          "effectiveRiskPct": 2.426349875289826,
+          "balanceAfter": 1886.1602853450113,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-23T06:00:00.000Z",
+          "opened": "2026-09-23T06:10:00.000Z",
+          "closed": "2026-09-23T09:55:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 47.744056145969665,
+          "r": 0.8971191072535568,
+          "effectiveRiskPct": 2.821568572717825,
+          "balanceAfter": 1933.9043414909809,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-09-25T07:00:00.000Z",
+          "opened": "2026-09-25T07:39:00.000Z",
+          "closed": "2026-09-25T12:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -57.84440994932963,
+          "r": -0.9999935539399369,
+          "effectiveRiskPct": 2.9910881101635813,
+          "balanceAfter": 1876.0599315416512,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-28T06:00:00.000Z",
+          "opened": "2026-09-28T06:07:00.000Z",
+          "closed": "2026-09-28T08:05:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 141.32183457028884,
+          "r": 2.515176909796213,
+          "effectiveRiskPct": 2.994980652513523,
+          "balanceAfter": 2017.3817661119401,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-29T03:00:00.000Z",
+          "opened": "2026-09-29T03:09:00.000Z",
+          "closed": "2026-09-29T04:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.44161781225604,
+          "r": -0.9997373318504694,
+          "effectiveRiskPct": 2.996829806185779,
+          "balanceAfter": 1956.940148299684,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-01T02:00:00.000Z",
+          "opened": "2026-10-01T02:05:00.000Z",
+          "closed": "2026-10-01T07:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 62.998094075715954,
+          "r": 1.074360110766613,
+          "effectiveRiskPct": 2.9964014052421066,
+          "balanceAfter": 2019.9382423754,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 7,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-05T00:00:00.000Z",
+          "opened": "2026-10-05T00:16:00.000Z",
+          "closed": "2026-10-05T01:59:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 66.35176586338581,
+          "r": 1.0968557005993642,
+          "effectiveRiskPct": 2.9947798149311393,
+          "balanceAfter": 2086.290008238786,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-05T03:00:00.000Z",
+          "opened": "2026-10-05T03:30:00.000Z",
+          "closed": "2026-10-05T06:40:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -62.60794081268828,
+          "r": -1.0014411020459109,
+          "effectiveRiskPct": 2.9966038263959387,
+          "balanceAfter": 2023.6820674260978,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-06T01:00:00.000Z",
+          "opened": "2026-10-06T01:32:00.000Z",
+          "closed": "2026-10-06T13:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 66.43786656484903,
+          "r": 1.0947294781203827,
+          "effectiveRiskPct": 2.9989317500992314,
+          "balanceAfter": 2090.1199339909467,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-10-07T06:00:00.000Z",
+          "opened": "2026-10-07T06:35:00.000Z",
+          "closed": "2026-10-07T07:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -54.535325759961225,
+          "r": -1.0010161197595182,
+          "effectiveRiskPct": 2.606547437896103,
+          "balanceAfter": 2035.5846082309854,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-08T00:00:00.000Z",
+          "opened": "2026-10-08T00:15:00.000Z",
+          "closed": "2026-10-08T01:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -46.53850100607054,
+          "r": -0.9994199975907593,
+          "effectiveRiskPct": 2.287574239127866,
+          "balanceAfter": 1989.0461072249147,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-08T03:00:00.000Z",
+          "opened": "2026-10-08T03:14:00.000Z",
+          "closed": "2026-10-08T10:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 56.100276807631325,
+          "r": 0.9422593946688318,
+          "effectiveRiskPct": 2.9932960838325093,
+          "balanceAfter": 2045.1463840325462,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-12T04:00:00.000Z",
+          "opened": "2026-10-12T04:17:00.000Z",
+          "closed": "2026-10-12T16:41:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -43.98384773952761,
+          "r": -1.0016999406997429,
+          "effectiveRiskPct": 2.146995688826636,
+          "balanceAfter": 2001.1625362930185,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-14T05:00:00.000Z",
+          "opened": "2026-10-14T05:24:00.000Z",
+          "closed": "2026-10-14T08:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 65.66248759808735,
+          "r": 1.0939901164474326,
+          "effectiveRiskPct": 2.99931147784964,
+          "balanceAfter": 2066.825023891106,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-10-16T02:00:00.000Z",
+          "opened": "2026-10-16T02:04:00.000Z",
+          "closed": "2026-10-16T03:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -58.734853974977426,
+          "r": -0.9995770251331666,
+          "effectiveRiskPct": 2.8429938275064273,
+          "balanceAfter": 2008.0901699161286,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-16T06:00:00.000Z",
+          "opened": "2026-10-16T06:08:00.000Z",
+          "closed": "2026-10-16T06:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.09800038274115,
+          "r": -0.9990742924790715,
+          "effectiveRiskPct": 2.9955669323336984,
+          "balanceAfter": 1947.9921695333874,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-19T02:00:00.000Z",
+          "opened": "2026-10-19T02:03:00.000Z",
+          "closed": "2026-10-19T11:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 65.81690636740892,
+          "r": 1.1279203331759287,
+          "effectiveRiskPct": 2.995517302171272,
+          "balanceAfter": 2013.8090759007962,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-22T00:00:00.000Z",
+          "opened": "2026-10-22T00:00:00.000Z",
+          "closed": "2026-10-22T01:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.38804600976552,
+          "r": -1.0005343759602068,
+          "effectiveRiskPct": 2.9970961024572715,
+          "balanceAfter": 1953.4210298910307,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-10-23T04:00:00.000Z",
+          "opened": "2026-10-23T04:28:00.000Z",
+          "closed": "2026-10-23T06:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -58.519216790837525,
+          "r": -0.9993185535162639,
+          "effectiveRiskPct": 2.9977726666368607,
+          "balanceAfter": 1894.901813100193,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-10-26T04:00:00.000Z",
+          "opened": "2026-10-26T04:21:00.000Z",
+          "closed": "2026-10-26T07:51:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 69.3678301939041,
+          "r": 1.220515190820116,
+          "effectiveRiskPct": 2.999357336301031,
+          "balanceAfter": 1964.2696432940972,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-10-27T01:00:00.000Z",
+          "opened": "2026-10-27T01:04:00.000Z",
+          "closed": "2026-10-27T07:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 48.929564971981755,
+          "r": 0.9771350623868675,
+          "effectiveRiskPct": 2.549268926455142,
+          "balanceAfter": 2013.199208266079,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-10-28T00:00:00.000Z",
+          "opened": "2026-10-28T00:02:00.000Z",
+          "closed": "2026-10-28T00:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.434331009981264,
+          "r": 1.0731354380211633,
+          "effectiveRiskPct": 1.9178694599201225,
+          "balanceAfter": 2054.63353927606,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-29T05:00:00.000Z",
+          "opened": "2026-10-29T05:05:00.000Z",
+          "closed": "2026-10-29T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -61.59697115370861,
+          "r": -1.0005461480914684,
+          "effectiveRiskPct": 2.996317701994713,
+          "balanceAfter": 1993.0365681223516,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-30T01:00:00.000Z",
+          "opened": "2026-10-30T01:06:00.000Z",
+          "closed": "2026-10-30T01:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -59.6866395640966,
+          "r": -0.9994020179662362,
+          "effectiveRiskPct": 2.9965507614416333,
+          "balanceAfter": 1933.349928558255,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-30T05:00:00.000Z",
+          "opened": "2026-10-30T05:13:00.000Z",
+          "closed": "2026-10-30T07:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 61.806216833648215,
+          "r": 1.1907422983590923,
+          "effectiveRiskPct": 2.684750384714166,
+          "balanceAfter": 1995.1561453919032,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-02T04:00:00.000Z",
+          "opened": "2026-11-02T04:26:00.000Z",
+          "closed": "2026-11-02T07:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 79.58923638330928,
+          "r": 1.3313021895475792,
+          "effectiveRiskPct": 2.9964069892225917,
+          "balanceAfter": 2074.7453817752125,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:19:00.000Z",
+          "closed": "2026-11-03T00:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -62.19482738681463,
+          "r": -1.0000484083018586,
+          "effectiveRiskPct": 2.9975638135105216,
+          "balanceAfter": 2012.5505543883978,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.91565578813697,
+          "r": 0.7445223899443397,
+          "effectiveRiskPct": 2.99759657390643,
+          "balanceAfter": 2057.466210176535,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-11-04T05:00:00.000Z",
+          "opened": "2026-11-04T05:03:00.000Z",
+          "closed": "2026-11-04T07:45:00.000Z",
+          "reason": "periodBoundary",
+          "pnl": 27.423025529224187,
+          "r": 0.4448093624252721,
+          "effectiveRiskPct": 2.9964617389660004,
+          "balanceAfter": 2084.889235705759,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        }
+      ]
+    },
+    "refactored": {
+      "slots": 1,
+      "from": "2026-01-01T00:00:00.000Z",
+      "to": "2026-11-04T07:45:00.000Z",
+      "startCapital": 1000,
+      "finalBalance": 2084.889235705759,
+      "returnPct": 108.48892357057589,
+      "trades": 137,
+      "wins": 79,
+      "winRate": 57.66423357664234,
+      "profitFactor": 1.4305419995768849,
+      "maxDrawdownPct": 16.569786749553778,
+      "maxMarginUsagePct": 89.99906090711632,
+      "maxEffectiveRiskPct": 2.9999910364797895,
+      "maxConcurrent": 1,
+      "rejections": {
+        "symbolOccupied": 0,
+        "notSelected": 152,
+        "pendingExpired": 178,
+        "portfolioFull": 89
+      },
+      "activeDays": 116,
+      "positiveDays": 70,
+      "negativeDays": 45,
+      "positiveDayPct": 60.3448275862069,
+      "longestLosingDayStreak": 3,
+      "monthly": {
+        "2026-01": -6.077928475173923,
+        "2026-02": 61.82759868258398,
+        "2026-03": 267.0842045179171,
+        "2026-04": 33.64211053070444,
+        "2026-05": -0.2038814001384992,
+        "2026-06": 248.34563637187316,
+        "2026-07": 87.58399337801625,
+        "2026-08": -15.245724969741875,
+        "2026-09": 279.98413966364313,
+        "2026-10": 38.215997092219226,
+        "2026-11": 89.73309031385581
+      },
+      "bySymbol": {
+        "AUDJPY": {
+          "trades": 14,
+          "pnl": -97.31624829336208,
+          "wins": 5
+        },
+        "AUDUSD": {
+          "trades": 40,
+          "pnl": 87.50769743994621,
+          "wins": 20
+        },
+        "EURJPY": {
+          "trades": 9,
+          "pnl": 90.02094769044135,
+          "wins": 6
+        },
+        "EURUSD": {
+          "trades": 28,
+          "pnl": 426.2037935419613,
+          "wins": 18
+        },
+        "GBPUSD": {
+          "trades": 31,
+          "pnl": 411.42283164916097,
+          "wins": 21
+        },
+        "USDCHF": {
+          "trades": 8,
+          "pnl": 119.04105939919552,
+          "wins": 5
+        },
+        "USDJPY": {
+          "trades": 7,
+          "pnl": 48.009154278415465,
+          "wins": 4
+        }
+      },
+      "bySessionCombination": {
+        "sydney+tokyo": {
+          "trades": 125,
+          "pnl": 804.4902230774719,
+          "wins": 70
+        },
+        "tokyo": {
+          "trades": 12,
+          "pnl": 280.3990126282869,
+          "wins": 9
+        }
+      },
+      "tradeLog": [
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-06T01:00:00.000Z",
+          "opened": "2026-01-06T01:01:00.000Z",
+          "closed": "2026-01-06T04:40:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 36.73825960965057,
+          "r": 1.3684899507878772,
+          "effectiveRiskPct": 2.684583806296813,
+          "balanceAfter": 1036.7382596096506,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-01-19T02:00:00.000Z",
+          "opened": "2026-01-19T02:19:00.000Z",
+          "closed": "2026-01-19T05:26:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.990538879958834,
+          "r": -0.9987711715118028,
+          "effectiveRiskPct": 2.9929123868327094,
+          "balanceAfter": 1005.7477207296918,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-21T05:00:00.000Z",
+          "opened": "2026-01-21T05:29:00.000Z",
+          "closed": "2026-01-21T07:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.27494560812324,
+          "r": 1.1721837217137352,
+          "effectiveRiskPct": 2.9921379316159946,
+          "balanceAfter": 1041.022666337815,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-01-22T05:00:00.000Z",
+          "opened": "2026-01-22T05:21:00.000Z",
+          "closed": "2026-01-22T09:05:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 10.264657074913758,
+          "r": 0.32898113374034915,
+          "effectiveRiskPct": 2.997183039772846,
+          "balanceAfter": 1051.2873234127287,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-23T04:00:00.000Z",
+          "opened": "2026-01-23T04:40:00.000Z",
+          "closed": "2026-01-23T13:24:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 37.75686608473541,
+          "r": 1.1986620997132968,
+          "effectiveRiskPct": 2.9962478697069783,
+          "balanceAfter": 1089.0441894974642,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-01-26T01:00:00.000Z",
+          "opened": "2026-01-26T01:05:00.000Z",
+          "closed": "2026-01-26T07:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -32.689425127196145,
+          "r": -1.001655160765934,
+          "effectiveRiskPct": 2.9967019331778104,
+          "balanceAfter": 1056.3547643702682,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-27T02:00:00.000Z",
+          "opened": "2026-01-27T02:19:00.000Z",
+          "closed": "2026-01-27T08:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -31.656314437877583,
+          "r": -1.00181322133529,
+          "effectiveRiskPct": 2.9913263507014336,
+          "balanceAfter": 1024.6984499323905,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-01-28T03:00:00.000Z",
+          "opened": "2026-01-28T03:20:00.000Z",
+          "closed": "2026-01-28T07:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 0,
+          "r": 0,
+          "effectiveRiskPct": 2.9946629776286584,
+          "balanceAfter": 1024.6984499323905,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-01-29T03:00:00.000Z",
+          "opened": "2026-01-29T03:05:00.000Z",
+          "closed": "2026-01-29T10:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.77637840756434,
+          "r": -1.0022936835804903,
+          "effectiveRiskPct": 2.9965838905373485,
+          "balanceAfter": 993.9220715248262,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-02-05T02:00:00.000Z",
+          "opened": "2026-02-05T02:06:00.000Z",
+          "closed": "2026-02-05T03:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 32.30324805613056,
+          "r": 1.0859703944298058,
+          "effectiveRiskPct": 2.992787434402078,
+          "balanceAfter": 1026.2253195809567,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-02-11T06:00:00.000Z",
+          "opened": "2026-02-11T06:04:00.000Z",
+          "closed": "2026-02-11T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.75993301744454,
+          "r": -1.0004112963810117,
+          "effectiveRiskPct": 2.9961535915158892,
+          "balanceAfter": 995.4653865635122,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-18T00:00:00.000Z",
+          "opened": "2026-02-18T00:34:00.000Z",
+          "closed": "2026-02-18T03:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 26.33323341031616,
+          "r": 0.8829788053098718,
+          "effectiveRiskPct": 2.99590298597953,
+          "balanceAfter": 1021.7986199738284,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-19T00:00:00.000Z",
+          "opened": "2026-02-19T00:29:00.000Z",
+          "closed": "2026-02-19T00:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -28.474616523112662,
+          "r": -0.9998727751555325,
+          "effectiveRiskPct": 2.787069693190022,
+          "balanceAfter": 993.3240034507157,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-19T04:00:00.000Z",
+          "opened": "2026-02-19T04:22:00.000Z",
+          "closed": "2026-02-19T07:38:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -29.777911495122368,
+          "r": -0.9992711462919569,
+          "effectiveRiskPct": 2.9999910364797895,
+          "balanceAfter": 963.5460919555934,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-20T00:00:00.000Z",
+          "opened": "2026-02-20T00:21:00.000Z",
+          "closed": "2026-02-20T01:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.34288775783677,
+          "r": 1.4011310533679426,
+          "effectiveRiskPct": 2.9882417499873646,
+          "balanceAfter": 1003.8889797134302,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-02-24T04:00:00.000Z",
+          "opened": "2026-02-24T04:40:00.000Z",
+          "closed": "2026-02-24T12:28:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 33.54040959486452,
+          "r": 1.116583382098189,
+          "effectiveRiskPct": 2.992206176765218,
+          "balanceAfter": 1037.4293893082947,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-02-27T06:00:00.000Z",
+          "opened": "2026-02-27T06:17:00.000Z",
+          "closed": "2026-02-27T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 18.320280899115534,
+          "r": 0.5895837162708556,
+          "effectiveRiskPct": 2.9952156835054367,
+          "balanceAfter": 1055.7496702074102,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-03T02:00:00.000Z",
+          "opened": "2026-03-03T02:02:00.000Z",
+          "closed": "2026-03-03T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 54.316267706748526,
+          "r": 1.7200175948325371,
+          "effectiveRiskPct": 2.991135423856263,
+          "balanceAfter": 1110.0659379141587,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 9,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-04T00:00:00.000Z",
+          "opened": "2026-03-04T00:02:00.000Z",
+          "closed": "2026-03-04T01:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 23.905571440279747,
+          "r": 0.7201972085038649,
+          "effectiveRiskPct": 2.9901909257278834,
+          "balanceAfter": 1133.9715093544385,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-05T02:00:00.000Z",
+          "opened": "2026-03-05T02:24:00.000Z",
+          "closed": "2026-03-05T04:51:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.698441208269074,
+          "r": 1.0551865759534589,
+          "effectiveRiskPct": 2.9834437368623856,
+          "balanceAfter": 1169.6699505627075,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-03-06T05:00:00.000Z",
+          "opened": "2026-03-06T05:31:00.000Z",
+          "closed": "2026-03-06T09:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 75.65338664340949,
+          "r": 2.157320582884158,
+          "effectiveRiskPct": 2.9981292692153017,
+          "balanceAfter": 1245.323337206117,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 9,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-09T07:00:00.000Z",
+          "opened": "2026-03-09T07:05:00.000Z",
+          "closed": "2026-03-09T09:33:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -37.160540281038905,
+          "r": -0.998641944873342,
+          "effectiveRiskPct": 2.9880653369635204,
+          "balanceAfter": 1208.162796925078,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-10T05:00:00.000Z",
+          "opened": "2026-03-10T05:03:00.000Z",
+          "closed": "2026-03-10T06:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.031107748781544,
+          "r": 1.1323487701129518,
+          "effectiveRiskPct": 2.999214803880216,
+          "balanceAfter": 1249.1939046738596,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-11T00:00:00.000Z",
+          "opened": "2026-03-11T00:09:00.000Z",
+          "closed": "2026-03-11T03:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 39.9688710599704,
+          "r": 1.0670940512194151,
+          "effectiveRiskPct": 2.998398322830858,
+          "balanceAfter": 1289.16277573383,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-13T02:00:00.000Z",
+          "opened": "2026-03-13T02:39:00.000Z",
+          "closed": "2026-03-13T05:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.406154247342066,
+          "r": 0.7865543479272885,
+          "effectiveRiskPct": 2.9986446358868064,
+          "balanceAfter": 1319.568929981172,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-17T07:00:00.000Z",
+          "opened": "2026-03-17T07:03:00.000Z",
+          "closed": "2026-03-17T08:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 47.21460750793817,
+          "r": 1.1953042130713905,
+          "effectiveRiskPct": 2.993407567459082,
+          "balanceAfter": 1366.7835374891101,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-03-18T04:00:00.000Z",
+          "opened": "2026-03-18T04:05:00.000Z",
+          "closed": "2026-03-18T07:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.153428483449765,
+          "r": -1.0006158303083923,
+          "effectiveRiskPct": 2.4972797648975664,
+          "balanceAfter": 1332.6301090056604,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-19T02:00:00.000Z",
+          "opened": "2026-03-19T02:05:00.000Z",
+          "closed": "2026-03-19T02:09:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.83408268880172,
+          "r": -0.9990076299330151,
+          "effectiveRiskPct": 2.9921019972576146,
+          "balanceAfter": 1292.7960263168586,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-03-19T04:00:00.000Z",
+          "opened": "2026-03-19T04:05:00.000Z",
+          "closed": "2026-03-19T06:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 20.375335120644497,
+          "r": 0.5258655851149404,
+          "effectiveRiskPct": 2.9970915020017066,
+          "balanceAfter": 1313.171361437503,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-03-20T01:00:00.000Z",
+          "opened": "2026-03-20T01:00:00.000Z",
+          "closed": "2026-03-20T09:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.462147342545066,
+          "r": -1.0017830326269004,
+          "effectiveRiskPct": 2.9997539877930377,
+          "balanceAfter": 1273.709214094958,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-24T00:00:00.000Z",
+          "opened": "2026-03-24T00:02:00.000Z",
+          "closed": "2026-03-24T01:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 18.126544287913212,
+          "r": 0.47502995842649776,
+          "effectiveRiskPct": 2.9958752563901174,
+          "balanceAfter": 1291.8357583828713,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-03-24T06:00:00.000Z",
+          "opened": "2026-03-24T06:02:00.000Z",
+          "closed": "2026-03-24T07:20:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.114948371450076,
+          "r": 1.1438377309800385,
+          "effectiveRiskPct": 2.985479238081471,
+          "balanceAfter": 1335.9507067543213,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-25T00:00:00.000Z",
+          "opened": "2026-03-25T00:30:00.000Z",
+          "closed": "2026-03-25T00:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.904902344335994,
+          "r": -0.9985984703550687,
+          "effectiveRiskPct": 2.991196347330938,
+          "balanceAfter": 1296.0458044099853,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-25T02:00:00.000Z",
+          "opened": "2026-03-25T02:05:00.000Z",
+          "closed": "2026-03-25T12:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.64226117327457,
+          "r": 0.791039965562596,
+          "effectiveRiskPct": 2.9888356419489224,
+          "balanceAfter": 1326.68806558326,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-26T06:00:00.000Z",
+          "opened": "2026-03-26T06:12:00.000Z",
+          "closed": "2026-03-26T12:06:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 85.74514507306965,
+          "r": 2.159124399776299,
+          "effectiveRiskPct": 2.9933882651182273,
+          "balanceAfter": 1412.4332106563295,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 10,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-27T00:00:00.000Z",
+          "opened": "2026-03-27T00:19:00.000Z",
+          "closed": "2026-03-27T03:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.31637805855912,
+          "r": -0.9999479855226372,
+          "effectiveRiskPct": 2.9961472810226746,
+          "balanceAfter": 1370.1168325977703,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-30T07:00:00.000Z",
+          "opened": "2026-03-30T07:00:00.000Z",
+          "closed": "2026-03-30T14:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 35.64322754253322,
+          "r": 0.86777857429594,
+          "effectiveRiskPct": 2.99785413739549,
+          "balanceAfter": 1405.7600601403035,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-31T00:00:00.000Z",
+          "opened": "2026-03-31T00:09:00.000Z",
+          "closed": "2026-03-31T00:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.034235200271354,
+          "r": -0.9987882116532192,
+          "effectiveRiskPct": 2.9937707571314887,
+          "balanceAfter": 1363.7258249400322,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-03-31T03:00:00.000Z",
+          "opened": "2026-03-31T03:04:00.000Z",
+          "closed": "2026-03-31T11:25:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -40.891950214705226,
+          "r": -1.0005841707173528,
+          "effectiveRiskPct": 2.996795655979036,
+          "balanceAfter": 1322.833874725327,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-02T01:00:00.000Z",
+          "opened": "2026-04-02T01:11:00.000Z",
+          "closed": "2026-04-02T01:17:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -39.6265264630044,
+          "r": -1.0010964202311117,
+          "effectiveRiskPct": 2.992297633009642,
+          "balanceAfter": 1283.2073482623225,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-02T07:00:00.000Z",
+          "opened": "2026-04-02T07:25:00.000Z",
+          "closed": "2026-04-02T10:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.379653155088654,
+          "r": -1.0019196775636598,
+          "effectiveRiskPct": 2.9851853492069105,
+          "balanceAfter": 1244.827695107234,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-04-03T02:00:00.000Z",
+          "opened": "2026-04-03T02:22:00.000Z",
+          "closed": "2026-04-03T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -36.310614825311646,
+          "r": -0.99967068346181,
+          "effectiveRiskPct": 2.917879847404704,
+          "balanceAfter": 1208.5170802819223,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-07T00:00:00.000Z",
+          "opened": "2026-04-07T00:15:00.000Z",
+          "closed": "2026-04-07T01:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -30.12104061122221,
+          "r": -1.0003033599278872,
+          "effectiveRiskPct": 2.4916409008142253,
+          "balanceAfter": 1178.3960396707,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-07T03:00:00.000Z",
+          "opened": "2026-04-07T03:40:00.000Z",
+          "closed": "2026-04-07T08:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.814329514841376,
+          "r": 1.268646366445748,
+          "effectiveRiskPct": 2.997678471551383,
+          "balanceAfter": 1223.2103691855414,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-08T05:00:00.000Z",
+          "opened": "2026-04-08T05:21:00.000Z",
+          "closed": "2026-04-08T06:02:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 6.205211796064415,
+          "r": 0.16954595951173287,
+          "effectiveRiskPct": 2.9920442423012377,
+          "balanceAfter": 1229.4155809816057,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-04-09T02:00:00.000Z",
+          "opened": "2026-04-09T02:20:00.000Z",
+          "closed": "2026-04-09T12:07:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.34775836468187,
+          "r": 1.4250162013563703,
+          "effectiveRiskPct": 2.9879929898312514,
+          "balanceAfter": 1281.7633393462875,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-04-10T01:00:00.000Z",
+          "opened": "2026-04-10T01:31:00.000Z",
+          "closed": "2026-04-10T03:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -37.37774185408944,
+          "r": -0.9997091891938127,
+          "effectiveRiskPct": 2.916967096780114,
+          "balanceAfter": 1244.385597492198,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-04-13T06:00:00.000Z",
+          "opened": "2026-04-13T06:07:00.000Z",
+          "closed": "2026-04-13T06:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.132308179682276,
+          "r": -1.0007363297387313,
+          "effectiveRiskPct": 2.7408862740892475,
+          "balanceAfter": 1210.2532893125158,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-04-14T03:00:00.000Z",
+          "opened": "2026-04-14T03:34:00.000Z",
+          "closed": "2026-04-14T06:15:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 6.519659732938639,
+          "r": 0.24105913042051502,
+          "effectiveRiskPct": 2.234730070205579,
+          "balanceAfter": 1216.7729490454544,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-20T05:00:00.000Z",
+          "opened": "2026-04-20T05:30:00.000Z",
+          "closed": "2026-04-20T06:57:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -33.18130618664127,
+          "r": -0.9996599579197923,
+          "effectiveRiskPct": 2.7279200356215867,
+          "balanceAfter": 1183.5916428588132,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-04-22T07:00:00.000Z",
+          "opened": "2026-04-22T07:23:00.000Z",
+          "closed": "2026-04-22T12:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.642183842872214,
+          "r": 0.8658701465913288,
+          "effectiveRiskPct": 2.9899577913824644,
+          "balanceAfter": 1214.2338267016853,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-23T02:00:00.000Z",
+          "opened": "2026-04-23T02:11:00.000Z",
+          "closed": "2026-04-23T11:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 59.338768697441935,
+          "r": 1.9142421615300351,
+          "effectiveRiskPct": 2.552932460398989,
+          "balanceAfter": 1273.5725953991273,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 7,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-04-29T01:00:00.000Z",
+          "opened": "2026-04-29T01:02:00.000Z",
+          "closed": "2026-04-29T05:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 34.303078481405564,
+          "r": 0.9764001256525062,
+          "effectiveRiskPct": 2.758554476481134,
+          "balanceAfter": 1307.8756738805328,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-04-30T01:00:00.000Z",
+          "opened": "2026-04-30T01:07:00.000Z",
+          "closed": "2026-04-30T04:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 48.600311375498336,
+          "r": 1.2406559422420498,
+          "effectiveRiskPct": 2.9951682932628283,
+          "balanceAfter": 1356.475985256031,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-05-05T03:00:00.000Z",
+          "opened": "2026-05-05T03:42:00.000Z",
+          "closed": "2026-05-05T06:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -34.60421345310521,
+          "r": -0.9999058924179234,
+          "effectiveRiskPct": 2.5512777708278294,
+          "balanceAfter": 1321.8717718029259,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-05-07T01:00:00.000Z",
+          "opened": "2026-05-07T01:17:00.000Z",
+          "closed": "2026-05-07T08:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 34.49611909101677,
+          "r": 0.8716134662968416,
+          "effectiveRiskPct": 2.9940357289059847,
+          "balanceAfter": 1356.3678908939426,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-05-11T06:00:00.000Z",
+          "opened": "2026-05-11T06:10:00.000Z",
+          "closed": "2026-05-11T08:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.77842961629695,
+          "r": 1.3278025685573775,
+          "effectiveRiskPct": 2.8750001385329136,
+          "balanceAfter": 1408.1463205102395,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-05-13T00:00:00.000Z",
+          "opened": "2026-05-13T00:13:00.000Z",
+          "closed": "2026-05-13T01:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.667478591167274,
+          "r": -0.9994549318026001,
+          "effectiveRiskPct": 2.747481986413868,
+          "balanceAfter": 1369.4788419190722,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-05-13T03:00:00.000Z",
+          "opened": "2026-05-13T03:08:00.000Z",
+          "closed": "2026-05-13T07:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 32.42350953970935,
+          "r": 0.8890824160006942,
+          "effectiveRiskPct": 2.662947923337965,
+          "balanceAfter": 1401.9023514587816,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-05-14T06:00:00.000Z",
+          "opened": "2026-05-14T06:14:00.000Z",
+          "closed": "2026-05-14T06:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -38.70819092968354,
+          "r": -0.9993173158566193,
+          "effectiveRiskPct": 2.7630051700902194,
+          "balanceAfter": 1363.194160529098,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-05-19T00:00:00.000Z",
+          "opened": "2026-05-19T00:01:00.000Z",
+          "closed": "2026-05-19T01:08:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.350220916903254,
+          "r": 1.2811321937543911,
+          "effectiveRiskPct": 2.9975529051988827,
+          "balanceAfter": 1415.5443814460014,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-05-20T00:00:00.000Z",
+          "opened": "2026-05-20T00:00:00.000Z",
+          "closed": "2026-05-20T08:44:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.50801057438732,
+          "r": -1.0011126396729357,
+          "effectiveRiskPct": 2.9996069072069993,
+          "balanceAfter": 1373.036370871614,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-05-21T01:00:00.000Z",
+          "opened": "2026-05-21T01:08:00.000Z",
+          "closed": "2026-05-21T02:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -41.10502562072803,
+          "r": -1.0006109392545681,
+          "effectiveRiskPct": 2.9919038673308487,
+          "balanceAfter": 1331.9313452508861,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-05-29T05:00:00.000Z",
+          "opened": "2026-05-29T05:11:00.000Z",
+          "closed": "2026-05-29T07:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 24.34075860500655,
+          "r": 0.704606482772881,
+          "effectiveRiskPct": 2.593615751963276,
+          "balanceAfter": 1356.2721038558927,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-06-01T05:00:00.000Z",
+          "opened": "2026-06-01T05:05:00.000Z",
+          "closed": "2026-06-01T07:06:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 20.093932960174183,
+          "r": 0.5709824970971186,
+          "effectiveRiskPct": 2.5947488266144867,
+          "balanceAfter": 1376.366036816067,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-06-08T05:00:00.000Z",
+          "opened": "2026-06-08T05:36:00.000Z",
+          "closed": "2026-06-08T09:48:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.1663169145375,
+          "r": 1.0456000086140593,
+          "effectiveRiskPct": 2.7910170204768323,
+          "balanceAfter": 1416.5323537306044,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-06-11T00:00:00.000Z",
+          "opened": "2026-06-11T00:02:00.000Z",
+          "closed": "2026-06-11T01:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 40.70745143519997,
+          "r": 0.9601659728012807,
+          "effectiveRiskPct": 2.9929613194939693,
+          "balanceAfter": 1457.2398051658045,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-06-11T06:00:00.000Z",
+          "opened": "2026-06-11T06:04:00.000Z",
+          "closed": "2026-06-11T12:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.89305725887291,
+          "r": 0.9587719677422055,
+          "effectiveRiskPct": 2.9984423405523954,
+          "balanceAfter": 1499.1328624246773,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-12T03:00:00.000Z",
+          "opened": "2026-06-12T03:34:00.000Z",
+          "closed": "2026-06-12T05:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -44.9594097217718,
+          "r": -1.0005276519918862,
+          "effectiveRiskPct": 2.997446086122441,
+          "balanceAfter": 1454.1734527029055,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-16T07:00:00.000Z",
+          "opened": "2026-06-16T07:05:00.000Z",
+          "closed": "2026-06-16T10:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 54.25299632645789,
+          "r": 1.2458459815359406,
+          "effectiveRiskPct": 2.994629931591676,
+          "balanceAfter": 1508.4264490293633,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-06-17T07:00:00.000Z",
+          "opened": "2026-06-17T07:43:00.000Z",
+          "closed": "2026-06-17T18:00:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 36.932974576562806,
+          "r": 0.8175435078822988,
+          "effectiveRiskPct": 2.9948789554473536,
+          "balanceAfter": 1545.3594236059262,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-06-23T07:00:00.000Z",
+          "opened": "2026-06-23T07:42:00.000Z",
+          "closed": "2026-06-23T12:09:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 59.25831662183972,
+          "r": 1.278672886754253,
+          "effectiveRiskPct": 2.9988887078124256,
+          "balanceAfter": 1604.6177402277658,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-07-16T03:00:00.000Z",
+          "opened": "2026-07-16T03:06:00.000Z",
+          "closed": "2026-07-17T01:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -48.19293959273897,
+          "r": -1.0021766019659348,
+          "effectiveRiskPct": 2.996867687730747,
+          "balanceAfter": 1556.424800635027,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-07-17T06:00:00.000Z",
+          "opened": "2026-07-17T06:15:00.000Z",
+          "closed": "2026-07-17T08:14:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -45.11389904869126,
+          "r": -0.9997989888264006,
+          "effectiveRiskPct": 2.8991422683119747,
+          "balanceAfter": 1511.3109015863356,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-07-20T02:00:00.000Z",
+          "opened": "2026-07-20T02:00:00.000Z",
+          "closed": "2026-07-20T07:53:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 22.3968914733426,
+          "r": 0.6661840987593378,
+          "effectiveRiskPct": 2.224537177459663,
+          "balanceAfter": 1533.7077930596781,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-07-21T05:00:00.000Z",
+          "opened": "2026-07-21T05:09:00.000Z",
+          "closed": "2026-07-21T08:51:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 80.94247684033137,
+          "r": 2.4959573157114985,
+          "effectiveRiskPct": 2.1144465500008662,
+          "balanceAfter": 1614.6502699000096,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 8,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-07-23T05:00:00.000Z",
+          "opened": "2026-07-23T05:19:00.000Z",
+          "closed": "2026-07-23T07:54:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 75.37712673762236,
+          "r": 2.4972273047526947,
+          "effectiveRiskPct": 1.8694034265047126,
+          "balanceAfter": 1690.027396637632,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-07-24T04:00:00.000Z",
+          "opened": "2026-07-24T04:16:00.000Z",
+          "closed": "2026-07-24T11:57:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -40.62240897711369,
+          "r": -1.000574217628481,
+          "effectiveRiskPct": 2.402274444847102,
+          "balanceAfter": 1649.4049876605181,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-07-27T03:00:00.000Z",
+          "opened": "2026-07-27T03:30:00.000Z",
+          "closed": "2026-07-27T08:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 55.761873003614426,
+          "r": 1.1277245603565658,
+          "effectiveRiskPct": 2.9978300636425486,
+          "balanceAfter": 1705.1668606641326,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-07-29T00:00:00.000Z",
+          "opened": "2026-07-29T00:21:00.000Z",
+          "closed": "2026-07-29T03:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 38.74109003180464,
+          "r": 0.9310003971225989,
+          "effectiveRiskPct": 2.4403666768553496,
+          "balanceAfter": 1743.9079506959372,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-07-29T06:00:00.000Z",
+          "opened": "2026-07-29T06:07:00.000Z",
+          "closed": "2026-07-29T08:42:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.4614423310548,
+          "r": 0.8503696923811572,
+          "effectiveRiskPct": 2.9981421227803606,
+          "balanceAfter": 1788.369393026992,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-07-30T00:00:00.000Z",
+          "opened": "2026-07-30T00:01:00.000Z",
+          "closed": "2026-07-30T00:30:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -43.8576588071681,
+          "r": -0.9997303941850563,
+          "effectiveRiskPct": 2.4530438983588954,
+          "balanceAfter": 1744.511734219824,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-07-30T03:00:00.000Z",
+          "opened": "2026-07-30T03:21:00.000Z",
+          "closed": "2026-07-30T07:04:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.31000061404195,
+          "r": -0.9997677318076607,
+          "effectiveRiskPct": 2.999243419215383,
+          "balanceAfter": 1692.201733605782,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-08-05T00:00:00.000Z",
+          "opened": "2026-08-05T00:22:00.000Z",
+          "closed": "2026-08-05T02:53:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.85128176886343,
+          "r": 1.0464101553523824,
+          "effectiveRiskPct": 2.9847052053714784,
+          "balanceAfter": 1745.0530153746454,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-07T04:00:00.000Z",
+          "opened": "2026-08-07T04:30:00.000Z",
+          "closed": "2026-08-07T08:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 30.18897900933234,
+          "r": 0.7926403565291418,
+          "effectiveRiskPct": 2.1825470747850715,
+          "balanceAfter": 1775.2419943839777,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-08-10T05:00:00.000Z",
+          "opened": "2026-08-10T05:35:00.000Z",
+          "closed": "2026-08-10T13:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -50.172966934954125,
+          "r": -1.0002597751213367,
+          "effectiveRiskPct": 2.8255267050921336,
+          "balanceAfter": 1725.0690274490237,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-11T02:00:00.000Z",
+          "opened": "2026-08-11T02:09:00.000Z",
+          "closed": "2026-08-12T02:09:00.000Z",
+          "reason": "timeout",
+          "pnl": 35.92715682061436,
+          "r": 0.7148615013671832,
+          "effectiveRiskPct": 2.913362078657834,
+          "balanceAfter": 1760.996184269638,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-12T03:00:00.000Z",
+          "opened": "2026-08-12T03:28:00.000Z",
+          "closed": "2026-08-12T09:24:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -48.16875163455853,
+          "r": -1.002111302414785,
+          "effectiveRiskPct": 2.7295497586440907,
+          "balanceAfter": 1712.8274326350795,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-13T06:00:00.000Z",
+          "opened": "2026-08-13T06:12:00.000Z",
+          "closed": "2026-08-13T12:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -51.34812927669304,
+          "r": -0.9993522011551503,
+          "effectiveRiskPct": 2.999800979269986,
+          "balanceAfter": 1661.4793033583865,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-08-14T07:00:00.000Z",
+          "opened": "2026-08-14T07:03:00.000Z",
+          "closed": "2026-08-14T11:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 45.80162626363992,
+          "r": 0.9209267819564975,
+          "effectiveRiskPct": 2.9933731567866895,
+          "balanceAfter": 1707.2809296220264,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-08-17T04:00:00.000Z",
+          "opened": "2026-08-17T04:06:00.000Z",
+          "closed": "2026-08-17T07:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 29.79311770711567,
+          "r": 0.7703005861708948,
+          "effectiveRiskPct": 2.265430456163471,
+          "balanceAfter": 1737.074047329142,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-08-20T02:00:00.000Z",
+          "opened": "2026-08-20T02:02:00.000Z",
+          "closed": "2026-08-20T08:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 53.83624985563473,
+          "r": 1.034597865786412,
+          "effectiveRiskPct": 2.995607367667323,
+          "balanceAfter": 1790.910297184777,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "BUY",
+          "signaled": "2026-08-21T02:00:00.000Z",
+          "opened": "2026-08-21T02:23:00.000Z",
+          "closed": "2026-08-21T13:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -53.762934485257226,
+          "r": -1.0009761067895078,
+          "effectiveRiskPct": 2.999061839046295,
+          "balanceAfter": 1737.1473626995198,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-08-24T00:00:00.000Z",
+          "opened": "2026-08-24T00:03:00.000Z",
+          "closed": "2026-08-24T07:17:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.076042811762896,
+          "r": -0.9997304606233129,
+          "effectiveRiskPct": 2.9985989823774273,
+          "balanceAfter": 1685.071319887757,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-08-25T06:00:00.000Z",
+          "opened": "2026-08-25T06:24:00.000Z",
+          "closed": "2026-08-25T09:12:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -35.92466471926931,
+          "r": -0.9988810526712175,
+          "effectiveRiskPct": 2.1343255405299524,
+          "balanceAfter": 1649.1466551684878,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-08-26T05:00:00.000Z",
+          "opened": "2026-08-26T05:01:00.000Z",
+          "closed": "2026-08-26T12:01:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 27.8093534675528,
+          "r": 0.8585417478507692,
+          "effectiveRiskPct": 1.9641298490500414,
+          "balanceAfter": 1676.9560086360407,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-09-01T01:00:00.000Z",
+          "opened": "2026-09-01T01:06:00.000Z",
+          "closed": "2026-09-01T08:41:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.67788218957226,
+          "r": 1.0500914584853498,
+          "effectiveRiskPct": 2.991434587973327,
+          "balanceAfter": 1729.633890825613,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-02T00:00:00.000Z",
+          "opened": "2026-09-02T00:20:00.000Z",
+          "closed": "2026-09-02T01:27:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -33.45487644613092,
+          "r": -1.0000754034082342,
+          "effectiveRiskPct": 1.9340713778831,
+          "balanceAfter": 1696.1790143794822,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-09-03T01:00:00.000Z",
+          "opened": "2026-09-03T01:34:00.000Z",
+          "closed": "2026-09-03T08:52:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.604733003963176,
+          "r": 1.01506387200636,
+          "effectiveRiskPct": 2.997260422159331,
+          "balanceAfter": 1747.7837473834454,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-09-10T02:00:00.000Z",
+          "opened": "2026-09-10T02:01:00.000Z",
+          "closed": "2026-09-10T09:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -52.34641900619004,
+          "r": -0.998579791665502,
+          "effectiveRiskPct": 2.9992765202031966,
+          "balanceAfter": 1695.4373283772554,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-09-11T02:00:00.000Z",
+          "opened": "2026-09-11T02:31:00.000Z",
+          "closed": "2026-09-11T05:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -50.839780765770215,
+          "r": -0.9999569453593553,
+          "effectiveRiskPct": 2.9987525281851317,
+          "balanceAfter": 1644.5975476114852,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-09-11T07:00:00.000Z",
+          "opened": "2026-09-11T07:08:00.000Z",
+          "closed": "2026-09-11T11:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.822174850697536,
+          "r": 1.0733154867385533,
+          "effectiveRiskPct": 2.992466135475274,
+          "balanceAfter": 1697.4197224621828,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-09-15T00:00:00.000Z",
+          "opened": "2026-09-15T00:29:00.000Z",
+          "closed": "2026-09-15T06:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 52.039811783070405,
+          "r": 1.1509866400068007,
+          "effectiveRiskPct": 2.6636440630474887,
+          "balanceAfter": 1749.4595342452533,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-09-16T00:00:00.000Z",
+          "opened": "2026-09-16T00:11:00.000Z",
+          "closed": "2026-09-16T02:35:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -42.70668613340293,
+          "r": -0.999618752193258,
+          "effectiveRiskPct": 2.442067011972102,
+          "balanceAfter": 1706.7528481118504,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-17T01:00:00.000Z",
+          "opened": "2026-09-17T01:00:00.000Z",
+          "closed": "2026-09-17T05:45:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -51.189416959052764,
+          "r": -1.001801892546768,
+          "effectiveRiskPct": 2.993833881127232,
+          "balanceAfter": 1655.5634311527976,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "BUY",
+          "signaled": "2026-09-17T07:00:00.000Z",
+          "opened": "2026-09-17T07:02:00.000Z",
+          "closed": "2026-09-17T17:25:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 51.21550848120261,
+          "r": 1.0346977948010672,
+          "effectiveRiskPct": 2.9898000197891337,
+          "balanceAfter": 1706.7789396340002,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-09-18T05:00:00.000Z",
+          "opened": "2026-09-18T05:21:00.000Z",
+          "closed": "2026-09-18T12:39:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 71.84895390372795,
+          "r": 1.6031681648282765,
+          "effectiveRiskPct": 2.625814811799429,
+          "balanceAfter": 1778.6278935377281,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-21T03:00:00.000Z",
+          "opened": "2026-09-21T03:01:00.000Z",
+          "closed": "2026-09-21T04:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 49.724492683655484,
+          "r": 1.0935107292847221,
+          "effectiveRiskPct": 2.5565966376098594,
+          "balanceAfter": 1828.3523862213835,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-09-23T01:00:00.000Z",
+          "opened": "2026-09-23T01:17:00.000Z",
+          "closed": "2026-09-23T04:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 57.80789912362773,
+          "r": 1.3030883375484663,
+          "effectiveRiskPct": 2.426349875289826,
+          "balanceAfter": 1886.1602853450113,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-09-23T06:00:00.000Z",
+          "opened": "2026-09-23T06:10:00.000Z",
+          "closed": "2026-09-23T09:55:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 47.744056145969665,
+          "r": 0.8971191072535568,
+          "effectiveRiskPct": 2.821568572717825,
+          "balanceAfter": 1933.9043414909809,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-09-25T07:00:00.000Z",
+          "opened": "2026-09-25T07:39:00.000Z",
+          "closed": "2026-09-25T12:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -57.84440994932963,
+          "r": -0.9999935539399369,
+          "effectiveRiskPct": 2.9910881101635813,
+          "balanceAfter": 1876.0599315416512,
+          "sessions": [
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-28T06:00:00.000Z",
+          "opened": "2026-09-28T06:07:00.000Z",
+          "closed": "2026-09-28T08:05:00.000Z",
+          "reason": "takeProfit",
+          "pnl": 141.32183457028884,
+          "r": 2.515176909796213,
+          "effectiveRiskPct": 2.994980652513523,
+          "balanceAfter": 2017.3817661119401,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-09-29T03:00:00.000Z",
+          "opened": "2026-09-29T03:09:00.000Z",
+          "closed": "2026-09-29T04:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.44161781225604,
+          "r": -0.9997373318504694,
+          "effectiveRiskPct": 2.996829806185779,
+          "balanceAfter": 1956.940148299684,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-01T02:00:00.000Z",
+          "opened": "2026-10-01T02:05:00.000Z",
+          "closed": "2026-10-01T07:46:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 62.998094075715954,
+          "r": 1.074360110766613,
+          "effectiveRiskPct": 2.9964014052421066,
+          "balanceAfter": 2019.9382423754,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 7,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-05T00:00:00.000Z",
+          "opened": "2026-10-05T00:16:00.000Z",
+          "closed": "2026-10-05T01:59:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 66.35176586338581,
+          "r": 1.0968557005993642,
+          "effectiveRiskPct": 2.9947798149311393,
+          "balanceAfter": 2086.290008238786,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-05T03:00:00.000Z",
+          "opened": "2026-10-05T03:30:00.000Z",
+          "closed": "2026-10-05T06:40:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -62.60794081268828,
+          "r": -1.0014411020459109,
+          "effectiveRiskPct": 2.9966038263959387,
+          "balanceAfter": 2023.6820674260978,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-06T01:00:00.000Z",
+          "opened": "2026-10-06T01:32:00.000Z",
+          "closed": "2026-10-06T13:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 66.43786656484903,
+          "r": 1.0947294781203827,
+          "effectiveRiskPct": 2.9989317500992314,
+          "balanceAfter": 2090.1199339909467,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "BUY",
+          "signaled": "2026-10-07T06:00:00.000Z",
+          "opened": "2026-10-07T06:35:00.000Z",
+          "closed": "2026-10-07T07:16:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -54.535325759961225,
+          "r": -1.0010161197595182,
+          "effectiveRiskPct": 2.606547437896103,
+          "balanceAfter": 2035.5846082309854,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-08T00:00:00.000Z",
+          "opened": "2026-10-08T00:15:00.000Z",
+          "closed": "2026-10-08T01:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -46.53850100607054,
+          "r": -0.9994199975907593,
+          "effectiveRiskPct": 2.287574239127866,
+          "balanceAfter": 1989.0461072249147,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURUSD",
+          "side": "SELL",
+          "signaled": "2026-10-08T03:00:00.000Z",
+          "opened": "2026-10-08T03:14:00.000Z",
+          "closed": "2026-10-08T10:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 56.100276807631325,
+          "r": 0.9422593946688318,
+          "effectiveRiskPct": 2.9932960838325093,
+          "balanceAfter": 2045.1463840325462,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-12T04:00:00.000Z",
+          "opened": "2026-10-12T04:17:00.000Z",
+          "closed": "2026-10-12T16:41:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -43.98384773952761,
+          "r": -1.0016999406997429,
+          "effectiveRiskPct": 2.146995688826636,
+          "balanceAfter": 2001.1625362930185,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-14T05:00:00.000Z",
+          "opened": "2026-10-14T05:24:00.000Z",
+          "closed": "2026-10-14T08:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 65.66248759808735,
+          "r": 1.0939901164474326,
+          "effectiveRiskPct": 2.99931147784964,
+          "balanceAfter": 2066.825023891106,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 4,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "SELL",
+          "signaled": "2026-10-16T02:00:00.000Z",
+          "opened": "2026-10-16T02:04:00.000Z",
+          "closed": "2026-10-16T03:49:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -58.734853974977426,
+          "r": -0.9995770251331666,
+          "effectiveRiskPct": 2.8429938275064273,
+          "balanceAfter": 2008.0901699161286,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-16T06:00:00.000Z",
+          "opened": "2026-10-16T06:08:00.000Z",
+          "closed": "2026-10-16T06:54:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.09800038274115,
+          "r": -0.9990742924790715,
+          "effectiveRiskPct": 2.9955669323336984,
+          "balanceAfter": 1947.9921695333874,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-19T02:00:00.000Z",
+          "opened": "2026-10-19T02:03:00.000Z",
+          "closed": "2026-10-19T11:03:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 65.81690636740892,
+          "r": 1.1279203331759287,
+          "effectiveRiskPct": 2.995517302171272,
+          "balanceAfter": 2013.8090759007962,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 5,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "BUY",
+          "signaled": "2026-10-22T00:00:00.000Z",
+          "opened": "2026-10-22T00:00:00.000Z",
+          "closed": "2026-10-22T01:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -60.38804600976552,
+          "r": -1.0005343759602068,
+          "effectiveRiskPct": 2.9970961024572715,
+          "balanceAfter": 1953.4210298910307,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-10-23T04:00:00.000Z",
+          "opened": "2026-10-23T04:28:00.000Z",
+          "closed": "2026-10-23T06:37:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -58.519216790837525,
+          "r": -0.9993185535162639,
+          "effectiveRiskPct": 2.9977726666368607,
+          "balanceAfter": 1894.901813100193,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "BUY",
+          "signaled": "2026-10-26T04:00:00.000Z",
+          "opened": "2026-10-26T04:21:00.000Z",
+          "closed": "2026-10-26T07:51:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 69.3678301939041,
+          "r": 1.220515190820116,
+          "effectiveRiskPct": 2.999357336301031,
+          "balanceAfter": 1964.2696432940972,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 6,
+          "pairRank": null
+        },
+        {
+          "symbol": "GBPUSD",
+          "side": "SELL",
+          "signaled": "2026-10-27T01:00:00.000Z",
+          "opened": "2026-10-27T01:04:00.000Z",
+          "closed": "2026-10-27T07:22:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 48.929564971981755,
+          "r": 0.9771350623868675,
+          "effectiveRiskPct": 2.549268926455142,
+          "balanceAfter": 2013.199208266079,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 2,
+          "pairRank": null
+        },
+        {
+          "symbol": "EURJPY",
+          "side": "SELL",
+          "signaled": "2026-10-28T00:00:00.000Z",
+          "opened": "2026-10-28T00:02:00.000Z",
+          "closed": "2026-10-28T00:50:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 41.434331009981264,
+          "r": 1.0731354380211633,
+          "effectiveRiskPct": 1.9178694599201225,
+          "balanceAfter": 2054.63353927606,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDJPY",
+          "side": "BUY",
+          "signaled": "2026-10-29T05:00:00.000Z",
+          "opened": "2026-10-29T05:05:00.000Z",
+          "closed": "2026-10-29T06:21:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -61.59697115370861,
+          "r": -1.0005461480914684,
+          "effectiveRiskPct": 2.996317701994713,
+          "balanceAfter": 1993.0365681223516,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-30T01:00:00.000Z",
+          "opened": "2026-10-30T01:06:00.000Z",
+          "closed": "2026-10-30T01:34:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -59.6866395640966,
+          "r": -0.9994020179662362,
+          "effectiveRiskPct": 2.9965507614416333,
+          "balanceAfter": 1933.349928558255,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "AUDUSD",
+          "side": "SELL",
+          "signaled": "2026-10-30T05:00:00.000Z",
+          "opened": "2026-10-30T05:13:00.000Z",
+          "closed": "2026-10-30T07:56:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 61.806216833648215,
+          "r": 1.1907422983590923,
+          "effectiveRiskPct": 2.684750384714166,
+          "balanceAfter": 1995.1561453919032,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-02T04:00:00.000Z",
+          "opened": "2026-11-02T04:26:00.000Z",
+          "closed": "2026-11-02T07:47:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 79.58923638330928,
+          "r": 1.3313021895475792,
+          "effectiveRiskPct": 2.9964069892225917,
+          "balanceAfter": 2074.7453817752125,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 3,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T00:00:00.000Z",
+          "opened": "2026-11-03T00:19:00.000Z",
+          "closed": "2026-11-03T00:43:00.000Z",
+          "reason": "stopLoss",
+          "pnl": -62.19482738681463,
+          "r": -1.0000484083018586,
+          "effectiveRiskPct": 2.9975638135105216,
+          "balanceAfter": 2012.5505543883978,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDCHF",
+          "side": "SELL",
+          "signaled": "2026-11-03T03:00:00.000Z",
+          "opened": "2026-11-03T03:33:00.000Z",
+          "closed": "2026-11-03T06:31:00.000Z",
+          "reason": "stopLoss",
+          "pnl": 44.91565578813697,
+          "r": 0.7445223899443397,
+          "effectiveRiskPct": 2.99759657390643,
+          "balanceAfter": 2057.466210176535,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 1,
+          "pairRank": null
+        },
+        {
+          "symbol": "USDJPY",
+          "side": "BUY",
+          "signaled": "2026-11-04T05:00:00.000Z",
+          "opened": "2026-11-04T05:03:00.000Z",
+          "closed": "2026-11-04T07:45:00.000Z",
+          "reason": "periodBoundary",
+          "pnl": 27.423025529224187,
+          "r": 0.4448093624252721,
+          "effectiveRiskPct": 2.9964617389660004,
+          "balanceAfter": 2084.889235705759,
+          "sessions": [
+            "sydney",
+            "tokyo"
+          ],
+          "managementMode": "fixed",
+          "stopMoves": 0,
+          "pairRank": null
+        }
+      ]
+    }
+  }
+}
