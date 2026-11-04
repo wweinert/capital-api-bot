@@ -612,7 +612,6 @@ class TradingService {
 
     async closePosition(dealId, label) {
         const requestedReason = label || "manual_close";
-        let symbol;
         let priceHint;
         let closePayload;
         let confirmation;
@@ -620,7 +619,6 @@ class TradingService {
         try {
             const context = await this.getPositionContext(dealId);
             if (context) {
-                symbol = context.symbol;
                 priceHint = context.price;
             }
         } catch (contextError) {

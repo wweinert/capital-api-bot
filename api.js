@@ -119,15 +119,6 @@ export const refreshSession = async () => {
     await startSession();
 };
 
-export const getSessionDetails = async () => {
-    try {
-        const response = await apiGet(`${API.BASE_URL}/session`, { headers: getHeaders() });
-        logger.info(`[API] Session details: ${JSON.stringify(response.data)}`);
-    } catch (error) {
-        logger.error("[api.js][API] Session details error:", error.response?.data || error.message);
-    }
-};
-
 async function withSessionRetry(fn, ...args) {
     try {
         return await fn(...args);
@@ -160,12 +151,6 @@ export const getAccountInfo = async () =>
     withSessionRetry(async () => {
         const response = await apiGet(`${API.BASE_URL}/accounts`, { headers: getHeaders() });
         return response.data;
-    });
-
-export const getMarkets = async () =>
-    withSessionRetry(async () => {
-        const response = await apiGet(`${API.BASE_URL}/markets?searchTerm=EURUSD`, { headers: getHeaders() });
-        return Array.isArray(response.data.markets) ? response.data.markets : [];
     });
 
 export async function getMarketDetails(symbol) {

@@ -33,15 +33,6 @@ const logger = {
         }
     },
 
-    trade: (action, symbol, details) => {
-        const timestamp = new Date().toISOString();
-        if (typeof details === "object") {
-            console.log(`[TRADE] ${timestamp} | ${action} ${symbol}:\n${JSON.stringify(details, null, 2)}\n`);
-        } else {
-            console.log(`[TRADE] ${timestamp} | ${action} ${symbol}: ${details}`);
-        }
-    },
-
     debug: (message) => {
         const timestamp = new Date().toISOString();
         if (typeof message === "object") {

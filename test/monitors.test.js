@@ -46,10 +46,10 @@ test("monitor serializes its cycle and keeps the protection-check order", async 
     const callbacks = [];
     const monitor = createMonitor({ setInterval: (callback) => { callbacks.push(callback); return callbacks.length; }, clearInterval() {} });
     const calls = [];
-    monitor.logDeals = () => {};
     for (const name of ["dynamicStopCheck", "weekendFlatCheck", "dailyFlatCheck", "maxHoldCheck"])
         monitor[name] = async () => calls.push(name);
     await monitor.startMonitorOpenTrades({});
+    assert.equal(callbacks.length, 1, "startup schedules only the trade-protection monitor");
     await callbacks[0]();
     assert.deepEqual(calls, ["dynamicStopCheck", "weekendFlatCheck", "dailyFlatCheck", "maxHoldCheck"]);
     monitor.monitorInProgress = true;

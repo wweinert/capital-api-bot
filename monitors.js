@@ -9,15 +9,10 @@ import logger from "./utils/logger.js";
 class TradeMonitor {
     monitorInterval = null;
     monitorInProgress = false;
-    dealIdMonitorInterval = null;
-    dealIdMonitorInProgress = false;
-    openedBrockerDealIds = [];
-    checkInterval = 15_000;
 
     async startMonitorOpenTrades(bot, intervalMs = 20 * 1000) {
         logger.info(`[Monitoring] Checking open trades at ${new Date().toISOString()}`);
         if (this.monitorInterval) clearInterval(this.monitorInterval);
-        if (!this.dealIdMonitorInterval) this.logDeals(bot);
 
         this.monitorInterval = setInterval(async () => {
             if (this.monitorInProgress) {
@@ -31,7 +26,7 @@ class TradeMonitor {
                 await this.dynamicStopCheck();
                 await this.weekendFlatCheck(bot);
                 await this.dailyFlatCheck(bot);
-                await this.maxHoldCheck(bot);
+                await this.maxHoldCheck();
             } catch (error) {
                 logger.error(`[Monitoring] Monitor cycle failed: ${error.message}`);
             } finally {
@@ -138,7 +133,7 @@ class TradeMonitor {
         }
     }
 
-    async maxHoldCheck(bot) {
+    async maxHoldCheck() {
         try {
             const positions = await getOpenPositions();
             if (!positions?.positions?.length) return;
@@ -178,53 +173,6 @@ class TradeMonitor {
         } catch (error) {
             logger.error("[Bot] Error in max hold monitor:", error);
         }
-    }
-
-    logDeals(bot) {
-        if (this.dealIdMonitorInterval) {
-            logger.warn("[DealID Monitor] Already running; skipping start.");
-            return;
-        }
-        logger.info(`[DealID Monitor] Starting (every ${this.checkInterval}ms)`);
-
-        const run = async () => {
-            if (this.dealIdMonitorInProgress) {
-                logger.warn("[DealID Monitor] Previous tick still running; skipping.");
-                return;
-            }
-            this.dealIdMonitorInProgress = true;
-            logger.info(`[DealID Monitor] tick ${new Date().toISOString()}`);
-
-            try {
-                const res = await getOpenPositions();
-                const positions = Array.isArray(res?.positions) ? res.positions : [];
-
-                const brokerDealIds = positions.map((position) => position?.position?.dealId ?? position?.dealId).filter(Boolean);
-
-                for (const dealId of brokerDealIds) {
-                    if (!this.openedBrockerDealIds.includes(dealId)) {
-                        this.openedBrockerDealIds.push(dealId);
-                    }
-                }
-
-                const closedDealIds = this.openedBrockerDealIds.filter((id) => !brokerDealIds.includes(id));
-
-                this.openedBrockerDealIds = this.openedBrockerDealIds.filter((id) => brokerDealIds.includes(id));
-
-                if (closedDealIds.length) {
-                    logger.info(`[DealID Monitor] Closed deals: ${closedDealIds.join(", ")}`);
-                }
-                return [];
-            } catch (error) {
-                logger.error("[DealID Monitor] Error:", error);
-                return [];
-            } finally {
-                this.dealIdMonitorInProgress = false;
-            }
-        };
-
-        run();
-        this.dealIdMonitorInterval = setInterval(run, this.checkInterval);
     }
 
     parseOpenTimeMs(openTime) {
